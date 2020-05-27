@@ -1,0 +1,102 @@
+trigger:
+  batch: true
+  branches:
+    include:
+      - "*"
+
+workspace:
+    clean: all
+
+variables:
+  - group: "ESFA - SonarCloud"
+  - name: sonarCloudProjectKey
+    value: "SkillsFundingAgency_das-roatp-gateway"
+  - group: 'Prod Management Resources'    
+  - name: buildConfiguration
+    value: 'release'
+  - name: buildPlatform
+    value: 'anycpu'
+
+pool:
+  name: 'DAS - Continuous Integration'
+
+resources:
+  repositories:
+  - repository: das-platform-building-blocks
+    type: github
+    name: SkillsFundingAgency/das-platform-building-blocks
+    ref: refs/heads/master
+    endpoint: "GitHub (SFA)"  
+
+steps:
+- task: UseGitVersion@5
+  inputs:
+    versionSpec: 5.x
+    useConfigFile: true
+    configFilePath: GitVersion.yml
+
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare Sonarcloud analysis configuration'
+  inputs:
+    SonarCloud: "$(SonarCloudConnectionId)"
+    organization: "$(SonarCloudOrganisationKey)"
+    scannerMode: 'MSBuild'
+    projectName: "$(Build.DefinitionName)"
+    projectKey: "$(sonarCloudProjectKey)"
+    extraProperties: |
+      sonar.pullrequest.provider=GitHub
+      sonar.pullrequest.github.repository=$(Build.Repository.Name)
+
+- task: DotNetCoreCLI@2
+  displayName: dot restore
+  inputs:
+    command: restore
+    projects: 'src/**/*.csproj'
+    noCache: true
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet build
+  inputs:
+    projects: 'src/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)  --no-restore'
+    
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: test
+    projects: '**/*.UnitTests.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-build'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud analysis'
+  enabled: false
+    
+- task: SonarCloudPublish@1
+  displayName: 'Publish results on build summary'
+  inputs:
+    pollingTimeoutSec: '300'
+  enabled: false
+
+- template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks  
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish WebApp'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: 'src/SFA.DAS.RoatpGateway.Web/SFA.DAS.RoatpGateway.Web.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    Contents: |
+     azure/**
+     config/**
+    TargetFolder: '$(build.artifactstagingdirectory)/publish'
+    OverWrite: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)/publish'
