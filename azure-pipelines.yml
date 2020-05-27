@@ -8,9 +8,6 @@ workspace:
     clean: all
 
 variables:
-  - group: "ESFA - SonarCloud"
-  - name: sonarCloudProjectKey
-    value: "SkillsFundingAgency_das-roatp-gateway"
   - group: 'Prod Management Resources'    
   - name: buildConfiguration
     value: 'release'
@@ -35,18 +32,6 @@ steps:
     useConfigFile: true
     configFilePath: GitVersion.yml
 
-- task: SonarCloudPrepare@1
-  displayName: 'Prepare Sonarcloud analysis configuration'
-  inputs:
-    SonarCloud: "$(SonarCloudConnectionId)"
-    organization: "$(SonarCloudOrganisationKey)"
-    scannerMode: 'MSBuild'
-    projectName: "$(Build.DefinitionName)"
-    projectKey: "$(sonarCloudProjectKey)"
-    extraProperties: |
-      sonar.pullrequest.provider=GitHub
-      sonar.pullrequest.github.repository=$(Build.Repository.Name)
-
 - task: DotNetCoreCLI@2
   displayName: dot restore
   inputs:
@@ -66,16 +51,6 @@ steps:
     command: test
     projects: '**/*.UnitTests.csproj'
     arguments: '--configuration $(buildConfiguration) --no-build'
-
-- task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud analysis'
-  enabled: false
-    
-- task: SonarCloudPublish@1
-  displayName: 'Publish results on build summary'
-  inputs:
-    pollingTimeoutSec: '300'
-  enabled: false
 
 - template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks  
 
