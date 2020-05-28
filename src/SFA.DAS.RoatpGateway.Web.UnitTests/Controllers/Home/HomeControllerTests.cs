@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Web.Controllers;
+using SFA.DAS.RoatpGateway.Web.Settings;
 using SFA.DAS.RoatpGateway.Web.UnitTests.MockedObjects;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 
@@ -10,11 +12,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Home
     public class HomeControllerTests
     {
         private HomeController _controller;
+        private Mock<IWebConfiguration> _configuration;
 
         [SetUp]
         public void SetUp()
         {
-            _controller = new HomeController()
+            _configuration = new Mock<IWebConfiguration>();
+            _controller = new HomeController(_configuration.Object)
             {
                 ControllerContext = MockedControllerContext.Setup()
             };

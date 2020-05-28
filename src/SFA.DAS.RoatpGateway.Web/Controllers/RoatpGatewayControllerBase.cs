@@ -13,11 +13,12 @@ using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Attributes;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Web.Validators;
+using SFA.DAS.RoatpGateway.Web.Domain;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
     [ExternalApiExceptionFilter]
-    //[Authorize(Roles = Roles.RoatpGatewayTeam)]
+    [Authorize(Roles = Roles.RoatpGatewayTeam)]
     public class RoatpGatewayControllerBase<T> : Controller
     {
         protected readonly IHttpContextAccessor _contextAccessor;

@@ -19,7 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Attributes
             "HomeController"
         };
 
-        [Test, Ignore("Requires integration with iDAMS")]
+        [Test]
         public void ControllersShouldHaveAuthorizeAttribute()
         {
             var webAssembly = typeof(PingController).GetTypeInfo().Assembly;

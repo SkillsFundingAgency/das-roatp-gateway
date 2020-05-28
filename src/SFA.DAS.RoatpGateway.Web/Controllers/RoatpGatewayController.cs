@@ -11,10 +11,11 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
+using SFA.DAS.RoatpGateway.Web.Domain;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
-    //[Authorize(Roles = Roles.RoatpGatewayTeam)]
+    [Authorize(Roles = Roles.RoatpGatewayTeam)]
     public class RoatpGatewayController : RoatpGatewayControllerBase<RoatpGatewayController>
     {
         private readonly IRoatpApplicationApiClient _applyApiClient;
