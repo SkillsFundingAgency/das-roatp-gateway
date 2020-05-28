@@ -11,6 +11,7 @@ using SFA.DAS.RoatpGateway.Domain.CharityCommission;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
 using System.Net.Http;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
+using System.Net.Http.Headers;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
@@ -82,7 +83,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<string> GetIcoNumber(Guid applicationId)
         {
-            return await Get($"/Gateway/{applicationId}/IcoNumber");
+            return await Get<string>($"/Gateway/{applicationId}/IcoNumber");
         }
 
         public async Task TriggerGatewayDataGathering(Guid applicationId, string userName)
@@ -211,5 +212,17 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         {
             return await Get($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
         }
+
+        private async Task<T> Get<T>(string uri)
+        {
+            _client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _tokenService.GetToken(_client.BaseAddress));
+
+            using (var response = await _client.GetAsync(new Uri(uri, UriKind.Relative)))
+            {
+                return await response.Content.ReadAsAsync<T>();
+            }
+        }
+
     }
 }
