@@ -12,5 +12,8 @@ namespace SFA.DAS.RoatpGateway.Web.Settings
 
         [JsonRequired]
         public ClientApiAuthentication ApplyApiAuthentication { get; set; }
+
+        [JsonRequired]
+        public ClientApiAuthentication RoatpRegisterApiAuthentication { get; set; }
     }
 }

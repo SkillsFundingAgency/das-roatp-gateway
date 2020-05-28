@@ -14,7 +14,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("NewApplications", "RoatpGateway");
         }
 
     }
