@@ -121,11 +121,16 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
             try
             {
-                await Post($"/Gateway/UpdateGatewayReviewStatusAndComment", new { applicationId, gatewayReviewStatus, gatewayReviewComment, userName });
+                var responseCode = await Post($"/Gateway/UpdateGatewayReviewStatusAndComment", new { applicationId, gatewayReviewStatus, gatewayReviewComment, userName });
+                if (responseCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException($"Unable to update RoATP gateway review status, response code {responseCode}");
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - Error: '" + ex.Message + "'");
+                throw;
             }
 
         }
