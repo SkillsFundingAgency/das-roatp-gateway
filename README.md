@@ -33,5 +33,5 @@
 - run the following repos locally to get the application working, and dashboard links working suitably
   - das-apply-service (https://github.com/SkillsFundingAgency/das-apply-service)
   - das-admin-service (https://github.com/SkillsFundingAgency/das-admin-service)
-  - das-assessor-ervice (https://github.com/SkillsFundingAgency/das-assessor-service)
+  - das-assessor-service (https://github.com/SkillsFundingAgency/das-assessor-service)
   - das-roatp-service (https://github.com/SkillsFundingAgency/das-roatp-service)
