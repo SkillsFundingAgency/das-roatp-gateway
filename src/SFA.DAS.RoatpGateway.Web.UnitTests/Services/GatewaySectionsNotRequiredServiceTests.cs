@@ -120,7 +120,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         {
             _apiClient.Setup(x => x.GetTradingName(_applicationId)).ReturnsAsync(tradingName);
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Main).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
 
             var tradingNameSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
                     .Where(sec => sec.PageId == GatewayPageIds.TradingName).FirstOrDefault();
@@ -134,7 +134,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         {
             _apiClient.Setup(x => x.GetTradingName(_applicationId)).ReturnsAsync("Trading name");
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Main).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
 
             var tradingNameSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
                    .Where(sec => sec.PageId == GatewayPageIds.TradingName).FirstOrDefault();
@@ -149,7 +149,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         {
             _apiClient.Setup(x => x.GetOrganisationWebsiteAddress(_applicationId)).ReturnsAsync(websiteAddress);
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Main).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
 
             var websiteSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
                     .Where(sec => sec.PageId == GatewayPageIds.WebsiteAddress).FirstOrDefault();
@@ -163,7 +163,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         {
             _apiClient.Setup(x => x.GetOrganisationWebsiteAddress(_applicationId)).ReturnsAsync("www.site.com");
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Main).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
 
             var websiteSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
                     .Where(sec => sec.PageId == GatewayPageIds.WebsiteAddress).FirstOrDefault();
@@ -175,7 +175,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         [Test]
         public void Not_required_set_for_office_for_students_if_supporting_provider()
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Supporting).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting).GetAwaiter().GetResult();
 
             var officeForStudentsSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
                     .Where(sec => sec.PageId == GatewayPageIds.OfficeForStudents).FirstOrDefault();
@@ -217,7 +217,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         [Test]
         public void Not_required_set_for_initial_teacher_training_if_supporting_provider()
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Supporting).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting).GetAwaiter().GetResult();
 
             var initialTeacherTrainingSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
                     .Where(sec => sec.PageId == GatewayPageIds.InitialTeacherTraining).FirstOrDefault();
@@ -259,7 +259,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         [Test]
         public void Not_required_set_for_ofsted_if_supporting_provider()
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Supporting).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting).GetAwaiter().GetResult();
 
             var ofstedSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
                     .Where(sec => sec.PageId == GatewayPageIds.Ofsted).FirstOrDefault();
@@ -298,7 +298,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         [Test]
         public void Not_required_not_set_for_subcontractor_declaration_if_supporting_provider()
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Supporting).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting).GetAwaiter().GetResult();
 
             var subcontractorSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
                     .Where(sec => sec.PageId == GatewayPageIds.SubcontractorDeclaration).FirstOrDefault();
@@ -323,7 +323,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             };
             _apiClient.Setup(x => x.GetUkrlpDetails(_applicationId)).ReturnsAsync(providerDetails);
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, ProviderTypes.Main).GetAwaiter().GetResult();
+            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
 
             var peopleInControlCriminalComplianceSequence = _viewModel.Sequences.FirstOrDefault(x => x.SequenceNumber
                                                                                                 == GatewaySequences.PeopleInControlCriminalComplianceChecks);

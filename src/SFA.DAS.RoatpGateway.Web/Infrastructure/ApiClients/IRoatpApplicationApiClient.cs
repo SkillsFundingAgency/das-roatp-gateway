@@ -21,7 +21,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<List<GatewayPageAnswerSummary>> GetGatewayPageAnswers(Guid applicationId);
         Task<GatewayCommonDetails> GetPageCommonDetails(Guid applicationId, string pageId, string userName);
         Task<ContactAddress> GetOrganisationAddress(Guid applicationId);
-        Task<string> GetIcoNumber(Guid applicationId);
+        Task<IcoNumber> GetIcoNumber(Guid applicationId);
         Task TriggerGatewayDataGathering(Guid applicationId, string userName);
 
         Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string username,

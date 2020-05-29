@@ -12,7 +12,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
     public class RoatpOrganisationSummaryApiClient : ApiClientBase<RoatpOrganisationSummaryApiClient>, IRoatpOrganisationSummaryApiClient
     {
         private readonly HttpClient _client;
-        private readonly ILogger<RoatpOrganisationSummaryApiClient> _logger;
         private readonly ITokenService _tokenService;
         private const string RoutePath = "organisation";
 
@@ -20,26 +19,25 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             : base(client, logger)
         {
             _client = client;
-            _logger = logger;
             _tokenService = tokenService;
         }
 
         public async Task<string> GetTypeOfOrganisation(Guid applicationId)
         {
             _logger.LogInformation($"Retrieving type of organisation from applicationId [{applicationId}]");
-            return await Get<string>($"{RoutePath}/TypeOfOrganisation/{applicationId}");
+            return await Get($"{RoutePath}/TypeOfOrganisation/{applicationId}");
         }
 
         public async Task<string> GetCompanyNumber(Guid applicationId)
         {
             _logger.LogInformation($"Retrieving company number from applicationId [{applicationId}]");
-            return await Get<string>($"{RoutePath}/CompanyNumber/{applicationId}");
+            return await Get($"{RoutePath}/CompanyNumber/{applicationId}");
         }
 
         public async Task<string> GetCharityNumber(Guid applicationId)
         {
             _logger.LogInformation($"Retrieving charity number from applicationId [{applicationId}]");
-            return await Get<string>($"{RoutePath}/CharityNumber/{applicationId}");
+            return await Get($"{RoutePath}/CharityNumber/{applicationId}");
         }
 
         public async Task<List<PersonInControl>> GetDirectorsFromSubmitted(Guid applicationId)
@@ -83,17 +81,5 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             _logger.LogInformation($"Retrieving list of Whos in control in Qna QuestionTags from applicationId [{applicationId}]");
             return await Get<List<PersonInControl>>($"{RoutePath}/WhosInControlData/Submitted/{applicationId}");
         }
-
-        private async Task<T> Get<T>(string uri)
-        {
-            _client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", _tokenService.GetToken(_client.BaseAddress));
-
-            using (var response = await _client.GetAsync(new Uri(uri, UriKind.Relative)))
-            {
-                return await response.Content.ReadAsAsync<T>();
-            }
-        }
-
     }
 }

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
-using SFA.DAS.RoatpGateway.Web.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain.Ukrlp;
 using SFA.DAS.RoatpGateway.Domain.CompaniesHouse;
 using SFA.DAS.RoatpGateway.Domain.CharityCommission;
@@ -81,9 +80,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<ContactAddress>($"/Gateway/{applicationId}/OrganisationAddress");
         }
 
-        public async Task<string> GetIcoNumber(Guid applicationId)
+        public async Task<IcoNumber> GetIcoNumber(Guid applicationId)
         {
-            return await Get<string>($"/Gateway/{applicationId}/IcoNumber");
+            return await Get<IcoNumber>($"/Gateway/{applicationId}/IcoNumber");
         }
 
         public async Task TriggerGatewayDataGathering(Guid applicationId, string userName)
@@ -216,17 +215,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task<string> GetOrganisationWebsiteAddress(Guid applicationId)
         {
             return await Get($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
-        }
-
-        private async Task<T> Get<T>(string uri)
-        {
-            _client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", _tokenService.GetToken(_client.BaseAddress));
-
-            using (var response = await _client.GetAsync(new Uri(uri, UriKind.Relative)))
-            {
-                return await response.Content.ReadAsAsync<T>();
-            }
         }
 
     }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
@@ -8,7 +7,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
     public class RoatpShutterPageController : Controller
     {
         [Route("ExternalApisUnavailable")]
-        public async Task<IActionResult> ExternalApisUnavailable()
+        public IActionResult ExternalApisUnavailable()
         {
             return View("~/Views/Roatp/Apply/ExternalApisUnavailable.cshtml");
         }

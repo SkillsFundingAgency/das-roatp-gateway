@@ -17,8 +17,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
     {
         private readonly IGatewayRegisterChecksOrchestrator _orchestrator;
 
-        private const string GatewayViewsLocation = "~/Views/Gateway/pages";
-
         public RoatpGatewayRegisterChecksController(IRoatpApplicationApiClient applyApiClient,
                                                 IHttpContextAccessor contextAccessor,
                                                 IRoatpGatewayPageValidator gatewayValidator,
@@ -29,7 +27,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/Roatp")]
-        public async Task<IActionResult> GetGatewayRoatpPage(Guid applicationId, string pageId)
+        public async Task<IActionResult> GetGatewayRoatpPage(Guid applicationId)
         {
             var username = _contextAccessor.HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetRoatpViewModel(new GetRoatpRequest(applicationId, username));
@@ -44,7 +42,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/Roepao")]
-        public async Task<IActionResult> GetGatewayRoepaoPage(Guid applicationId, string pageId)
+        public async Task<IActionResult> GetGatewayRoepaoPage(Guid applicationId)
         {
             var username = _contextAccessor.HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetRoepaoViewModel(new GetRoepaoRequest(applicationId, username));

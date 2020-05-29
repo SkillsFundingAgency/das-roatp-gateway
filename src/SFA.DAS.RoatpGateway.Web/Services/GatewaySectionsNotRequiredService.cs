@@ -71,7 +71,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         {
             var officeForStudentStatus = SectionReviewStatus.NotRequired;
 
-            if (providerRoute.Equals(ProviderTypes.Main) || providerRoute.Equals(ProviderTypes.Employer))
+            if (providerRoute == (int)ProviderTypes.Main || providerRoute == (int)ProviderTypes.Employer)
             {
                 var officeForStudent = await _accreditationClient.GetOfficeForStudents(applicationId);
                 if (officeForStudent != null && officeForStudent.Equals("Yes", StringComparison.InvariantCultureIgnoreCase)) officeForStudentStatus = string.Empty;
@@ -90,7 +90,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         {
             var initialTeacherTrainingStatus = SectionReviewStatus.NotRequired;
 
-            if (providerRoute.Equals(ProviderTypes.Main) || providerRoute.Equals(ProviderTypes.Employer))
+            if (providerRoute == (int)ProviderTypes.Main || providerRoute == (int)ProviderTypes.Employer)
             {
                 var initialTeacherTraining = await _accreditationClient.GetInitialTeacherTraining(applicationId);
                 if (initialTeacherTraining != null && initialTeacherTraining.DoesOrganisationOfferInitialTeacherTraining) initialTeacherTrainingStatus = string.Empty;
@@ -109,7 +109,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
         private async Task SetupNotRequireLinkForOfsted(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
         {
-            var OfstedStatus = providerRoute.Equals(ProviderTypes.Supporting) ? SectionReviewStatus.NotRequired : string.Empty;
+            var OfstedStatus = providerRoute == (int)ProviderTypes.Supporting ? SectionReviewStatus.NotRequired : string.Empty;
             if (OfstedStatus.Equals(SectionReviewStatus.NotRequired))
             {
                 var page = GetSectionByPageId(viewModel, GatewayPageIds.Ofsted);
@@ -124,7 +124,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
         private async Task SetupNotRequiredLinkForSubcontractorDeclaration(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
         {
-            var SubcontractorDeclarationStatus = providerRoute.Equals(ProviderTypes.Supporting) ? string.Empty : SectionReviewStatus.NotRequired;
+            var SubcontractorDeclarationStatus = providerRoute == (int)ProviderTypes.Supporting ? string.Empty : SectionReviewStatus.NotRequired;
             if (SubcontractorDeclarationStatus.Equals(SectionReviewStatus.NotRequired))
             {
                 var page = GetSectionByPageId(viewModel, GatewayPageIds.SubcontractorDeclaration);

@@ -19,6 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         private RoatpGatewayController _controller;
         private Mock<IGatewayOverviewOrchestrator> _orchestrator;
         private Mock<IRoatpGatewayApplicationViewModelValidator> _validator;
+        private Mock<IRoatpGatewayPageValidator> _pageValidator;
 
         [SetUp]
         public void Setup()
@@ -27,7 +28,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _orchestrator = new Mock<IGatewayOverviewOrchestrator>();
             _validator = new Mock<IRoatpGatewayApplicationViewModelValidator>();
-            _controller = new RoatpGatewayController(ApplyApiClient.Object, ContextAccessor.Object, _orchestrator.Object, _validator.Object, Logger.Object);
+            _pageValidator = new Mock<IRoatpGatewayPageValidator>();
+            _controller = new RoatpGatewayController(ApplyApiClient.Object, ContextAccessor.Object, _orchestrator.Object,
+                                                     _validator.Object, Logger.Object, _pageValidator.Object);
         }
 
         [Test]

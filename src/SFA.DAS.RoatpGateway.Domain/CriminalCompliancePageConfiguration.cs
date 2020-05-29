@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SFA.DAS.RoatpGateway.Domain
 {
     public static class CriminalCompliancePageConfiguration
     {
-        public static Dictionary<string, string> Headings = new Dictionary<string, string>
+        private static Dictionary<string, string> headings = new Dictionary<string, string>
         {
             { GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, "Composition with creditors check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, "Failed to pay back funds in the last 3 years check" },
@@ -28,5 +29,7 @@ namespace SFA.DAS.RoatpGateway.Domain
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees, "Register of Removed Trustees check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt, "People in control or any partner organisations been made bankrupt in the last 3 years check" }
         };
+
+        public static IReadOnlyDictionary<string, string> Headings = new ReadOnlyDictionary<string, string>(headings);
     }
 }

@@ -76,7 +76,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         public void post_website_address_path_with_errors()
         {
             var applicationId = Guid.NewGuid();
-            var pageId = GatewayPageIds.WebsiteAddress;
 
             var vm = new WebsiteViewModel
             {

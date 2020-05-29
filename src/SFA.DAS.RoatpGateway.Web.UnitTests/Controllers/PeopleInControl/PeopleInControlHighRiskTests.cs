@@ -47,7 +47,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.PeopleInControl
         [Test]
         public void check_people_in_control_high_risk_request_is_sent_and_viewmodel_returned()
         {
-            var result = (ViewResult)_controller.GetGatewayPeopleInControlRiskPage(_applicationId, GatewayPageIds.PeopleInControl).Result;
+            var result = (ViewResult)_controller.GetGatewayPeopleInControlRiskPage(_applicationId).Result;
             var resultModel = (PeopleInControlHighRiskPageViewModel)result.Model;
             Assert.AreEqual(_applicationId, resultModel.ApplicationId);
         }

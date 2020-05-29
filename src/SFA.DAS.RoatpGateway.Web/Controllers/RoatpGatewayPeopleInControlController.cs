@@ -19,8 +19,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         private readonly IPeopleInControlOrchestrator _orchestrator;
 
-        private const string GatewayViewsLocation = "~/Views/Gateway/pages";
-
         public RoatpGatewayPeopleInControlController(IHttpContextAccessor contextAccessor, IRoatpApplicationApiClient roatpApiClient, ILogger<RoatpGatewayPeopleInControlController> logger, IRoatpGatewayPageValidator validator, IPeopleInControlOrchestrator orchestrator) : base(contextAccessor, roatpApiClient, logger, validator)
         {
             {
@@ -29,7 +27,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/PeopleInControl")]
-        public async Task<IActionResult> GetGatewayPeopleInControlPage(Guid applicationId, string pageId)
+        public async Task<IActionResult> GetGatewayPeopleInControlPage(Guid applicationId)
         {
             var username = _contextAccessor.HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(applicationId, username));
@@ -45,7 +43,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/PeopleInControlRisk")]
-        public async Task<IActionResult> GetGatewayPeopleInControlRiskPage(Guid applicationId, string pageId)
+        public async Task<IActionResult> GetGatewayPeopleInControlRiskPage(Guid applicationId)
         {
             var username = _contextAccessor.HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(applicationId, username));

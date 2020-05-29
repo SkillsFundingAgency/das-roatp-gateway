@@ -61,9 +61,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
         }
 
-        protected async Task<IActionResult> ValidateAndUpdatePageAnswer<T>(SubmitGatewayPageAnswerCommand command,
-                                                                  Func<Task<T>> viewModelBuilder,
-                                                                  string errorView) where T : RoatpGatewayPageViewModel
+        protected async Task<IActionResult> ValidateAndUpdatePageAnswer<VM>(SubmitGatewayPageAnswerCommand command,
+                                                                  Func<Task<VM>> viewModelBuilder,
+                                                                  string errorView) where VM : RoatpGatewayPageViewModel
         {
             var validationResponse = await GatewayValidator.Validate(command);
             if (validationResponse.Errors != null && validationResponse.Errors.Any())

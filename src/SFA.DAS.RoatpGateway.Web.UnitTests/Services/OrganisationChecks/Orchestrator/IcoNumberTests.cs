@@ -59,7 +59,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
             // SubmittedApplicationIcoNumber
             var expectedIcoNumberIcoNumber = "1234QWER";
-            var icoNumberResult = "1234QWER";
+            var icoNumberResult = new IcoNumber { Value = "1234QWER" };
 
 
             _applyApiClient.Setup(x => x.GetIcoNumber(It.IsAny<Guid>())).ReturnsAsync(icoNumberResult);

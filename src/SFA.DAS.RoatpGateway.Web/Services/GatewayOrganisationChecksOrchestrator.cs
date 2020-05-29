@@ -166,7 +166,8 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 model.OrganisationAddress = string.Join(", ", AddressArray.Where(s => !string.IsNullOrEmpty(s))); ;
             }
 
-            model.IcoNumber = await _applyApiClient.GetIcoNumber(request.ApplicationId);
+            var icoNumber = await _applyApiClient.GetIcoNumber(request.ApplicationId);
+            model.IcoNumber = icoNumber.Value;
 
             return model;
         }

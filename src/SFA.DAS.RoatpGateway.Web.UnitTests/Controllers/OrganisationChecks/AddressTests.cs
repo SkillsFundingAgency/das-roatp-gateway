@@ -31,7 +31,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         public void check_address_request_is_sent()
         {
             var applicationId = Guid.NewGuid();
-            var pageId = "Address";
 
             _orchestrator.Setup(x => x.GetAddressViewModel(new GetAddressRequest(applicationId, Username)))
                 .ReturnsAsync(new AddressCheckViewModel())

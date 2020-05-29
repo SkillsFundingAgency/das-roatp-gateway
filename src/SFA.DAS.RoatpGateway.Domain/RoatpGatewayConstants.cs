@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SFA.DAS.RoatpGateway.Domain
 {
@@ -57,7 +58,7 @@ namespace SFA.DAS.RoatpGateway.Domain
 
     public static class NoSelectionErrorMessages
     {
-        public static Dictionary<string, string> Errors = new Dictionary<string, string>
+        private static Dictionary<string, string> errors = new Dictionary<string, string>
         {
             { GatewayPageIds.LegalName, "Select the outcome for legal name check" },
             { GatewayPageIds.TradingName, "Select the outcome for trading name check" },
@@ -97,6 +98,7 @@ namespace SFA.DAS.RoatpGateway.Domain
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt, "Select the outcome for people in control or any partner organisations been made bankrupt in the last 3 years check" }
         };
 
+        public static IReadOnlyDictionary<string, string> Errors = new ReadOnlyDictionary<string, string>(errors);
     }
 
     public static class HtmlAndCssElements

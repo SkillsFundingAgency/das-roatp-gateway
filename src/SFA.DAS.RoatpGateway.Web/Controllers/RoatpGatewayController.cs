@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,25 +10,21 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
-using SFA.DAS.RoatpGateway.Web.Domain;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
-    [Authorize(Roles = Roles.RoatpGatewayTeam)]
     public class RoatpGatewayController : RoatpGatewayControllerBase<RoatpGatewayController>
     {
-        private readonly IRoatpApplicationApiClient _applyApiClient;
-        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IGatewayOverviewOrchestrator _orchestrator;
         private readonly IRoatpGatewayApplicationViewModelValidator _validator;
-        private readonly ILogger<RoatpGatewayController> _logger;
-        public RoatpGatewayController(IRoatpApplicationApiClient applyApiClient, IHttpContextAccessor contextAccessor, IGatewayOverviewOrchestrator orchestrator, IRoatpGatewayApplicationViewModelValidator validator, ILogger<RoatpGatewayController> logger)
+
+        public RoatpGatewayController(IRoatpApplicationApiClient applyApiClient, IHttpContextAccessor contextAccessor,
+                                     IGatewayOverviewOrchestrator orchestrator, IRoatpGatewayApplicationViewModelValidator validator, 
+                                     ILogger<RoatpGatewayController> logger, IRoatpGatewayPageValidator gatewayValidator)
+            :base(contextAccessor, applyApiClient, logger, gatewayValidator)
         {
-            _applyApiClient = applyApiClient;
-            _contextAccessor = contextAccessor;
             _orchestrator = orchestrator;
             _validator = validator;
-            _logger = logger;
         }
 
         [HttpGet("/Roatp/Gateway/New")]
