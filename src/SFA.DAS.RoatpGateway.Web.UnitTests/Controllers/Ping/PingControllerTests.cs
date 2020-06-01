@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.RoatpGateway.Web.Controllers;
-using SFA.DAS.RoatpGateway.Web.UnitTests.MockedObjects;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Ping
 {
