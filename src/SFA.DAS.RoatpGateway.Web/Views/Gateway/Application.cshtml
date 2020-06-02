@@ -103,18 +103,18 @@
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <ol class="app-task-list">
+                <ol class="das-task-list">
                     @foreach (var sequence in Model.Sequences)
                     {
                         <li>
-                            <h2 class="app-task-list__section">
-                                <span class="app-task-list__section-number">@sequence.SequenceNumber. </span>@sequence.SequenceTitle
+                            <h2 class="das-task-list__section">
+                                <span class="das-task-list__section-number">@sequence.SequenceNumber. </span>@sequence.SequenceTitle
                             </h2>
-                            <ul class="app-task-list__items">
+                            <ul class="das-task-list__items">
                                 @foreach (var currentSection in sequence.Sections)
                                 {
-                                    <li class="app-task-list__item">
-                                        <span class="app-task-list__task-name app-task-list__task-name--inactive">
+                                    <li class="das-task-list__item">
+                                        <span class="das-task-list__task-name das-task-list__task-name--inactive">
                                             @if (currentSection.Status != null && currentSection.Status.Equals(SectionReviewStatus.NotRequired))
                                             {
                                                 @currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : "<span class=\"govuk-visually-hidden\"> " + currentSection.HiddenText + "</span>"))
@@ -128,11 +128,26 @@
                                         {
                                             @if (!currentSection.Status.Equals(SectionReviewStatus.New))
                                             {
-                                                var cssModifierClassName = currentSection.Status.ToLower().Replace(" ", "");
-                                                <strong class="govuk-tag app-task-list__task-@cssModifierClassName das-no-wrap">@currentSection.Status</strong>
+                                                var cssModifierClassName = "";
+                                                switch(currentSection.Status)
+                                                {
+                                                    case "Not required":
+                                                        cssModifierClassName = "govuk-tag--inactive";
+                                                        break;
+                                                    case "Pass":
+                                                        cssModifierClassName = "das-tag--solid-green";
+                                                        break;
+                                                    case "Fail":
+                                                        cssModifierClassName = "das-tag--solid-red";
+                                                        break;
+                                                    default:
+                                                        cssModifierClassName = "";
+                                                        break;                   
+                                                }
+                                                
+                                                <strong class="das-task-list__task-tag das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
                                             }
                                         }
-
 
                                     </li>
                                 }
@@ -140,12 +155,12 @@
                         </li>
                     }
                     <li>
-                        <h2 class="app-task-list__section">
-                            <span class="app-task-list__section-number">7. </span>Overall gateway outcome
+                        <h2 class="das-task-list__section">
+                            <span class="das-task-list__section-number">7. </span>Overall gateway outcome
                         </h2>
-                        <ul class="app-task-list__items">
-                            <li class="app-task-list__item">
-                                <span class="app-task-list__task-name app-task-list__task-name--inactive">
+                        <ul class="das-task-list__items">
+                            <li class="das-task-list__item">
+                                <span class="das-task-list__task-name das-task-list__task-name--inactive">
                                     @if (Model.ReadyToConfirm)
                                     {
                                         <a asp-controller="RoatpGateway" asp-action="ConfirmOutcome" asp-route-applicationId="@Model.ApplicationId">Confirm gateway outcome</a>
