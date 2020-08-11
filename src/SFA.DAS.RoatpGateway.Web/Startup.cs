@@ -97,6 +97,8 @@ namespace SFA.DAS.RoatpGateway.Web
 
             ConfigureHttpClients(services);
             ConfigureDependencyInjection(services);
+
+            Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
         }
 
         private void ConfigureApplicationConfiguration()
