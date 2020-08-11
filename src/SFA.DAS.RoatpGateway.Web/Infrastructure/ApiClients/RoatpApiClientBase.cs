@@ -244,7 +244,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var message = TryParseJson<ApiError>(responseContent, out var apiError) ? apiError?.Message : responseContent;
 
-                _logger.LogError($"HTTP {statusCode} || {httpMethod}: {requestUri} || Message: {message ?? responseContent}");
+                _logger.LogError($"HTTP {statusCode} || {httpMethod}: {requestUri} || Message: {message}");
             }
         }
 
