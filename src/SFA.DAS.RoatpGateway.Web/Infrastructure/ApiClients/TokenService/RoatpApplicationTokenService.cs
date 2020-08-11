@@ -4,7 +4,7 @@ using System;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService
 {
-    public class RoatpApplicationTokenService : ITokenService
+    public class RoatpApplicationTokenService : IRoatpApplicationTokenService
     {
         private readonly IWebConfiguration _configuration;
 

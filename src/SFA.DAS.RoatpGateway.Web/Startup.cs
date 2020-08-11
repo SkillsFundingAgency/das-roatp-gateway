@@ -149,7 +149,7 @@ namespace SFA.DAS.RoatpGateway.Web
             .SetHandlerLifetime(handlerLifeTime)
             .AddPolicyHandler(GetRetryPolicy());
 
-            services.AddHttpClient<IRoatpApiClient, RoatpApiClient>(config =>
+            services.AddHttpClient<IRoatpRegisterApiClient, RoatpRegisterApiClient>(config =>
             {
                 config.BaseAddress = new Uri(ApplicationConfiguration.RoatpRegisterApiAuthentication.ApiBaseAddress);
                 config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
@@ -188,8 +188,8 @@ namespace SFA.DAS.RoatpGateway.Web
 
             services.AddTransient(x => ApplicationConfiguration);
 
-            services.AddTransient<ITokenService, RoatpApplicationTokenService>();
-            services.AddTransient<IRoatpTokenService, RoatpRegisterTokenService>();
+            services.AddTransient<IRoatpApplicationTokenService, RoatpApplicationTokenService>();
+            services.AddTransient<IRoatpRegisterTokenService, RoatpRegisterTokenService>();
 
             services.AddTransient<IGatewayOverviewOrchestrator, GatewayOverviewOrchestrator>();
             services.AddTransient<IGatewayOrganisationChecksOrchestrator, GatewayOrganisationChecksOrchestrator>();

@@ -15,9 +15,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
     {
         protected readonly HttpClient _client;
         protected readonly ILogger<CB> _logger;
-        protected readonly IRoatpTokenService _tokenService;
+        protected readonly ITokenService _tokenService;
 
-        public RoatpApiClientBase(HttpClient client, ILogger<CB> logger, IRoatpTokenService tokenService)
+        public RoatpApiClientBase(HttpClient client, ILogger<CB> logger, ITokenService tokenService)
         {
             _client = client;
             _logger = logger;

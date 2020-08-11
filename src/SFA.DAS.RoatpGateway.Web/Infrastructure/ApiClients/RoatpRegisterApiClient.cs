@@ -9,9 +9,9 @@ using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
-    public class RoatpApiClient : RoatpApiClientBase<RoatpApiClient>, IRoatpApiClient
+    public class RoatpRegisterApiClient : RoatpApiClientBase<RoatpRegisterApiClient>, IRoatpRegisterApiClient
     {
-        public RoatpApiClient(HttpClient client, ILogger<RoatpApiClient> logger, IRoatpTokenService tokenService)
+        public RoatpRegisterApiClient(HttpClient client, ILogger<RoatpRegisterApiClient> logger, IRoatpRegisterTokenService tokenService)
             : base(client, logger, tokenService)
         {
         }
