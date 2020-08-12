@@ -11,15 +11,12 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
     public class RoatpOrganisationSummaryApiClient : ApiClientBase<RoatpOrganisationSummaryApiClient>, IRoatpOrganisationSummaryApiClient
     {
-        private readonly HttpClient _client;
-        private readonly ITokenService _tokenService;
         private const string RoutePath = "organisation";
 
-        public RoatpOrganisationSummaryApiClient(HttpClient client, ILogger<RoatpOrganisationSummaryApiClient> logger, ITokenService tokenService)
+        public RoatpOrganisationSummaryApiClient(HttpClient client, ILogger<RoatpOrganisationSummaryApiClient> logger, IRoatpApplicationTokenService tokenService)
             : base(client, logger)
         {
-            _client = client;
-            _tokenService = tokenService;
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
         }
 
         public async Task<string> GetTypeOfOrganisation(Guid applicationId)

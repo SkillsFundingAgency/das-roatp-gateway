@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
@@ -9,11 +10,12 @@ using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
-    public class RoatpRegisterApiClient : RoatpApiClientBase<RoatpRegisterApiClient>, IRoatpRegisterApiClient
+    public class RoatpRegisterApiClient : ApiClientBase<RoatpRegisterApiClient>, IRoatpRegisterApiClient
     {
         public RoatpRegisterApiClient(HttpClient client, ILogger<RoatpRegisterApiClient> logger, IRoatpRegisterTokenService tokenService)
-            : base(client, logger, tokenService)
+            : base(client, logger)
         {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
         }
 
         public async Task<IEnumerable<ProviderDetails>> GetUkrlpProviderDetails(string ukprn)

@@ -14,13 +14,13 @@ using System.Net.Http.Headers;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
-    public class RoatpApplicationApiClient : RoatpApiClientBase<RoatpApplicationApiClient>, IRoatpApplicationApiClient
+    public class RoatpApplicationApiClient : ApiClientBase<RoatpApplicationApiClient>, IRoatpApplicationApiClient
     {
         public RoatpApplicationApiClient(HttpClient client, ILogger<RoatpApplicationApiClient> logger, IRoatpApplicationTokenService tokenService)
-            : base(client, logger, tokenService)
+            : base(client, logger)
         {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
         }
-
 
         public async Task<RoatpApplicationResponse> GetApplication(Guid applicationId)
         {
