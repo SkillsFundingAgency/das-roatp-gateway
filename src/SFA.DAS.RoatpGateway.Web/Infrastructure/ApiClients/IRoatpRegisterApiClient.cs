@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
-    public interface IRoatpApiClient
+    public interface IRoatpRegisterApiClient
     {
         Task<IEnumerable<ProviderDetails>> GetUkrlpProviderDetails(string ukprn);
         Task<OrganisationRegisterStatus> GetOrganisationRegisterStatus(string ukprn);

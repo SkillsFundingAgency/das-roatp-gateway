@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService
 {
-    public interface IRoatpTokenService : ITokenService
+    public interface IRoatpRegisterTokenService : ITokenService
     {
     }
 }
