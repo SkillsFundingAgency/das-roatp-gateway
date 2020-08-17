@@ -80,8 +80,23 @@
                                     <td class="govuk-table__cell">
                                         @if (!string.IsNullOrWhiteSpace(currentSection.Status))
                                         {
-                                            var cssModifierClassName = currentSection.Status.ToLower().Replace(" ", "");
-                                            <strong class="govuk-tag govuk-tag--@cssModifierClassName das-no-wrap">@currentSection.Status</strong>
+                                            var cssModifierClassName = "";
+                                            switch (currentSection.Status)
+                                            {
+                                                case "Not required":
+                                                    cssModifierClassName = "govuk-tag--inactive";
+                                                    break;
+                                                case "Pass":
+                                                    cssModifierClassName = "das-tag--solid-green";
+                                                    break;
+                                                case "Fail":
+                                                    cssModifierClassName = "das-tag--solid-red";
+                                                    break;
+                                                default:
+                                                    cssModifierClassName = "";
+                                                    break;
+                                            }
+                                            <strong class="das-task-list__task-tag das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
                                         }
                                     </td>
                                     <td class="govuk-table__cell">
