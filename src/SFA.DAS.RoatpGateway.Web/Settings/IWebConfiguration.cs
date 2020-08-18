@@ -7,5 +7,9 @@
         AuthSettings StaffAuthentication { get; set; }
 
         ClientApiAuthentication ApplyApiAuthentication { get; set; }
+
+        ClientApiAuthentication RoatpRegisterApiAuthentication { get; set; }
+
+        string EsfaAdminServicesBaseUrl { get; set; }
     }
 }

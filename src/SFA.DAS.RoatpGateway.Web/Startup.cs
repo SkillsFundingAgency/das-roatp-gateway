@@ -20,6 +20,10 @@ using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 using SFA.DAS.RoatpGateway.Web.Settings;
 using SFA.DAS.RoatpGateway.Web.Extensions;
+using SFA.DAS.RoatpGateway.Web.Services;
+using SFA.DAS.RoatpGateway.Web.Validators;
+using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common;
 
 namespace SFA.DAS.RoatpGateway.Web
 {
@@ -142,6 +146,38 @@ namespace SFA.DAS.RoatpGateway.Web
             })
             .SetHandlerLifetime(handlerLifeTime)
             .AddPolicyHandler(GetRetryPolicy());
+
+            services.AddHttpClient<IRoatpRegisterApiClient, RoatpRegisterApiClient>(config =>
+            {
+                config.BaseAddress = new Uri(ApplicationConfiguration.RoatpRegisterApiAuthentication.ApiBaseAddress);
+                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
+            })
+            .SetHandlerLifetime(handlerLifeTime)
+            .AddPolicyHandler(GetRetryPolicy());
+
+            services.AddHttpClient<IRoatpOrganisationSummaryApiClient, RoatpOrganisationSummaryApiClient>(config =>
+            {
+                config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
+                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
+            })
+            .SetHandlerLifetime(handlerLifeTime)
+            .AddPolicyHandler(GetRetryPolicy());
+
+            services.AddHttpClient<IRoatpExperienceAndAccreditationApiClient, RoatpExperienceAndAccreditationApiClient>(config =>
+            {
+                config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
+                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
+            })
+           .SetHandlerLifetime(handlerLifeTime)
+           .AddPolicyHandler(GetRetryPolicy());
+
+            services.AddHttpClient<IRoatpGatewayCriminalComplianceChecksApiClient, RoatpGatewayCriminalComplianceChecksApiClient>(config =>
+            {
+                config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
+                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
+            })
+           .SetHandlerLifetime(handlerLifeTime)
+           .AddPolicyHandler(GetRetryPolicy());
         }
 
         private void ConfigureDependencyInjection(IServiceCollection services)
@@ -151,8 +187,18 @@ namespace SFA.DAS.RoatpGateway.Web
             services.AddTransient(x => ApplicationConfiguration);
 
             services.AddTransient<IRoatpApplicationTokenService, RoatpApplicationTokenService>();
+            services.AddTransient<IRoatpRegisterTokenService, RoatpRegisterTokenService>();
 
-
+            services.AddTransient<IGatewayOverviewOrchestrator, GatewayOverviewOrchestrator>();
+            services.AddTransient<IGatewayOrganisationChecksOrchestrator, GatewayOrganisationChecksOrchestrator>();
+            services.AddTransient<IGatewaySectionsNotRequiredService, GatewaySectionsNotRequiredService>();
+            services.AddTransient<IGatewayExperienceAndAccreditationOrchestrator, GatewayExperienceAndAccreditationOrchestrator>();
+            services.AddTransient<IPeopleInControlOrchestrator, PeopleInControlOrchestrator>();
+            services.AddTransient<IGatewayRegisterChecksOrchestrator, GatewayRegisterChecksOrchestrator>();
+            services.AddTransient<IGatewayCriminalComplianceChecksOrchestrator, GatewayCriminalComplianceChecksOrchestrator>();
+            services.AddTransient<IRoatpGatewayPageValidator, RoatpGatewayPageValidator>();
+            services.AddTransient<IRoatpGatewayApplicationViewModelValidator, RoatpGatewayApplicationViewModelValidator>();
+            DependencyInjection.ConfigureDependencyInjection(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
