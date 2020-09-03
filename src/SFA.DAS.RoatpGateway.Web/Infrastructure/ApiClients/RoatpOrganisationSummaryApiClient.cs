@@ -22,19 +22,19 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task<string> GetTypeOfOrganisation(Guid applicationId)
         {
             _logger.LogInformation($"Retrieving type of organisation from applicationId [{applicationId}]");
-            return await Get($"{RoutePath}/TypeOfOrganisation/{applicationId}");
+            return await Get<string>($"{RoutePath}/TypeOfOrganisation/{applicationId}");
         }
 
         public async Task<string> GetCompanyNumber(Guid applicationId)
         {
             _logger.LogInformation($"Retrieving company number from applicationId [{applicationId}]");
-            return await Get($"{RoutePath}/CompanyNumber/{applicationId}");
+            return await Get<string>($"{RoutePath}/CompanyNumber/{applicationId}");
         }
 
         public async Task<string> GetCharityNumber(Guid applicationId)
         {
             _logger.LogInformation($"Retrieving charity number from applicationId [{applicationId}]");
-            return await Get($"{RoutePath}/CharityNumber/{applicationId}");
+            return await Get<string>($"{RoutePath}/CharityNumber/{applicationId}");
         }
 
         public async Task<List<PersonInControl>> GetDirectorsFromSubmitted(Guid applicationId)

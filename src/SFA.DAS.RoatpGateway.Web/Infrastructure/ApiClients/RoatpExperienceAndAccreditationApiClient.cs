@@ -34,7 +34,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<string> GetOfficeForStudents(Guid applicationId)
         {
-            return await Get($"/Accreditation/{applicationId}/OfficeForStudents");
+            return await Get<string>($"/Accreditation/{applicationId}/OfficeForStudents");
         }
 
         public async Task<InitialTeacherTraining> GetInitialTeacherTraining(Guid applicationId)

@@ -43,7 +43,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         /// <returns>A Task yielding the result (of type T).</returns>
         /// <exception cref="RoatpApiClientException">Thrown if there was an unsuccessful response.</exception>
         /// <exception cref="HttpRequestException">Thrown if something unexpected occurred when sending the request.</exception>
-        protected async Task<T> Get<T>(string uri) where T : new()
+        protected async Task<T> Get<T>(string uri)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         /// <param name="uri">The URI to the end point you wish to interact with.</param>
         /// <returns>A Task yielding the result (of type U).</returns>
         /// <exception cref="HttpRequestException">Thrown if something unexpected occurred when sending the request.</exception>
-        protected async Task<U> Post<T, U>(string uri, T model) where U : new()
+        protected async Task<U> Post<T, U>(string uri, T model)
         {
             var serializeObject = JsonConvert.SerializeObject(model);
 
@@ -201,7 +201,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         /// <param name="uri">The URI to the end point you wish to interact with.</param>
         /// <returns>A Task yielding the result (of type U).</returns>
         /// <exception cref="HttpRequestException">Thrown if something unexpected occurred when sending the request.</exception>
-        protected async Task<U> Put<T, U>(string uri, T model) where U : new()
+        protected async Task<U> Put<T, U>(string uri, T model)
         {
             var serializeObject = JsonConvert.SerializeObject(model);
 
@@ -248,7 +248,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
         }
 
-        private static bool TryParseJson<T>(string json, out T result) where T : new()
+        private static bool TryParseJson<T>(string json, out T result)
         {
             try
             {

@@ -193,28 +193,28 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<string> GetTradingName(Guid applicationId)
         {
-            return await Get($"/Gateway/{applicationId}/TradingName");
+            return await Get<string>($"/Gateway/{applicationId}/TradingName");
         }
 
         public async Task<string> GetProviderRouteName(Guid applicationId)
         {
-            return await Get($"/Gateway/{applicationId}/ProviderRouteName");
+            return await Get<string>($"/Gateway/{applicationId}/ProviderRouteName");
         }
 
         public async Task<string> GetWebsiteAddressSourcedFromUkrlp(Guid applicationId)
         {
-            return await Get($"/Gateway/{applicationId}/WebsiteAddressFromUkrlp");
+            return await Get<string>($"/Gateway/{applicationId}/WebsiteAddressFromUkrlp");
         }
 
 
         public async Task<string> GetWebsiteAddressManuallyEntered(Guid applicationId)
         {
-            return await Get($"/Gateway/{applicationId}/WebsiteAddressManuallyEntered");
+            return await Get<string>($"/Gateway/{applicationId}/WebsiteAddressManuallyEntered");
         }
 
         public async Task<string> GetOrganisationWebsiteAddress(Guid applicationId)
         {
-            return await Get($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
+            return await Get<string>($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
         }
 
     }
