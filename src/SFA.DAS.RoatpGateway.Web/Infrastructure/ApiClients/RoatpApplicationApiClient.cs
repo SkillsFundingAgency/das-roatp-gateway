@@ -11,6 +11,7 @@ using SFA.DAS.RoatpGateway.Domain.Roatp;
 using System.Net.Http;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
 using System.Net.Http.Headers;
+using SFA.DAS.AdminService.Common.Infrastructure;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
