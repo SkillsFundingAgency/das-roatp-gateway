@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 
@@ -34,7 +35,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<string> GetOfficeForStudents(Guid applicationId)
         {
-            return await Get($"/Accreditation/{applicationId}/OfficeForStudents");
+            return await Get<string>($"/Accreditation/{applicationId}/OfficeForStudents");
         }
 
         public async Task<InitialTeacherTraining> GetInitialTeacherTraining(Guid applicationId)
