@@ -10,10 +10,13 @@ namespace SFA.DAS.RoatpGateway.Domain
         public static class Captions
         {
             public static string OrganisationChecks = "Organisation checks";
-
             public static string PeopleInControlChecks = "People in control checks";
             public static string ExperienceAndAccreditation = "Experience and accreditation checks";
-            public static string OrganisationsCriminalAndComplianceChecks = "Organisation’s criminal and compliance checks";
+            public static string OrganisationsCriminalAndComplianceChecks = "Organisation's criminal and compliance checks";
+
+            // This one needs adding Mark, currently both sections 5 and 6 share the one above - Greg
+            // public static string PeopleInControlCriminalAndComplianceChecks = "People in control's criminal and compliance checks";
+
             public static string RegisterChecks = "Register checks";
         }
 
