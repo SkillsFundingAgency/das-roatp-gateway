@@ -71,11 +71,13 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         {
             var officeForStudentStatus = SectionReviewStatus.NotRequired;
 
-            if (providerRoute == (int)ProviderTypes.Main || providerRoute == (int)ProviderTypes.Employer)
+            // TODO - adjust unit tests
+            if (providerRoute == (int)ProviderTypes.Main)
             {
                 var officeForStudent = await _accreditationClient.GetOfficeForStudents(applicationId);
                 if (officeForStudent != null && officeForStudent.Equals("Yes", StringComparison.InvariantCultureIgnoreCase)) officeForStudentStatus = string.Empty;
             }
+
             if (officeForStudentStatus.Equals(SectionReviewStatus.NotRequired))
             {
                 var page = GetSectionByPageId(viewModel, GatewayPageIds.OfficeForStudents);
