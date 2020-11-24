@@ -69,15 +69,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
         private async Task SetupNotRequiredLinkForOfficeForStudents(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
         {
-            var officeForStudentStatus = SectionReviewStatus.NotRequired;
-
-            // TODO - adjust unit tests
-            if (providerRoute == (int)ProviderTypes.Main)
-            {
-                var officeForStudent = await _accreditationClient.GetOfficeForStudents(applicationId);
-                if (officeForStudent != null && officeForStudent.Equals("Yes", StringComparison.InvariantCultureIgnoreCase)) officeForStudentStatus = string.Empty;
-            }
-
+            var officeForStudentStatus = providerRoute == (int)ProviderTypes.Main ?  string.Empty : SectionReviewStatus.NotRequired;
             if (officeForStudentStatus.Equals(SectionReviewStatus.NotRequired))
             {
                 var page = GetSectionByPageId(viewModel, GatewayPageIds.OfficeForStudents);
@@ -111,8 +103,15 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
         private async Task SetupNotRequireLinkForOfsted(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
         {
-            var OfstedStatus = providerRoute == (int)ProviderTypes.Supporting ? SectionReviewStatus.NotRequired : string.Empty;
-            if (OfstedStatus.Equals(SectionReviewStatus.NotRequired))
+            var ofstedStatus = SectionReviewStatus.NotRequired;
+
+            if (providerRoute == (int)ProviderTypes.Main || providerRoute == (int)ProviderTypes.Employer)
+            {
+                var initialTeacherTraining = await _accreditationClient.GetInitialTeacherTraining(applicationId);
+                if (initialTeacherTraining != null && !initialTeacherTraining.IsPostGradOnlyApprenticeship) ofstedStatus = string.Empty;
+            }
+
+            if (ofstedStatus.Equals(SectionReviewStatus.NotRequired))
             {
                 var page = GetSectionByPageId(viewModel, GatewayPageIds.Ofsted);
 
