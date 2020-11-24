@@ -61,6 +61,17 @@
                         </dd>
                     </div>
                 }
+                @if (!string.IsNullOrWhiteSpace(Model.ApplicationEmailAddress))
+                {
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Applicant's email address
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            @Model.ApplicationEmailAddress
+                        </dd>
+                    </div>
+                }
                 @if (Model.SubmittedDate.HasValue)
                 {
                     <div class="govuk-summary-list__row">
