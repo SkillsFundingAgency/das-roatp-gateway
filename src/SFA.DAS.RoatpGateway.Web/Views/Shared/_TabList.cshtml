@@ -1,0 +1,19 @@
+﻿@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayDashboardViewModel
+
+<ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item @(Model.SelectedTab == "NewApplications" ? "govuk-tabs__list-item--selected" : "") ">
+        <a class="govuk-tabs__tab" asp-action="NewApplications" asp-controller="RoatpGateway">
+            New (@Model.ApplicationCounts.NewApplicationsCount)
+        </a>
+    </li>
+    <li class="govuk-tabs__list-item @(Model.SelectedTab == "InProgressApplications" ? "govuk-tabs__list-item--selected" : "")">
+        <a class="govuk-tabs__tab" asp-action="InProgressApplications" asp-controller="RoatpGateway">
+            In progress (@Model.ApplicationCounts.InProgressApplicationsCount)
+        </a>
+    </li>
+    <li class="govuk-tabs__list-item @(Model.SelectedTab == "ClosedApplications" ? "govuk-tabs__list-item--selected" : "")">
+        <a class="govuk-tabs__tab" asp-action="ClosedApplications" asp-controller="RoatpGateway">
+            Gateway outcome  (@Model.ApplicationCounts.ClosedApplicationsCount)
+        </a>
+    </li>
+</ul>
