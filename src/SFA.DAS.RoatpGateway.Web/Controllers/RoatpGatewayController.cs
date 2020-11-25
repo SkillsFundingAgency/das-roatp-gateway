@@ -39,7 +39,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 Applications = paginatedApplications,
                 ApplicationCounts = counts,
-                SelectedTab = "NewApplications"
+                SelectedTab = nameof(NewApplications)
             };
 
             return View("~/Views/Gateway/NewApplications.cshtml", viewModel);
@@ -57,7 +57,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 Applications = paginatedApplications,
                 ApplicationCounts = counts,
-                SelectedTab = "InProgressApplications"
+                SelectedTab = nameof(InProgressApplications)
             };
 
             return View("~/Views/Gateway/InProgressApplications.cshtml", viewModel);
@@ -75,7 +75,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 Applications = paginatedApplications,
                 ApplicationCounts = counts,
-                SelectedTab = "ClosedApplications"
+                SelectedTab = nameof(ClosedApplications)
             };
 
             return View("~/Views/Gateway/ClosedApplications.cshtml", viewModel);
