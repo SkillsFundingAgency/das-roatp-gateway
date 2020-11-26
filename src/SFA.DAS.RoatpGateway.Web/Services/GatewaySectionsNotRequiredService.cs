@@ -82,13 +82,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         }
         private async Task SetupNotRequiredLinkForInitialTeacherTraining(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
         {
-            var initialTeacherTrainingStatus = SectionReviewStatus.NotRequired;
-
-            if (providerRoute == (int)ProviderTypes.Main || providerRoute == (int)ProviderTypes.Employer)
-            {
-                var initialTeacherTraining = await _accreditationClient.GetInitialTeacherTraining(applicationId);
-                if (initialTeacherTraining != null && initialTeacherTraining.DoesOrganisationOfferInitialTeacherTraining) initialTeacherTrainingStatus = string.Empty;
-            }
+            var initialTeacherTrainingStatus = providerRoute == (int)ProviderTypes.Supporting ? SectionReviewStatus.NotRequired : string.Empty;
 
             if (initialTeacherTrainingStatus.Equals(SectionReviewStatus.NotRequired))
             {

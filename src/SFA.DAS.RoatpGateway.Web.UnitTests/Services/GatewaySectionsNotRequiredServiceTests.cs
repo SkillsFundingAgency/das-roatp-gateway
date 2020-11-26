@@ -228,7 +228,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
         [TestCase(ProviderTypes.Main)]
         [TestCase(ProviderTypes.Employer)]
-        public async Task Not_required_set_for_initial_teacher_training_if_main_or_employer_and_answered_no(int providerTypeId)
+        public async Task Not_required_not_set_for_initial_teacher_training_if_main_or_employer_and_answered_no(int providerTypeId)
         {
             _accreditationClient.Setup(x => x.GetInitialTeacherTraining(_applicationId)).ReturnsAsync(new InitialTeacherTraining { DoesOrganisationOfferInitialTeacherTraining = false });
 
@@ -238,7 +238,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
                     .FirstOrDefault(sec => sec.PageId == GatewayPageIds.InitialTeacherTraining);
 
             initialTeacherTrainingSection.Should().NotBeNull();
-            initialTeacherTrainingSection.Status.Should().Be(SectionReviewStatus.NotRequired);
+            initialTeacherTrainingSection.Status.Should().Be(SectionReviewStatus.New);
         }
 
         [TestCase(ProviderTypes.Main)]
