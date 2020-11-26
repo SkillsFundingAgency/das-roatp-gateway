@@ -12,7 +12,7 @@
         <li class="govuk-breadcrumbs__list-item">
             <a class="govuk-breadcrumbs__link" asp-action="Index" asp-controller="Dashboard">Dashboard</a>
         </li>
-        <li class="govuk-breadcrumbs__list-item" aria-current="page">RoATP applications</li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">RoATP gateway applications</li>
     </ol>
 </div>
 
@@ -22,8 +22,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds das-no-wrap">
             <h1 class="govuk-heading-xl">
-                <span class="govuk-caption-xl">RoATP Applications</span>
-                Gateway outcome
+                RoATP gateway applications
             </h1>
         </div>
     </div>
@@ -33,7 +32,7 @@
 
             <partial name="_TabList" />
             <div class="govuk-tabs__panel" id="outcome">
-
+                
                 @if (@Model.Applications.Items.Any())
                 {
                     <table class="govuk-table das-table--condensed das-table--responsive">
@@ -68,12 +67,12 @@
                                             {
                                                 case GatewayReviewStatus.Pass:
                                                     <div class="das-tag das-tag--solid-green">
-                                                        accepted
+                                                        pass
                                                     </div>
                                                     break;
                                                 case GatewayReviewStatus.Fail:
                                                     <div class="das-tag das-tag--solid-red">
-                                                        declined
+                                                        fail
                                                     </div>
                                                     break;
                                                 default:
