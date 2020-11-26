@@ -83,12 +83,13 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         protected async Task<IActionResult> SubmitGatewayPageAnswer(SubmitGatewayPageAnswerCommand command)
         {
             var username = _contextAccessor.HttpContext.User.UserDisplayName();
+            var userId = _contextAccessor.HttpContext.User.UserId();
             var comments = SetupGatewayPageOptionTexts(command);
 
             _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswer - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}'");
             try
             {
-                await _applyApiClient.SubmitGatewayPageAnswer(command.ApplicationId, command.PageId, command.Status, username, comments);
+                await _applyApiClient.SubmitGatewayPageAnswer(command.ApplicationId, command.PageId, command.Status, userId, username, comments);
             }
             catch (Exception ex)
             {
