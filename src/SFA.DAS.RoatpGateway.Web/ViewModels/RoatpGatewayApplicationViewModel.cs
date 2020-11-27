@@ -41,6 +41,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string CssOnErrorDeclined { get; set; }
         public string CssOnErrorApproved { get; set; }
 
+        public string ApplicationEmailAddress { get; set; }
 
         public RoatpGatewayApplicationViewModel()
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
@@ -35,6 +36,11 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var applicationData = GetApplicationData(application);
 
             var viewmodel = new RoatpGatewayApplicationViewModel(applicationData);
+
+            var contact = await _applyApiClient.GetContactDetails(request.ApplicationId);
+
+            viewmodel.ApplicationEmailAddress = contact?.Email;
+
             viewmodel.Sequences = GetCoreGatewayApplicationViewModel();
 
             var savedStatuses = await _applyApiClient.GetGatewayPageAnswers(request.ApplicationId);
