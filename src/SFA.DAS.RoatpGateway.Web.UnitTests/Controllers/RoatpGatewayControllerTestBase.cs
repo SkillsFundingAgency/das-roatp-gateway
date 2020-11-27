@@ -17,6 +17,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         protected Mock<IRoatpGatewayPageValidator> GatewayValidator;
         protected Mock<ILogger<T>> Logger;
 
+        protected string UserId => "user id";
         protected string Username => "user name";
         protected string GivenName => "user";
         protected string Surname => "name";
@@ -32,7 +33,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.NameIdentifier, "1"),
-                new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", Username),
+                new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", UserId),
                 new Claim(ClaimTypes.GivenName, GivenName),
                 new Claim(ClaimTypes.Surname, Surname)
             }));

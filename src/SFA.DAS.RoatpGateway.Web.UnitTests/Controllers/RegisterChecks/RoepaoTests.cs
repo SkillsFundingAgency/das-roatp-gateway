@@ -27,6 +27,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
         private Mock<IGatewayRegisterChecksOrchestrator> _orchestrator;
         private Mock<ILogger<RoatpGatewayRegisterChecksController>> _logger;
 
+        private string userId = "user id";
         private string username = "john smith";
         private string givenName = "john";
         private string surname = "smith";
@@ -43,7 +44,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
              {
                 new Claim(ClaimTypes.NameIdentifier, "1"),
-                new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", username),
+                new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", userId),
                 new Claim(ClaimTypes.GivenName, givenName),
                 new Claim(ClaimTypes.Surname, surname)
              }));
@@ -94,7 +95,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
 
             var result = await _controller.EvaluateRoepaoPage(command);
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, username, vm.OptionPassText), Times.Once);
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText), Times.Once);
         }
 
         [Test]
@@ -129,7 +130,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
 
             var result = await _controller.EvaluateRoepaoPage(command);
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, username, vm.OptionPassText), Times.Never);
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText), Times.Never);
         }
     }
 }

@@ -99,21 +99,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
         }
 
-        public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string username,
-            string comments)
-        {
-            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}'");
-
-            try
-            {
-                await Post($"/Gateway/Page/Submit", new { applicationId, pageId, status, comments, username });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '" + ex.Message + "'");
-            }
-        }
-
         public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username,
             string comments)
         {
