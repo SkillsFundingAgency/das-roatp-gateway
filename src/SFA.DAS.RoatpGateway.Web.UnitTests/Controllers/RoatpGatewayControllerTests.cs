@@ -72,6 +72,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task ConfirmOutcome_evaluation_result_is_on_error()
         {
             var applicationId = Guid.NewGuid();
+            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new RoatpApplicationResponse { ApplicationId = applicationId });
 
             var viewModel = new RoatpGatewayApplicationViewModel
             {
@@ -120,8 +121,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.AboutToConfirmOutcome(viewModel);
             var viewResult = result as ViewResult;
+            var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
-            Assert.AreSame(viewModel, viewResult.Model);
+            Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Once);
         }
 
