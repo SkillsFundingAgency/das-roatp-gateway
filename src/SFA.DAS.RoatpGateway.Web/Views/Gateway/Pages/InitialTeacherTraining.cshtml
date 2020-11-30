@@ -53,10 +53,13 @@
                         <td class="govuk-table__cell">Does your organisation offer initial teacher training?</td>
                         <td class="govuk-table__cell">@(Model.DoesOrganisationOfferInitialTeacherTraining ? "Yes" : "No")</td>
                     </tr>
+                    @if (Model.IsPostGradOnlyApprenticeship.HasValue)
+                    {
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">Is the postgraduate teaching apprenticeship the only apprenticeship your organisation intends to deliver?</td>
-                        <td class="govuk-table__cell">@(Model.IsPostGradOnlyApprenticeship ? "Yes" : "No")</td>
+                        <td class="govuk-table__cell">@(Model.IsPostGradOnlyApprenticeship.Value ? "Yes" : "No")</td>
                     </tr>
+                    }
                 </tbody>
             </table>
 
