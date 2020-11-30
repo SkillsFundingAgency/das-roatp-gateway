@@ -31,7 +31,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             {
                 GatewayReviewStatus = gatewayReviewStatus,
                 OptionAskClarificationText = clarificationMessage,
-                OptionDeclinedText = declinedMessage,
+                OptionFailedText = declinedMessage,
                 OptionApprovedText = approvedMessage
             };
 
@@ -57,7 +57,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             _viewModel = new RoatpGatewayApplicationViewModel();
             _viewModel.GatewayReviewStatus = gatewayReviewStatus;
             _viewModel.OptionAskClarificationText = words;
-            _viewModel.OptionDeclinedText = words;
+            _viewModel.OptionFailedText = words;
             _viewModel.OptionApprovedText = words;
 
             var result = _validator.Validate(_viewModel).Result;

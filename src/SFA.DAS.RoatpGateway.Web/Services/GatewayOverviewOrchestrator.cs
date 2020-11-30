@@ -99,12 +99,12 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 viewModelOnError.ErrorMessages = validationResponse.Errors;
                 viewModelOnError.GatewayReviewStatus = viewModel.GatewayReviewStatus;
                 viewModelOnError.OptionAskClarificationText = viewModel.OptionAskClarificationText;
-                viewModelOnError.OptionDeclinedText = viewModel.OptionDeclinedText;
+                viewModelOnError.OptionFailedText = viewModel.OptionFailedText;
                 viewModelOnError.OptionApprovedText = viewModel.OptionApprovedText;
-
+               
                 viewModelOnError.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
                 viewModelOnError.RadioCheckedAskClarification = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
-                viewModelOnError.RadioCheckedDeclined = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Fail ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
+                viewModelOnError.RadioCheckedFailed = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Fail ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedApproved = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Pass ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
 
                 foreach (var error in viewModelOnError.ErrorMessages)
@@ -120,9 +120,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         viewModelOnError.CssOnErrorAskClarification = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionDeclinedText)))
+                    if (error.Field.Equals(nameof(viewModelOnError.OptionFailedText)))
                     {
-                        viewModelOnError.ErrorTextDeclined = error.ErrorMessage;
+                        viewModelOnError.ErrorTextFailed = error.ErrorMessage;
                         viewModelOnError.CssOnErrorDeclined = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 

@@ -123,44 +123,82 @@
                         <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextGatewayReviewStatus
                     </span>
                 }
-                <div class="govuk-form-group @Model.CssFormGroupError">
-                    <div class="govuk-radios govuk-radios--conditional " data-module="radios">
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input"
-                                   id="OptionApproved"
-                                   name="GatewayReviewStatus"
-                                   type="radio"
-                                   value="Pass"
-                                   data-aria-controls="conditional-OptionApproved"
-                                   @Model.RadioCheckedApproved>
-                            <label class="govuk-label govuk-radios__label" for="OptionApproved">
-                                Pass this application
-                            </label>
+            <div class="govuk-form-group @Model.CssFormGroupError">
+                <div class="govuk-radios govuk-radios--conditional " data-module="radios">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input"
+                               id="OptionApproved"
+                               name="GatewayReviewStatus"
+                               type="radio"
+                               value="Pass"
+                               data-aria-controls="conditional-OptionApproved"
+                               @Model.RadioCheckedApproved>
+                        <label class="govuk-label govuk-radios__label" for="OptionApproved">
+                            Pass this application
+                        </label>
+                    </div>
+                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionApproved">
+                        <div class="govuk-character-count" data-module="character-count" data-maxwords="500">
+                            <div class="govuk-form-group">
+                                <a name="OptionApprovedText"></a>
+                                <label class="govuk-label" for="OptionApprovedText">
+                                    Add comments (optional)
+                                </label>
+                                @if (!string.IsNullOrEmpty(Model.ErrorTextApproved))
+                                {
+                                    <span class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextApproved
+                                    </span>
+                                }
+                                <textarea class="govuk-textarea js-character-count @Model.CssOnErrorApproved"
+                                          id="OptionApprovedText"
+                                          name="OptionApprovedText"
+                                          rows="5"
+                                          aria-describedby="OptionApprovedText-info">@Model.OptionApprovedText</textarea>
+                                <span id="OptionApprovedText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+                            </div>
                         </div>
-                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionApproved">
-                            <div class="govuk-character-count" data-module="character-count" data-maxwords="500">
-                                <div class="govuk-form-group">
-                                    <a name="OptionApprovedText"></a>
-                                    <label class="govuk-label" for="OptionApprovedText">
-                                        Add comments (optional)
-                                    </label>
-                                    @if (!string.IsNullOrEmpty(Model.ErrorTextApproved))
-                                    {
-                                        <span class="govuk-error-message">
-                                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextApproved
-                                        </span>
-                                    }
-                                    <textarea class="govuk-textarea js-character-count @Model.CssOnErrorApproved"
-                                              id="OptionApprovedText"
-                                              name="OptionApprovedText"
-                                              rows="5"
-                                              aria-describedby="OptionApprovedText-info">@Model.OptionApprovedText</textarea>
-                                    <span id="OptionApprovedText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
-                                </div>
+                    </div>
+
+
+
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input"
+                               id="OptionFailed"
+                               name="GatewayReviewStatus"
+                               type="radio"
+                               value="Fail"
+                               data-aria-controls="conditional-OptionFailed"
+                               @Model.RadioCheckedFailed
+                               >
+                        <label class="govuk-label govuk-radios__label" for="OptionFailed">
+                            Fail this application
+                        </label>
+                    </div>
+                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionFailed">
+                        <div class="govuk-character-count" data-module="character-count" data-maxwords="500">
+                            <div class="govuk-form-group">
+                                <a name="OptionFailedText"></a>
+                                <label class="govuk-label" for="OptionFailedText">
+                                    Add comments
+                                </label>
+                                @if (!string.IsNullOrEmpty(Model.ErrorTextFailed))
+                                {
+                                    <span class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextFailed
+                                    </span>
+                                }
+                                <textarea class="govuk-textarea js-character-count @Model.CssOnErrorFailed"
+                                          id="OptionFailedText"
+                                          name="OptionFailedText"
+                                          rows="5"
+                                          aria-describedby="OptionApprovedText-info">@Model.OptionFailedText</textarea>
+                                <span id="OptionApprovedText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
                 <button type="submit" class="govuk-button">
                     Save and continue
                 </button>
