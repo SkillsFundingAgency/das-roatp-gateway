@@ -27,7 +27,11 @@
                     <strong>@Model.GatewayReviewStatus</strong>
                 </div>
             </div>
-            <p><a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-link">Go to RoATP applications</a></p>
+            <p class="govuk-body">
+                <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-link govuk-link--no-visited-state">
+                    Go to RoATP applications
+                </a>
+            </p>
         </div>
     </div>
 </main>

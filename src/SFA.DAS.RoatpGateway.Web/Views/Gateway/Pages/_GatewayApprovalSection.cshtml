@@ -68,6 +68,18 @@
                             <label for="OptionPassText" class="govuk-label">
                                 Add comments (optional)
                             </label>
+                            @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
+                            {
+                                @foreach (var error in Model.ErrorMessages)
+                                {
+                                    @if (error.Field == "OptionPassText")
+                                    {
+                                        <span class="govuk-error-message">
+                                            <span class="govuk-visually-hidden">Error:</span> @error.ErrorMessage
+                                        </span>
+                                    }
+                                }
+                            }
                             <textarea class="govuk-textarea govuk-js-character-count"
                                       id="OptionPassText"
                                       name="OptionPassText"
@@ -139,6 +151,18 @@
                             <label for="OptionInProgressText" class="govuk-label">
                                 Add comments (optional)
                             </label>
+                            @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
+                            {
+                                @foreach (var error in Model.ErrorMessages)
+                                {
+                                    @if (error.Field == "OptionInProgressText")
+                                    {
+                                        <span class="govuk-error-message">
+                                            <span class="govuk-visually-hidden">Error:</span> @error.ErrorMessage
+                                        </span>
+                                    }
+                                }
+                            }
                             <textarea class="govuk-textarea govuk-js-character-count"
                                       id="OptionInProgressText"
                                       name="OptionInProgressText"
