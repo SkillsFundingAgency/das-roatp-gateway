@@ -49,7 +49,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task ConfirmOutcome_evaluation_positive_result()
+        public async Task ConfirmOutcome_evaluation_pass_result()
         {
             var applicationId = Guid.NewGuid();
 
@@ -67,6 +67,27 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _orchestrator.Verify(x => x.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(viewModel.ApplicationId, Username)), Times.Never);
         }
+
+        [Test]
+        public async Task ConfirmOutcome_evaluation_fail_result()
+        {
+            var applicationId = Guid.NewGuid();
+
+            var viewModel = new RoatpGatewayApplicationViewModel
+            {
+                ApplicationId = applicationId,
+                GatewayReviewStatus = GatewayReviewStatus.Fail,
+                OptionApprovedText = "Some approved text",
+                ErrorMessages = new List<ValidationErrorDetail>()
+            };
+
+            _validator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            await _controller.EvaluateConfirmOutcome(viewModel);
+
+            _orchestrator.Verify(x => x.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(viewModel.ApplicationId, Username)), Times.Never);
+        }
+
 
         [Test]
         public async Task ConfirmOutcome_evaluation_result_is_on_error()
@@ -163,6 +184,69 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.AboutToConfirmOutcome(viewModel);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayConfirmOutcomeViewModel;
+
+            Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
+        }
+
+
+
+        [Test]
+        public async Task AboutToCFailOutcome_selection_Yes()
+        {
+            var applicationId = Guid.NewGuid();
+            var viewModel = new RoatpGatewayFailOutcomeViewModel
+            {
+                ApplicationId = applicationId,
+                GatewayReviewStatus = GatewayReviewStatus.Fail,
+                GatewayReviewComment = "some comment",
+                ConfirmGatewayOutcome = "Yes"
+            };
+
+            var result = await _controller.AboutToFailOutcome(viewModel);
+            var viewResult = result as ViewResult;
+            var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
+
+            Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Once);
+        }
+
+        [Test]
+        public async Task AboutToFailOutcome_selection_No()
+        {
+            var applicationId = Guid.NewGuid();
+            var expectedActionName = "ConfirmOutcome";
+            var viewModel = new RoatpGatewayFailOutcomeViewModel
+            {
+                ApplicationId = applicationId,
+                GatewayReviewStatus = GatewayReviewStatus.Pass,
+                GatewayReviewComment = "some comment",
+                ConfirmGatewayOutcome = "No"
+            };
+
+            var result = await _controller.AboutToFailOutcome(viewModel);
+            var redirectToActionResult = result as RedirectToActionResult;
+
+            Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
+        }
+
+        [Test]
+        public async Task AboutToFailOutcome_no_selection()
+        {
+            var applicationId = Guid.NewGuid();
+            var viewModel = new RoatpGatewayFailOutcomeViewModel
+            {
+                ApplicationId = applicationId,
+                GatewayReviewStatus = GatewayReviewStatus.Pass,
+                GatewayReviewComment = "some comment"
+            };
+
+            _controller.ModelState.AddModelError("ConfirmGatewayOutcome", "Select if you are sure you want to pass this application");
+
+            var result = await _controller.AboutToFailOutcome(viewModel);
+            var viewResult = result as ViewResult;
+            var resultViewModel = viewResult.Model as RoatpGatewayFailOutcomeViewModel;
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
