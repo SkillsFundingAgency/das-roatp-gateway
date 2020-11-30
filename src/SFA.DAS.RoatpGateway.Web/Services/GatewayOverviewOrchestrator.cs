@@ -129,7 +129,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     if (error.Field.Equals(nameof(viewModelOnError.OptionFailedText)))
                     {
                         viewModelOnError.ErrorTextFailed = error.ErrorMessage;
-                        viewModelOnError.CssOnErrorDeclined = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                        viewModelOnError.CssOnErrorFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
                     if (error.Field.Equals(nameof(viewModelOnError.OptionApprovedText)))

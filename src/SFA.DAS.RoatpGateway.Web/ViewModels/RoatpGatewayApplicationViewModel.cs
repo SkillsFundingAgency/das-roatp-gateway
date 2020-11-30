@@ -39,7 +39,6 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
    
         public string CssFormGroupError { get; set; }
         public string CssOnErrorAskClarification { get; set; }
-        public string CssOnErrorDeclined { get; set; }
         public string CssOnErrorApproved { get; set; }
         public string CssOnErrorFailed { get; set; }
         public string ApplicationEmailAddress { get; set; }
