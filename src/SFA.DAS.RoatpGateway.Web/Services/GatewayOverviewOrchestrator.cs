@@ -28,10 +28,12 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 return null;
             }
 
+            var contact = await _applyApiClient.GetContactDetails(request.ApplicationId);
             var applicationData = GetApplicationData(application);
 
             var viewmodel = new RoatpGatewayApplicationViewModel(applicationData)
             {
+                ApplicationEmailAddress  = contact?.Email,
                 Sequences = GetCoreGatewayApplicationViewModel()
             };
 

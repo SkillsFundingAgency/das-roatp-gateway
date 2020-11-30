@@ -43,5 +43,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<string> GetWebsiteAddressSourcedFromUkrlp(Guid applicationId);
         Task<string> GetWebsiteAddressManuallyEntered(Guid applicationId);
         Task<string> GetOrganisationWebsiteAddress(Guid applicationId);
+
+        Task<ContactDetails> GetContactDetails(Guid applicationId);
+
     }
 }
