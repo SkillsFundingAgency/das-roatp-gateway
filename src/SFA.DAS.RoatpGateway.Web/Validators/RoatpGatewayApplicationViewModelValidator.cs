@@ -13,7 +13,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
         private const string NoSelectionErrorMessage = "Select what you want to do";
         private const string ErrorEnterClarificationComments = "Enter your clarification comments";
         private const string ErrorEnterDeclinedComments = "Enter your comments";
-        private const string TooManyWords = "Your comments must be 500 words or less";
+        private const string TooManyWords = "Your comments must be 150 words or less";
         private const string TooManyWordsFail = "Your comments must be 150 words or less";
 
         public async Task<ValidationResponse> Validate(RoatpGatewayApplicationViewModel viewModel)
@@ -46,7 +46,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                         else
                         {
                             var wordCount = viewModel.OptionAskClarificationText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
-                            if (wordCount > 500)
+                            if (wordCount > 150)
                             {
                                 validationResponse.Errors.Add(new ValidationErrorDetail("OptionAskClarificationText", TooManyWords));
                             }
@@ -74,7 +74,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                 case GatewayReviewStatus.Pass when !string.IsNullOrEmpty(viewModel.OptionApprovedText):
                     {
                         var wordCount = viewModel.OptionApprovedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
-                        if (wordCount > 500)
+                        if (wordCount > 150)
                         {
                             validationResponse.Errors.Add(new ValidationErrorDetail("OptionApprovedText", TooManyWords));
                         }
