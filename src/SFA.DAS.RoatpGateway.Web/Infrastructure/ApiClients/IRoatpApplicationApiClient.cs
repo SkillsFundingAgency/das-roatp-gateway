@@ -15,6 +15,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications();
         Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications();
         Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications();
+        Task<GetGatewayApplicationCountsResponse> GetApplicationCounts();
         Task StartGatewayReview(Guid applicationId, string reviewer);
         Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string evaluatedBy);
 
@@ -42,5 +43,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<string> GetWebsiteAddressSourcedFromUkrlp(Guid applicationId);
         Task<string> GetWebsiteAddressManuallyEntered(Guid applicationId);
         Task<string> GetOrganisationWebsiteAddress(Guid applicationId);
+
+        Task<ContactDetails> GetContactDetails(Guid applicationId);
+
     }
 }

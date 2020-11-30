@@ -28,6 +28,11 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<RoatpApplicationResponse>($"/Application/{applicationId}");
         }
 
+        public async Task<GetGatewayApplicationCountsResponse> GetApplicationCounts()
+        {
+            return await Get<GetGatewayApplicationCountsResponse>($"/GatewayReview/Counts");
+        }
+
         public async Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications()
         {
             return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/NewApplications");
@@ -216,6 +221,12 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task<string> GetOrganisationWebsiteAddress(Guid applicationId)
         {
             return await Get<string>($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
+        }
+
+
+        public async Task<ContactDetails> GetContactDetails(Guid applicationId)
+        {
+            return await Get<ContactDetails>($"/Application/{applicationId}/Contact");
         }
 
     }
