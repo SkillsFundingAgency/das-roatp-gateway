@@ -31,54 +31,60 @@
                     </h2>
                     <div class="govuk-error-summary__body">
                         <ul class="govuk-list govuk-error-summary__list">
-                            <li><a sfa-validation-for="ConfirmGatewayOutcome"></a></li>
+                            <li><a href="#ConfirmGatewayOutcomeYes" sfa-validation-for="ConfirmGatewayOutcome"></a></li>
                         </ul>
                     </div>
                 </div>
             }
-            <span class="govuk-caption-m">Overall gateway outcome</span>
-            <h1 class="govuk-heading-xl">Are you sure you want to pass this application?</h1>
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            <h2 class="govuk-heading-l govuk-!-margin-top-5">Comments</h2>
-            <p class="govuk-body">@Model.GatewayReviewComment</p>
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <div class="govuk-warning-text">
-                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                <strong class="govuk-warning-text__text">
-                    <span class="govuk-warning-text__assistive">Warning</span>
-                    This application will pass and go to governance.
-                </strong>
-            </div>
-            <a name="ConfirmGatewayOutcome"></a>
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <span class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span> <span asp-validation-for="ConfirmGatewayOutcome"></span>
-                </span>
 
-            }
             <form class="form" method="post" asp-action="AboutToConfirmOutcome" asp-controller="RoatpGateway">
-                <input type="hidden" asp-for="ApplicationId" />
-                <input type="hidden" asp-for="ApplicationStatus" />
-                <input type="hidden" asp-for="GatewayReviewStatus" />
-                <input type="hidden" asp-for="GatewayReviewComment" />
                 <div class="govuk-form-group @Model.CssFormGroupError">
-                    <div class="govuk-radios govuk-radios--inline">
-                        <div class="govuk-radios__item">
-                            <input asp-for="ConfirmGatewayOutcome" id="ConfirmGatewayOutcomeYes" value="Yes" type="radio" class="govuk-radios__input" />
-                            <label for="ConfirmGatewayOutcomeYes" class="govuk-label govuk-radios__label">Yes</label>
+                    <fieldset class="govuk-fieldset" aria-describedby="ConfirmGatewayOutcome-error">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-7">
+                            <span class="govuk-caption-l">Overall gateway outcome</span>
+                            <h1 class="govuk-fieldset__heading">Are you sure you want to pass this application?</h1>
+                        </legend>
+        
+                        @if (!string.IsNullOrEmpty(Model.GatewayReviewComment))
+                        {
+                            <h2 class="govuk-heading-l">Comments</h2>
+                            <div class="govuk-inset-text govuk-!-margin-bottom-7">
+                                @Model.GatewayReviewComment
+                            </div>
+                        }
+
+                        <div class="govuk-warning-text">
+                            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                            <strong class="govuk-warning-text__text">
+                                <span class="govuk-warning-text__assistive">Warning</span>
+                                This application will pass and go to governance.
+                            </strong>
                         </div>
-                        <div class="govuk-radios__item">
-                            <input asp-for="ConfirmGatewayOutcome" id="ConfirmGatewayOutcomeNo" value="No" type="radio" class="govuk-radios__input" />
-                            <label for="ConfirmGatewayOutcomeNo" class="govuk-label govuk-radios__label">No</label>
+
+                        <a name="ConfirmGatewayOutcome"></a>
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <span class="govuk-error-message" id="ConfirmGatewayOutcome-error">
+                                <span class="govuk-visually-hidden">Error:</span> <span asp-validation-for="ConfirmGatewayOutcome"></span>
+                            </span>
+                        }
+                        
+                        <input type="hidden" asp-for="ApplicationId" />
+                        <input type="hidden" asp-for="ApplicationStatus" />
+                        <input type="hidden" asp-for="GatewayReviewStatus" />
+                        <input type="hidden" asp-for="GatewayReviewComment" />
+
+                        <div class="govuk-radios govuk-radios--inline">
+                            <div class="govuk-radios__item">
+                                <input asp-for="ConfirmGatewayOutcome" id="ConfirmGatewayOutcomeYes" value="Yes" type="radio" class="govuk-radios__input" />
+                                <label for="ConfirmGatewayOutcomeYes" class="govuk-label govuk-radios__label">Yes</label>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input asp-for="ConfirmGatewayOutcome" id="ConfirmGatewayOutcomeNo" value="No" type="radio" class="govuk-radios__input" />
+                                <label for="ConfirmGatewayOutcomeNo" class="govuk-label govuk-radios__label">No</label>
+                            </div>
                         </div>
-                    </div>
+                    </fieldset>
                 </div>
                 <button type="submit" class="govuk-button">
                     Save and continue
