@@ -12,7 +12,7 @@
         <li class="govuk-breadcrumbs__list-item">
             <a class="govuk-breadcrumbs__link" asp-action="Index" asp-controller="Dashboard">Dashboard</a>
         </li>
-        <li class="govuk-breadcrumbs__list-item" aria-current="page">RoATP applications</li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">RoATP gateway applications</li>
     </ol>
 </div>
 
@@ -22,8 +22,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds das-no-wrap">
             <h1 class="govuk-heading-xl">
-                <span class="govuk-caption-xl">RoATP Applications</span>
-                New
+                RoATP gateway applications
             </h1>
         </div>
     </div>
@@ -31,25 +30,10 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
 
-            <ul class="govuk-tabs__list">
-                <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                    <a class="govuk-tabs__tab" asp-action="NewApplications" asp-controller="RoatpGateway">
-                        New
-                    </a>
-                </li>
-                <li class="govuk-tabs__list-item">
-                    <a class="govuk-tabs__tab" asp-action="InProgressApplications" asp-controller="RoatpGateway">
-                        In progress
-                    </a>
-                </li>
-                <li class="govuk-tabs__list-item">
-                    <a class="govuk-tabs__tab" asp-action="ClosedApplications" asp-controller="RoatpGateway">
-                        Gateway outcome
-                    </a>
-                </li>
-            </ul>
-            <div class="govuk-tabs__panel" id="new">
+            <partial name="_TabList" />
 
+            <div class="govuk-tabs__panel" id="new">
+                
                 @if (@Model.Applications.Items.Any())
                 {
                     <table class="govuk-table das-table--condensed das-table--responsive">
@@ -57,9 +41,9 @@
                             <tr class="govuk-table__row">
                                 <th class="govuk-table__header" scope="col">Organisation name</th>
                                 <th class="govuk-table__header" scope="col">UKPRN</th>
+                                <th class="govuk-table__header" scope="col">Provider route</th>
                                 <th class="govuk-table__header" scope="col">Application reference number</th>
                                 <th class="govuk-table__header" scope="col">Application submitted</th>
-                                <th class="govuk-table__header govuk-table__header--numeric" scope="col">Current status</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
@@ -72,35 +56,14 @@
                                     <td class="govuk-table__cell" data-label="UKPRN">
                                         @item.Ukprn
                                     </td>
+                                    <td class="govuk-table__cell" data-label="Route">
+                                        @item.ApplicationRouteShortText
+                                    </td>
                                     <td class="govuk-table__cell" data-label="Application reference number">
                                         @item.ApplicationReferenceNumber
                                     </td>
                                     <td class="govuk-table__cell" data-label="Application submitted">
                                         @item.SubmittedDate.ToSfaShortDateString()
-                                    </td>
-                                    <td class="govuk-table__cell govuk-table__cell--numeric" data-label="Current status">
-                                        @{
-                                            switch (item.GatewayReviewStatus)
-                                            {
-                                                case GatewayReviewStatus.New:
-                                                    if (item.ApplicationStatus == ApplicationStatus.Resubmitted)
-                                                    {
-                                                        <div class="govuk-tag">
-                                                            updated
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="govuk-tag govuk-tag--inactive">
-                                                            unassigned
-                                                        </div>
-                                                    }
-                                                    break;
-                                                default:
-                                                    <text>---</text>
-                                                    break;
-                                            }
-                                        }
                                     </td>
                                 </tr>
                             }
@@ -143,7 +106,7 @@
                 }
                 else
                 {
-                    <p class="govuk-body-l">There are no new applications at this time.</p>
+            <p class="govuk-body-l">No applications to assess</p>
                 }
             </div>
         </div>

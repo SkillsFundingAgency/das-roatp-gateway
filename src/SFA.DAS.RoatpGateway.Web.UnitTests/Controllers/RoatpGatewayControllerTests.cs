@@ -10,6 +10,7 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Castle.Components.DictionaryAdapter;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 {
@@ -163,6 +164,70 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
+        }
+
+
+        [Test]
+        public async Task NewApplications_ViewModel_Has_Correct_Application_Counts()
+        {
+            ApplyApiClient.Setup(x => x.GetNewGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+
+            ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
+            {
+                NewApplicationsCount = 1,
+                InProgressApplicationsCount = 2,
+                ClosedApplicationsCount = 3
+            });
+
+            var result = await _controller.NewApplications(1);
+            var viewResult = result as ViewResult;
+            var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
+
+            Assert.AreEqual(1, resultViewModel.ApplicationCounts.NewApplicationsCount);
+            Assert.AreEqual(2, resultViewModel.ApplicationCounts.InProgressApplicationsCount);
+            Assert.AreEqual(3, resultViewModel.ApplicationCounts.ClosedApplicationsCount);
+        }
+
+        [Test]
+        public async Task InProgressApplications_ViewModel_Has_Correct_Application_Counts()
+        {
+            ApplyApiClient.Setup(x => x.GetInProgressGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+
+            ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
+            {
+                NewApplicationsCount = 1,
+                InProgressApplicationsCount = 2,
+                ClosedApplicationsCount = 3
+            });
+
+            var result = await _controller.InProgressApplications(1);
+            var viewResult = result as ViewResult;
+            var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
+
+            Assert.AreEqual(1, resultViewModel.ApplicationCounts.NewApplicationsCount);
+            Assert.AreEqual(2, resultViewModel.ApplicationCounts.InProgressApplicationsCount);
+            Assert.AreEqual(3, resultViewModel.ApplicationCounts.ClosedApplicationsCount);
+        }
+
+        [Test]
+        public async Task ClosedApplications_ViewModel_Has_Correct_Application_Counts()
+        {
+            ApplyApiClient.Setup(x => x.GetClosedGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+
+            ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
+            {
+                NewApplicationsCount = 1,
+                InProgressApplicationsCount = 2,
+                ClosedApplicationsCount = 3
+            });
+
+            var result = await _controller.ClosedApplications(1);
+            var viewResult = result as ViewResult;
+            var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
+
+            Assert.AreEqual(1, resultViewModel.ApplicationCounts.NewApplicationsCount);
+            Assert.AreEqual(2, resultViewModel.ApplicationCounts.InProgressApplicationsCount);
+            Assert.AreEqual(3, resultViewModel.ApplicationCounts.ClosedApplicationsCount);
         }
     }
 }
