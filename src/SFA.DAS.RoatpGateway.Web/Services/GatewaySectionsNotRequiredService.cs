@@ -102,7 +102,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             if (providerRoute == (int)ProviderTypes.Main || providerRoute == (int)ProviderTypes.Employer)
             {
                 var initialTeacherTraining = await _accreditationClient.GetInitialTeacherTraining(applicationId);
-                if (initialTeacherTraining != null && !initialTeacherTraining.IsPostGradOnlyApprenticeship) ofstedStatus = string.Empty;
+                if (initialTeacherTraining != null && (initialTeacherTraining.DoesOrganisationOfferInitialTeacherTraining is false || initialTeacherTraining.IsPostGradOnlyApprenticeship is false)) ofstedStatus = string.Empty;
             }
 
             if (ofstedStatus.Equals(SectionReviewStatus.NotRequired))
