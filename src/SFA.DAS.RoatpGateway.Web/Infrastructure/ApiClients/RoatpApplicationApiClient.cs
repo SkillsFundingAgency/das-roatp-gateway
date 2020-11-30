@@ -217,5 +217,11 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<string>($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
         }
 
+
+        public async Task<ContactDetails> GetContactDetails(Guid applicationId)
+        {
+            return await Get<ContactDetails>($"/Application/{applicationId}/Contact");
+        }
+
     }
 }
