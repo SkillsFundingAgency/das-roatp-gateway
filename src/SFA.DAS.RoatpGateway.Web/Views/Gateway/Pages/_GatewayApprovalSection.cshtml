@@ -63,19 +63,19 @@
                     </label>
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionPass">
-                    <div class="govuk-character-count" data-module="character-count" data-maxwords="150">
+                    <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
                         <div class="govuk-form-group">
                             <label for="OptionPassText" class="govuk-label">
                                 Add comments (optional)
                             </label>
-                            <textarea class="govuk-textarea js-character-count"
+                            <textarea class="govuk-textarea govuk-js-character-count"
                                       id="OptionPassText"
                                       name="OptionPassText"
                                       rows="5"
-                                      maxlength="10000">@Model.OptionPassText</textarea>
+                                      maxlength="10000"
+                                      aria-describedby="OptionPassText-info">@Model.OptionPassText</textarea>
                         </div>
-
-                        <span id="word-count-info-OptionPass" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+                        <span id="OptionPassText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
                     </div>
                 </div>
                 <!-- FAIL -->
@@ -92,7 +92,7 @@
                     </label>
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionFail">
-                    <div class="govuk-character-count" data-module="character-count" data-maxwords="150">
+                    <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
                         <div class="govuk-form-group">
                             <label for="OptionFailText" class="govuk-label">
                                 Add comments
@@ -109,13 +109,14 @@
                                     }
                                 }
                             }
-                            <textarea class="govuk-textarea js-character-count @isErrorFailText"
+                            <textarea class="govuk-textarea govuk-js-character-count @isErrorFailText"
                                       id="OptionFailText"
                                       name="OptionFailText"
                                       rows="5"
-                                      maxlength="10000">@Model.OptionFailText</textarea>
+                                      maxlength="10000"
+                                      aria-describedby="OptionFailText-info">@Model.OptionFailText</textarea>
                         </div>
-                        <span id="word-count-info-OptionFail" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+                        <span id="OptionFailText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
                     </div>
                 </div>
                 <div class="govuk-radios__divider">or</div>
@@ -133,18 +134,19 @@
                     </label>
                 </div>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-InProgress">
-                    <div class="govuk-character-count" data-module="character-count" data-maxwords="150">
+                    <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
                         <div class="govuk-form-group">
                             <label for="OptionInProgressText" class="govuk-label">
                                 Add comments (optional)
                             </label>
-                            <textarea class="govuk-textarea js-character-count"
+                            <textarea class="govuk-textarea govuk-js-character-count"
                                       id="OptionInProgressText"
                                       name="OptionInProgressText"
                                       rows="5"
-                                      maxlength="10000">@Model.OptionInProgressText</textarea>
+                                      maxlength="10000"
+                                      aria-describedby="OptionInProgressText-info">@Model.OptionInProgressText</textarea>
                         </div>
-                        <span id="word-count-info-InProgress" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+                        <span id="OptionInProgressText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
                     </div>
                 </div>
             }
