@@ -31,10 +31,16 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         public async Task<IActionResult> NewApplications(int page = 1)
         {
             var applications = await _applyApiClient.GetNewGatewayApplications();
+            var counts = await _applyApiClient.GetApplicationCounts();
 
             var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
 
-            var viewModel = new RoatpGatewayDashboardViewModel { Applications = paginatedApplications };
+            var viewModel = new RoatpGatewayDashboardViewModel
+            {
+                Applications = paginatedApplications,
+                ApplicationCounts = counts,
+                SelectedTab = nameof(NewApplications)
+            };
 
             return View("~/Views/Gateway/NewApplications.cshtml", viewModel);
         }
@@ -43,10 +49,16 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         public async Task<IActionResult> InProgressApplications(int page = 1)
         {
             var applications = await _applyApiClient.GetInProgressGatewayApplications();
+            var counts = await _applyApiClient.GetApplicationCounts();
 
             var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
 
-            var viewModel = new RoatpGatewayDashboardViewModel { Applications = paginatedApplications };
+            var viewModel = new RoatpGatewayDashboardViewModel
+            {
+                Applications = paginatedApplications,
+                ApplicationCounts = counts,
+                SelectedTab = nameof(InProgressApplications)
+            };
 
             return View("~/Views/Gateway/InProgressApplications.cshtml", viewModel);
         }
@@ -55,10 +67,16 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         public async Task<IActionResult> ClosedApplications(int page = 1)
         {
             var applications = await _applyApiClient.GetClosedGatewayApplications();
+            var counts = await _applyApiClient.GetApplicationCounts();
 
             var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
 
-            var viewModel = new RoatpGatewayDashboardViewModel { Applications = paginatedApplications };
+            var viewModel = new RoatpGatewayDashboardViewModel
+            {
+                Applications = paginatedApplications,
+                ApplicationCounts = counts,
+                SelectedTab = nameof(ClosedApplications)
+            };
 
             return View("~/Views/Gateway/ClosedApplications.cshtml", viewModel);
         }

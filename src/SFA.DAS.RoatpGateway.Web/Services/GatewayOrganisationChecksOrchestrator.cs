@@ -23,6 +23,21 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _organisationSummaryApiClient = organisationSummaryApiClient;
         }
 
+        public async Task<TwoInTwelveMonthsViewModel> GetTwoInTwelveMonthsViewModel(GetTwoInTwelveMonthsRequest request)
+        {
+            _logger.LogInformation($"Retrieving two in twelve months check details for application {request.ApplicationId}");
+
+            var model = new TwoInTwelveMonthsViewModel();
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewayPageIds.TwoInTwelveMonths, request.UserName,
+                                                                                            RoatpGatewayConstants.Captions.OrganisationChecks,
+                                                                                            RoatpGatewayConstants.Headings.TwoInTwelveMonths,
+                                                                                            NoSelectionErrorMessages.Errors[GatewayPageIds.TwoInTwelveMonths]);
+
+            model.SubmittedTwoInTwelveMonths = await _applyApiClient.GetTwoInTwelveMonths(request.ApplicationId);
+
+            return model;
+        }
+
         public async Task<LegalNamePageViewModel> GetLegalNameViewModel(GetLegalNameRequest request)
         {
             _logger.LogInformation($"Retrieving legal name details for application {request.ApplicationId}");

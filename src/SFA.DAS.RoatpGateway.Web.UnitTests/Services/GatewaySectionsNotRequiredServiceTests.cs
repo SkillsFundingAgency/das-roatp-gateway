@@ -11,6 +11,7 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {
@@ -116,28 +117,28 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
         [TestCase("")]
         [TestCase(null)]
-        public void Not_required_set_for_trading_name_when_not_found_on_ukrlp(string tradingName)
+        public async Task Not_required_set_for_trading_name_when_not_found_on_ukrlp(string tradingName)
         {
             _apiClient.Setup(x => x.GetTradingName(_applicationId)).ReturnsAsync(tradingName);
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main);
 
             var tradingNameSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.TradingName).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.TradingName);
 
             tradingNameSection.Should().NotBeNull();
             tradingNameSection.Status.Should().Be(SectionReviewStatus.NotRequired);
         }
 
         [Test]
-        public void Not_required_not_set_for_trading_name_when_found_on_ukrlp()
+        public async Task Not_required_not_set_for_trading_name_when_found_on_ukrlp()
         {
             _apiClient.Setup(x => x.GetTradingName(_applicationId)).ReturnsAsync("Trading name");
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main);
 
             var tradingNameSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                   .Where(sec => sec.PageId == GatewayPageIds.TradingName).FirstOrDefault();
+                   .FirstOrDefault(sec => sec.PageId == GatewayPageIds.TradingName);
 
             tradingNameSection.Should().NotBeNull();
             tradingNameSection.Status.Should().Be(SectionReviewStatus.New);
@@ -145,82 +146,81 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
         [TestCase("")]
         [TestCase(null)]
-        public void Not_required_set_for_website_when_not_found_on_ukrlp_or_manually_entered(string websiteAddress)
+        public async Task Not_required_set_for_website_when_not_found_on_ukrlp_or_manually_entered(string websiteAddress)
         {
             _apiClient.Setup(x => x.GetOrganisationWebsiteAddress(_applicationId)).ReturnsAsync(websiteAddress);
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main);
 
             var websiteSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.WebsiteAddress).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.WebsiteAddress);
 
             websiteSection.Should().NotBeNull();
             websiteSection.Status.Should().Be(SectionReviewStatus.NotRequired);
         }
 
         [Test]
-        public void Not_required_not_set_for_website_when_found_on_ukrlp_or_manually_entered()
+        public async Task Not_required_not_set_for_website_when_found_on_ukrlp_or_manually_entered()
         {
             _apiClient.Setup(x => x.GetOrganisationWebsiteAddress(_applicationId)).ReturnsAsync("www.site.com");
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main);
 
             var websiteSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.WebsiteAddress).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.WebsiteAddress);
 
             websiteSection.Should().NotBeNull();
             websiteSection.Status.Should().Be(SectionReviewStatus.New);
         }
 
-        [Test]
-        public void Not_required_set_for_office_for_students_if_supporting_provider()
+        [TestCase(ProviderTypes.Employer)]
+        [TestCase(ProviderTypes.Supporting)]
+        public async Task Not_required_set_for_office_for_students_if_employer_or_supporting_provider(int providerTypeId)
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId);
 
             var officeForStudentsSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.OfficeForStudents).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.OfficeForStudents);
 
             officeForStudentsSection.Should().NotBeNull();
             officeForStudentsSection.Status.Should().Be(SectionReviewStatus.NotRequired);
         }
 
-        [TestCase(ProviderTypes.Main)]
-        [TestCase(ProviderTypes.Employer)]
-        public void Not_required_set_for_office_for_students_if_main_or_employer_and_answered_no(int providerTypeId)
+        [Test]
+        public async Task Not_required_not_set_for_office_for_students_if_main_and_answered_no()
         {
             _accreditationClient.Setup(x => x.GetOfficeForStudents(_applicationId)).ReturnsAsync("No");
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main);
 
             var officeForStudentsSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.OfficeForStudents).FirstOrDefault();
-
-            officeForStudentsSection.Should().NotBeNull();
-            officeForStudentsSection.Status.Should().Be(SectionReviewStatus.NotRequired);
-        }
-
-        [TestCase(ProviderTypes.Main)]
-        [TestCase(ProviderTypes.Employer)]
-        public void Not_required_not_set_for_office_for_students_if_main_or_employer_and_answered_yes(int providerTypeId)
-        {
-            _accreditationClient.Setup(x => x.GetOfficeForStudents(_applicationId)).ReturnsAsync("Yes");
-
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId).GetAwaiter().GetResult();
-
-            var officeForStudentsSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.OfficeForStudents).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.OfficeForStudents);
 
             officeForStudentsSection.Should().NotBeNull();
             officeForStudentsSection.Status.Should().Be(SectionReviewStatus.New);
         }
 
         [Test]
-        public void Not_required_set_for_initial_teacher_training_if_supporting_provider()
+        public async Task Not_required_not_set_for_office_for_students_if_main_and_answered_yes()
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting).GetAwaiter().GetResult();
+            _accreditationClient.Setup(x => x.GetOfficeForStudents(_applicationId)).ReturnsAsync("Yes");
+
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main);
+
+            var officeForStudentsSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.OfficeForStudents);
+
+            officeForStudentsSection.Should().NotBeNull();
+            officeForStudentsSection.Status.Should().Be(SectionReviewStatus.New);
+        }
+
+        [Test]
+        public async Task Not_required_set_for_initial_teacher_training_if_supporting_provider()
+        {
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting);
 
             var initialTeacherTrainingSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.InitialTeacherTraining).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.InitialTeacherTraining);
 
             initialTeacherTrainingSection.Should().NotBeNull();
             initialTeacherTrainingSection.Status.Should().Be(SectionReviewStatus.NotRequired);
@@ -228,41 +228,41 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
         [TestCase(ProviderTypes.Main)]
         [TestCase(ProviderTypes.Employer)]
-        public void Not_required_set_for_initial_teacher_training_if_main_or_employer_and_answered_no(int providerTypeId)
+        public async Task Not_required_not_set_for_initial_teacher_training_if_main_or_employer_and_answered_no(int providerTypeId)
         {
             _accreditationClient.Setup(x => x.GetInitialTeacherTraining(_applicationId)).ReturnsAsync(new InitialTeacherTraining { DoesOrganisationOfferInitialTeacherTraining = false });
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId);
 
             var initialTeacherTrainingSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.InitialTeacherTraining).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.InitialTeacherTraining);
 
             initialTeacherTrainingSection.Should().NotBeNull();
-            initialTeacherTrainingSection.Status.Should().Be(SectionReviewStatus.NotRequired);
+            initialTeacherTrainingSection.Status.Should().Be(SectionReviewStatus.New);
         }
 
         [TestCase(ProviderTypes.Main)]
         [TestCase(ProviderTypes.Employer)]
-        public void Not_required_not_set_for_initial_teacher_training_if_main_or_employer_and_answered_yes(int providerTypeId)
+        public async Task Not_required_not_set_for_initial_teacher_training_if_main_or_employer_and_answered_yes(int providerTypeId)
         {
             _accreditationClient.Setup(x => x.GetInitialTeacherTraining(_applicationId)).ReturnsAsync(new InitialTeacherTraining { DoesOrganisationOfferInitialTeacherTraining = true });
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId);
 
             var initialTeacherTrainingSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.InitialTeacherTraining).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.InitialTeacherTraining);
 
             initialTeacherTrainingSection.Should().NotBeNull();
             initialTeacherTrainingSection.Status.Should().Be(SectionReviewStatus.New);
         }
 
         [Test]
-        public void Not_required_set_for_ofsted_if_supporting_provider()
+        public async Task Not_required_set_for_ofsted_if_supporting_provider()
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting);
 
             var ofstedSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.Ofsted).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.Ofsted);
 
             ofstedSection.Should().NotBeNull();
             ofstedSection.Status.Should().Be(SectionReviewStatus.NotRequired);
@@ -270,38 +270,69 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
         [TestCase(ProviderTypes.Main)]
         [TestCase(ProviderTypes.Employer)]
-        public void Not_required_not_set_for_ofsted_if_main_or_employer_provider(int providerTypeId)
+        public async Task Not_required_not_set_for_ofsted_if_main_or_employer_provider_and_offer_initial_teacher_training_answered_no(int providerTypeId)
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId).GetAwaiter().GetResult();
+            _accreditationClient.Setup(x => x.GetInitialTeacherTraining(_applicationId)).ReturnsAsync(new InitialTeacherTraining { DoesOrganisationOfferInitialTeacherTraining = false });
+
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId);
 
             var ofstedSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.Ofsted).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.Ofsted);
 
             ofstedSection.Should().NotBeNull();
             ofstedSection.Status.Should().Be(SectionReviewStatus.New);
         }
 
+        [TestCase(ProviderTypes.Main)]
+        [TestCase(ProviderTypes.Employer)]
+        public async Task Not_required_not_set_for_ofsted_if_main_or_employer_provider_and_postgrad_only_answered_no(int providerTypeId)
+        {
+            _accreditationClient.Setup(x => x.GetInitialTeacherTraining(_applicationId)).ReturnsAsync(new InitialTeacherTraining { DoesOrganisationOfferInitialTeacherTraining = true, IsPostGradOnlyApprenticeship = false });
+
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId);
+
+            var ofstedSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.Ofsted);
+
+            ofstedSection.Should().NotBeNull();
+            ofstedSection.Status.Should().Be(SectionReviewStatus.New);
+        }
 
         [TestCase(ProviderTypes.Main)]
         [TestCase(ProviderTypes.Employer)]
-        public void Not_required_set_for_subcontractor_declaration_if_not_supporting_provider(int providerTypeId)
+        public async Task Not_required_set_for_ofsted_if_main_or_employer_provider_and_postgrad_only_answered_yes(int providerTypeId)
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId).GetAwaiter().GetResult();
+            _accreditationClient.Setup(x => x.GetInitialTeacherTraining(_applicationId)).ReturnsAsync(new InitialTeacherTraining { DoesOrganisationOfferInitialTeacherTraining = true, IsPostGradOnlyApprenticeship = true });
+
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId);
+
+            var ofstedSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.Ofsted);
+
+            ofstedSection.Should().NotBeNull();
+            ofstedSection.Status.Should().Be(SectionReviewStatus.NotRequired);
+        }
+
+        [TestCase(ProviderTypes.Main)]
+        [TestCase(ProviderTypes.Employer)]
+        public async Task Not_required_set_for_subcontractor_declaration_if_not_supporting_provider(int providerTypeId)
+        {
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, providerTypeId);
 
             var subcontractorSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.SubcontractorDeclaration).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.SubcontractorDeclaration);
 
             subcontractorSection.Should().NotBeNull();
             subcontractorSection.Status.Should().Be(SectionReviewStatus.NotRequired);
         }
 
         [Test]
-        public void Not_required_not_set_for_subcontractor_declaration_if_supporting_provider()
+        public async Task Not_required_not_set_for_subcontractor_declaration_if_supporting_provider()
         {
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Supporting);
 
             var subcontractorSection = _viewModel.Sequences.SelectMany(seq => seq.Sections)
-                    .Where(sec => sec.PageId == GatewayPageIds.SubcontractorDeclaration).FirstOrDefault();
+                    .FirstOrDefault(sec => sec.PageId == GatewayPageIds.SubcontractorDeclaration);
 
             subcontractorSection.Should().NotBeNull();
             subcontractorSection.Status.Should().Be(SectionReviewStatus.New);
@@ -309,7 +340,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
         [TestCase(VerificationAuthorities.CharityCommissionAuthority)]
         [TestCase(VerificationAuthorities.CompaniesHouseAuthority)]
-        public void Not_required_not_set_for_people_in_control_criminal_compliance_if_company_or_charity(string verificationAuthority)
+        public async Task Not_required_not_set_for_people_in_control_criminal_compliance_if_company_or_charity(string verificationAuthority)
         {
             var providerDetails = new ProviderDetails
             {
@@ -323,7 +354,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             };
             _apiClient.Setup(x => x.GetUkrlpDetails(_applicationId)).ReturnsAsync(providerDetails);
 
-            _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main).GetAwaiter().GetResult();
+            await _service.SetupNotRequiredLinks(_applicationId, UserName, _viewModel, (int)ProviderTypes.Main);
 
             var peopleInControlCriminalComplianceSequence = _viewModel.Sequences.FirstOrDefault(x => x.SequenceNumber
                                                                                                 == GatewaySequences.PeopleInControlCriminalComplianceChecks);

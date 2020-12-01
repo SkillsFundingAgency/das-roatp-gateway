@@ -1,44 +1,38 @@
-﻿@using SFA.DAS.RoatpGateway.Domain;
-@model SFA.DAS.RoatpGateway.Web.ViewModels.InitialTeacherTrainingViewModel
+﻿@using SFA.DAS.AdminService.Common.Extensions;
+@using SFA.DAS.RoatpGateway.Domain;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.TwoInTwelveMonthsViewModel 
 
 @{
-    ViewBag.Title = $"Gateway - {@Model.Heading}";
+    ViewBag.Title = $"Gateway - {Model.Heading}";
     Layout = "_Layout";
 }
 
 @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml"); }
-
 <main class="govuk-main-wrapper " id="main-content" role="main">
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
-
             <span class="govuk-caption-xl">
                 @Model.Caption
             </span>
-
             <h1 class="govuk-heading-xl">@Model.Heading</h1>
-
-
             <div class="govuk-!-margin-bottom-4">
-                @if (Model.Ukprn != null)
-                {
-                    <p class="govuk-body govuk-!-margin-bottom-0">
-                        UKPRN: @Model.Ukprn
-                    </p>
-                }
-
-                @if (Model.ApplyLegalName != null)
-                {
-                    <p class="govuk-body govuk-!-margin-bottom-0">
-                        Legal name: @Model.ApplyLegalName
-                    </p>
-                }
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    UKPRN: @Model.Ukprn
+                </p>
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    Legal name: @Model.ApplyLegalName
+                </p>
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    Provider Route: @Model.ApplicationRoute
+                </p>
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    Application submitted on: @Model.ApplicationSubmittedOn.ToSfaShortDateString()
+                </p>
             </div>
         </div>
     </div>
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <table class="govuk-table govuk-!-margin-bottom-9">
@@ -50,30 +44,22 @@
                 </thead>
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">Does your organisation offer initial teacher training?</td>
-                        <td class="govuk-table__cell">@(Model.DoesOrganisationOfferInitialTeacherTraining ? "Yes" : "No")</td>
+                        <td class="govuk-table__cell">Have you had 2 unsuccessful applications in the last 12 months?</td>
+                        <td class="govuk-table__cell">
+                            @Model.SubmittedTwoInTwelveMonths
+                        </td>
                     </tr>
-                    @if (Model.IsPostGradOnlyApprenticeship.HasValue)
-                    {
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">Is the postgraduate teaching apprenticeship the only apprenticeship your organisation intends to deliver?</td>
-                        <td class="govuk-table__cell">@(Model.IsPostGradOnlyApprenticeship.Value ? "Yes" : "No")</td>
-                    </tr>
-                    }
                 </tbody>
             </table>
-
         </div>
     </div>
-
     @if (Model.ApplicationId != Guid.Empty)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <form class="js-disable-on-submit" asp-action="EvaluateInitialTeacherTrainingPage" asp-controller="RoatpGatewayExperienceAndAccreditation">
+                <form class="js-disable-on-submit" asp-action="EvaluateTwoInTwelveMonthsPage" asp-controller="RoatpGatewayOrganisationChecks">
 
                     @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalSection.cshtml"); }
-
                     <button class="govuk-button" type="submit">Save and continue</button>
                 </form>
             </div>

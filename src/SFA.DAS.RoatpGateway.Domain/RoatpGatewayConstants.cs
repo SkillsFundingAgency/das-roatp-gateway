@@ -22,6 +22,7 @@ namespace SFA.DAS.RoatpGateway.Domain
 
         public static class Headings
         {
+            public static string TwoInTwelveMonths = "2 applications in 12 months check";
             public static string LegalName = "Legal name check";
             public static string TradingName = "Trading name check";
             public static string OrganisationStatusCheck = "Organisation status check";
@@ -63,6 +64,7 @@ namespace SFA.DAS.RoatpGateway.Domain
     {
         private static Dictionary<string, string> errors = new Dictionary<string, string>
         {
+            { GatewayPageIds.TwoInTwelveMonths, "Select the outcome for 2 applications in 12 months check" },
             { GatewayPageIds.LegalName, "Select the outcome for legal name check" },
             { GatewayPageIds.TradingName, "Select the outcome for trading name check" },
             { GatewayPageIds.OrganisationStatus, "Select the outcome for organisation status check" },

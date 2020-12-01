@@ -12,7 +12,7 @@
         <li class="govuk-breadcrumbs__list-item">
             <a class="govuk-breadcrumbs__link" asp-action="Index" asp-controller="Dashboard">Dashboard</a>
         </li>
-        <li class="govuk-breadcrumbs__list-item" aria-current="page">RoATP applications</li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">RoATP gateway applications</li>
     </ol>
 </div>
 
@@ -22,8 +22,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds das-no-wrap">
             <h1 class="govuk-heading-xl">
-                <span class="govuk-caption-xl">RoATP Applications</span>
-                Gateway outcome
+                RoATP gateway applications
             </h1>
         </div>
     </div>
@@ -31,25 +30,9 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
 
-            <ul class="govuk-tabs__list">
-                <li class="govuk-tabs__list-item">
-                    <a class="govuk-tabs__tab" asp-action="NewApplications" asp-controller="RoatpGateway">
-                        New
-                    </a>
-                </li>
-                <li class="govuk-tabs__list-item">
-                    <a class="govuk-tabs__tab" asp-action="InProgressApplications" asp-controller="RoatpGateway">
-                        In progress
-                    </a>
-                </li>
-                <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                    <a class="govuk-tabs__tab" asp-action="ClosedApplications" asp-controller="RoatpGateway">
-                        Gateway outcome
-                    </a>
-                </li>
-            </ul>
+            <partial name="_TabList" />
             <div class="govuk-tabs__panel" id="outcome">
-
+                
                 @if (@Model.Applications.Items.Any())
                 {
                     <table class="govuk-table das-table--condensed das-table--responsive">
@@ -84,12 +67,12 @@
                                             {
                                                 case GatewayReviewStatus.Pass:
                                                     <div class="das-tag das-tag--solid-green">
-                                                        accepted
+                                                        pass
                                                     </div>
                                                     break;
                                                 case GatewayReviewStatus.Fail:
                                                     <div class="das-tag das-tag--solid-red">
-                                                        declined
+                                                        fail
                                                     </div>
                                                     break;
                                                 default:
@@ -140,7 +123,7 @@
                 }
                 else
                 {
-                    <p class="govuk-body-l">There are no applications at this time.</p>
+            <p class="govuk-body-l">No outcomes yet</p>
                 }
 
             </div>
