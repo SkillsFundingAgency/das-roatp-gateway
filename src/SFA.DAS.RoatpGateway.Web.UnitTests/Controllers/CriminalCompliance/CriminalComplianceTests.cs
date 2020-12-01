@@ -25,7 +25,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
             CoreSetup();
 
             _orchestrator = new Mock<IGatewayCriminalComplianceChecksOrchestrator>();
-            _controller = new RoatpOrganisationCriminalComplianceChecksController(ApplyApiClient.Object, ContextAccessor.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
+            _controller = new RoatpOrganisationCriminalComplianceChecksController(ApplyApiClient.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
         }
 
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors)]

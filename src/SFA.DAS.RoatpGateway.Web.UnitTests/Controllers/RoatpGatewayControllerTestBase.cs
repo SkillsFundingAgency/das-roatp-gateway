@@ -13,7 +13,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
     public abstract class RoatpGatewayControllerTestBase<T>
     {
         protected Mock<IRoatpApplicationApiClient> ApplyApiClient;
-        protected Mock<IHttpContextAccessor> ContextAccessor;
         protected Mock<IRoatpGatewayPageValidator> GatewayValidator;
         protected Mock<ILogger<T>> Logger;
 
@@ -26,7 +25,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         protected void CoreSetup()
         {
             ApplyApiClient = new Mock<IRoatpApplicationApiClient>();
-            ContextAccessor = new Mock<IHttpContextAccessor>();
             GatewayValidator = new Mock<IRoatpGatewayPageValidator>();
             Logger = new Mock<ILogger<T>>();
 
@@ -38,14 +36,17 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 new Claim(ClaimTypes.Surname, Surname)
             }));
 
-            var context = new DefaultHttpContext { User = user };
+            //var context = new DefaultHttpContext { User = user };
             GatewayValidator.Setup(v => v.Validate(It.IsAny<SubmitGatewayPageAnswerCommand>()))
                 .ReturnsAsync(new ValidationResponse
                 {
                     Errors = new List<ValidationErrorDetail>()
                 }
                 );
-            ContextAccessor.Setup(_ => _.HttpContext).Returns(context);
+
+
+
+
         }
     }
 }

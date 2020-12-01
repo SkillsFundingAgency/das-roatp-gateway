@@ -57,7 +57,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
                     Errors = new List<ValidationErrorDetail>()
                 });
 
-            _controller = new RoatpGatewayRegisterChecksController(_applyApiClient.Object, _contextAccessor.Object, _gatewayValidator.Object, _orchestrator.Object, _logger.Object);
+            _controller = new RoatpGatewayRegisterChecksController(_applyApiClient.Object, _gatewayValidator.Object, _orchestrator.Object, _logger.Object);
         }
 
         [Test]

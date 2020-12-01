@@ -30,7 +30,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             _orchestrator = new Mock<IGatewayOverviewOrchestrator>();
             _validator = new Mock<IRoatpGatewayApplicationViewModelValidator>();
             _pageValidator = new Mock<IRoatpGatewayPageValidator>();
-            _controller = new RoatpGatewayController(ApplyApiClient.Object, ContextAccessor.Object, _orchestrator.Object,
+            _controller = new RoatpGatewayController(ApplyApiClient.Object, _orchestrator.Object,
                                                      _validator.Object, Logger.Object, _pageValidator.Object);
         }
 
