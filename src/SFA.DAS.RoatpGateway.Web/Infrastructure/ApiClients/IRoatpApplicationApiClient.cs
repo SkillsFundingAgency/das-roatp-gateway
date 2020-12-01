@@ -11,7 +11,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
     public interface IRoatpApplicationApiClient
     {
-        Task<RoatpApplicationResponse> GetApplication(Guid Id);
+        Task<RoatpApplicationResponse> GetApplication(Guid applicationId);
         Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications();
         Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications();
         Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications();
@@ -38,6 +38,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task<OrganisationRegisterStatus> GetOrganisationRegisterStatus(Guid applicationId);
 
+        Task<string> GetTwoInTwelveMonths(Guid applicationId);
         Task<string> GetTradingName(Guid applicationId);
         Task<string> GetProviderRouteName(Guid applicationId);
         Task<string> GetWebsiteAddressSourcedFromUkrlp(Guid applicationId);

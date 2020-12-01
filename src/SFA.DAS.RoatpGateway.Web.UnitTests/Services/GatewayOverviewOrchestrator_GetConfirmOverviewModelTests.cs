@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Web.Services;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {
@@ -19,7 +19,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
     {
         private GatewayOverviewOrchestrator _orchestrator;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
-        private Mock<ILogger<GatewayOverviewOrchestrator>> _logger;
         private Mock<IGatewaySectionsNotRequiredService> _sectionsNotRequiredService;
 
         private static string UserName = "GatewayUser";
@@ -28,15 +27,14 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
-            _logger = new Mock<ILogger<GatewayOverviewOrchestrator>>();
             _sectionsNotRequiredService = new Mock<IGatewaySectionsNotRequiredService>();
-            _orchestrator = new GatewayOverviewOrchestrator(_applyApiClient.Object, _logger.Object, _sectionsNotRequiredService.Object);
+            _orchestrator = new GatewayOverviewOrchestrator(_applyApiClient.Object, _sectionsNotRequiredService.Object);
         }
 
         [TestCase("12345678", "John Ltd.", SectionReviewStatus.Pass, "Very good.")]
         [TestCase("87654321", "Simon Ltd.", SectionReviewStatus.Fail, "Not so good.")]
         [TestCase("12344321", "Frank Ltd.", SectionReviewStatus.NotRequired, null)]
-        public void GetConfirmOverviewViewModel_returns_model(string ukprn, string organisationName, string sectionReviewStatus, string comment)
+        public async Task GetConfirmOverviewViewModel_returns_model(string ukprn, string organisationName, string sectionReviewStatus, string comment)
         {
             var applicationId = Guid.NewGuid();
             var gatewayReviewStatus = GatewayReviewStatus.InProgress;
@@ -74,9 +72,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var request = new GetApplicationOverviewRequest(applicationId, UserName);
 
-            var response = _orchestrator.GetConfirmOverviewViewModel(request);
-
-            var viewModel = response.Result;
+            var viewModel = await _orchestrator.GetConfirmOverviewViewModel(request);
 
             Assert.AreEqual(applicationId, viewModel.ApplicationId);
             Assert.AreEqual(ukprn, viewModel.Ukprn);
@@ -89,7 +85,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         [TestCase("12345678", "John Ltd.")]
         [TestCase("87654321", "Simon Ltd.")]
         [TestCase("12344321", "Frank Ltd.")]
-        public void GetConfirmOverviewViewModel_returns_model_no_saved_statuses(string ukprn, string organisationName)
+        public async Task GetConfirmOverviewViewModel_returns_model_no_saved_statuses(string ukprn, string organisationName)
         {
             var applicationId = Guid.NewGuid();
             var gatewayReviewStatus = GatewayReviewStatus.InProgress;
@@ -112,16 +108,14 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(returnedRoatpApplicationResponse);
 
-            // No Saved Statusses
+            // No Saved Statuses
             var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>();
 
             _applyApiClient.Setup(x => x.GetGatewayPageAnswers(applicationId)).ReturnsAsync(returnedGatewayPageAnswers);
 
             var request = new GetApplicationOverviewRequest(applicationId, UserName);
 
-            var response = _orchestrator.GetConfirmOverviewViewModel(request);
-
-            var viewModel = response.Result;
+            var viewModel = await _orchestrator.GetConfirmOverviewViewModel(request);
 
             viewModel.ApplicationId.Should().Be(applicationId);
             viewModel.Ukprn.Should().Be(ukprn);

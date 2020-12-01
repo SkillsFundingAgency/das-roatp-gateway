@@ -1,7 +1,9 @@
 ﻿using SFA.DAS.AdminService.Common.Validation;
+using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SFA.DAS.RoatpGateway.Web.ViewModels
 {
@@ -23,6 +25,8 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
 
         public List<GatewaySequence> Sequences { get; set; }
         public bool ReadyToConfirm { get; set; }
+
+        public bool TwoInTwoMonthsPassed { get; set; }
 
         // Model On Error
         public bool IsInvalid { get; set; }

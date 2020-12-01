@@ -7,7 +7,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 {
     public interface IGatewayOverviewOrchestrator
     {
-        Task<RoatpGatewayApplicationViewModel> GetOverviewViewModel(GetApplicationOverviewRequest getTradingNameRequest);
+        Task<RoatpGatewayApplicationViewModel> GetOverviewViewModel(GetApplicationOverviewRequest request);
         Task<RoatpGatewayApplicationViewModel> GetConfirmOverviewViewModel(GetApplicationOverviewRequest request);
         void ProcessViewModelOnError(RoatpGatewayApplicationViewModel viewModelOnError, RoatpGatewayApplicationViewModel viewModel, ValidationResponse validationResponse);
     }
