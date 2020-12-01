@@ -122,7 +122,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
 
             Assert.AreSame(viewModel, viewResult.Model);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Once);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, UserId, Username), Times.Once);
         }
 
         [Test]
@@ -142,7 +142,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var redirectToActionResult = result as RedirectToActionResult;
 
             Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, UserId, Username), Times.Never);
         }
 
         [Test]
@@ -163,7 +163,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var resultViewModel = viewResult.Model as RoatpGatewayConfirmOutcomeViewModel;
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, UserId, Username), Times.Never);
         }
 
 

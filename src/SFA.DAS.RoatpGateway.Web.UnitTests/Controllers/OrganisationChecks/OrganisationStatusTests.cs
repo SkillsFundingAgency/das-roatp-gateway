@@ -57,11 +57,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var command = new SubmitGatewayPageAnswerCommand(viewModel);
 
             ApplyApiClient.Setup(x =>
-                x.SubmitGatewayPageAnswer(applicationId, pageId, viewModel.Status, Username, It.IsAny<string>()));
+                x.SubmitGatewayPageAnswer(applicationId, pageId, viewModel.Status, UserId, Username, It.IsAny<string>()));
 
             var result = _controller.EvaluateOrganisationStatus(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             _orchestrator.Verify(x => x.GetOrganisationStatusViewModel(It.IsAny<GetOrganisationStatusRequest>()), Times.Never());
         }
 
@@ -99,11 +99,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                 .Verifiable("view model not returned");
 
             ApplyApiClient.Setup(x =>
-                x.SubmitGatewayPageAnswer(applicationId, pageId, viewModel.Status, Username, It.IsAny<string>()));
+                x.SubmitGatewayPageAnswer(applicationId, pageId, viewModel.Status, UserId, Username, It.IsAny<string>()));
 
             var result = _controller.EvaluateOrganisationStatus(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _orchestrator.Verify(x => x.GetTradingNameViewModel(It.IsAny<GetTradingNameRequest>()), Times.Never());
         }
     }
