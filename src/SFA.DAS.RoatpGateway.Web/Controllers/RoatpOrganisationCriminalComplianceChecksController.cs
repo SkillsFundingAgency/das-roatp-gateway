@@ -13,6 +13,7 @@ using SFA.DAS.RoatpGateway.Web.Validators;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
+    // TODO : We need a similar copy for PeopleInControlCriminalAndComplianceChecks OR we modify this class to be more generic
     public class RoatpOrganisationCriminalComplianceChecksController : RoatpGatewayControllerBase<RoatpOrganisationCriminalComplianceChecksController>
     {
         private readonly IGatewayCriminalComplianceChecksOrchestrator _orchestrator;
@@ -27,6 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             _orchestrator = orchestrator;
         }
 
+        // TODO: Fix this so it doesn't take generic routing!
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}")]
         public async Task<IActionResult> GetCriminalCompliancePage(Guid applicationId, string gatewayPageId)
         {
