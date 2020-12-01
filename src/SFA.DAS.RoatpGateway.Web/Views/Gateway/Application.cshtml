@@ -126,13 +126,18 @@
                                 {
                                     <li class="das-task-list__item">
                                         <span class="das-task-list__task-name das-task-list__task-name--inactive">
-                                            @if (currentSection.Status != null && currentSection.Status.Equals(SectionReviewStatus.NotRequired))
+                                            @if (!Model.TwoInTwoMonthsPassed && currentSection.PageId != GatewayPageIds.TwoInTwelveMonths)
                                             {
-                                                @currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : "<span class=\"govuk-visually-hidden\"> " + currentSection.HiddenText + "</span>"))
+                                                @* TwoInTwelveMonths must be a Pass before unlocking any other section *@
+                                                @currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))
+                                            }
+                                            else if (currentSection.Status != null && currentSection.Status.Equals(SectionReviewStatus.NotRequired))
+                                            {
+                                                @currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))
                                             }
                                             else
                                             {
-                                                <a class="govuk-link" href="/Roatp/GatewayCheckStatus/@Model.ApplicationId/Page/@currentSection.PageId/Status/@Model.GatewayReviewStatus">@currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : "<span class=\"govuk-visually-hidden\"> " + currentSection.HiddenText + "</span>"))</a>
+                                                <a class="govuk-link" href="/Roatp/GatewayCheckStatus/@Model.ApplicationId/Page/@currentSection.PageId/Status/@Model.GatewayReviewStatus">@currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))</a>
                                             }
                                         </span>
                                         @if (!string.IsNullOrWhiteSpace(currentSection.Status))
@@ -142,20 +147,21 @@
                                                 var cssModifierClassName = "";
                                                 switch(currentSection.Status)
                                                 {
-                                                    case "Not required":
+                                                    case SectionReviewStatus.NotRequired:
                                                         cssModifierClassName = "govuk-tag--inactive";
                                                         break;
-                                                    case "Pass":
+                                                    case SectionReviewStatus.Pass:
                                                         cssModifierClassName = "das-tag--solid-green";
                                                         break;
-                                                    case "Fail":
+                                                    case SectionReviewStatus.Fail:
                                                         cssModifierClassName = "das-tag--solid-red";
                                                         break;
+                                                    case SectionReviewStatus.InProgress:
                                                     default:
                                                         cssModifierClassName = "";
-                                                        break;                   
+                                                        break;
                                                 }
-                                                
+
                                                 <strong class="das-task-list__task-tag das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
                                             }
                                         }
