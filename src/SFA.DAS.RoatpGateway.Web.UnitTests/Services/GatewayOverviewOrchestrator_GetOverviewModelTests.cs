@@ -1,18 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
-using FluentAssertions;
-using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
-using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Web.Services;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {
@@ -21,7 +17,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
     {
         private GatewayOverviewOrchestrator _orchestrator;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
-        private Mock<ILogger<GatewayOverviewOrchestrator>> _logger;
         private Mock<IGatewaySectionsNotRequiredService> _sectionsNotRequiredService;
         private readonly Guid _applicationId = Guid.NewGuid();
         private const string UserName = "GatewayUser";
@@ -33,14 +28,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
-            _logger = new Mock<ILogger<GatewayOverviewOrchestrator>>();
             _sectionsNotRequiredService = new Mock<IGatewaySectionsNotRequiredService>();
-            _orchestrator = new GatewayOverviewOrchestrator(_applyApiClient.Object, _logger.Object, _sectionsNotRequiredService.Object);
-            
+            _orchestrator = new GatewayOverviewOrchestrator(_applyApiClient.Object, _sectionsNotRequiredService.Object);
         }
 
         [Test]
-        public void GetOverviewViewModel_returns_model()
+        public async Task GetOverviewViewModel_returns_model()
         {
             var applyData = new RoatpApplyData
             {
@@ -63,6 +56,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             _applyApiClient.Setup(x => x.GetContactDetails(_applicationId)).ReturnsAsync(contactDetails);
             const string sectionReviewStatus = SectionReviewStatus.Pass;
             const string comment = "comments go here";
+
             var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>
             {
                 new GatewayPageAnswerSummary
@@ -79,9 +73,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             var gatewayReviewStatus = GatewayReviewStatus.InProgress;
             var request = new GetApplicationOverviewRequest(_applicationId, UserName);
 
-            var response = _orchestrator.GetOverviewViewModel(request);
-
-            var viewModel = response.Result;
+            var viewModel = await _orchestrator.GetOverviewViewModel(request);
 
             Assert.AreEqual(_applicationId, viewModel.ApplicationId);
             Assert.AreEqual(viewModel.ApplicationEmailAddress,Email);
