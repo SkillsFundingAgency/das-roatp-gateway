@@ -93,7 +93,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{typeof(T).Name}-SubmitGatewayPageAnswer - Error: '" + ex.Message + "'");
+                _logger.LogError(ex, $"{typeof(T).Name}-SubmitGatewayPageAnswer - Error: '{ex.Message}'");
                 throw;
             }
 
