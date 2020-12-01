@@ -16,14 +16,13 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications();
         Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications();
         Task<GetGatewayApplicationCountsResponse> GetApplicationCounts();
-        Task StartGatewayReview(Guid applicationId, string reviewer);
+
         Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string evaluatedBy);
 
         Task<List<GatewayPageAnswerSummary>> GetGatewayPageAnswers(Guid applicationId);
         Task<GatewayCommonDetails> GetPageCommonDetails(Guid applicationId, string pageId, string userName);
         Task<ContactAddress> GetOrganisationAddress(Guid applicationId);
         Task<IcoNumber> GetIcoNumber(Guid applicationId);
-        Task TriggerGatewayDataGathering(Guid applicationId, string userName);
 
         Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username, string comments);
         Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string userId, string userName);
