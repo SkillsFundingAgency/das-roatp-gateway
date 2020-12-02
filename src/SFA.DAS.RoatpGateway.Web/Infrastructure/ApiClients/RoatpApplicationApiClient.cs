@@ -104,29 +104,28 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
         }
 
-        public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string username,
+        public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username,
             string comments)
         {
             _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}'");
 
             try
             {
-                await Post($"/Gateway/Page/Submit", new { applicationId, pageId, status, comments, username });
+                await Post($"/Gateway/Page/Submit", new { applicationId, pageId, status, comments, userId, username });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '" + ex.Message + "'");
             }
-
         }
 
-        public async Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string userName)
+        public async Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string userId, string userName)
         {
             _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - ApplicationId '{applicationId}' - GatewayReviewStatus '{gatewayReviewStatus}' - GatewayReviewComment '{gatewayReviewComment}' - UserName '{userName}'");
 
             try
             {
-                var responseCode = await Post($"/Gateway/UpdateGatewayReviewStatusAndComment", new { applicationId, gatewayReviewStatus, gatewayReviewComment, userName });
+                var responseCode = await Post($"/Gateway/UpdateGatewayReviewStatusAndComment", new { applicationId, gatewayReviewStatus, gatewayReviewComment, userId, userName });
                 if (responseCode != System.Net.HttpStatusCode.OK)
                 {
                     throw new HttpRequestException($"Unable to update RoATP gateway review status, response code {responseCode}");
