@@ -61,6 +61,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                 );
             _contextAccessor.Setup(_ => _.HttpContext).Returns(context);
             _controller = new RoatpGatewayOrganisationChecksController(_applyApiClient.Object, _gatewayValidator.Object, _orchestrator.Object, _logger.Object);
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = context
+            };
         }
 
         [Test]

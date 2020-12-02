@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AdminService.Common.Validation;
@@ -24,6 +25,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             _orchestrator = new Mock<IGatewayOrganisationChecksOrchestrator>();
             _controller = new RoatpGatewayOrganisationChecksController(ApplyApiClient.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = Context
+            };
         }
 
         [Test]

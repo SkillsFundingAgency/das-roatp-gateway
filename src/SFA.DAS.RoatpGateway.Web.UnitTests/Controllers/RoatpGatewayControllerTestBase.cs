@@ -15,6 +15,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         protected Mock<IRoatpApplicationApiClient> ApplyApiClient;
         protected Mock<IRoatpGatewayPageValidator> GatewayValidator;
         protected Mock<ILogger<T>> Logger;
+        protected HttpContext Context;
 
         protected string UserId => "user id";
         protected string Username => "user name";
@@ -35,8 +36,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 new Claim(ClaimTypes.GivenName, GivenName),
                 new Claim(ClaimTypes.Surname, Surname)
             }));
-
-            //var context = new DefaultHttpContext { User = user };
+            
             GatewayValidator.Setup(v => v.Validate(It.IsAny<SubmitGatewayPageAnswerCommand>()))
                 .ReturnsAsync(new ValidationResponse
                 {
@@ -44,7 +44,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 }
                 );
 
-
+            Context = new DefaultHttpContext { User = user };
 
 
         }

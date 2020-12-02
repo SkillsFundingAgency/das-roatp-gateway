@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
@@ -25,6 +26,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             _orchestrator = new Mock<IGatewayOrganisationChecksOrchestrator>();
             _controller = new RoatpGatewayOrganisationChecksController(ApplyApiClient.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = Context
+            };
         }
 
         [Test]

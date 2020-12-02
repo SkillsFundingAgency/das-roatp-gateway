@@ -42,6 +42,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.PeopleInControl
                 .Verifiable("view model not returned");
 
             _controller = new RoatpGatewayPeopleInControlController(ApplyApiClient.Object, _logger.Object, GatewayValidator.Object, _orchestrator.Object);
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = Context
+            };
         }
 
         [Test]

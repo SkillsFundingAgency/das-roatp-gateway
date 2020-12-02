@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
 {
@@ -22,7 +23,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
     {
         private RoatpGatewayRegisterChecksController _controller;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
-        private Mock<IHttpContextAccessor> _contextAccessor;
         private Mock<IRoatpGatewayPageValidator> _gatewayValidator;
         private Mock<IGatewayRegisterChecksOrchestrator> _orchestrator;
         private Mock<ILogger<RoatpGatewayRegisterChecksController>> _logger;
@@ -36,7 +36,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
-            _contextAccessor = new Mock<IHttpContextAccessor>();
             _gatewayValidator = new Mock<IRoatpGatewayPageValidator>();
             _logger = new Mock<ILogger<RoatpGatewayRegisterChecksController>>();
             _orchestrator = new Mock<IGatewayRegisterChecksOrchestrator>();
@@ -49,8 +48,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
                 new Claim(ClaimTypes.Surname, surname)
              }));
 
-            _contextAccessor.Setup(_ => _.HttpContext).Returns(new DefaultHttpContext { User = user });
-
             _gatewayValidator.Setup(v => v.Validate(It.IsAny<SubmitGatewayPageAnswerCommand>()))
                 .ReturnsAsync(new ValidationResponse
                 {
@@ -58,6 +55,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
                 });
 
             _controller = new RoatpGatewayRegisterChecksController(_applyApiClient.Object, _gatewayValidator.Object, _orchestrator.Object, _logger.Object);
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = user }
+            };
         }
 
         [Test]
