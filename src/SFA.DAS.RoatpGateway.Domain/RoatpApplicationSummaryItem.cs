@@ -17,6 +17,7 @@ namespace SFA.DAS.RoatpGateway.Domain
         public string GatewayReviewStatus { get; set; }
         public string AssessorReviewStatus { get; set; }
         public string FinancialReviewStatus { get; set; }
+        public string GatewayUserName { get; set; }
 
         public string ApplicationRouteShortText
         {
