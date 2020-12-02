@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore.Internal;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Models;
@@ -91,7 +90,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{typeof(T).Name}-SubmitGatewayPageAnswer - Error: '" + ex.Message + "'");
+                _logger.LogError(ex, $"{typeof(T).Name}-SubmitGatewayPageAnswer - Error: '{ex.Message}'");
                 throw;
             }
 

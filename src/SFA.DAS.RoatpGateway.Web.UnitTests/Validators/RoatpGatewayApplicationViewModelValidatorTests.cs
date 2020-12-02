@@ -31,7 +31,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             {
                 GatewayReviewStatus = gatewayReviewStatus,
                 OptionAskClarificationText = clarificationMessage,
-                OptionDeclinedText = declinedMessage,
+                OptionFailedText = declinedMessage,
                 OptionApprovedText = approvedMessage
             };
 
@@ -40,12 +40,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             Assert.AreEqual(hasErrorMessage, result.Errors.Any());
         }
 
-        [TestCase(GatewayReviewStatus.ClarificationSent, 500, false)]
-        [TestCase(GatewayReviewStatus.ClarificationSent, 501, true)]
-        [TestCase(GatewayReviewStatus.Fail, 500, false)]
-        [TestCase(GatewayReviewStatus.Fail, 501, true)]
-        [TestCase(GatewayReviewStatus.Pass, 500, false)]
-        [TestCase(GatewayReviewStatus.Pass, 501, true)]
+        [TestCase(GatewayReviewStatus.ClarificationSent, 150, false)]
+        [TestCase(GatewayReviewStatus.ClarificationSent, 151, true)]
+        [TestCase(GatewayReviewStatus.Fail, 150, false)]
+        [TestCase(GatewayReviewStatus.Fail, 151, true)]
+        [TestCase(GatewayReviewStatus.Pass, 150, false)]
+        [TestCase(GatewayReviewStatus.Pass, 151, true)]
         public void Test_cases_where_input_is_too_long(string gatewayReviewStatus, int wordCount, bool hasErrorMessage)
         {
             var words = string.Empty;
@@ -57,7 +57,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             _viewModel = new RoatpGatewayApplicationViewModel();
             _viewModel.GatewayReviewStatus = gatewayReviewStatus;
             _viewModel.OptionAskClarificationText = words;
-            _viewModel.OptionDeclinedText = words;
+            _viewModel.OptionFailedText = words;
             _viewModel.OptionApprovedText = words;
 
             var result = _validator.Validate(_viewModel).Result;
