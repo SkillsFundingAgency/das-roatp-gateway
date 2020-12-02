@@ -13,22 +13,20 @@ using SFA.DAS.RoatpGateway.Web.Validators;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
-    // TODO : We need a similar copy for PeopleInControlCriminalAndComplianceChecks OR we modify this class to be more generic
-    public class RoatpOrganisationCriminalComplianceChecksController : RoatpGatewayControllerBase<RoatpOrganisationCriminalComplianceChecksController>
+    public class RoatpCriminalComplianceChecksController : RoatpGatewayControllerBase<RoatpCriminalComplianceChecksController>
     {
         private readonly IGatewayCriminalComplianceChecksOrchestrator _orchestrator;
 
-        private const string CriminalComplianceView = "~/Views/Gateway/pages/OrganisationCriminalComplianceChecks.cshtml";
+        private const string CriminalComplianceView = "~/Views/Gateway/pages/CriminalComplianceChecks.cshtml";
 
-        public RoatpOrganisationCriminalComplianceChecksController(IRoatpApplicationApiClient applyApiClient, IHttpContextAccessor contextAccessor,
+        public RoatpCriminalComplianceChecksController(IRoatpApplicationApiClient applyApiClient, IHttpContextAccessor contextAccessor,
                                                               IRoatpGatewayPageValidator gatewayValidator,
                                                               IGatewayCriminalComplianceChecksOrchestrator orchestrator,
-                                                              ILogger<RoatpOrganisationCriminalComplianceChecksController> logger) : base(contextAccessor, applyApiClient, logger, gatewayValidator)
+                                                              ILogger<RoatpCriminalComplianceChecksController> logger) : base(contextAccessor, applyApiClient, logger, gatewayValidator)
         {
             _orchestrator = orchestrator;
         }
 
-        // TODO: Fix this so it doesn't take generic routing!
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}")]
         public async Task<IActionResult> GetCriminalCompliancePage(Guid applicationId, string gatewayPageId)
         {
@@ -38,12 +36,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             return View(CriminalComplianceView, viewModel);
         }
 
-        [HttpPost("/Roatp/Gateway/{applicationId}/Page/SubmitComplianceCheck")]
+        [HttpPost("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}")]
         public async Task<IActionResult> EvaluateCriminalCompliancePage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<OrganisationCriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, _contextAccessor.HttpContext.User.UserDisplayName()));
+            Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, _contextAccessor.HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, CriminalComplianceView);
         }
-
     }
 }
+
