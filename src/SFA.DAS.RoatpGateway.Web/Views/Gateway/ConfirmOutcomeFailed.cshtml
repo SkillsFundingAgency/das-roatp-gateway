@@ -1,5 +1,5 @@
 @using SFA.DAS.RoatpGateway.Domain;
-@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayConfirmOutcomeViewModel
+@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayFailOutcomeViewModel
 
 @{
     ViewBag.Title = "Gateway - Overall gateway outcome";
@@ -21,6 +21,7 @@
     </ol>
 </div>
 <main class="govuk-main-wrapper " id="main-content" role="main">
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (!ViewData.ModelState.IsValid)
@@ -37,38 +38,35 @@
                 </div>
             }
 
-            <form class="form" method="post" asp-action="AboutToConfirmOutcome" asp-controller="RoatpGateway">
+            <form class="form" method="post" asp-action="AboutToFailOutcome" asp-controller="RoatpGateway">
                 <div class="govuk-form-group @Model.CssFormGroupError">
                     <fieldset class="govuk-fieldset" aria-describedby="ConfirmGatewayOutcome-error">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-7">
                             <span class="govuk-caption-l">Overall gateway outcome</span>
-                            <h1 class="govuk-fieldset__heading">Are you sure you want to pass this application?</h1>
+                            <h1 class="govuk-fieldset__heading">Are you sure you want to fail this application?</h1>
                         </legend>
-        
-                        @if (!string.IsNullOrEmpty(Model.GatewayReviewComment))
-                        {
-                            <h2 class="govuk-heading-l">Comments</h2>
-                            <div class="govuk-inset-text govuk-!-margin-bottom-7">
-                                @Model.GatewayReviewComment
-                            </div>
-                        }
+
+                        <h2 class="govuk-heading-l">Comments</h2>
+                        <div class="govuk-inset-text govuk-!-margin-bottom-7">
+                            @Model.GatewayReviewComment
+                        </div>
 
                         <div class="govuk-warning-text">
                             <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                             <strong class="govuk-warning-text__text">
                                 <span class="govuk-warning-text__assistive">Warning</span>
-                                This application will pass and go to governance.
+                                This application will fail and go to governance.
                             </strong>
                         </div>
 
                         <a name="ConfirmGatewayOutcome"></a>
                         @if (!ViewData.ModelState.IsValid)
                         {
-                            <span class="govuk-error-message" id="ConfirmGatewayOutcome-error">
+                            <span class="govuk-error-message">
                                 <span class="govuk-visually-hidden">Error:</span> <span asp-validation-for="ConfirmGatewayOutcome"></span>
                             </span>
                         }
-                        
+
                         <input type="hidden" asp-for="ApplicationId" />
                         <input type="hidden" asp-for="ApplicationStatus" />
                         <input type="hidden" asp-for="GatewayReviewStatus" />
