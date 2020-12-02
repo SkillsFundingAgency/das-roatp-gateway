@@ -88,6 +88,25 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             _orchestrator.Verify(x => x.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(viewModel.ApplicationId, Username)), Times.Never);
         }
 
+        [Test]
+        public async Task ConfirmOutcome_evaluation_reject_result()
+        {
+            var applicationId = Guid.NewGuid();
+
+            var viewModel = new RoatpGatewayApplicationViewModel
+            {
+                ApplicationId = applicationId,
+                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                OptionApprovedText = "Some approved text",
+                ErrorMessages = new List<ValidationErrorDetail>()
+            };
+
+            _validator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            await _controller.EvaluateConfirmOutcome(viewModel);
+
+            _orchestrator.Verify(x => x.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(viewModel.ApplicationId, Username)), Times.Never);
+        }
 
         [Test]
         public async Task ConfirmOutcome_evaluation_result_is_on_error()
@@ -192,7 +211,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
 
         [Test]
-        public async Task AboutToCFailOutcome_selection_Yes()
+        public async Task AboutToFailOutcome_selection_Yes()
         {
             var applicationId = Guid.NewGuid();
             var viewModel = new RoatpGatewayFailOutcomeViewModel
@@ -238,7 +257,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpGatewayFailOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Pass,
+                GatewayReviewStatus = GatewayReviewStatus.Reject,
                 GatewayReviewComment = "some comment"
             };
 
@@ -252,6 +271,66 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
         }
 
+        [Test]
+        public async Task AboutToRejectOutcome_selection_Yes()
+        {
+            var applicationId = Guid.NewGuid();
+            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            {
+                ApplicationId = applicationId,
+                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewComment = "some comment",
+                ConfirmGatewayOutcome = "Yes"
+            };
+
+            var result = await _controller.AboutToRejectOutcome(viewModel);
+            var viewResult = result as ViewResult;
+            var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
+
+            Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Once);
+        }
+
+        [Test]
+        public async Task AboutToRejectOutcome_selection_No()
+        {
+            var applicationId = Guid.NewGuid();
+            var expectedActionName = "ConfirmOutcome";
+            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            {
+                ApplicationId = applicationId,
+                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewComment = "some comment",
+                ConfirmGatewayOutcome = "No"
+            };
+
+            var result = await _controller.AboutToRejectOutcome(viewModel);
+            var redirectToActionResult = result as RedirectToActionResult;
+
+            Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
+        }
+
+        [Test]
+        public async Task AboutToRejectOutcome_no_selection()
+        {
+            var applicationId = Guid.NewGuid();
+            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            {
+                ApplicationId = applicationId,
+                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewComment = "some comment"
+            };
+
+            _controller.ModelState.AddModelError("ConfirmGatewayOutcome", "Select if you are sure you want to reject this application");
+
+            var result = await _controller.AboutToRejectOutcome(viewModel);
+            var viewResult = result as ViewResult;
+            var resultViewModel = viewResult.Model as RoatpGatewayRejectOutcomeViewModel;
+
+            Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, Username), Times.Never);
+        }
 
         [Test]
         public async Task NewApplications_ViewModel_Has_Correct_Application_Counts()

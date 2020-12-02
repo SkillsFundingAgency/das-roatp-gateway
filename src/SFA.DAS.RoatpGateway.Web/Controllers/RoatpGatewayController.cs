@@ -141,6 +141,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                             viewModel.OptionApprovedText = gatewayReviewComment;
                             break;
                         }
+                    case GatewayReviewStatus.Reject:
+                    {
+                        viewModel.RadioCheckedRejected = HtmlAndCssElements.CheckBoxChecked;
+                        viewModel.OptionRejectedText = gatewayReviewComment;
+                        break;
+                    }
                 }
 
                 if (viewModel.ApplicationStatus == ApplicationStatus.GatewayAssessed)
@@ -219,6 +225,17 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         viewName = "~/Views/Gateway/ConfirmOutcomeApproved.cshtml";
                         break;
                     }
+                case GatewayReviewStatus.Reject:
+                {
+                    confirmViewModel = new RoatpGatewayRejectOutcomeViewModel
+                    {
+                        ApplicationId = viewModel.ApplicationId,
+                        GatewayReviewStatus = viewModel.GatewayReviewStatus,
+                        GatewayReviewComment = viewModel.OptionRejectedText
+                    };
+                    viewName = "~/Views/Gateway/ConfirmOutcomeRejected.cshtml";
+                    break;
+                }
             }
 
             return View(viewName, confirmViewModel);
@@ -295,7 +312,40 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
         }
 
+        [HttpPost("/Roatp/Gateway/{applicationId}/AboutToRejectOutcome")]
+        public async Task<IActionResult> AboutToRejectOutcome(RoatpGatewayRejectOutcomeViewModel viewModel)
+        {
+            if (viewModel.ApplicationStatus == ApplicationStatus.GatewayAssessed)
+            {
+                return RedirectToAction(nameof(NewApplications));
+            }
 
+            if (ModelState.IsValid)
+            {
+                if (viewModel.ConfirmGatewayOutcome.Equals(HtmlAndCssElements.RadioButtonValueYes, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var username = _contextAccessor.HttpContext.User.UserDisplayName();
+                    await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, username);
+
+                    var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
+                    return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(ConfirmOutcome), new
+                    {
+                        applicationId = viewModel.ApplicationId,
+                        gatewayReviewStatus = viewModel.GatewayReviewStatus,
+                        gatewayReviewComment = viewModel.GatewayReviewComment
+                    });
+                }
+            }
+            else
+            {
+                viewModel.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
+                return View("~/Views/Gateway/ConfirmOutcomeRejected.cshtml", viewModel);
+            }
+        }
 
         [HttpPost("/Roatp/Gateway")]
         public async Task<IActionResult> EvaluateGateway(RoatpGatewayApplicationViewModel viewModel, bool? isGatewayApproved)

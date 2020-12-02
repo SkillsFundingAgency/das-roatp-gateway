@@ -18,6 +18,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string OptionAskClarificationText { get; set; }
         public string OptionFailedText { get; set; }
         public string OptionApprovedText { get; set; }
+        public string OptionRejectedText { get; set; }
         public string GatewayReviewComment { get; set; }
         public List<ValidationErrorDetail> ErrorMessages { get; set; }
 
@@ -35,16 +36,17 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string ErrorTextAskClarification { get; set; }
         public string ErrorTextFailed { get; set; }
         public string ErrorTextApproved { get; set; }
-
+        public string ErrorTextRejected { get; set; }
         public string RadioCheckedAskClarification { get; set; }
         public string RadioCheckedFailed { get; set; }
         public string RadioCheckedApproved { get; set; }
-
+        public string RadioCheckedRejected { get; set; }
    
         public string CssFormGroupError { get; set; }
         public string CssOnErrorAskClarification { get; set; }
         public string CssOnErrorApproved { get; set; }
         public string CssOnErrorFailed { get; set; }
+        public string CssOnErrorRejected { get; set; }
         public string ApplicationEmailAddress { get; set; }
 
         public RoatpGatewayApplicationViewModel()
