@@ -28,6 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
         private Mock<ILogger<RoatpGatewayOrganisationChecksController>> _logger;
 
+        private string userId = "user123";
         private string username = "john smith";
         private string givenName = "john";
         private string surname = "smith";
@@ -46,7 +47,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
              {
                 new Claim(ClaimTypes.NameIdentifier, "1"),
-                new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", username),
+                new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn", userId),
                 new Claim(ClaimTypes.GivenName, givenName),
                 new Claim(ClaimTypes.Surname, surname)
              }));
@@ -103,7 +104,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             await _controller.EvaluateOrganisationRiskPage(command);
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, username, vm.OptionPassText));
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText));
         }
 
         [Test]
@@ -139,11 +140,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                                                                                 && y.UserName == username))).ReturnsAsync(vm);
 
             _applyApiClient.Setup(x =>
-                x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, username, comment));
+                x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, comment));
 
             var result = _controller.EvaluateOrganisationRiskPage(command).Result;
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, username, comment), Times.Never);
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, comment), Times.Never);
         }
     }
 }

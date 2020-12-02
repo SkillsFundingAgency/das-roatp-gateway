@@ -43,6 +43,7 @@
                                 <th class="govuk-table__header" scope="col">UKPRN</th>
                                 <th class="govuk-table__header" scope="col">Application reference number</th>
                                 <th class="govuk-table__header" scope="col">Application submitted</th>
+                                <th class="govuk-table__header" scope="col">Outcome made by</th>
                                 <th class="govuk-table__header govuk-table__header--numeric" scope="col">Outcome</th>
                             </tr>
                         </thead>
@@ -61,6 +62,9 @@
                                     </td>
                                     <td class="govuk-table__cell" data-label="Application submitted">
                                         @item.SubmittedDate.ToSfaShortDateString()
+                                    </td>
+                                    <td class="govuk-table__cell" data-label="Outcome made by">
+                                        @item.GatewayUserName
                                     </td>
                                     <td class="govuk-table__cell govuk-table__cell--numeric" data-label="Outcome">
                                         @{

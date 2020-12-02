@@ -25,9 +25,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<IcoNumber> GetIcoNumber(Guid applicationId);
         Task TriggerGatewayDataGathering(Guid applicationId, string userName);
 
-        Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string username,
-           string comments);
-        Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string userName);
+        Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username, string comments);
+        Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string userId, string userName);
         Task<ProviderDetails> GetUkrlpDetails(Guid applicationId);
 
         Task<CompaniesHouseSummary> GetCompaniesHouseDetails(Guid applicationId);
