@@ -26,7 +26,7 @@
         <div class="govuk-grid-column-two-thirds">
             @if (Model.IsInvalid)
             {
-                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
                     <h2 class="govuk-error-summary__title" id="error-summary-title">
                         There is a problem
                     </h2>
@@ -34,7 +34,14 @@
                         <ul class="govuk-list govuk-error-summary__list">
                             @foreach (var error in Model.ErrorMessages)
                             {
-                                <li><a href="#@error.Field">@error.ErrorMessage</a></li>
+                                if(error.Field == "GatewayReviewStatus")
+                                {
+                                    <li><a href="#OptionApproved">@error.ErrorMessage</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="#@error.Field">@error.ErrorMessage</a></li>
+                                }
                             }
                         </ul>
                     </div>
@@ -61,7 +68,7 @@
             <div class="govuk-grid-column-full">
                 @foreach (var sequence in Model.Sequences)
                 {
-                    <h2 class="govuk-heading-l govuk-!-margin-top-5">@sequence.SequenceTitle</h2>
+                    <h2 class="govuk-heading-l">@sequence.SequenceTitle</h2>
                     <table class="govuk-table govuk-!-margin-bottom-9">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
@@ -96,7 +103,7 @@
                                                     cssModifierClassName = "";
                                                     break;
                                             }
-                                            <strong class="das-task-list__task-tag das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
+                                            <strong class="das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
                                         }
                                     </td>
                                     <td class="govuk-table__cell">
@@ -113,32 +120,32 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <form class="form" method="post" asp-action="EvaluateConfirmOutcome" asp-controller="RoatpGateway">
-                <input type="hidden" asp-for="ApplicationId" />
-                <input type="hidden" asp-for="ApplicationStatus" />
-                <a name="GatewayReviewStatus"></a>
-                <h3 class="govuk-heading-m govuk-!-margin-top-5">What do you want to do?</h3>
-                @if (!string.IsNullOrEmpty(Model.ErrorTextGatewayReviewStatus))
-                {
-                    <span class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextGatewayReviewStatus
-                    </span>
-                }
                 <div class="govuk-form-group @Model.CssFormGroupError">
-                    <div class="govuk-radios govuk-radios--conditional " data-module="radios">
+                    <input type="hidden" asp-for="ApplicationId" />
+                    <input type="hidden" asp-for="ApplicationStatus" />
+                    <a name="GatewayReviewStatus"></a>
+                    <h3 class="govuk-heading-l">What do you want to do?</h3>
+                    @if (!string.IsNullOrEmpty(Model.ErrorTextGatewayReviewStatus))
+                    {
+                        <span class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextGatewayReviewStatus
+                        </span>
+                    }
+                    <div class="govuk-radios govuk-radios--conditional " data-module="govuk-radios">
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input"
-                                   id="OptionApproved"
-                                   name="GatewayReviewStatus"
-                                   type="radio"
-                                   value="Pass"
-                                   data-aria-controls="conditional-OptionApproved"
-                                   @Model.RadioCheckedApproved>
+                                id="OptionApproved"
+                                name="GatewayReviewStatus"
+                                type="radio"
+                                value="Pass"
+                                data-aria-controls="conditional-OptionApproved"
+                                @Model.RadioCheckedApproved>
                             <label class="govuk-label govuk-radios__label" for="OptionApproved">
                                 Pass this application
                             </label>
                         </div>
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionApproved">
-                            <div class="govuk-character-count" data-module="character-count" data-maxwords="500">
+                            <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
                                 <div class="govuk-form-group">
                                     <a name="OptionApprovedText"></a>
                                     <label class="govuk-label" for="OptionApprovedText">
@@ -150,12 +157,50 @@
                                             <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextApproved
                                         </span>
                                     }
-                                    <textarea class="govuk-textarea js-character-count @Model.CssOnErrorApproved"
-                                              id="OptionApprovedText"
-                                              name="OptionApprovedText"
-                                              rows="5"
-                                              aria-describedby="OptionApprovedText-info">@Model.OptionApprovedText</textarea>
+                                    <textarea class="govuk-textarea govuk-js-character-count @Model.CssOnErrorApproved"
+                                            id="OptionApprovedText"
+                                            name="OptionApprovedText"
+                                            rows="5"
+                                            aria-describedby="OptionApprovedText-info">@Model.OptionApprovedText</textarea>
                                     <span id="OptionApprovedText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input"
+                                id="OptionFailed"
+                                name="GatewayReviewStatus"
+                                type="radio"
+                                value="Fail"
+                                data-aria-controls="conditional-OptionFailed"
+                                @Model.RadioCheckedFailed
+                                >
+                            <label class="govuk-label govuk-radios__label" for="OptionFailed">
+                                Fail this application
+                            </label>
+                        </div>
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionFailed">
+                            <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
+                                <div class="govuk-form-group">
+                                    <a name="OptionFailedText"></a>
+                                    <label class="govuk-label" for="OptionFailedText">
+                                        Add comments
+                                    </label>
+                                    @if (!string.IsNullOrEmpty(Model.ErrorTextFailed))
+                                    {
+                                        <span class="govuk-error-message">
+                                            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextFailed
+                                        </span>
+                                    }
+                                    <textarea class="govuk-textarea govuk-js-character-count @Model.CssOnErrorFailed"
+                                            id="OptionFailedText"
+                                            name="OptionFailedText"
+                                            rows="5"
+                                            aria-describedby="OptionFailedText-info">@Model.OptionFailedText</textarea>
+                                    <span id="OptionFailedText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
                                 </div>
                             </div>
                         </div>
