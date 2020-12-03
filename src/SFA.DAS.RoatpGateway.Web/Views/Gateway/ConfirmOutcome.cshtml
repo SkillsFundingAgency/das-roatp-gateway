@@ -133,44 +133,6 @@
                     }
                 <div class="govuk-radios govuk-radios--conditional " data-module="govuk-radios">
 
-
-
-                    <div class="govuk-radios__item">
-                        <input class="govuk-radios__input"
-                               id="OptionRejected"
-                               name="GatewayReviewStatus"
-                               type="radio"
-                               value="Reject"
-                               data-aria-controls="conditional-OptionRejected"
-                               @Model.RadioCheckedRejected>
-                        <label class="govuk-label govuk-radios__label" for="OptionRejected">
-                            Reject this application
-                        </label>
-                    </div>
-                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionRejected">
-                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
-                            <div class="govuk-form-group">
-                                <a name="OptionRejectedText"></a>
-                                <label class="govuk-label" for="OptionRejectedText">
-                                    Add comments
-                                </label>
-                                @if (!string.IsNullOrEmpty(Model.ErrorTextRejected))
-                                {
-                                    <span class="govuk-error-message">
-                                        <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextRejected
-                                    </span>
-                                }
-                                <textarea class="govuk-textarea govuk-js-character-count @Model.CssOnErrorRejected"
-                                          id="OptionRejectedText"
-                                          name="OptionRejectedText"
-                                          rows="5"
-                                          aria-describedby="OptionFailedText-info">@Model.OptionRejectedText</textarea>
-                                <span id="OptionRejectedText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input"
                                id="OptionApproved"
@@ -205,8 +167,6 @@
                             </div>
                         </div>
                     </div>
-
-
 
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input"
@@ -243,7 +203,40 @@
                         </div>
                     </div>
 
-
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input"
+                               id="OptionRejected"
+                               name="GatewayReviewStatus"
+                               type="radio"
+                               value="Reject"
+                               data-aria-controls="conditional-OptionRejected"
+                               @Model.RadioCheckedRejected>
+                        <label class="govuk-label govuk-radios__label" for="OptionRejected">
+                            Reject this application
+                        </label>
+                    </div>
+                    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionRejected">
+                        <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
+                            <div class="govuk-form-group">
+                                <a name="OptionRejectedText"></a>
+                                <label class="govuk-label" for="OptionRejectedText">
+                                    Add comments
+                                </label>
+                                @if (!string.IsNullOrEmpty(Model.ErrorTextRejected))
+                                {
+                                    <span class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextRejected
+                                    </span>
+                                }
+                                <textarea class="govuk-textarea govuk-js-character-count @Model.CssOnErrorRejected"
+                                          id="OptionRejectedText"
+                                          name="OptionRejectedText"
+                                          rows="5"
+                                          aria-describedby="OptionFailedText-info">@Model.OptionRejectedText</textarea>
+                                <span id="OptionRejectedText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
