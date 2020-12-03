@@ -337,5 +337,42 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             return View("~/Views/Gateway/Evaluated.cshtml");
         }
+
+
+        [HttpGet("/Roatp/Gateway/{applicationId}/Remove")]
+        public async Task<IActionResult> RemoveApplication(Guid applicationId)
+        {
+            // placeholder for now
+            await Task.CompletedTask;
+            var vm = new RoatpGatewayOutcomeViewModel { ApplicationId = applicationId };
+            return View("~/Views/Gateway/ConfirmRemoveApplication.cshtml", vm);
+        }
+
+        [HttpPost("/Roatp/Gateway/{applicationId}/Remove")]
+        public async Task<IActionResult> ConfirmRemoveApplication(Guid applicationId)
+        {
+            // placeholder for now
+            await Task.CompletedTask;
+            var vm = new RoatpGatewayOutcomeViewModel { ApplicationId = applicationId };
+            return View("~/Views/Gateway/ConfirmRemoveApplication.cshtml", vm);
+        }
+
+        [HttpGet("/Roatp/Gateway/{applicationId}/Withdraw")]
+        public async Task<IActionResult> WithdrawApplication(Guid applicationId)
+        {
+            // placeholder for now
+            await Task.CompletedTask;
+            var vm = new RoatpGatewayOutcomeViewModel { ApplicationId = applicationId };
+            return View("~/Views/Gateway/ConfirmWithdrawApplication.cshtml", vm);
+        }
+
+        [HttpPost("/Roatp/Gateway/{applicationId}/Withdraw")]
+        public async Task<IActionResult> ConfirmWithdrawApplication(Guid applicationId)
+        {
+            // placeholder for now
+            await Task.CompletedTask;
+            var vm = new RoatpGatewayOutcomeViewModel { ApplicationId = applicationId };
+            return View("~/Views/Gateway/ConfirmWithdrawApplication.cshtml", vm);
+        }
     }
 }

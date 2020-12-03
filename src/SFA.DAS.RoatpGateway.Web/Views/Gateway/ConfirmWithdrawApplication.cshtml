@@ -1,0 +1,127 @@
+@* TODO: This is a Holding Page. Please use appropriate viewmodel when implementing *@
+@using SFA.DAS.AdminService.Common.Extensions;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayOutcomeViewModel
+
+@{
+    ViewBag.Title = "Gateway - Application action";
+    Layout = "_Layout";
+}
+
+<div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="Dashboard" asp-action="Index" class="govuk-breadcrumbs__link">RoATP dashboard</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-breadcrumbs__link">RoATP applications</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId" class="govuk-breadcrumbs__link">Application assessment overview</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Application action</li>
+    </ol>
+</div>
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                    <h2 class="govuk-error-summary__title" id="error-summary-title">
+                        There is a problem
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                            @*<li><a href="#ConfirmGatewayOutcomeYes" sfa-validation-for="ConfirmGatewayOutcome"></a></li>*@
+                        </ul>
+                    </div>
+                </div>
+            }
+
+            <form class="form" method="post" asp-action="ConfirmWithdrawApplication" asp-controller="RoatpGateway" asp-route-applicationId="@Model.ApplicationId">
+                <div class="govuk-form-group @Model.CssFormGroupError">
+                    <fieldset class="govuk-fieldset" aria-describedby="ConfirmGatewayOutcome-error">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-7">
+                            <span class="govuk-caption-l">Application action</span>
+                            <h1 class="govuk-fieldset__heading">Are you sure the applicant wants to withdraw their application?</h1>
+                        </legend>
+
+                        <div class="govuk-!-margin-bottom-4">
+                            <p class="govuk-body govuk-!-margin-bottom-0">
+                                UKPRN: {Placeholder Text}@*@Model.Ukprn*@
+                            </p>
+                            <p class="govuk-body govuk-!-margin-bottom-0">
+                                Legal name: {Placeholder Text}@*@Model.ApplyLegalName*@
+                            </p>
+                            <p class="govuk-body govuk-!-margin-bottom-0">
+                                Provider Route: {Placeholder Text}@*@Model.ApplicationRoute*@
+                            </p>
+                            <p class="govuk-body govuk-!-margin-bottom-0">
+                                Application submitted on: {Placeholder Text}@*@Model.ApplicationSubmittedOn.ToSfaShortDateString()*@
+                            </p>
+                        </div>
+
+                        @*<a name="ConfirmGatewayOutcome"></a>*@
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <span class="govuk-error-message">
+                                @*<span class="govuk-visually-hidden">Error:</span> <span asp-validation-for="ConfirmGatewayOutcome"></span>*@
+                            </span>
+                        }
+
+                        <input type="hidden" asp-for="ApplicationId" />
+
+                        <div class="govuk-radios govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+                            <div class="govuk-radios__item">
+                                @*<input asp-for="ConfirmGatewayOutcome" id="ConfirmGatewayOutcomeYes" value="Yes" type="radio" class="govuk-radios__input" data-aria-controls="conditional-ConfirmGatewayOutcomeYes" />*@
+                                @*<label for="ConfirmGatewayOutcomeYes" class="govuk-label govuk-radios__label">Yes</label>*@
+                                <input name="ConfirmGatewayOutcome" id="ConfirmGatewayOutcomeYes" value="Yes" type="radio" class="govuk-radios__input" data-aria-controls="conditional-ConfirmGatewayOutcomeYes" />
+                                <label class="govuk-label govuk-radios__label">Yes</label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-ConfirmGatewayOutcomeYes">
+                                <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="500">
+                                    <div class="govuk-form-group">
+                                        <label for="OptionYesText" class="govuk-label">
+                                            Add comments (optional)
+                                        </label>
+                                        @*
+                                            @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
+                                            {
+                                                @foreach (var error in Model.ErrorMessages)
+                                                {
+                                                    @if (error.Field == "OptionYesText")
+                                                    {
+                                                        <span class="govuk-error-message">
+                                                            <span class="govuk-visually-hidden">Error:</span> @error.ErrorMessage
+                                                        </span>
+                                                    }
+                                                }
+                                            }
+                                        *@
+                                        <textarea class="govuk-textarea govuk-js-character-count"
+                                                  id="OptionYesText"
+                                                  name="OptionYesText"
+                                                  rows="5"
+                                                  maxlength="10000"
+                                                  aria-describedby="OptionPassText-info">@*@Model.OptionYesText*@</textarea>
+                                    </div>
+                                    <span id="OptionYesText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+                                </div>
+                            </div>
+                            <div class="govuk-radios__item">
+                                @*<input asp-for="ConfirmGatewayOutcome" id="ConfirmGatewayOutcomeNo" value="No" type="radio" class="govuk-radios__input" />*@
+                                @*<label for="ConfirmGatewayOutcomeNo" class="govuk-label govuk-radios__label">No</label>*@
+                                <input name="ConfirmGatewayOutcome" id="ConfirmGatewayOutcomeNo" value="No" type="radio" class="govuk-radios__input" />
+                                <label class="govuk-label govuk-radios__label">No</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <button type="submit" class="govuk-button">
+                    Save and continue
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
