@@ -1270,3 +1270,11 @@ TODO: change to 'das-page-navigation' and BEM
 .das-table--condensed .govuk-table__header:last-child {
     padding-right: 0;
 }
+
+.das-actions-box {
+    position: relative;
+    border: 1px solid #b1b4b6;
+    padding: 20px;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJUlEQVQoU2P88ePHfwY0wMHBwYguxjgUFKI7GsTH5m4M3w1ChQAZTSeO0/AZpgAAAABJRU5ErkJggg==)
+        repeat;
+}
