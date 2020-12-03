@@ -10,6 +10,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
 {
     public class RoatpGatewayPageValidator : IRoatpGatewayPageValidator
     {
+        private const string ClarificationDetailsRequired = "Enter comments";
         private const string FailDetailsRequired = "Enter comments";
         private const string TooManyWords = "Your comments must be 150 words or less";
 
@@ -30,6 +31,11 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                 {
                     validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailText",
                         FailDetailsRequired));
+                }
+                else if (command.Status == SectionReviewStatus.Clarification && string.IsNullOrEmpty(command.OptionClarificationText))
+                {
+                    validationResponse.Errors.Add(new ValidationErrorDetail("OptionClarificationText",
+                        ClarificationDetailsRequired));
                 }
             }
 
@@ -69,6 +75,18 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                         if (wordCount > 150)
                         {
                             validationResponse.Errors.Add(new ValidationErrorDetail("OptionInProgressText",
+                                TooManyWords));
+                        }
+
+                        break;
+                    }
+                case SectionReviewStatus.Clarification when !string.IsNullOrEmpty(command.OptionClarificationText):
+                    {
+                        var wordCount = command.OptionClarificationText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)
+                            .Length;
+                        if (wordCount > 150)
+                        {
+                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionClarificationText",
                                 TooManyWords));
                         }
 
