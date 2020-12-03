@@ -237,8 +237,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 if (viewModel.ConfirmGatewayOutcome.Equals(HtmlAndCssElements.RadioButtonValueYes, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var username = _contextAccessor.HttpContext.User.UserDisplayName();
-                    var userId = _contextAccessor.HttpContext.User.UserId();
+                    var username = HttpContext.User.UserDisplayName();
+                    var userId = HttpContext.User.UserId();
                     await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, userId, username);
                     var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
                     return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);

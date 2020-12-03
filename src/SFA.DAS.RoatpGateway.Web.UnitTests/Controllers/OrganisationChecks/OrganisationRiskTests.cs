@@ -23,7 +23,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
     {
         private RoatpGatewayOrganisationChecksController _controller;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
-        private Mock<IHttpContextAccessor> _contextAccessor;
         private Mock<IRoatpGatewayPageValidator> _gatewayValidator;
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
         private Mock<ILogger<RoatpGatewayOrganisationChecksController>> _logger;
@@ -39,7 +38,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
-            _contextAccessor = new Mock<IHttpContextAccessor>();
             _gatewayValidator = new Mock<IRoatpGatewayPageValidator>();
             _logger = new Mock<ILogger<RoatpGatewayOrganisationChecksController>>();
             _orchestrator = new Mock<IGatewayOrganisationChecksOrchestrator>();
@@ -59,7 +57,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                     Errors = new List<ValidationErrorDetail>()
                 }
                 );
-            _contextAccessor.Setup(_ => _.HttpContext).Returns(context);
+
             _controller = new RoatpGatewayOrganisationChecksController(_applyApiClient.Object, _gatewayValidator.Object, _orchestrator.Object, _logger.Object);
 
             _controller.ControllerContext = new ControllerContext
