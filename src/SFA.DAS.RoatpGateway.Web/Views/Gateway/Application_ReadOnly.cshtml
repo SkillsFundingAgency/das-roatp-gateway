@@ -113,10 +113,9 @@
                             <table class="govuk-table govuk-!-margin-bottom-9">
                                 <thead class="govuk-table__head">
                                     <tr class="govuk-table__row">
-                                        @* TODO: Not sure if these need widths assigning *@
-                                        <th class="govuk-table__header">Check</th>
-                                        <th class="govuk-table__header govuk-!-width-one-quarter">Outcome</th>
-                                        <th class="govuk-table__header">Comments</th>
+                                        <th class="govuk-table__header das-table-cell-width-40">Check</th>
+                                        <th class="govuk-table__header das-table-cell-width-20">Outcome</th>
+                                        <th class="govuk-table__header das-table-cell-width-40">Comments</th>
                                     </tr>
                                 </thead>
                                 <tbody class="govuk-table__body">
@@ -147,7 +146,7 @@
                                                     @if (!currentSection.Status.Equals(SectionReviewStatus.New))
                                                     {
                                                         var cssModifierClassName = CssStylingHelper.GetSectionReviewStatusStyle(currentSection.Status);
-                                                        <strong class="das-task-list__task-tag das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
+                                                        <strong class="das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
                                                     }
                                                 }
                                             </td>
