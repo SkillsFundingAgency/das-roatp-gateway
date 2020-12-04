@@ -138,6 +138,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
             Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
             Assert.AreEqual(true, viewModel.AreClarificationsSelected);
+            Assert.AreEqual(false, viewModel.ReadyToConfirm);
         }
     }
 }

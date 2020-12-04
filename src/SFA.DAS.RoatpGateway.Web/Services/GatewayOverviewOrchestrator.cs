@@ -156,7 +156,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             if (!twoInTwelveMonthsFailed)
             {
-                var gradedStatutes = new[] { SectionReviewStatus.Pass, SectionReviewStatus.Fail, SectionReviewStatus.Clarification, SectionReviewStatus.NotRequired };
+                var gradedStatutes = new[] { SectionReviewStatus.Pass, SectionReviewStatus.Fail, SectionReviewStatus.NotRequired };
 
                 foreach (var section in sections)
                 {
