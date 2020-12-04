@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.RoatpGateway.Web.ViewModels
 {
-    public class OrganisationCriminalCompliancePageViewModel : RoatpGatewayPageViewModel
+    public class CriminalCompliancePageViewModel : RoatpGatewayPageViewModel
     {
         public string QuestionText { get; set; }
 
