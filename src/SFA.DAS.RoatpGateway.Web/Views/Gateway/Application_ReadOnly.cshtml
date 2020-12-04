@@ -184,7 +184,7 @@
                         Outcome made date
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        {PlaceHolder}
+                        @Model.GatewayOutcomeDateTime.ToSfaShortDateString()
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -192,7 +192,7 @@
                         Outcome made by
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        {PlaceHolder}
+                        @Model.GatewayUserName
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -200,7 +200,7 @@
                         Comments
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @Model.GatewayReviewComment
+                        @Model.GatewayReviewComments
                     </dd>
                 </div>
             </dl>
