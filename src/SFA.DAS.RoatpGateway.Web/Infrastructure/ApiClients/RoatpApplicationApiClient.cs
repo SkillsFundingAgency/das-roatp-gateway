@@ -48,19 +48,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/ClosedApplications");
         }
 
-        public async Task StartGatewayReview(Guid applicationId, string reviewer)
-        {
-            await Post($"/GatewayReview/{applicationId}/StartReview", new { reviewer });
-        }
-
         public async Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string evaluatedBy)
         {
             await Post($"/GatewayReview/{applicationId}/Evaluate", new { isGatewayApproved, evaluatedBy });
-        }
-
-        public async Task StartAssessorReview(Guid applicationId, string reviewer)
-        {
-            await Post($"/Application/{applicationId}/StartAssessorReview", new { reviewer });
         }
 
         public async Task<List<GatewayPageAnswerSummary>> GetGatewayPageAnswers(Guid applicationId)
@@ -91,18 +81,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<IcoNumber>($"/Gateway/{applicationId}/IcoNumber");
         }
 
-        public async Task TriggerGatewayDataGathering(Guid applicationId, string userName)
-        {
-            try
-            {
-                await Get<object>($"Gateway/ApiChecks/{applicationId}/{userName}");
-            }
-            catch (RoatpApiClientException ex)
-            {
-                _logger.LogError("An error occurred when retrieving Gateway Api checks details", ex);
-                throw new ExternalApiException("An error occurred when retrieving Gateway Api checks details", ex);
-            }
-        }
 
         public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username,
             string comments)

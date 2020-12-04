@@ -337,18 +337,5 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             return View("~/Views/Gateway/Evaluated.cshtml");
         }
-
-        [HttpGet("/Roatp/GatewayCheckStatus/{applicationId}/Page/{PageId}/Status/{gatewayReviewStatus}")]
-        public async Task<IActionResult> CheckStatus(Guid applicationId, string PageId, string gatewayReviewStatus)
-        {
-            if (gatewayReviewStatus.Equals(GatewayReviewStatus.New))
-            {
-                var username = HttpContext.User.UserDisplayName();
-                await _applyApiClient.TriggerGatewayDataGathering(applicationId, username);
-                await _applyApiClient.StartGatewayReview(applicationId, username);
-            }
-
-            return Redirect($"/Roatp/Gateway/{applicationId}/Page/{PageId}");
-        }
     }
 }
