@@ -1,19 +1,30 @@
 @using SFA.DAS.AdminService.Common.Extensions;
+@using SFA.DAS.RoatpGateway.Web.Helpers;
 @using SFA.DAS.RoatpGateway.Domain;
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayApplicationViewModel
 
 @{
-    ViewBag.Title = "Gateway evaluation";
+    ViewBag.Title = "Gateway outcome";
     Layout = "_Layout";
 }
 
-<a asp-action="ClosedApplications" asp-controller="RoatpGateway" class="govuk-back-link">Back</a>
+<div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="Dashboard" asp-action="Index" class="govuk-breadcrumbs__link">RoATP dashboard</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="RoatpGateway" asp-action="ClosedApplications" class="govuk-breadcrumbs__link">RoATP gateway applications</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Gateway outcome</li>
+    </ol>
+</div>
 
 <main class="govuk-main-wrapper " id="main-content" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-xl">Application assessment overview</h1>
+            <h1 class="govuk-heading-xl">Gateway outcome</h1>
             <h2 class="govuk-heading-m">Organisation details</h2>
 
             <dl class="govuk-summary-list">
@@ -84,24 +95,113 @@
                     </div>
                 }
             </dl>
+        </div>
+    </div>
 
-            <h2 class="govuk-heading-m">Application details</h2>
+    @if (Model.Sequences.Any())
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <ol class="das-task-list">
+                    @foreach (var sequence in Model.Sequences)
+                    {
+                        <li>
+                            <h2 class="das-task-list__section">
+                                <span class="das-task-list__section-number">@sequence.SequenceNumber. </span>@sequence.SequenceTitle
+                            </h2>
+
+                            <table class="govuk-table govuk-!-margin-bottom-9">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        @* TODO: Not sure if these need widths assigning *@
+                                        <th class="govuk-table__header">Check</th>
+                                        <th class="govuk-table__header govuk-!-width-one-quarter">Outcome</th>
+                                        <th class="govuk-table__header">Comments</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                    @foreach (var currentSection in sequence.Sections)
+                                    {
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">
+                                                <span class="das-task-list__task-name das-task-list__task-name--inactive">
+                                                    @if (!Model.TwoInTwoMonthsPassed && currentSection.PageId != GatewayPageIds.TwoInTwelveMonths)
+                                                    {
+                                                        @* TwoInTwelveMonths must be a Pass before unlocking any other section *@
+                                                        @currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))
+                                                    }
+                                                    else if (currentSection.Status != null && currentSection.Status.Equals(SectionReviewStatus.NotRequired))
+                                                    {
+                                                        @currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))
+                                                    }
+                                                    else
+                                                    {
+                                                        @* TODO: Add href to read-only page *@
+                                                        <a class="govuk-link" href="#">@currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))</a>
+                                                    }
+                                                </span>
+                                            </td>
+                                            <td class="govuk-table__cell">
+                                                @if (!string.IsNullOrWhiteSpace(currentSection.Status))
+                                                {
+                                                    @if (!currentSection.Status.Equals(SectionReviewStatus.New))
+                                                    {
+                                                        var cssModifierClassName = CssStylingHelper.GetSectionReviewStatusStyle(currentSection.Status);
+                                                        <strong class="das-task-list__task-tag das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
+                                                    }
+                                                }
+                                            </td>
+                                            <td class="govuk-table__cell">
+                                                @currentSection.Comment
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </li>
+                    }
+
+                </ol>
+            </div>
+        </div>
+    }
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h2 class="govuk-heading-m">Gateway outcome</h2>
 
             <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">
-                        Application Status
+                        Outcome
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @Model.ApplicationStatus
+                        @Model.GatewayReviewStatus
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">
-                        Gateway Review Status
+                        Outcome made date
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @Model.GatewayReviewStatus
+                        {PlaceHolder}
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Outcome made by
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        {PlaceHolder}
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Comments
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.GatewayReviewComment
                     </dd>
                 </div>
             </dl>
