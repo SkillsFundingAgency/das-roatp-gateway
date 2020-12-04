@@ -81,6 +81,63 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.AreEqual(OrganisationName, viewModel.OrganisationName);
             Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
             Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
+            Assert.AreEqual(false, viewModel.AreClarificationsSelected);
+        }
+
+
+
+
+
+        [Test]
+        public async Task GetOverviewViewModel_with_clarifications_returns_model()
+        {
+            var applyData = new RoatpApplyData
+            {
+                ApplyDetails = new RoatpApplyDetails
+                {
+                    UKPRN = Ukprn,
+                    OrganisationName = OrganisationName
+                }
+            };
+
+            var returnedRoatpApplicationResponse = new RoatpApplicationResponse
+            {
+                ApplicationId = _applicationId,
+                ApplyData = applyData,
+                GatewayReviewStatus = GatewayReviewStatus.InProgress
+            };
+
+            var contactDetails = new ContactDetails { Email = Email };
+            _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync(returnedRoatpApplicationResponse);
+            _applyApiClient.Setup(x => x.GetContactDetails(_applicationId)).ReturnsAsync(contactDetails);
+            const string sectionReviewStatus = SectionReviewStatus.Clarification;
+            const string comment = "comments go here";
+
+            var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>
+            {
+                new GatewayPageAnswerSummary
+                {
+                    ApplicationId = _applicationId,
+                    PageId = GatewayPageIds.OrganisationRisk,
+                    Status = sectionReviewStatus,
+                    Comments = comment
+                }
+            };
+
+            _applyApiClient.Setup(x => x.GetGatewayPageAnswers(_applicationId)).ReturnsAsync(returnedGatewayPageAnswers);
+
+            var gatewayReviewStatus = GatewayReviewStatus.InProgress;
+            var request = new GetApplicationOverviewRequest(_applicationId, UserName);
+
+            var viewModel = await _orchestrator.GetOverviewViewModel(request);
+
+            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
+            Assert.AreEqual(viewModel.ApplicationEmailAddress, Email);
+            Assert.AreEqual(Ukprn, viewModel.Ukprn);
+            Assert.AreEqual(OrganisationName, viewModel.OrganisationName);
+            Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
+            Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
+            Assert.AreEqual(true, viewModel.AreClarificationsSelected);
         }
     }
 }

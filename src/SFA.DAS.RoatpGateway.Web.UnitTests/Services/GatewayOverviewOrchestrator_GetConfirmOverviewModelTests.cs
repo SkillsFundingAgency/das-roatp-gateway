@@ -31,11 +31,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             _orchestrator = new GatewayOverviewOrchestrator(_applyApiClient.Object, _sectionsNotRequiredService.Object);
         }
 
-        [TestCase("12345678", "John Ltd.", SectionReviewStatus.Pass, "Very good.")]
-        [TestCase("87654321", "Simon Ltd.", SectionReviewStatus.Fail, "Not so good.")]
-        [TestCase("43211234", "Bob Ltd.", SectionReviewStatus.Clarification, "Needs clarification.")]
-        [TestCase("12344321", "Frank Ltd.", SectionReviewStatus.NotRequired, null)]
-        public async Task GetConfirmOverviewViewModel_returns_model(string ukprn, string organisationName, string sectionReviewStatus, string comment)
+        [TestCase("12345678", "John Ltd.", SectionReviewStatus.Pass, "Very good.", false)]
+        [TestCase("87654321", "Simon Ltd.", SectionReviewStatus.Fail, "Not so good.", false)]
+        [TestCase("43211234", "Bob Ltd.", SectionReviewStatus.Clarification, "Needs clarification.", true)]
+        [TestCase("12344321", "Frank Ltd.", SectionReviewStatus.NotRequired, null, false)]
+        public async Task GetConfirmOverviewViewModel_returns_model(string ukprn, string organisationName, string sectionReviewStatus, string comment, bool isClarificationSet)
         {
             var applicationId = Guid.NewGuid();
             var gatewayReviewStatus = GatewayReviewStatus.InProgress;
@@ -81,6 +81,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
             Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
             Assert.AreEqual(comment, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Comment);
+            Assert.AreEqual(viewModel.AreClarificationsSelected,isClarificationSet);
         }
 
         [TestCase("12345678", "John Ltd.")]

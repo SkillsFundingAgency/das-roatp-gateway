@@ -53,6 +53,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
 
             var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
+            viewmodel.AreClarificationsSelected = sections.Any(x => x.Status == SectionReviewStatus.Clarification);
             viewmodel.TwoInTwoMonthsPassed = TwoInTwelveMonthsPassed(sections);
             viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
 
@@ -91,6 +92,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
 
             var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
+            viewmodel.AreClarificationsSelected = sections.Any(x => x.Status == SectionReviewStatus.Clarification);
             viewmodel.TwoInTwoMonthsPassed = TwoInTwelveMonthsPassed(sections);
             viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
 
