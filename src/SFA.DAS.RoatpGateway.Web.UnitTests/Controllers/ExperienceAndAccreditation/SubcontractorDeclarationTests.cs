@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Controllers;
@@ -28,10 +30,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             _orchestrator = new Mock<IGatewayExperienceAndAccreditationOrchestrator>();
             _controller = new RoatpGatewayExperienceAndAccreditationController(ApplyApiClient.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
 
-            _controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = Context
-            };
+            _controller.ControllerContext = MockedControllerContext.Setup();
+            UserId = _controller.ControllerContext.HttpContext.User.UserId();
+            Username = _controller.ControllerContext.HttpContext.User.UserDisplayName();
         }
 
         [Test]
