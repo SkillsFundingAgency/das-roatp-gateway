@@ -197,25 +197,7 @@
                     </li>
                 </ol>
                 
-                <h2 class="das-task-list__section">
-                    Application actions
-                </h2>
-                <ul class="das-task-list__items">
-                    <li class="das-task-list__item">
-                        <span class="das-task-list__task-name das-task-list__task-name--inactive">
-                            @if (Model.AreClarificationsSelected)
-                            {
-                                <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGateway" asp-action="AskForClarification" asp-route-applicationId="@Model.ApplicationId">
-                                    Ask for clarification
-                                </a>
-                            }
-                            else
-                            {
-                                <text>Ask for clarification</text>
-                            }
-                        </span>
-                    </li>
-                </ul>
+                <partial name="_ApplicationActions" />
             </div>
         </div>
     }
