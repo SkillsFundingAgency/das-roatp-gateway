@@ -255,7 +255,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 new GatewaySequence
                 {
                     SequenceNumber = 5,
-                    SequenceTitle = "Organisation’s criminal and compliance checks",
+                    SequenceTitle = "Organisation's criminal and compliance checks",
                     Sections = new List<GatewaySection>
                     {
                         new GatewaySection { SectionNumber = 1, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors,  LinkTitle = "Composition with creditors" },
@@ -276,7 +276,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 new GatewaySequence
                 {
                     SequenceNumber = 6,
-                    SequenceTitle = "People in control’s criminal and compliance checks",
+                    SequenceTitle = "People in control's criminal and compliance checks",
                     Sections = new List<GatewaySection>
                     {
                         new GatewaySection { SectionNumber = 1, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions,  LinkTitle = "Unspent criminal convictions" },

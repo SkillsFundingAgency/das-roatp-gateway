@@ -16,9 +16,9 @@ using SFA.DAS.RoatpGateway.Web.Controllers;
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
 {
     [TestFixture]
-    public class CriminalComplianceTests : RoatpGatewayControllerTestBase<RoatpOrganisationCriminalComplianceChecksController>
+    public class OrganisationCriminalComplianceTests : RoatpGatewayControllerTestBase<RoatpCriminalComplianceChecksController>
     {
-        private RoatpOrganisationCriminalComplianceChecksController _controller;
+        private RoatpCriminalComplianceChecksController _controller;
         private Mock<IGatewayCriminalComplianceChecksOrchestrator> _orchestrator;
 
         [SetUp]
@@ -27,7 +27,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
             CoreSetup();
 
             _orchestrator = new Mock<IGatewayCriminalComplianceChecksOrchestrator>();
-            _controller = new RoatpOrganisationCriminalComplianceChecksController(ApplyApiClient.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
+            _controller = new RoatpCriminalComplianceChecksController(ApplyApiClient.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
 
             _controller.ControllerContext = MockedControllerContext.Setup();
             UserId = _controller.ControllerContext.HttpContext.User.UserId();
@@ -46,21 +46,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FraudIrregularities)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.OngoingInvestigation)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.ContractTerminated)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt)]
-        public void Criminal_compliance_check_is_displayed(string gatewayPageId)
+        public void Organisation_criminal_compliance_check_is_displayed(string gatewayPageId)
         {
             var applicationId = Guid.NewGuid();
 
             _orchestrator.Setup(x => x.GetCriminalComplianceCheckViewModel(It.IsAny<GetCriminalComplianceCheckRequest>()))
-                .ReturnsAsync(new OrganisationCriminalCompliancePageViewModel())
+                .ReturnsAsync(new CriminalCompliancePageViewModel())
                 .Verifiable("view model not returned");
 
             var result = _controller.GetCriminalCompliancePage(applicationId, gatewayPageId).GetAwaiter().GetResult();
@@ -68,7 +59,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
 
             var viewResult = result as ViewResult;
             viewResult.Should().NotBeNull();
-            var viewModel = viewResult.Model as OrganisationCriminalCompliancePageViewModel;
+            var viewModel = viewResult.Model as CriminalCompliancePageViewModel;
             viewModel.Should().NotBeNull();
         }
 
@@ -84,22 +75,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FraudIrregularities)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.OngoingInvestigation)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.ContractTerminated)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt)]
-        public void Criminal_compliance_check_result_is_saved(string gatewayPageId)
+        public void Organisation_criminal_compliance_check_result_is_saved(string gatewayPageId)
         {
-            var model = new OrganisationCriminalCompliancePageViewModel
+            var model = new CriminalCompliancePageViewModel
             {
                 ApplicationId = Guid.NewGuid(),
                 ApplyLegalName = "legal name",
-                ComplianceCheckQuestionId = "CC-1",
+                ComplianceCheckQuestionId = "CC-20",
                 ComplianceCheckAnswer = "No",
                 OptionPassText = "check passed",
                 Status = "Pass",
@@ -138,22 +120,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FraudIrregularities)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.OngoingInvestigation)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.ContractTerminated)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees)]
-        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt)]
-        public void Criminal_compliance_check_has_validation_error(string gatewayPageId)
+        public void Organisation_criminal_compliance_check_has_validation_error(string gatewayPageId)
         {
-            var model = new OrganisationCriminalCompliancePageViewModel
+            var model = new CriminalCompliancePageViewModel
             {
                 ApplicationId = Guid.NewGuid(),
                 ApplyLegalName = "legal name",
-                ComplianceCheckQuestionId = "CC-1",
+                ComplianceCheckQuestionId = "CC-20",
                 ComplianceCheckAnswer = "No",
                 OptionFailText = null,
                 Status = "Fail",
@@ -184,7 +157,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
             var result = _controller.EvaluateCriminalCompliancePage(command).GetAwaiter().GetResult();
 
             var viewResult = result as ViewResult;
-            var viewModel = viewResult.Model as OrganisationCriminalCompliancePageViewModel;
+            var viewModel = viewResult.Model as CriminalCompliancePageViewModel;
             viewModel.Should().NotBeNull();
             viewModel.ErrorMessages.Count.Should().BeGreaterThan(0);
 
