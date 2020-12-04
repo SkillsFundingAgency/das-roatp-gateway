@@ -35,16 +35,16 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         [Test]
         public async Task GetOverviewViewModel_returns_model()
         {
-            var applyData = new RoatpApplyData
+            var applyData = new ApplyData
             {
-                ApplyDetails = new RoatpApplyDetails
+                ApplyDetails = new ApplyDetails
                 {
                     UKPRN = Ukprn,
                     OrganisationName = OrganisationName
                 }
             };
 
-            var returnedRoatpApplicationResponse = new RoatpApplicationResponse
+            var application = new Apply
             {
                 ApplicationId = _applicationId,
                 ApplyData = applyData,
@@ -52,7 +52,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             };
 
             var contactDetails = new ContactDetails {Email = Email};
-            _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync(returnedRoatpApplicationResponse);
+            _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync(application);
             _applyApiClient.Setup(x => x.GetContactDetails(_applicationId)).ReturnsAsync(contactDetails);
             const string sectionReviewStatus = SectionReviewStatus.Pass;
             const string comment = "comments go here";

@@ -10,7 +10,7 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Castle.Components.DictionaryAdapter;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 {
@@ -40,7 +40,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var applicationId = Guid.NewGuid();
             var expectedViewModel = new RoatpGatewayApplicationViewModel { ReadyToConfirm = true };
 
-            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new RoatpApplicationResponse { ApplicationId = applicationId });
+            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId });
             _orchestrator.Setup(x => x.GetConfirmOverviewViewModel(It.Is<GetApplicationOverviewRequest>(y => y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
             var result = await _controller.ConfirmOutcome(applicationId, GatewayReviewStatus.Pass, null);
@@ -93,7 +93,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task ConfirmOutcome_evaluation_result_is_on_error()
         {
             var applicationId = Guid.NewGuid();
-            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new RoatpApplicationResponse { ApplicationId = applicationId });
+            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId });
 
             var viewModel = new RoatpGatewayApplicationViewModel
             {

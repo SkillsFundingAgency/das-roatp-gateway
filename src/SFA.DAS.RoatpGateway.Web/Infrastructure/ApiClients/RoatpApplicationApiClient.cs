@@ -12,6 +12,7 @@ using System.Net.Http;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
 using System.Net.Http.Headers;
 using SFA.DAS.AdminService.Common.Infrastructure;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
@@ -23,9 +24,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
         }
 
-        public async Task<RoatpApplicationResponse> GetApplication(Guid applicationId)
+        public async Task<Apply> GetApplication(Guid applicationId)
         {
-            return await Get<RoatpApplicationResponse>($"/Application/{applicationId}");
+            return await Get<Apply>($"/Application/{applicationId}");
         }
 
         public async Task<GetGatewayApplicationCountsResponse> GetApplicationCounts()
