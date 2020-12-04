@@ -6,6 +6,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 {
     public interface IGatewayCriminalComplianceChecksOrchestrator
     {
-        Task<OrganisationCriminalCompliancePageViewModel> GetCriminalComplianceCheckViewModel(GetCriminalComplianceCheckRequest request);
+        Task<CriminalCompliancePageViewModel> GetCriminalComplianceCheckViewModel(GetCriminalComplianceCheckRequest request);
     }
 }
