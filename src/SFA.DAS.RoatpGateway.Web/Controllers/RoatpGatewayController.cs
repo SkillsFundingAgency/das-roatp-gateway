@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Domain;
@@ -117,12 +119,84 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             var viewModel =
                 await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
 
+            
             if (viewModel is null)
             {
                 return RedirectToAction(nameof(NewApplications));
             }
-            return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
 
+           var vm = new RoatpGatewayAskForClarificationViewModel(viewModel);
+
+            return View("~/Views/Gateway/AskForClarification.cshtml", vm);
+
+        }
+
+
+        [HttpPost("/Roatp/Gateway/{applicationId}/AboutToAskForClarification")]
+        public async Task<IActionResult> AboutToAskForClarification(Guid applicationId, string confirmAskForClarification)
+        {
+
+            var username = _contextAccessor.HttpContext.User.UserDisplayName();
+
+            var viewModel =
+                await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
+
+
+            if (viewModel is null)
+            {
+                return RedirectToAction(nameof(NewApplications));
+            }
+
+
+            if (string.IsNullOrEmpty(confirmAskForClarification))
+            {
+                var vm = new RoatpGatewayAskForClarificationViewModel(viewModel);
+                vm.ErrorMessages = new List<ValidationErrorDetail>
+                {
+                    new ValidationErrorDetail("ConfirmAskForClarification",
+                        "Select if you are sure you want to ask for clarification")
+                };
+                return View("~/Views/Gateway/AskForClarification.cshtml", vm);
+            }
+
+            //validationResponse.Errors.Add(new ValidationErrorDetail("GatewayReviewStatus", NoSelectionErrorMessage));
+
+
+            if (confirmAskForClarification == "No")
+            {
+                return View("~/Views/Gateway/Application.cshtml", viewModel);
+            }
+            if (true)
+            {
+                return RedirectToAction(nameof(NewApplications));
+            }
+
+            // if (ModelState.IsValid)
+            // {
+            //     if (viewModel.ConfirmAskForClarification.Equals(HtmlAndCssElements.RadioButtonValueYes, StringComparison.InvariantCultureIgnoreCase))
+            //     {
+            //         var username = _contextAccessor.HttpContext.User.UserDisplayName();
+            //         var userId = _contextAccessor.HttpContext.User.UserId();
+            //         await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, userId, username);
+            //
+            //         var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
+            //         return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);
+            //     }
+            //     else
+            //     {
+            //         return RedirectToAction(nameof(ConfirmOutcome), new
+            //         {
+            //             applicationId = viewModel.ApplicationId,
+            //             gatewayReviewStatus = viewModel.GatewayReviewStatus,
+            //             gatewayReviewComment = viewModel.GatewayReviewComment
+            //         });
+            //     }
+            // }
+            // else
+            // {
+            //     viewModel.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
+            //     return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
+            // }
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]
@@ -367,6 +441,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 return View("~/Views/Gateway/ConfirmOutcomeRejected.cshtml", viewModel);
             }
         }
+
+
+
+      
 
         [HttpPost("/Roatp/Gateway")]
         public async Task<IActionResult> EvaluateGateway(RoatpGatewayApplicationViewModel viewModel, bool? isGatewayApproved)
