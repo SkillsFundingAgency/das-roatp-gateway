@@ -1270,3 +1270,8 @@ TODO: change to 'das-page-navigation' and BEM
 .das-table--condensed .govuk-table__header:last-child {
     padding-right: 0;
 }
+
+.das-tag--solid-orange {
+    color: #0b0c0c;
+    background-color: #f47738;
+}
