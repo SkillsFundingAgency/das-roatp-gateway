@@ -1,6 +1,4 @@
-﻿@using SFA.DAS.AdminService.Common.Extensions;
-@using SFA.DAS.RoatpGateway.Domain;
-@model SFA.DAS.RoatpGateway.Web.ViewModels.OrganisationCriminalCompliancePageViewModel
+﻿@model SFA.DAS.RoatpGateway.Web.ViewModels.CriminalCompliancePageViewModel
 
 @{
     ViewBag.Title = $"Gateway - {Model.Heading}";
@@ -42,7 +40,7 @@
                         <td class="govuk-table__header">Applicant's answer</td>
                         <td class="govuk-table__cell">@Model.ComplianceCheckAnswer</td>
                     </tr>
-                    @if (!String.IsNullOrWhiteSpace(Model.FurtherInformationAnswer))
+                    @if (!string.IsNullOrWhiteSpace(Model.FurtherInformationAnswer))
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__header">Applicant's detailed answer</td>
@@ -52,12 +50,12 @@
                 </tbody>
             </table>
         </div>
-    </div>    @if (Model.ApplicationId != Guid.Empty)
+    </div>    
+    @if (Model.ApplicationId != Guid.Empty)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <form class="js-disable-on-submit" asp-action="EvaluateCriminalCompliancePage" asp-controller="RoatpOrganisationCriminalComplianceChecks">
-
+                <form class="js-disable-on-submit" method="post" >
                     @{ await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalSection.cshtml"); }
                     <button class="govuk-button" type="submit">Save and continue</button>
                 </form>

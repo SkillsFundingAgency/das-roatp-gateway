@@ -1276,3 +1276,8 @@ TODO: change to 'das-page-navigation' and BEM
     border: 1px solid #b1b4b6;
     padding: 20px;
 }
+
+.das-tag--solid-orange {
+    color: #0b0c0c;
+    background-color: #f47738;
+}

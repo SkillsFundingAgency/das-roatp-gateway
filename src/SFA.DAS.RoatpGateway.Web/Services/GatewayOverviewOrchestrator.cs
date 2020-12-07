@@ -107,12 +107,13 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 viewModelOnError.OptionAskClarificationText = viewModel.OptionAskClarificationText;
                 viewModelOnError.OptionFailedText = viewModel.OptionFailedText;
                 viewModelOnError.OptionApprovedText = viewModel.OptionApprovedText;
+                viewModelOnError.OptionRejectedText = viewModel.OptionRejectedText;
                
                 viewModelOnError.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
                 viewModelOnError.RadioCheckedAskClarification = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedFailed = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Fail ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedApproved = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Pass ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
-
+                viewModelOnError.RadioCheckedRejected = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Reject ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 foreach (var error in viewModelOnError.ErrorMessages)
                 {
                     if (error.Field.Equals(nameof(viewModelOnError.GatewayReviewStatus)))
@@ -136,6 +137,12 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     {
                         viewModelOnError.ErrorTextApproved = error.ErrorMessage;
                         viewModelOnError.CssOnErrorApproved = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                    }
+
+                    if (error.Field.Equals(nameof(viewModelOnError.OptionRejectedText)))
+                    {
+                        viewModelOnError.ErrorTextRejected = error.ErrorMessage;
+                        viewModelOnError.CssOnErrorRejected = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
                 }
             }
@@ -255,7 +262,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 new GatewaySequence
                 {
                     SequenceNumber = 5,
-                    SequenceTitle = "Organisation’s criminal and compliance checks",
+                    SequenceTitle = "Organisation's criminal and compliance checks",
                     Sections = new List<GatewaySection>
                     {
                         new GatewaySection { SectionNumber = 1, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors,  LinkTitle = "Composition with creditors" },
@@ -276,7 +283,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 new GatewaySequence
                 {
                     SequenceNumber = 6,
-                    SequenceTitle = "People in control’s criminal and compliance checks",
+                    SequenceTitle = "People in control's criminal and compliance checks",
                     Sections = new List<GatewaySection>
                     {
                         new GatewaySection { SectionNumber = 1, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions,  LinkTitle = "Unspent criminal convictions" },
