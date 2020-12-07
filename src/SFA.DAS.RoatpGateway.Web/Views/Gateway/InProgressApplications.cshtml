@@ -69,7 +69,7 @@
                                     <td class="govuk-table__cell govuk-table__cell--numeric" data-label="Current status">
                                         @{
                                             var cssModifierClassName = CssStylingHelper.GetGatewayReviewStatusStyle(item.GatewayReviewStatus);
-                                            <div class="das-tag @cssModifierClassName">
+                                            <div class="das-tag @cssModifierClassName das-no-wrap">
                                                 @item.GatewayReviewStatus
                                             </div>
                                         }
