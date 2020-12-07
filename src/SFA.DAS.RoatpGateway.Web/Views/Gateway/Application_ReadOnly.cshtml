@@ -145,8 +145,8 @@
                                                 {
                                                     @if (!currentSection.Status.Equals(SectionReviewStatus.New))
                                                     {
-                                                        var cssModifierClassName = CssStylingHelper.GetSectionReviewStatusStyle(currentSection.Status);
-                                                        <strong class="das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
+                                                        var sectionCssModifierClassName = CssStylingHelper.GetSectionReviewStatusStyle(currentSection.Status);
+                                                        <strong class="das-tag @sectionCssModifierClassName das-no-wrap">@currentSection.Status</strong>
                                                     }
                                                 }
                                             </td>
