@@ -19,9 +19,9 @@ namespace SFA.DAS.RoatpGateway.Web.Helpers
                 case SectionReviewStatus.Fail:
                     cssModifierClassName = "das-tag--solid-red";
                     break;
-                //case SectionReviewStatus.Clarification:
-                //    cssModifierClassName = "das-tag--solid-purple";
-                //    break;
+                case SectionReviewStatus.Clarification:
+                    cssModifierClassName = "das-tag--solid-purple";
+                    break;
                 case SectionReviewStatus.InProgress:
                 default:
                     cssModifierClassName = "";
