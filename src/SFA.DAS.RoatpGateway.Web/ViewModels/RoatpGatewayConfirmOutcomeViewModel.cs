@@ -16,4 +16,11 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         [Required(ErrorMessage = "Select if you are sure you want to fail this application")]
         public string ConfirmGatewayOutcome { get; set; }
     }
+
+    public class RoatpGatewayRejectOutcomeViewModel : RoatpGatewayOutcomeViewModel
+    {
+
+        [Required(ErrorMessage = "Select if you are sure you want to reject this application")]
+        public string ConfirmGatewayOutcome { get; set; }
+    }
 }

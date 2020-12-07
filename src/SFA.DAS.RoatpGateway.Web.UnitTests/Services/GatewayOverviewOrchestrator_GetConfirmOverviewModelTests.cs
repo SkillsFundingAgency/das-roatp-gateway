@@ -190,6 +190,17 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             viewModelOnError.ErrorTextFailed.Should().Be(errorMessage);
         }
 
+        [TestCase(GatewayReviewStatus.Reject, "OptionRejectedText", "Error - Decline")]
+        public void ProcessViewModelOnError_process_view_model_correctly_OptionRejectedText(string gatewayReviewStatus, string field, string errorMessage)
+        {
+            var applicationId = Guid.NewGuid();
+            var viewModelOnError = ProcessViewModelOnError(applicationId, gatewayReviewStatus, field, errorMessage);
+
+            viewModelOnError.ApplicationId.Should().Be(applicationId);
+            viewModelOnError.GatewayReviewStatus.Should().Be(gatewayReviewStatus);
+            viewModelOnError.ErrorTextRejected.Should().Be(errorMessage);
+        }
+
         [TestCase(GatewayReviewStatus.Pass, "OptionApprovedText", "Error - Pass")]
         public void ProcessViewModelOnError_process_view_model_correctly_OptionApprovedText(string gatewayReviewStatus, string field, string errorMessage)
         {
