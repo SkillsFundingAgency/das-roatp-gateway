@@ -22,7 +22,29 @@ namespace SFA.DAS.RoatpGateway.Web.Helpers
                 case SectionReviewStatus.Clarification:
                     cssModifierClassName = "das-tag--solid-purple";
                     break;
-                case SectionReviewStatus.InProgress:
+                default:
+                    cssModifierClassName = "";
+                    break;
+            }
+
+            return cssModifierClassName;
+        }
+
+        public static string GetGatewayReviewStatusStyle(string status)
+        {
+            string cssModifierClassName;
+
+            switch (status)
+            {
+                case GatewayReviewStatus.Pass:
+                    cssModifierClassName = "das-tag--solid-green";
+                    break;
+                case GatewayReviewStatus.Fail:
+                    cssModifierClassName = "das-tag--solid-red";
+                    break;
+                case GatewayReviewStatus.Reject:
+                    cssModifierClassName = "das-tag--solid-orange";
+                    break;
                 default:
                     cssModifierClassName = "";
                     break;

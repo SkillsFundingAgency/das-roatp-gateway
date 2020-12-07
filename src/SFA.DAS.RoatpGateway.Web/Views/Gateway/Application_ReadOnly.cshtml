@@ -176,7 +176,10 @@
                         Outcome
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @Model.GatewayReviewStatus
+                        @{
+                            var cssModifierClassName = CssStylingHelper.GetGatewayReviewStatusStyle(@Model.GatewayReviewStatus);
+                            <strong class="das-tag @cssModifierClassName das-no-wrap">@Model.GatewayReviewStatus</strong>
+                        } 
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
