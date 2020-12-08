@@ -5,7 +5,6 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
         <dl class="govuk-summary-list">
             @if (!string.IsNullOrWhiteSpace(Model.Status))
             {
@@ -56,4 +55,6 @@
             }
         </dl>
     </div>
+
+    <a class="govuk-back-link" asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId">Back to gateway outcome</a>
 </div>
