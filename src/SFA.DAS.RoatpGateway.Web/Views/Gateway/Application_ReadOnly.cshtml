@@ -135,8 +135,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @* TODO: Add href to read-only page *@
-                                                        <a class="govuk-link" href="#">@currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))</a>
+                                                        <a class="govuk-link" href="/Roatp/Gateway/@Model.ApplicationId/Page/@currentSection.PageId">@currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))</a>
                                                     }
                                                 </span>
                                             </td>
