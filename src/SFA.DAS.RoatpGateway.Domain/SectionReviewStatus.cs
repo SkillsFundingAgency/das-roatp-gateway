@@ -8,5 +8,6 @@ namespace SFA.DAS.RoatpGateway.Domain
         public const string Pass = "Pass";
         public const string Fail = "Fail";
         public const string NotRequired = "Not required";
+        public const string Clarification = "Clarification";
     }
 }

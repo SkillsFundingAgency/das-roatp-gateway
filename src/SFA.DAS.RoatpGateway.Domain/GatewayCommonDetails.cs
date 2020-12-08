@@ -15,6 +15,7 @@ namespace SFA.DAS.RoatpGateway.Domain
         public string OptionFailText { get; set; }
 
         public string OptionInProgressText { get; set; }
+        public string OptionClarificationText { get; set; }
 
     }
 }
