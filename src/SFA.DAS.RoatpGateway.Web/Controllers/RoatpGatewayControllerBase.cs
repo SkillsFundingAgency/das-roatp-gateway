@@ -20,7 +20,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
     [Authorize(Roles = Roles.RoatpGatewayTeam)]
     public class RoatpGatewayControllerBase<T> : Controller
     {
-        protected readonly IHttpContextAccessor _contextAccessor;
         protected readonly IRoatpApplicationApiClient _applyApiClient;
         protected readonly ILogger<T> _logger;
         protected readonly IRoatpGatewayPageValidator GatewayValidator;
@@ -31,10 +30,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         }
 
-        public RoatpGatewayControllerBase(IHttpContextAccessor contextAccessor, IRoatpApplicationApiClient applyApiClient,
+        public RoatpGatewayControllerBase(IRoatpApplicationApiClient applyApiClient,
                                           ILogger<T> logger, IRoatpGatewayPageValidator gatewayValidator)
         {
-            _contextAccessor = contextAccessor;
             _applyApiClient = applyApiClient;
             _logger = logger;
             GatewayValidator = gatewayValidator;
@@ -46,6 +44,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             command.OptionInProgressText = command.Status == SectionReviewStatus.InProgress && !string.IsNullOrEmpty(command.OptionInProgressText) ? command.OptionInProgressText : string.Empty;
             command.OptionPassText = command.Status == SectionReviewStatus.Pass && !string.IsNullOrEmpty(command.OptionPassText) ? command.OptionPassText : string.Empty;
             command.OptionFailText = command.Status == SectionReviewStatus.Fail && !string.IsNullOrEmpty(command.OptionFailText) ? command.OptionFailText : string.Empty;
+            command.OptionClarificationText = command.Status == SectionReviewStatus.Clarification && !string.IsNullOrEmpty(command.OptionClarificationText) ? command.OptionClarificationText : string.Empty;
 
             switch (command.Status)
             {
@@ -55,6 +54,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     return command.OptionFailText;
                 case SectionReviewStatus.InProgress:
                     return command.OptionInProgressText;
+                case SectionReviewStatus.Clarification:
+                    return command.OptionClarificationText;
                 default:
                     return string.Empty;
             }
@@ -71,6 +72,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 viewModel.Status = command.Status;
                 viewModel.OptionFailText = command.OptionFailText;
                 viewModel.OptionInProgressText = command.OptionInProgressText;
+                viewModel.OptionClarificationText = command.OptionClarificationText;
                 viewModel.OptionPassText = command.OptionPassText;
                 viewModel.ErrorMessages = validationResponse.Errors;
                 return View(errorView, viewModel);
@@ -81,8 +83,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         protected async Task<IActionResult> SubmitGatewayPageAnswer(SubmitGatewayPageAnswerCommand command)
         {
-            var username = _contextAccessor.HttpContext.User.UserDisplayName();
-            var userId = _contextAccessor.HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            var userId = HttpContext.User.UserId();
             var comments = SetupGatewayPageOptionTexts(command);
 
             _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswer - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}'");

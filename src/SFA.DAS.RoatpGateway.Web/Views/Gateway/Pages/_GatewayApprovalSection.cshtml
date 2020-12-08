@@ -48,6 +48,7 @@
                 var radioCheckedPassed = Model.Status == "Pass" ? "checked" : "";
                 var radioCheckedFailed = Model.Status == "Fail" ? "checked" : "";
                 var radioCheckedInProgress = Model.Status == "In progress" ? "checked" : "";
+                var radioCheckedClarification = Model.Status == "Clarification" ? "checked" : "";
                 <!-- PASS -->
                 <div class="govuk-radios__item">
                     <input class="govuk-radios__input"
@@ -131,7 +132,6 @@
                         <span id="OptionFailText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
                     </div>
                 </div>
-                <div class="govuk-radios__divider">or</div>
                 <!-- IN PROGRESS -->
                 <div class="govuk-radios__item">
                     <input class="govuk-radios__input"
@@ -171,6 +171,48 @@
                                       aria-describedby="OptionInProgressText-info">@Model.OptionInProgressText</textarea>
                         </div>
                         <span id="OptionInProgressText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+                    </div>
+                </div>
+                <!-- CLARIFICATION -->
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input"
+                           type="radio"
+                           id="Clarification"
+                           name="Status"
+                           value="Clarification"
+                           data-aria-controls="conditional-Clarification"
+                           @radioCheckedClarification />
+                    <label class="govuk-label govuk-radios__label" for="Clarification">
+                        Needs clarification
+                    </label>
+                </div>
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-Clarification">
+                    <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
+                        <div class="govuk-form-group">
+                            <span class="govuk-hint" aria-live="polite">You'll need to use the due diligence mailbox when asking for clarification from this applicant.</span>
+                            <label for="OptionClarificationText" class="govuk-label">
+                                Add comments
+                            </label>
+                            @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
+                            {
+                                @foreach (var error in Model.ErrorMessages)
+                                {
+                                    @if (error.Field == "OptionClarificationText")
+                                    {
+                                        <span class="govuk-error-message">
+                                            <span class="govuk-visually-hidden">Error:</span> @error.ErrorMessage
+                                        </span>
+                                    }
+                                }
+                            }
+                            <textarea class="govuk-textarea govuk-js-character-count"
+                                      id="OptionClarificationText"
+                                      name="OptionClarificationText"
+                                      rows="5"
+                                      maxlength="10000"
+                                      aria-describedby="OptionClarificationText-info">@Model.OptionClarificationText</textarea>
+                        </div>
+                        <span id="OptionClarificationText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
                     </div>
                 </div>
             }

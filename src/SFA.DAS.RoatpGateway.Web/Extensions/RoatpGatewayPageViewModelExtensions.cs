@@ -22,6 +22,7 @@ namespace SFA.DAS.RoatpGateway.Web.Extensions
             viewModel.OptionPassText = commonDetails.OptionPassText;
             viewModel.OptionFailText = commonDetails.OptionFailText;
             viewModel.OptionInProgressText = commonDetails.OptionInProgressText;
+            viewModel.OptionClarificationText = commonDetails.OptionClarificationText;
             viewModel.SourcesCheckedOn = commonDetails.CheckedOn;
             viewModel.ApplicationSubmittedOn = commonDetails.ApplicationSubmittedOn;
             viewModel.Caption = caption;

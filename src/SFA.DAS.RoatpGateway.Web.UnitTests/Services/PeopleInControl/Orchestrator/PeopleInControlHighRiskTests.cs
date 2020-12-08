@@ -49,8 +49,9 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn,
                 GatewayReviewStatus = "RevStatus",
-                OptionFailText = "fail",
-                OptionInProgressText = "inprog",
+                OptionFailText = "Fail",
+                OptionInProgressText = "In progress",
+                OptionClarificationText = "Clarification",
                 OptionPassText = "Pass",
                 Status = "Status"
             };
@@ -70,6 +71,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             Assert.AreEqual(_applicationId, viewModel.ApplicationId);
             Assert.AreEqual(_commonDetails.OptionFailText, viewModel.OptionFailText);
             Assert.AreEqual(_commonDetails.OptionInProgressText, viewModel.OptionInProgressText);
+            Assert.AreEqual(_commonDetails.OptionClarificationText, viewModel.OptionClarificationText);
             Assert.AreEqual(_commonDetails.OptionPassText, viewModel.OptionPassText);
             Assert.AreEqual(_commonDetails.Status, viewModel.Status);
             Assert.AreEqual(_commonDetails.Ukprn, viewModel.Ukprn);

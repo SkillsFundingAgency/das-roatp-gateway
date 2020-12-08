@@ -7,6 +7,8 @@ using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using FluentAssertions;
+using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.RoatpGateway.Web.Models;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Controllers;
@@ -25,7 +27,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
             CoreSetup();
 
             _orchestrator = new Mock<IGatewayCriminalComplianceChecksOrchestrator>();
-            _controller = new RoatpCriminalComplianceChecksController(ApplyApiClient.Object, ContextAccessor.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
+            _controller = new RoatpCriminalComplianceChecksController(ApplyApiClient.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
+
+            _controller.ControllerContext = MockedControllerContext.Setup();
+            UserId = _controller.ControllerContext.HttpContext.User.UserId();
+            Username = _controller.ControllerContext.HttpContext.User.UserDisplayName();
         }
 
         [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions)]
