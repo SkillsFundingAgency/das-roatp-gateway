@@ -20,7 +20,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
     [Authorize(Roles = Roles.RoatpGatewayTeam)]
     public class RoatpGatewayControllerBase<T> : Controller
     {
-        protected readonly IHttpContextAccessor _contextAccessor;
         protected readonly IRoatpApplicationApiClient _applyApiClient;
         protected readonly ILogger<T> _logger;
         protected readonly IRoatpGatewayPageValidator GatewayValidator;
@@ -31,10 +30,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         }
 
-        public RoatpGatewayControllerBase(IHttpContextAccessor contextAccessor, IRoatpApplicationApiClient applyApiClient,
+        public RoatpGatewayControllerBase(IRoatpApplicationApiClient applyApiClient,
                                           ILogger<T> logger, IRoatpGatewayPageValidator gatewayValidator)
         {
-            _contextAccessor = contextAccessor;
             _applyApiClient = applyApiClient;
             _logger = logger;
             GatewayValidator = gatewayValidator;
@@ -85,8 +83,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         protected async Task<IActionResult> SubmitGatewayPageAnswer(SubmitGatewayPageAnswerCommand command)
         {
-            var username = _contextAccessor.HttpContext.User.UserDisplayName();
-            var userId = _contextAccessor.HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            var userId = HttpContext.User.UserId();
             var comments = SetupGatewayPageOptionTexts(command);
 
             _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswer - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}'");

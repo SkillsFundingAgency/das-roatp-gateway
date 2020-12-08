@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.RoatpGateway.Domain;
+@using SFA.DAS.RoatpGateway.Domain;
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayApplicationViewModel
 
 @{
@@ -20,12 +20,12 @@
                     <span class="das-!-color-dark-grey">Ask for clarification</span>
                 }
             </p>
-            @* <p class="govuk-body govuk-!-margin-bottom-1"> 
+             <p class="govuk-body govuk-!-margin-bottom-1"> 
                 <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGateway" asp-action="RemoveApplication" asp-route-applicationId="@Model.ApplicationId">Internal removal of application</a>
              </p> 
              <p class="govuk-body govuk-!-margin-bottom-0"> 
                 <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGateway" asp-action="WithdrawApplication" asp-route-applicationId="@Model.ApplicationId">Applicant withdrawal of application</a>
-            </p> *@
+            </p> 
 
         </div>
     </div>

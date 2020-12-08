@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Controllers;
@@ -41,7 +43,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.PeopleInControl
                 .ReturnsAsync(ViewModel)
                 .Verifiable("view model not returned");
 
-            _controller = new RoatpGatewayPeopleInControlController(ContextAccessor.Object, ApplyApiClient.Object, _logger.Object, GatewayValidator.Object, _orchestrator.Object);
+            _controller = new RoatpGatewayPeopleInControlController(ApplyApiClient.Object, _logger.Object, GatewayValidator.Object, _orchestrator.Object);
+
+            _controller.ControllerContext = MockedControllerContext.Setup();
+            UserId = _controller.ControllerContext.HttpContext.User.UserId();
+            Username = _controller.ControllerContext.HttpContext.User.UserDisplayName();
         }
 
         [Test]

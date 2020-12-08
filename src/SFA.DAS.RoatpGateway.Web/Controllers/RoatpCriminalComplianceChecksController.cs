@@ -19,10 +19,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         private const string CriminalComplianceView = "~/Views/Gateway/pages/CriminalComplianceChecks.cshtml";
 
-        public RoatpCriminalComplianceChecksController(IRoatpApplicationApiClient applyApiClient, IHttpContextAccessor contextAccessor,
+        public RoatpCriminalComplianceChecksController(IRoatpApplicationApiClient applyApiClient,
                                                               IRoatpGatewayPageValidator gatewayValidator,
                                                               IGatewayCriminalComplianceChecksOrchestrator orchestrator,
-                                                              ILogger<RoatpCriminalComplianceChecksController> logger) : base(contextAccessor, applyApiClient, logger, gatewayValidator)
+                                                              ILogger<RoatpCriminalComplianceChecksController> logger) : base(applyApiClient, logger, gatewayValidator)
         {
             _orchestrator = orchestrator;
         }
@@ -30,7 +30,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}")]
         public async Task<IActionResult> GetCriminalCompliancePage(Guid applicationId, string gatewayPageId)
         {
-            var username = _contextAccessor.HttpContext.User.UserDisplayName();
+            var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(applicationId, gatewayPageId, username));
 
             return View(CriminalComplianceView, viewModel);
@@ -39,7 +39,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}")]
         public async Task<IActionResult> EvaluateCriminalCompliancePage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, _contextAccessor.HttpContext.User.UserDisplayName()));
+            Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, CriminalComplianceView);
         }
     }

@@ -182,8 +182,6 @@ namespace SFA.DAS.RoatpGateway.Web
 
         private void ConfigureDependencyInjection(IServiceCollection services)
         {
-            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-
             services.AddTransient(x => ApplicationConfiguration);
 
             services.AddTransient<IRoatpApplicationTokenService, RoatpApplicationTokenService>();
