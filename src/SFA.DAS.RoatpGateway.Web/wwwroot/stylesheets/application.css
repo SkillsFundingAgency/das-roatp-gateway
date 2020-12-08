@@ -1271,6 +1271,12 @@ TODO: change to 'das-page-navigation' and BEM
     padding-right: 0;
 }
 
+.das-actions-box {
+    position: relative;
+    border: 1px solid #b1b4b6;
+    padding: 20px;
+}
+
 .das-tag--solid-orange {
     color: #0b0c0c;
     background-color: #f47738;
@@ -1278,10 +1284,4 @@ TODO: change to 'das-page-navigation' and BEM
 
 .das-tag--solid-purple {
     background-color: #4c2c92;
-}
-
-.das-actions-box {
-    position: relative;
-    border: 1px solid #b1b4b6;
-    padding: 20px;
 }
