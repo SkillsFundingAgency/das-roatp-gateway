@@ -81,7 +81,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
             Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
             Assert.AreEqual(comment, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Comment);
-            Assert.AreEqual(viewModel.AreClarificationsSelected,isClarificationSet);
+            Assert.AreEqual(viewModel.IsClarificationsSelectedAndAllFieldsSet,isClarificationSet);
         }
 
         [TestCase("12345678", "John Ltd.")]

@@ -3,16 +3,15 @@
 
 @{
     var sections = Model.Sequences?.SelectMany(seq => seq.Sections);
-    var hasSectionWithClarficiation = sections?.Any(sec => sec.Status == SectionReviewStatus.Clarification) ?? false;
 }
 
-<div class="govuk-grid-row">
+    <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="das-actions-box">
             <h2 class="govuk-heading-m">Application actions</h2>
 
             <p class="govuk-body govuk-body govuk-!-margin-bottom-1">
-                @if (Model.AreClarificationsSelected)
+                @if (Model.IsClarificationsSelectedAndAllFieldsSet)
                 {
                     <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGateway" asp-action="AskForClarification" asp-route-applicationId="@Model.ApplicationId" asp-route-gatewayReviewStatus="@GatewayReviewStatus.ClarificationSent">Ask for clarification</a>
                 }
