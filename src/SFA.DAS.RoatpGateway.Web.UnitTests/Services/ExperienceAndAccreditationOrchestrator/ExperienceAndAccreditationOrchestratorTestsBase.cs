@@ -40,8 +40,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
                 LegalName = UKRLPLegalName,
                 Ukprn = Ukprn,
                 GatewayReviewStatus = "RevStatus",
-                OptionFailText = "fail",
-                OptionInProgressText = "inprog",
+                OptionFailText = "Fail",
+                OptionInProgressText = "In progress",
+                OptionClarificationText = "Clarification",
                 OptionPassText = "Pass",
                 Status = "Status"
             };
@@ -53,6 +54,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
             Assert.AreEqual(ApplicationId, viewModel.ApplicationId);
             Assert.AreEqual(CommonDetails.OptionFailText, viewModel.OptionFailText);
             Assert.AreEqual(CommonDetails.OptionInProgressText, viewModel.OptionInProgressText);
+            Assert.AreEqual(CommonDetails.OptionClarificationText, viewModel.OptionClarificationText);
             Assert.AreEqual(CommonDetails.OptionPassText, viewModel.OptionPassText);
             Assert.AreEqual(CommonDetails.Status, viewModel.Status);
             Assert.AreEqual(CommonDetails.Ukprn, viewModel.Ukprn);

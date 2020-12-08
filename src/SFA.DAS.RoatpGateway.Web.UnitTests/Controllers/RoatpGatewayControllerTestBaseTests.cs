@@ -18,28 +18,31 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         [SetUp]
         public void Setup()
         {
-            _controller = new RoatpGatewayControllerBase<RoatpGatewayControllerBaseTests>(Mock.Of<IHttpContextAccessor>(), Mock.Of<IRoatpApplicationApiClient>(), Mock.Of<ILogger<RoatpGatewayControllerBaseTests>>(), Mock.Of<IRoatpGatewayPageValidator>());
+            _controller = new RoatpGatewayControllerBase<RoatpGatewayControllerBaseTests>(Mock.Of<IRoatpApplicationApiClient>(), Mock.Of<ILogger<RoatpGatewayControllerBaseTests>>(), Mock.Of<IRoatpGatewayPageValidator>());
         }
 
 
-        [TestCase(SectionReviewStatus.Pass, "pass", "fail", "in progress", "pass", "", "")]
-        [TestCase(SectionReviewStatus.Fail, "pass", "fail", "in progress", "", "fail", "")]
-        [TestCase(SectionReviewStatus.InProgress, "pass", "fail", "in progress", "", "", "in progress")]
-        [TestCase(null, "pass", "fail", "in progress", "pass", "fail", "in progress")]
-        public void check_gateway_options_settings(string status, string optionPassText, string optionFailText, string optionInProgressText, string expectedOptionPassText, string expectedOptionFailText, string expectedOptionInProgressText)
+        [TestCase(SectionReviewStatus.Pass, "pass", "fail", "in progress", "clarification", "pass", "", "", "")]
+        [TestCase(SectionReviewStatus.Fail, "pass", "fail", "in progress", "clarification", "", "fail", "", "")]
+        [TestCase(SectionReviewStatus.InProgress, "pass", "fail", "in progress", "clarification", "", "", "in progress", "")]
+        [TestCase(SectionReviewStatus.Clarification, "pass", "fail", "in progress", "clarification", "", "", "", "clarification")]
+        [TestCase(null, "pass", "fail", "in progress", "clarification", "pass", "fail", "in progress", "clarification")]
+        public void check_gateway_options_settings(string status, string optionPassText, string optionFailText, string optionInProgressText, string optionClarificationText, string expectedOptionPassText, string expectedOptionFailText, string expectedOptionInProgressText, string expectedOptionClarificationText)
         {
             var vm = new SubmitGatewayPageAnswerCommand
             {
                 Status = status,
                 OptionPassText = optionPassText,
                 OptionFailText = optionFailText,
-                OptionInProgressText = optionInProgressText
+                OptionInProgressText = optionInProgressText,
+                OptionClarificationText = optionClarificationText
             };
 
             _controller.SetupGatewayPageOptionTexts(vm);
             Assert.AreEqual(expectedOptionPassText, vm.OptionPassText);
             Assert.AreEqual(expectedOptionFailText, vm.OptionFailText);
             Assert.AreEqual(expectedOptionInProgressText, vm.OptionInProgressText);
+            Assert.AreEqual(expectedOptionClarificationText, vm.OptionClarificationText);
         }
     }
 }

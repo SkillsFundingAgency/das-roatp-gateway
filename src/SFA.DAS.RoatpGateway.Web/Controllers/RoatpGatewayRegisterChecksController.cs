@@ -18,10 +18,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         private readonly IGatewayRegisterChecksOrchestrator _orchestrator;
 
         public RoatpGatewayRegisterChecksController(IRoatpApplicationApiClient applyApiClient,
-                                                IHttpContextAccessor contextAccessor,
                                                 IRoatpGatewayPageValidator gatewayValidator,
                                                 IGatewayRegisterChecksOrchestrator orchestrator,
-                                                ILogger<RoatpGatewayRegisterChecksController> logger) : base(contextAccessor, applyApiClient, logger, gatewayValidator)
+                                                ILogger<RoatpGatewayRegisterChecksController> logger) : base(applyApiClient, logger, gatewayValidator)
         {
             _orchestrator = orchestrator;
         }
@@ -29,7 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/Roatp")]
         public async Task<IActionResult> GetGatewayRoatpPage(Guid applicationId)
         {
-            var username = _contextAccessor.HttpContext.User.UserDisplayName();
+            var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetRoatpViewModel(new GetRoatpRequest(applicationId, username));
             return View($"{GatewayViewsLocation}/Roatp.cshtml", viewModel);
         }
@@ -37,14 +36,14 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/Roatp")]
         public async Task<IActionResult> EvaluateRoatpPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<RoatpPageViewModel>> viewModelBuilder = () => _orchestrator.GetRoatpViewModel(new GetRoatpRequest(command.ApplicationId, _contextAccessor.HttpContext.User.UserDisplayName()));
+            Func<Task<RoatpPageViewModel>> viewModelBuilder = () => _orchestrator.GetRoatpViewModel(new GetRoatpRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Roatp.cshtml");
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/Roepao")]
         public async Task<IActionResult> GetGatewayRoepaoPage(Guid applicationId)
         {
-            var username = _contextAccessor.HttpContext.User.UserDisplayName();
+            var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetRoepaoViewModel(new GetRoepaoRequest(applicationId, username));
             return View($"{GatewayViewsLocation}/Roepao.cshtml", viewModel);
         }
@@ -52,7 +51,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/Roepao")]
         public async Task<IActionResult> EvaluateRoepaoPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<RoepaoPageViewModel>> viewModelBuilder = () => _orchestrator.GetRoepaoViewModel(new GetRoepaoRequest(command.ApplicationId, _contextAccessor.HttpContext.User.UserDisplayName()));
+            Func<Task<RoepaoPageViewModel>> viewModelBuilder = () => _orchestrator.GetRoepaoViewModel(new GetRoepaoRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Roepao.cshtml");
         }
     }

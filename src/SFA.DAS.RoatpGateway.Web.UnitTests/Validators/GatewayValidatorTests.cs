@@ -19,14 +19,16 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             _validator = new RoatpGatewayPageValidator();
         }
 
-        [TestCase(SectionReviewStatus.Pass, "", "", "", false)]
-        [TestCase(SectionReviewStatus.Pass, "sewrrwe", "", "", false)]
-        [TestCase(SectionReviewStatus.InProgress, "", "", "", false)]
-        [TestCase(SectionReviewStatus.InProgress, "", "asdasssfdsf", "", false)]
-        [TestCase(SectionReviewStatus.Fail, "", "", "fail message goes here", false)]
-        [TestCase(SectionReviewStatus.Fail, "", "", "", true)]
-        [TestCase(null, "", "", "", true)]
-        public void test_cases_for_no_status_and_no_fail_text_to_check_messages_as_expected(string status, string passMessage, string inProgressMessage, string failMessage, bool hasErrorMessage)
+        [TestCase(SectionReviewStatus.Pass, "", "", "", "", false)]
+        [TestCase(SectionReviewStatus.Pass, "pass message goes here", "", "", "", false)]
+        [TestCase(SectionReviewStatus.InProgress, "", "", "", "", false)]
+        [TestCase(SectionReviewStatus.InProgress, "", "in progress message goes here", "", "", false)]
+        [TestCase(SectionReviewStatus.Fail, "", "", "", "", true)]
+        [TestCase(SectionReviewStatus.Fail, "", "", "fail message goes here", "", false)]
+        [TestCase(SectionReviewStatus.Clarification, "", "", "", "", true)]
+        [TestCase(SectionReviewStatus.Clarification, "", "", "", "clarification message goes here", false)]
+        [TestCase(null, "", "", "", "", true)]
+        public void test_cases_for_no_status_and_no_fail_text_to_check_messages_as_expected(string status, string passMessage, string inProgressMessage, string failMessage, string clarificationMessage, bool hasErrorMessage)
         {
             _viewModel = new RoatpGatewayPageViewModel
             {
@@ -34,6 +36,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
                 OptionPassText = passMessage,
                 OptionFailText = failMessage,
                 OptionInProgressText = inProgressMessage,
+                OptionClarificationText = clarificationMessage,
                 PageId = GatewayPageIds.LegalName
             };
 

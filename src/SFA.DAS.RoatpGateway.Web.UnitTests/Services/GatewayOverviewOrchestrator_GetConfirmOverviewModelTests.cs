@@ -33,6 +33,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
         [TestCase("12345678", "John Ltd.", SectionReviewStatus.Pass, "Very good.")]
         [TestCase("87654321", "Simon Ltd.", SectionReviewStatus.Fail, "Not so good.")]
+        [TestCase("43211234", "Bob Ltd.", SectionReviewStatus.Clarification, "Needs clarification.")]
         [TestCase("12344321", "Frank Ltd.", SectionReviewStatus.NotRequired, null)]
         public async Task GetConfirmOverviewViewModel_returns_model(string ukprn, string organisationName, string sectionReviewStatus, string comment)
         {

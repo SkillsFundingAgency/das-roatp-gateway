@@ -18,10 +18,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         private readonly IGatewayOverviewOrchestrator _orchestrator;
         private readonly IRoatpGatewayApplicationViewModelValidator _validator;
 
-        public RoatpGatewayController(IRoatpApplicationApiClient applyApiClient, IHttpContextAccessor contextAccessor,
+        public RoatpGatewayController(IRoatpApplicationApiClient applyApiClient,
                                      IGatewayOverviewOrchestrator orchestrator, IRoatpGatewayApplicationViewModelValidator validator, 
                                      ILogger<RoatpGatewayController> logger, IRoatpGatewayPageValidator gatewayValidator)
-            :base(contextAccessor, applyApiClient, logger, gatewayValidator)
+            :base(applyApiClient, logger, gatewayValidator)
         {
             _orchestrator = orchestrator;
             _validator = validator;
@@ -84,7 +84,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}")]
         public async Task<IActionResult> ViewApplication(Guid applicationId)
         {
-            var username = _contextAccessor.HttpContext.User.UserDisplayName();
+            var username = HttpContext.User.UserDisplayName();
 
             var viewModel =
                 await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
@@ -116,7 +116,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 return RedirectToAction(nameof(NewApplications));
             }
 
-            var username = _contextAccessor.HttpContext.User.UserDisplayName();
+            var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
 
             if (viewModel.ReadyToConfirm)
@@ -178,7 +178,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             if (validationResponse.Errors != null && validationResponse.Errors.Any())
             {
-                var username = _contextAccessor.HttpContext.User.UserDisplayName();
+                var username = HttpContext.User.UserDisplayName();
                 var viewModelOnError = await _orchestrator.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(viewModel.ApplicationId, username));
                 if (viewModelOnError != null)
                 {
@@ -254,8 +254,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 if (viewModel.ConfirmGatewayOutcome.Equals(HtmlAndCssElements.RadioButtonValueYes, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var username = _contextAccessor.HttpContext.User.UserDisplayName();
-                    var userId = _contextAccessor.HttpContext.User.UserId();
+                    var username = HttpContext.User.UserDisplayName();
+                    var userId = HttpContext.User.UserId();
                     await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, userId, username);
                     var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
                     return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);
@@ -290,8 +290,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 if (viewModel.ConfirmGatewayOutcome.Equals(HtmlAndCssElements.RadioButtonValueYes, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var userId = _contextAccessor.HttpContext.User.UserId();
-                    var username = _contextAccessor.HttpContext.User.UserDisplayName();
+                    var userId = HttpContext.User.UserId();
+                    var username = HttpContext.User.UserDisplayName();
                     await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, userId, username);
                     
                     var vm = new RoatpGatewayOutcomeViewModel {GatewayReviewStatus = viewModel.GatewayReviewStatus};
@@ -326,8 +326,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 if (viewModel.ConfirmGatewayOutcome.Equals(HtmlAndCssElements.RadioButtonValueYes, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var username = _contextAccessor.HttpContext.User.UserDisplayName();
-                    var userId = _contextAccessor.HttpContext.User.UserId();
+                    var username = HttpContext.User.UserDisplayName();
+                    var userId = HttpContext.User.UserId();
                     await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, userId, username);
 
                     var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
@@ -366,12 +366,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                await _applyApiClient.EvaluateGateway(viewModel.ApplicationId, isGatewayApproved.Value, _contextAccessor.HttpContext.User.UserDisplayName());
+                await _applyApiClient.EvaluateGateway(viewModel.ApplicationId, isGatewayApproved.Value, HttpContext.User.UserDisplayName());
                 return RedirectToAction(nameof(Evaluated), new { viewModel.ApplicationId });
             }
             else
             {
-                var username = _contextAccessor.HttpContext.User.UserDisplayName();
+                var username = HttpContext.User.UserDisplayName();
                 var newViewModel = await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(application.ApplicationId, username));
                 return View("~/Views/Gateway/Application.cshtml", newViewModel);
             }

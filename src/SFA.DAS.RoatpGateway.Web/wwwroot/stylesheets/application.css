@@ -1277,6 +1277,9 @@ TODO: change to 'das-page-navigation' and BEM
     padding: 20px;
 }
 
+.das-tag--solid-purple {
+    background-color: #4c2c92;
+}
 .das-tag--solid-orange {
     color: #0b0c0c;
     background-color: #f47738;
