@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.AdminService.Common.Validation;
@@ -53,12 +54,14 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
 
             var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
-            viewmodel.AreClarificationsSelected = sections.Any(x => x.Status == SectionReviewStatus.Clarification);
+            viewmodel.IsClarificationsSelectedAndAllFieldsSet = IsClarificationSelectedAndAllOtherDetailsSet(sections);
             viewmodel.TwoInTwoMonthsPassed = TwoInTwelveMonthsPassed(sections);
             viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
 
             return viewmodel;
         }
+
+        
 
         public async Task<RoatpGatewayApplicationViewModel> GetConfirmOverviewViewModel(GetApplicationOverviewRequest request)
         {
@@ -92,7 +95,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
 
             var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
-            viewmodel.AreClarificationsSelected = sections.Any(x => x.Status == SectionReviewStatus.Clarification);
+            viewmodel.IsClarificationsSelectedAndAllFieldsSet = sections.Any(x => x.Status == SectionReviewStatus.Clarification);
             viewmodel.TwoInTwoMonthsPassed = TwoInTwelveMonthsPassed(sections);
             viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
 
@@ -176,6 +179,34 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
 
             return isReadyToConfirm;
+        }
+
+
+
+        private static bool IsClarificationSelectedAndAllOtherDetailsSet(IEnumerable<GatewaySection> sections)
+        {
+            var clarificationsPresent= sections.Any(x => x.Status == SectionReviewStatus.Clarification);
+
+            if (!clarificationsPresent)
+                return false;
+
+            var twoInTwelveMonthsFailed = sections.Where(sec => sec.PageId == GatewayPageIds.TwoInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Fail);
+
+            if (twoInTwelveMonthsFailed)
+                return false;
+
+            var gradedStatutes = new[] { SectionReviewStatus.Pass, SectionReviewStatus.Fail, SectionReviewStatus.NotRequired, SectionReviewStatus.Clarification };
+
+            foreach (var section in sections)
+            {
+                if (section.Status is null || !gradedStatutes.Contains(section.Status))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
         }
 
         private static Apply GetApplicationData(RoatpApplicationResponse application)
