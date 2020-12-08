@@ -18,7 +18,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         [SetUp]
         public void Setup()
         {
-            _controller = new RoatpGatewayControllerBase<RoatpGatewayControllerBaseTests>(Mock.Of<IHttpContextAccessor>(), Mock.Of<IRoatpApplicationApiClient>(), Mock.Of<ILogger<RoatpGatewayControllerBaseTests>>(), Mock.Of<IRoatpGatewayPageValidator>());
+            _controller = new RoatpGatewayControllerBase<RoatpGatewayControllerBaseTests>(Mock.Of<IRoatpApplicationApiClient>(), Mock.Of<ILogger<RoatpGatewayControllerBaseTests>>(), Mock.Of<IRoatpGatewayPageValidator>());
         }
 
 

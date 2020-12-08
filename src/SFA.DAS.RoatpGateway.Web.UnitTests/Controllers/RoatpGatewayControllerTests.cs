@@ -10,7 +10,8 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Castle.Components.DictionaryAdapter;
+using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 {
@@ -30,8 +31,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             _orchestrator = new Mock<IGatewayOverviewOrchestrator>();
             _validator = new Mock<IRoatpGatewayApplicationViewModelValidator>();
             _pageValidator = new Mock<IRoatpGatewayPageValidator>();
-            _controller = new RoatpGatewayController(ApplyApiClient.Object, ContextAccessor.Object, _orchestrator.Object,
+            _controller = new RoatpGatewayController(ApplyApiClient.Object, _orchestrator.Object,
                                                      _validator.Object, Logger.Object, _pageValidator.Object);
+
+            _controller.ControllerContext = MockedControllerContext.Setup();
+            UserId = _controller.ControllerContext.HttpContext.User.UserId();
+            Username = _controller.ControllerContext.HttpContext.User.UserDisplayName();
         }
 
         [Test]
