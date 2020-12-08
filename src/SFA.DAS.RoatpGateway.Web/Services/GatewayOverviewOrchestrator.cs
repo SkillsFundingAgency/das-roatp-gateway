@@ -62,7 +62,46 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             return viewmodel;
         }
 
-        
+        public async Task<RoatpGatewayApplicationViewModel> GetClarificationViewModel(GetApplicationClarificationsRequest request)
+        {
+            var application = await _applyApiClient.GetApplication(request.ApplicationId);
+            if (application is null)
+            {
+                return null;
+            }
+
+            var contact = await _applyApiClient.GetContactDetails(request.ApplicationId);
+            var applicationData = GetApplicationData(application);
+
+            var viewmodel = new RoatpGatewayApplicationViewModel(applicationData)
+            {
+                ApplicationEmailAddress = contact?.Email,
+                Sequences = GetCoreGatewayApplicationViewModel()
+            };
+
+            var savedStatuses = await _applyApiClient.GetGatewayPageAnswers(request.ApplicationId);
+            if (savedStatuses != null && !savedStatuses.Any())
+            {
+                var providerRoute = application.ApplyData.ApplyDetails.ProviderRoute;
+                await _sectionsNotRequiredService.SetupNotRequiredLinks(request.ApplicationId, request.UserName, viewmodel, providerRoute);
+            }
+            else
+            {
+                foreach (var currentStatus in savedStatuses ?? new List<GatewayPageAnswerSummary>())
+                {
+                    // Inject the statuses into viewmodel
+                    viewmodel.Sequences.SelectMany(seq => seq.Sections).FirstOrDefault(sec => sec.PageId == currentStatus.PageId).Status = currentStatus?.Status;
+                }
+            }
+
+            var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
+            viewmodel.IsClarificationsSelectedAndAllFieldsSet = IsAskForClarificationActive(sections);
+            viewmodel.TwoInTwoMonthsPassed = TwoInTwelveMonthsPassed(sections);
+            viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
+
+            return viewmodel;
+        }
+
 
         public async Task<RoatpGatewayApplicationViewModel> GetConfirmOverviewViewModel(GetApplicationOverviewRequest request)
         {
