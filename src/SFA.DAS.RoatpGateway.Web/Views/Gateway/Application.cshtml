@@ -145,7 +145,7 @@
                                             @if (!currentSection.Status.Equals(SectionReviewStatus.New))
                                             {
                                                 var cssModifierClassName = "";
-                                                switch(currentSection.Status)
+                                                switch (currentSection.Status)
                                                 {
                                                     case SectionReviewStatus.NotRequired:
                                                         cssModifierClassName = "govuk-tag--inactive";
@@ -198,5 +198,7 @@
                 </ol>
             </div>
         </div>
+
+        <partial name="_ApplicationActions" />
     }
 </main>
