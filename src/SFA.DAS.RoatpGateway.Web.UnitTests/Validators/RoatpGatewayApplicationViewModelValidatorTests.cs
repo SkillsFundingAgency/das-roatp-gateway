@@ -24,6 +24,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
         [TestCase(GatewayReviewStatus.Fail, "Clarification Message", null, "Approved Message", true)]
         [TestCase(GatewayReviewStatus.Pass, "Clarification Message", "Declined Message", "Approved Message", false)]
         [TestCase(GatewayReviewStatus.Pass, null, "Declined Message", "Approved Message", false)]
+        [TestCase(GatewayReviewStatus.Reject, "Clarification Message", "Declined Message", "Approved Message", false)]
+        [TestCase(GatewayReviewStatus.Reject, null, "Declined Message", "Approved Message", false)]
         [TestCase(null, null, null, null, true)]
         public void Test_cases_for_no_status_and_no_fail_text_to_check_messages_as_expected(string gatewayReviewStatus, string clarificationMessage, string declinedMessage, string approvedMessage, bool hasErrorMessage)
         {
@@ -32,7 +34,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
                 GatewayReviewStatus = gatewayReviewStatus,
                 OptionAskClarificationText = clarificationMessage,
                 OptionFailedText = declinedMessage,
-                OptionApprovedText = approvedMessage
+                OptionApprovedText = approvedMessage,
+                OptionRejectedText = declinedMessage
             };
 
             var result = _validator.Validate(_viewModel).Result;
@@ -46,6 +49,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
         [TestCase(GatewayReviewStatus.Fail, 151, true)]
         [TestCase(GatewayReviewStatus.Pass, 150, false)]
         [TestCase(GatewayReviewStatus.Pass, 151, true)]
+        [TestCase(GatewayReviewStatus.Reject, 150, false)]
+        [TestCase(GatewayReviewStatus.Reject, 151, true)]
         public void Test_cases_where_input_is_too_long(string gatewayReviewStatus, int wordCount, bool hasErrorMessage)
         {
             var words = string.Empty;
@@ -59,6 +64,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             _viewModel.OptionAskClarificationText = words;
             _viewModel.OptionFailedText = words;
             _viewModel.OptionApprovedText = words;
+            _viewModel.OptionRejectedText = words;
 
             var result = _validator.Validate(_viewModel).Result;
 

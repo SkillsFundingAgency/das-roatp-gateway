@@ -14,7 +14,6 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
         private const string ErrorEnterClarificationComments = "Enter your clarification comments";
         private const string ErrorEnterDeclinedComments = "Enter your comments";
         private const string TooManyWords = "Your comments must be 150 words or less";
-        private const string TooManyWordsFail = "Your comments must be 150 words or less";
 
         public async Task<ValidationResponse> Validate(RoatpGatewayApplicationViewModel viewModel)
         {
@@ -27,7 +26,8 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                 !string.IsNullOrEmpty(viewModel.GatewayReviewStatus) &&
                 !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.ClarificationSent) &&
                 !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.Fail) &&
-                !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.Pass))
+                !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.Pass) &&
+                !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.Reject))
             {
                 validationResponse.Errors.Add(new ValidationErrorDetail("GatewayReviewStatus", NoSelectionErrorMessage));
             }
@@ -66,11 +66,27 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                             var wordCount = viewModel.OptionFailedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
                             if (wordCount > 150)
                             {
-                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedText", TooManyWordsFail));
+                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedText", TooManyWords));
                             }
                         }
                         break;
                     }
+                case GatewayReviewStatus.Reject:
+                {
+                    if (string.IsNullOrEmpty(viewModel.OptionRejectedText))
+                    {
+                        validationResponse.Errors.Add(new ValidationErrorDetail("OptionRejectedText", ErrorEnterDeclinedComments));
+                    }
+                    else
+                    {
+                        var wordCount = viewModel.OptionRejectedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
+                        if (wordCount > 150)
+                        {
+                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionRejectedText", TooManyWords));
+                        }
+                    }
+                    break;
+                }
                 case GatewayReviewStatus.Pass when !string.IsNullOrEmpty(viewModel.OptionApprovedText):
                     {
                         var wordCount = viewModel.OptionApprovedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;

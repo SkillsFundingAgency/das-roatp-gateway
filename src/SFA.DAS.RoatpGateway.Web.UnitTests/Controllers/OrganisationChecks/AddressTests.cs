@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
@@ -24,7 +27,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             CoreSetup();
 
             _orchestrator = new Mock<IGatewayOrganisationChecksOrchestrator>();
-            _controller = new RoatpGatewayOrganisationChecksController(ApplyApiClient.Object, ContextAccessor.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
+            _controller = new RoatpGatewayOrganisationChecksController(ApplyApiClient.Object, GatewayValidator.Object, _orchestrator.Object, Logger.Object);
+
+            _controller.ControllerContext = MockedControllerContext.Setup();
+            UserId = _controller.ControllerContext.HttpContext.User.UserId();
+            Username = _controller.ControllerContext.HttpContext.User.UserDisplayName();
         }
 
         [Test]
