@@ -2,22 +2,23 @@
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using System;
 using System.Collections.Generic;
+using SFA.DAS.RoatpGateway.Web.Models;
 
 namespace SFA.DAS.RoatpGateway.Web.ViewModels
 {
     public class RoatpGatewayClarificationsViewModel : OrganisationDetailsViewModel
     {
-        public Guid Id { get; }
+        // public Guid Id { get; }
         public Guid ApplicationId { get; set; }
-        public Guid OrgId { get; }
-
-        public string ApplicationStatus { get; }
-        public string GatewayReviewStatus { get; set; }
-
-
-
-
-        public string ConfirmAskForClarification { get; set; }
+        // public Guid OrgId { get; }
+        //
+        // public string ApplicationStatus { get; }
+        // public string GatewayReviewStatus { get; set; }
+        //
+        //
+        //
+        //
+         public string ConfirmAskForClarification { get; set; }
 
 
         // public string OptionAskClarificationText { get; set; }
@@ -29,7 +30,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
 
         // public bool IsGatewayApproved { get; set; }
         // public bool IsClarificationsSelectedAndAllFieldsSet { get; set; }
-        public List<GatewaySequence> Sequences { get; set; }
+        public List<ClarificationSequence> Sequences { get; set; }
         // public bool ReadyToConfirm { get; set; }
         //
         // public bool TwoInTwoMonthsPassed { get; set; }
@@ -61,13 +62,13 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
 
         public RoatpGatewayClarificationsViewModel(Apply application)
         {
-            Id = application.Id;
+            //Id = application.Id;
             ApplicationId = application.ApplicationId;
-            OrgId = application.OrganisationId;
-
-            ApplicationStatus = application.ApplicationStatus;
-            GatewayReviewStatus = application.GatewayReviewStatus;
-
+            //OrgId = application.OrganisationId;
+        
+           // ApplicationStatus = application.ApplicationStatus;
+           // GatewayReviewStatus = application.GatewayReviewStatus;
+        
             // if (application.GatewayReviewStatus == RoatpGateway.Domain.GatewayReviewStatus.Pass)
             // {
             //     IsGatewayApproved = true;
@@ -76,7 +77,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
             // {
             //     IsGatewayApproved = false;
             // }
-
+        
             if (application.ApplyData?.ApplyDetails != null)
             {
                 ApplicationReference = application.ApplyData.ApplyDetails.ReferenceNumber;

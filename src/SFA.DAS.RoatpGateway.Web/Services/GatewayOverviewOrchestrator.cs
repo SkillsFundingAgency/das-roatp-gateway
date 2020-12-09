@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Security.Policy;
-using System.Threading.Tasks;
+﻿using System;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.Models;
 
 namespace SFA.DAS.RoatpGateway.Web.Services
 {
@@ -62,7 +63,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             return viewmodel;
         }
 
-        public async Task<RoatpGatewayApplicationViewModel> GetClarificationViewModel(GetApplicationClarificationsRequest request)
+        public async Task<RoatpGatewayClarificationsViewModel> GetClarificationViewModel(GetApplicationClarificationsRequest request)
         {
             var application = await _applyApiClient.GetApplication(request.ApplicationId);
             if (application is null)
@@ -73,33 +74,45 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var contact = await _applyApiClient.GetContactDetails(request.ApplicationId);
             var applicationData = GetApplicationData(application);
 
-            var viewmodel = new RoatpGatewayApplicationViewModel(applicationData)
+            var viewmodel = new RoatpGatewayClarificationsViewModel(applicationData)
             {
-                ApplicationEmailAddress = contact?.Email,
-                Sequences = GetCoreGatewayApplicationViewModel()
+                ApplicationEmailAddress = contact?.Email
+                
             };
 
-            var savedStatuses = await _applyApiClient.GetGatewayPageAnswers(request.ApplicationId);
-            if (savedStatuses != null && !savedStatuses.Any())
+            viewmodel.Sequences = await ConstructClarificationSequences(request.ApplicationId);
+
+            return viewmodel;
+        }
+
+        private async Task<List<ClarificationSequence>> ConstructClarificationSequences(Guid applicationId)
+        {
+            var clarificationSequences = new List<ClarificationSequence>();
+            var coreSequences = GetCoreGatewayApplicationViewModel();
+
+
+            var savedStatuses = await _applyApiClient.GetGatewayPageAnswers(applicationId);
+
+            foreach (var sequence in coreSequences)
             {
-                var providerRoute = application.ApplyData.ApplyDetails.ProviderRoute;
-                await _sectionsNotRequiredService.SetupNotRequiredLinks(request.ApplicationId, request.UserName, viewmodel, providerRoute);
-            }
-            else
-            {
-                foreach (var currentStatus in savedStatuses ?? new List<GatewayPageAnswerSummary>())
+                foreach (var status in savedStatuses.Where(x => x.Status == SectionReviewStatus.Clarification))
                 {
-                    // Inject the statuses into viewmodel
-                    viewmodel.Sequences.SelectMany(seq => seq.Sections).FirstOrDefault(sec => sec.PageId == currentStatus.PageId).Status = currentStatus?.Status;
+                    var section = sequence.Sections.FirstOrDefault(x => x.PageId == status.PageId);
+                    if (section == null) continue;
+
+                    if (clarificationSequences.All(x => x.SequenceNumber != sequence.SequenceNumber))
+                        clarificationSequences.Add(new ClarificationSequence
+                        {
+                            Sections = new List<ClarificationSection>(), SequenceNumber = sequence.SequenceNumber,
+                            SequenceTitle = sequence.SequenceTitle
+                        });
+
+                    clarificationSequences.FirstOrDefault(x => x.SequenceNumber == sequence.SequenceNumber)?.Sections
+                        .Add(new ClarificationSection {PageTitle = section.LinkTitle, Comment = status.Comments});
                 }
             }
 
-            var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
-            viewmodel.IsClarificationsSelectedAndAllFieldsSet = IsAskForClarificationActive(sections);
-            viewmodel.TwoInTwoMonthsPassed = TwoInTwelveMonthsPassed(sections);
-            viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
-
-            return viewmodel;
+            return clarificationSequences;
         }
 
 

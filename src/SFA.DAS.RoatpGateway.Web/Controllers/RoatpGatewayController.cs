@@ -10,6 +10,7 @@ using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 
@@ -117,86 +118,80 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             var username = HttpContext.User.UserDisplayName();
 
             var viewModel =
-                await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
-
+                await _orchestrator.GetClarificationViewModel(new GetApplicationClarificationsRequest(applicationId, username));
+            
             
             if (viewModel is null)
             {
                 return RedirectToAction(nameof(NewApplications));
             }
 
-           var vm = new RoatpGatewayAskForClarificationViewModel(viewModel);
-
-            return View("~/Views/Gateway/AskForClarification.cshtml", vm);
-
+            return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
         }
+
+        // private static Apply GetApplicationData(RoatpApplicationResponse application)
+        // {
+        //     return new Apply
+        //     {
+        //         ApplyData = new RoatpApplyData
+        //         {
+        //             ApplyDetails = new RoatpApplyDetails
+        //             {
+        //                 ReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber,
+        //                 ProviderRoute = application.ApplyData.ApplyDetails.ProviderRoute,
+        //                 ProviderRouteName = application.ApplyData.ApplyDetails.ProviderRouteName,
+        //                 UKPRN = application.ApplyData.ApplyDetails.UKPRN,
+        //                 OrganisationName = application.ApplyData.ApplyDetails.OrganisationName,
+        //                 ApplicationSubmittedOn = application.ApplyData.ApplyDetails.ApplicationSubmittedOn
+        //             }
+        //         },
+        //         Id = application.Id,
+        //         ApplicationId = application.ApplicationId,
+        //         OrganisationId = application.OrganisationId,
+        //         ApplicationStatus = application.ApplicationStatus,
+        //         GatewayReviewStatus = application.GatewayReviewStatus,
+        //         AssessorReviewStatus = application.AssessorReviewStatus,
+        //         FinancialReviewStatus = application.FinancialReviewStatus
+        //     };
+        // }
 
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToAskForClarification")]
         public async Task<IActionResult> AboutToAskForClarification(Guid applicationId, string confirmAskForClarification)
         {
 
-            var username = _contextAccessor.HttpContext.User.UserDisplayName();
-
-            var viewModel =
-                await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
-
-
-            if (viewModel is null)
-            {
-                return RedirectToAction(nameof(NewApplications));
-            }
-
+            var username = HttpContext.User.UserDisplayName();
 
             if (string.IsNullOrEmpty(confirmAskForClarification))
             {
-                var vm = new RoatpGatewayAskForClarificationViewModel(viewModel);
-                vm.ErrorMessages = new List<ValidationErrorDetail>
+                var viewModel = await _orchestrator.GetClarificationViewModel(new GetApplicationClarificationsRequest(applicationId, username));
+                if (viewModel is null)
+                {
+                    return RedirectToAction(nameof(NewApplications));
+                }
+                viewModel.ErrorMessages = new List<ValidationErrorDetail>
                 {
                     new ValidationErrorDetail("ConfirmAskForClarification",
                         "Select if you are sure you want to ask for clarification")
                 };
-                return View("~/Views/Gateway/AskForClarification.cshtml", vm);
+                return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
             }
-
-            //validationResponse.Errors.Add(new ValidationErrorDetail("GatewayReviewStatus", NoSelectionErrorMessage));
-
 
             if (confirmAskForClarification == "No")
             {
+                var viewModel =
+                    await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
+                
+                if (viewModel is null)
+                {
+                    return RedirectToAction(nameof(NewApplications));
+                }
                 return View("~/Views/Gateway/Application.cshtml", viewModel);
             }
             if (true)
             {
                 return RedirectToAction(nameof(NewApplications));
             }
-
-            // if (ModelState.IsValid)
-            // {
-            //     if (viewModel.ConfirmAskForClarification.Equals(HtmlAndCssElements.RadioButtonValueYes, StringComparison.InvariantCultureIgnoreCase))
-            //     {
-            //         var username = _contextAccessor.HttpContext.User.UserDisplayName();
-            //         var userId = _contextAccessor.HttpContext.User.UserId();
-            //         await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, userId, username);
-            //
-            //         var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
-            //         return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);
-            //     }
-            //     else
-            //     {
-            //         return RedirectToAction(nameof(ConfirmOutcome), new
-            //         {
-            //             applicationId = viewModel.ApplicationId,
-            //             gatewayReviewStatus = viewModel.GatewayReviewStatus,
-            //             gatewayReviewComment = viewModel.GatewayReviewComment
-            //         });
-            //     }
-            // }
-            // else
-            // {
-            //     viewModel.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
-            //     return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
-            // }
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]

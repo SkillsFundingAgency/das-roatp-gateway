@@ -119,6 +119,22 @@
                             }
                         </dl>
 
+
+                        <input type="hidden" asp-for="ApplicationId" />
+
+
+                        @foreach(var sequence in Model.Sequences)
+                        {
+                            if (sequence.Sections!=null && sequence.Sections.Any())
+                            {
+                                @Html.Raw(sequence.SequenceTitle + "<br/><hr/>")
+
+                                @foreach(var section in sequence.Sections)
+                                {
+                                    @Html.Raw("Check: " + section.PageTitle + "  check</br>Comments: " + section.Comment + "<br/><hr/>")
+                                }
+                            }
+                        }
                         <a name="ConfirmAskForClarification"></a>
                         @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
                         {
@@ -126,23 +142,6 @@
                                 <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessages.First().ErrorMessage
                             </span>
                         }
-
-                        <input type="hidden" asp-for="ApplicationId" />
-
-
-                        @foreach(var sequence in Model.Sequences)
-                        {
-                            if (sequence.Sections!=null && sequence.Sections.Where(x=>x.Status==SectionReviewStatus.Clarification).Any())
-                            {
-                                @Html.Raw(sequence.SequenceTitle + "<br/><hr/>")
-
-                                @foreach(var section in sequence.Sections.Where(x=>x.Status == SectionReviewStatus.Clarification))
-                                {
-                                    @Html.Raw("Check: " + section.LinkTitle + "</br>Comments: " + section.Comment + "<br/><hr/><hr/>")
-                                }
-                            }
-                        }
-
                         <div class="govuk-radios govuk-radios--inline">
                             <div class="govuk-radios__item">
                                 <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationYes" value="Yes" type="radio" class="govuk-radios__input" />
