@@ -107,6 +107,24 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
         }
 
+
+
+        [HttpGet("/Roatp/Gateway/Clarification/{applicationId}")]
+        public async Task<IActionResult> AskForClarification(Guid applicationId)
+        {
+            var username = HttpContext.User.UserDisplayName();
+
+            var viewModel =
+                await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
+
+            if (viewModel is null)
+            {
+                return RedirectToAction(nameof(NewApplications));
+            }
+            return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
+
+        }
+
         [HttpGet("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]
         public async Task<IActionResult> ConfirmOutcome(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment)
         {

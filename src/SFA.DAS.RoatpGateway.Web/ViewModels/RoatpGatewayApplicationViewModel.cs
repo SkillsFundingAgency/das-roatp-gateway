@@ -21,7 +21,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public List<ValidationErrorDetail> ErrorMessages { get; set; }
 
         public bool IsGatewayApproved { get; set; }
-
+        public bool IsClarificationsSelectedAndAllFieldsSet { get; set; }
         public List<GatewaySequence> Sequences { get; set; }
         public bool ReadyToConfirm { get; set; }
 
