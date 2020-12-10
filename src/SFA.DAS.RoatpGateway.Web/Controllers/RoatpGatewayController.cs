@@ -101,6 +101,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 case GatewayReviewStatus.New:
                 case GatewayReviewStatus.InProgress:
+                case GatewayReviewStatus.ClarificationSent:
                     return View("~/Views/Gateway/Application.cshtml", viewModel);
                 case GatewayReviewStatus.Pass:
                 case GatewayReviewStatus.Fail:
@@ -162,8 +163,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 }
                 return View("~/Views/Gateway/Application.cshtml", viewModel);
             }
-            //var userId = HttpContext.User.UserId();
-            //await _applyApiClient.UpdateGatewayReviewStatusAndComment(applicationId, GatewayReviewStatus.ClarificationSent, null, userId, username);
+            var userId = HttpContext.User.UserId();
+            await _applyApiClient.UpdateGatewayReviewStatusAsClarification(applicationId, userId, username);
 
             return View("~/Views/Gateway/ConfirmApplicationClarification.cshtml");
         }
