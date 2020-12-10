@@ -3,7 +3,7 @@
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayClarificationsViewModel
 
 @{
-    ViewBag.Title = "Gateway - Overall gateway outcome";
+    ViewBag.Title = "Are you sure you want to ask for clarification?";
     Layout = "_Layout";
 }
 
@@ -18,7 +18,7 @@
         <li class="govuk-breadcrumbs__list-item">
             <a asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId" class="govuk-breadcrumbs__link">Application assessment overview</a>
         </li>
-        <li class="govuk-breadcrumbs__list-item" aria-current="page">Overall gateway outcome </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Application actions</li>
     </ol>
 </div>
 <main class="govuk-main-wrapper " id="main-content" role="main">
@@ -41,119 +41,130 @@
                     </div>
                 </div>
             }
+        </div>
+    </div>
 
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <span class="govuk-caption-l">Application actions</span>
+            <h1 class="govuk-heading-xl">Are you sure you want to ask for clarification?</h1>
+
+            <div class="govuk-!-margin-bottom-7">
+                @if (!string.IsNullOrWhiteSpace(Model.Ukprn))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        UKPRN: @Model.Ukprn
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.OrganisationName))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Legal name: @Model.OrganisationName
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.ApplicationRoute))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Provider route: @Model.ApplicationRoute
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.ApplicationReference))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Application reference: @Model.ApplicationReference
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.ApplicationEmailAddress))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Applicant's email address: @Model.ApplicationEmailAddress
+                    </p>
+                }
+                @if (Model.SubmittedDate.HasValue)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Date application submitted: @Model.SubmittedDate.ToSfaShortDateString()
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            @foreach (var sequence in Model.Sequences)
+            {
+                if (sequence.Sections != null && sequence.Sections.Any())
+                {
+                    <h2 class="govuk-heading-l">@sequence.SequenceTitle</h2>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    <dl class="govuk-summary-list govuk-summary-list--no-border">
+                        @foreach (var clarSection in sequence.Sections)
+                        {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Check
+                                </dt>
+                                <dd class="govuk-summary-list__value govuk-!-font-weight-bold">
+                                    @clarSection.PageTitle
+                                </dd>
+                            </div>
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Comments
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    <pre class="govuk-body">@clarSection.Comment</pre>
+                                </dd>
+                            </div>
+                        }
+                    </dl>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-bottom-8">
+                }
+            }
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
             <form class="form" method="post" asp-action="AboutToAskForClarification" asp-controller="RoatpGateway">
+                <input type="hidden" asp-for="ApplicationId" />
+
                 <div class="govuk-form-group @Model.CssFormGroupError">
                     <fieldset class="govuk-fieldset" aria-describedby="ConfirmAskForClarification-error">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-7">
-                            <span class="govuk-caption-l">Overall gateway outcome</span>
-                            <h1 class="govuk-fieldset__heading">Are you sure you want to ask for clarification?</h1>
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                            Are you sure you want to ask for clarification?
                         </legend>
 
-                        <dl class="govuk-summary-list">
-                            @if (!string.IsNullOrWhiteSpace(Model.Ukprn))
-                            {
-                                <div class="govuk-summary-list__row">
-                                    <dt class="govuk-summary-list__key">
-                                        UKPRN
-                                    </dt>
-                                    <dd class="govuk-summary-list__value">
-                                        @Model.Ukprn
-                                    </dd>
-                                </div>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(Model.OrganisationName))
-                            {
-                                <div class="govuk-summary-list__row">
-                                    <dt class="govuk-summary-list__key">
-                                        Legal name
-                                    </dt>
-                                    <dd class="govuk-summary-list__value">
-                                        @Model.OrganisationName
-                                    </dd>
-                                </div>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(Model.ApplicationRoute))
-                            {
-                                <div class="govuk-summary-list__row">
-                                    <dt class="govuk-summary-list__key">
-                                        Provider route
-                                    </dt>
-                                    <dd class="govuk-summary-list__value">
-                                        @Model.ApplicationRoute
-                                    </dd>
-                                </div>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(Model.ApplicationReference))
-                            {
-                                <div class="govuk-summary-list__row">
-                                    <dt class="govuk-summary-list__key">
-                                        Application reference
-                                    </dt>
-                                    <dd class="govuk-summary-list__value">
-                                        @Model.ApplicationReference
-                                    </dd>
-                                </div>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(Model.ApplicationEmailAddress))
-                            {
-                                <div class="govuk-summary-list__row">
-                                    <dt class="govuk-summary-list__key">
-                                        Applicant's email address
-                                    </dt>
-                                    <dd class="govuk-summary-list__value">
-                                        @Model.ApplicationEmailAddress
-                                    </dd>
-                                </div>
-                            }
-                            @if (Model.SubmittedDate.HasValue)
-                            {
-                                <div class="govuk-summary-list__row">
-                                    <dt class="govuk-summary-list__key">
-                                        Date application submitted
-                                    </dt>
-                                    <dd class="govuk-summary-list__value">
-                                        @Model.SubmittedDate.ToSfaShortDateString()
-                                    </dd>
-                                </div>
-                            }
-                        </dl>
-
-
-                        <input type="hidden" asp-for="ApplicationId" />
-
-
-                        @foreach(var sequence in Model.Sequences)
-                        {
-                            if (sequence.Sections!=null && sequence.Sections.Any())
-                            {
-                                @Html.Raw(sequence.SequenceTitle + "<br/><hr/>")
-
-                                @foreach(var section in sequence.Sections)
-                                {
-                                    @Html.Raw("Check: " + section.PageTitle + "  check</br>Comments: " + section.Comment + "<br/><hr/>")
-                                }
-                            }
-                        }
                         <a name="ConfirmAskForClarification"></a>
+
                         @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
                         {
                             <span class="govuk-error-message">
                                 <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessages.First().ErrorMessage
                             </span>
                         }
-                        <div class="govuk-radios govuk-radios--inline">
+
+                        <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
                             <div class="govuk-radios__item">
-                                <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationYes" value="Yes" type="radio" class="govuk-radios__input" />
+                                <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationYes" value="Yes" type="radio" class="govuk-radios__input" data-aria-controls="conditional-ConfirmAskForClarificationYes" />
                                 <label for="ConfirmAskForClarificationYes" class="govuk-label govuk-radios__label">Yes</label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-ConfirmAskForClarificationYes">
+                                <div class="govuk-form-group">
+                                    <p class="govuk-body">You need to use the <span class="govuk-!-font-weight-bold">due.diligence@education.gov.uk</span> mailbox to ask for clarification from this applicant. </p>
+                                </div>
                             </div>
                             <div class="govuk-radios__item">
                                 <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationNo" value="No" type="radio" class="govuk-radios__input" />
                                 <label for="ConfirmAskForClarificationNo" class="govuk-label govuk-radios__label">No</label>
                             </div>
                         </div>
+
                     </fieldset>
                 </div>
+
                 <button type="submit" class="govuk-button">
                     Save and continue
                 </button>
