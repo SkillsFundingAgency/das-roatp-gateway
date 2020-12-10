@@ -47,8 +47,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             {
                 foreach (var currentStatus in savedStatuses ?? new List<GatewayPageAnswerSummary>())
                 {
-                    // Inject the statuses into viewmodel
+                    // Inject the statuses and comments into viewmodel
                     viewmodel.Sequences.SelectMany(seq => seq.Sections).FirstOrDefault(sec => sec.PageId == currentStatus.PageId).Status = currentStatus?.Status;
+                    viewmodel.Sequences.SelectMany(seq => seq.Sections).FirstOrDefault(sec => sec.PageId == currentStatus.PageId).Comment = currentStatus?.Comments;
                 }
             }
 
