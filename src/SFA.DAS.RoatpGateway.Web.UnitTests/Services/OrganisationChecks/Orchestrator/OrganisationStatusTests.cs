@@ -47,7 +47,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
-                CheckedOn = DateTime.Now,
+                SourcesCheckedOn = DateTime.Now,
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
@@ -98,7 +98,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
-                CheckedOn = DateTime.Now,
+                SourcesCheckedOn = DateTime.Now,
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
@@ -150,7 +150,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
-                CheckedOn = DateTime.Now,
+                SourcesCheckedOn = DateTime.Now,
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
