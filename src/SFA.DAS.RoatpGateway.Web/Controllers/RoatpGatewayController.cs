@@ -101,6 +101,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 case GatewayReviewStatus.New:
                 case GatewayReviewStatus.InProgress:
+                case GatewayReviewStatus.ClarificationSent:
                     return View("~/Views/Gateway/Application.cshtml", viewModel);
                 case GatewayReviewStatus.Pass:
                 case GatewayReviewStatus.Fail:
@@ -128,32 +129,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
         }
-
-        // private static Apply GetApplicationData(RoatpApplicationResponse application)
-        // {
-        //     return new Apply
-        //     {
-        //         ApplyData = new RoatpApplyData
-        //         {
-        //             ApplyDetails = new RoatpApplyDetails
-        //             {
-        //                 ReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber,
-        //                 ProviderRoute = application.ApplyData.ApplyDetails.ProviderRoute,
-        //                 ProviderRouteName = application.ApplyData.ApplyDetails.ProviderRouteName,
-        //                 UKPRN = application.ApplyData.ApplyDetails.UKPRN,
-        //                 OrganisationName = application.ApplyData.ApplyDetails.OrganisationName,
-        //                 ApplicationSubmittedOn = application.ApplyData.ApplyDetails.ApplicationSubmittedOn
-        //             }
-        //         },
-        //         Id = application.Id,
-        //         ApplicationId = application.ApplicationId,
-        //         OrganisationId = application.OrganisationId,
-        //         ApplicationStatus = application.ApplicationStatus,
-        //         GatewayReviewStatus = application.GatewayReviewStatus,
-        //         AssessorReviewStatus = application.AssessorReviewStatus,
-        //         FinancialReviewStatus = application.FinancialReviewStatus
-        //     };
-        // }
 
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToAskForClarification")]
@@ -188,10 +163,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 }
                 return View("~/Views/Gateway/Application.cshtml", viewModel);
             }
-            if (true)
-            {
-                return RedirectToAction(nameof(NewApplications));
-            }
+            var userId = HttpContext.User.UserId();
+            await _applyApiClient.UpdateGatewayReviewStatusAsClarification(applicationId, userId, username);
+
+            return View("~/Views/Gateway/ConfirmApplicationClarification.cshtml");
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]

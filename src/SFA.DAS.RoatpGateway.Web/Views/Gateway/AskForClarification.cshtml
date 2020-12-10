@@ -151,24 +151,28 @@
                                 <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationYes" value="Yes" type="radio" class="govuk-radios__input" data-aria-controls="conditional-ConfirmAskForClarificationYes" />
                                 <label for="ConfirmAskForClarificationYes" class="govuk-label govuk-radios__label">Yes</label>
                             </div>
-                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-ConfirmAskForClarificationYes">
+                            <<<<<<< HEAD <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-ConfirmAskForClarificationYes">
                                 <div class="govuk-form-group">
                                     <p class="govuk-body">You need to use the <span class="govuk-!-font-weight-bold">due.diligence@education.gov.uk</span> mailbox to ask for clarification from this applicant. </p>
                                 </div>
-                            </div>
-                            <div class="govuk-radios__item">
-                                <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationNo" value="No" type="radio" class="govuk-radios__input" />
-                                <label for="ConfirmAskForClarificationNo" class="govuk-label govuk-radios__label">No</label>
-                            </div>
                         </div>
-
-                    </fieldset>
+                        =======
+                        <p>You need to use the [mailbox name] mailbox to ask for clarification from this applicant.
+                        </p>
+                        >>>>>>> 3eb4ae9709384bf74a010f771a370a5174072119
+                        <div class="govuk-radios__item">
+                            <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationNo" value="No" type="radio" class="govuk-radios__input" />
+                            <label for="ConfirmAskForClarificationNo" class="govuk-label govuk-radios__label">No</label>
+                        </div>
                 </div>
 
-                <button type="submit" class="govuk-button">
-                    Save and continue
-                </button>
-            </form>
+                </fieldset>
         </div>
+
+        <button type="submit" class="govuk-button">
+            Save and continue
+        </button>
+        </form>
+    </div>
     </div>
 </main>
