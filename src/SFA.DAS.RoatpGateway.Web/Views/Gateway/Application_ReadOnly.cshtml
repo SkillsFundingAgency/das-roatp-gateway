@@ -202,7 +202,14 @@
                         Comments
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @Model.GatewayReviewComment
+                        @if (string.IsNullOrWhiteSpace(Model.GatewayReviewComment))
+                        {
+                            <text>N/A</text>
+                        }
+                        else
+                        {
+                            @Model.GatewayReviewComment
+                        }
                     </dd>
                 </div>
             </dl>
