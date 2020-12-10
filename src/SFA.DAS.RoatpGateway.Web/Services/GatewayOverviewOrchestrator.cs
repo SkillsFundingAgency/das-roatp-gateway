@@ -77,51 +77,11 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var viewmodel = new RoatpGatewayClarificationsViewModel(applicationData)
             {
                 ApplicationEmailAddress = contact?.Email
-                
             };
 
             viewmodel.Sequences = await ConstructClarificationSequences(request.ApplicationId);
-
             return viewmodel;
         }
-
-        private async Task<List<ClarificationSequence>> ConstructClarificationSequences(Guid applicationId)
-        {
-            var clarificationSequences = new List<ClarificationSequence>();
-            var coreSequences = GetCoreGatewayApplicationViewModel();
-
-
-            var savedStatuses = await _applyApiClient.GetGatewayPageAnswers(applicationId);
-
-            foreach (var sequence in coreSequences.OrderBy(x=>x.SequenceNumber))
-            {
-                foreach (var section in sequence.Sections.OrderBy(x => x.SectionNumber))
-                {
-                    foreach (var status in savedStatuses.Where(x => x.Status == SectionReviewStatus.Clarification))
-                    {
-                        //
-                        if (section.PageId!=status.PageId) continue;
-
-                        if (clarificationSequences.All(x => x.SequenceNumber != sequence.SequenceNumber))
-                            clarificationSequences.Add(new ClarificationSequence
-                            {
-                                Sections = new List<ClarificationSection>(), SequenceNumber = sequence.SequenceNumber,
-                                SequenceTitle = sequence.SequenceTitle
-                            });
-
-                        clarificationSequences.FirstOrDefault(x => x.SequenceNumber == sequence.SequenceNumber)
-                            ?.Sections
-                            .Add(new ClarificationSection {PageTitle = section.LinkTitle, Comment = status.Comments});
-
-                        if (status.PageId== GatewayPageIds.TwoInTwelveMonths)
-                            return clarificationSequences;
-                    }
-                }
-            }
-
-            return clarificationSequences;
-        }
-
 
         public async Task<RoatpGatewayApplicationViewModel> GetConfirmOverviewViewModel(GetApplicationOverviewRequest request)
         {
@@ -211,6 +171,41 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     }
                 }
             }
+        }
+
+        private async Task<List<ClarificationSequence>> ConstructClarificationSequences(Guid applicationId)
+        {
+            var clarificationSequences = new List<ClarificationSequence>();
+            var coreSequences = GetCoreGatewayApplicationViewModel();
+
+            var savedStatuses = await _applyApiClient.GetGatewayPageAnswers(applicationId);
+
+            foreach (var sequence in coreSequences.OrderBy(x => x.SequenceNumber))
+            {
+                foreach (var section in sequence.Sections.OrderBy(x => x.SectionNumber))
+                {
+                    foreach (var status in savedStatuses.Where(x => x.Status == SectionReviewStatus.Clarification))
+                    {
+                        if (section.PageId != status.PageId) continue;
+
+                        if (clarificationSequences.All(x => x.SequenceNumber != sequence.SequenceNumber))
+                            clarificationSequences.Add(new ClarificationSequence
+                            {
+                                Sections = new List<ClarificationSection>(),
+                                SequenceNumber = sequence.SequenceNumber,
+                                SequenceTitle = sequence.SequenceTitle
+                            });
+
+                        clarificationSequences.FirstOrDefault(x => x.SequenceNumber == sequence.SequenceNumber)
+                            ?.Sections.Add(new ClarificationSection { PageTitle = section.LinkTitle, Comment = status.Comments });
+
+                        if (status.PageId == GatewayPageIds.TwoInTwelveMonths)
+                            return clarificationSequences;
+                    }
+                }
+            }
+
+            return clarificationSequences;
         }
 
         private static bool TwoInTwelveMonthsPassed(IEnumerable<GatewaySection> sections)
