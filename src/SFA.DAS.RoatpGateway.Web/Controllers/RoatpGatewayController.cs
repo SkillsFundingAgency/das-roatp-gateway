@@ -101,6 +101,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     return View("~/Views/Gateway/Application.cshtml", viewModel);
                 case GatewayReviewStatus.Pass:
                 case GatewayReviewStatus.Fail:
+                case GatewayReviewStatus.Reject:
                     return View("~/Views/Gateway/Application_ReadOnly.cshtml", viewModel);
                 default:
                     return RedirectToAction(nameof(NewApplications));
