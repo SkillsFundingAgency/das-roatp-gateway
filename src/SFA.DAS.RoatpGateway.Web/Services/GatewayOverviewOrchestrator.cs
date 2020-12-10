@@ -93,22 +93,29 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             var savedStatuses = await _applyApiClient.GetGatewayPageAnswers(applicationId);
 
-            foreach (var sequence in coreSequences)
+            foreach (var sequence in coreSequences.OrderBy(x=>x.SequenceNumber))
             {
-                foreach (var status in savedStatuses.Where(x => x.Status == SectionReviewStatus.Clarification))
+                foreach (var section in sequence.Sections.OrderBy(x => x.SectionNumber))
                 {
-                    var section = sequence.Sections.FirstOrDefault(x => x.PageId == status.PageId);
-                    if (section == null) continue;
+                    foreach (var status in savedStatuses.Where(x => x.Status == SectionReviewStatus.Clarification))
+                    {
+                        //
+                        if (section.PageId!=status.PageId) continue;
 
-                    if (clarificationSequences.All(x => x.SequenceNumber != sequence.SequenceNumber))
-                        clarificationSequences.Add(new ClarificationSequence
-                        {
-                            Sections = new List<ClarificationSection>(), SequenceNumber = sequence.SequenceNumber,
-                            SequenceTitle = sequence.SequenceTitle
-                        });
+                        if (clarificationSequences.All(x => x.SequenceNumber != sequence.SequenceNumber))
+                            clarificationSequences.Add(new ClarificationSequence
+                            {
+                                Sections = new List<ClarificationSection>(), SequenceNumber = sequence.SequenceNumber,
+                                SequenceTitle = sequence.SequenceTitle
+                            });
 
-                    clarificationSequences.FirstOrDefault(x => x.SequenceNumber == sequence.SequenceNumber)?.Sections
-                        .Add(new ClarificationSection {PageTitle = section.LinkTitle, Comment = status.Comments});
+                        clarificationSequences.FirstOrDefault(x => x.SequenceNumber == sequence.SequenceNumber)
+                            ?.Sections
+                            .Add(new ClarificationSection {PageTitle = section.LinkTitle, Comment = status.Comments});
+
+                        if (status.PageId== GatewayPageIds.TwoInTwelveMonths)
+                            return clarificationSequences;
+                    }
                 }
             }
 

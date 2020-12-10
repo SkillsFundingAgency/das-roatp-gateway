@@ -129,32 +129,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
         }
 
-        // private static Apply GetApplicationData(RoatpApplicationResponse application)
-        // {
-        //     return new Apply
-        //     {
-        //         ApplyData = new RoatpApplyData
-        //         {
-        //             ApplyDetails = new RoatpApplyDetails
-        //             {
-        //                 ReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber,
-        //                 ProviderRoute = application.ApplyData.ApplyDetails.ProviderRoute,
-        //                 ProviderRouteName = application.ApplyData.ApplyDetails.ProviderRouteName,
-        //                 UKPRN = application.ApplyData.ApplyDetails.UKPRN,
-        //                 OrganisationName = application.ApplyData.ApplyDetails.OrganisationName,
-        //                 ApplicationSubmittedOn = application.ApplyData.ApplyDetails.ApplicationSubmittedOn
-        //             }
-        //         },
-        //         Id = application.Id,
-        //         ApplicationId = application.ApplicationId,
-        //         OrganisationId = application.OrganisationId,
-        //         ApplicationStatus = application.ApplicationStatus,
-        //         GatewayReviewStatus = application.GatewayReviewStatus,
-        //         AssessorReviewStatus = application.AssessorReviewStatus,
-        //         FinancialReviewStatus = application.FinancialReviewStatus
-        //     };
-        // }
-
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToAskForClarification")]
         public async Task<IActionResult> AboutToAskForClarification(Guid applicationId, string confirmAskForClarification)
@@ -188,10 +162,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 }
                 return View("~/Views/Gateway/Application.cshtml", viewModel);
             }
-            if (true)
-            {
-                return RedirectToAction(nameof(NewApplications));
-            }
+            //var userId = HttpContext.User.UserId();
+            //await _applyApiClient.UpdateGatewayReviewStatusAndComment(applicationId, GatewayReviewStatus.ClarificationSent, null, userId, username);
+
+            return View("~/Views/Gateway/ConfirmApplicationClarification.cshtml");
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]
