@@ -55,28 +55,29 @@
                     </tr>
                     @if (Model.IsPostGradOnlyApprenticeship.HasValue)
                     {
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">Is the postgraduate teaching apprenticeship the only apprenticeship your organisation intends to deliver?</td>
-                        <td class="govuk-table__cell">@(Model.IsPostGradOnlyApprenticeship.Value ? "Yes" : "No")</td>
-                    </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">Is the postgraduate teaching apprenticeship the only apprenticeship your organisation intends to deliver?</td>
+                            <td class="govuk-table__cell">@(Model.IsPostGradOnlyApprenticeship.Value ? "Yes" : "No")</td>
+                        </tr>
                     }
                 </tbody>
             </table>
 
         </div>
     </div>
-
-    @if (Model.ApplicationId != Guid.Empty)
+    @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <form class="js-disable-on-submit" asp-action="EvaluateInitialTeacherTrainingPage" asp-controller="RoatpGatewayExperienceAndAccreditation">
-
-                    @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalSection.cshtml"); }
-
+                    <partial name="~/Views/Gateway/Pages/_GatewayApprovalSection.cshtml" />
                     <button class="govuk-button" type="submit">Save and continue</button>
                 </form>
             </div>
         </div>
+    }
+    else
+    {
+        <partial name="~/Views/Gateway/Pages/_GatewayCheckOutcome.cshtml" />
     }
 </main>

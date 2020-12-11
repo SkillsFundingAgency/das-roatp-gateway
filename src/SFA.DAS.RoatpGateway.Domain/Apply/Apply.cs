@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SFA.DAS.RoatpGateway.Domain.Apply
 {
@@ -13,9 +11,12 @@ namespace SFA.DAS.RoatpGateway.Domain.Apply
         public string AssessorReviewStatus { get; set; }
         public string GatewayReviewStatus { get; set; }
         public string FinancialReviewStatus { get; set; }
-        public RoatpApplyData ApplyData { get; set; }
+        public ApplyData ApplyData { get; set; }
         public FinancialReviewDetails FinancialGrade { get; set; }
-        public string Status { get; set; }
+
+        public string GatewayUserId { get; set; }
+        public string GatewayUserName { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }

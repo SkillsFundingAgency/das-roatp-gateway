@@ -14,6 +14,7 @@ namespace SFA.DAS.RoatpGateway.Web.Extensions
 
             viewModel.ApplicationId = applicationId;
             viewModel.PageId = pageId;
+            viewModel.GatewayReviewStatus = commonDetails.GatewayReviewStatus;
             viewModel.ApplyLegalName = commonDetails.LegalName;
             viewModel.ApplicationRoute = commonDetails.ProviderRouteName;
             viewModel.Ukprn = commonDetails.Ukprn;

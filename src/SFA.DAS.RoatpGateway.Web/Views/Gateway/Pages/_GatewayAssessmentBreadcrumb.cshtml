@@ -7,7 +7,23 @@
             <a asp-controller="Dashboard" asp-action="Index" class="govuk-breadcrumbs__link">RoATP dashboard</a>
         </li>
         <li class="govuk-breadcrumbs__list-item">
-            <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-breadcrumbs__link">RoATP gateway applications</a>
+            @if (Model.GatewayReviewStatus == GatewayReviewStatus.New)
+            {
+                <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-breadcrumbs__link">RoATP gateway applications</a>
+            }
+            else if (Model.GatewayReviewStatus == GatewayReviewStatus.InProgress)
+            {
+                <a asp-controller="RoatpGateway" asp-action="InProgressApplications" class="govuk-breadcrumbs__link">RoATP gateway applications</a>
+            }
+            else if (Model.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
+            {
+                @* TODO : Future Work - Put correct dashboard link in for when Clarification has been sent *@
+                <a asp-controller="RoatpGateway" asp-action="ClosedApplications" class="govuk-breadcrumbs__link">RoATP gateway applications</a>
+            }
+            else
+            {
+                <a asp-controller="RoatpGateway" asp-action="ClosedApplications" class="govuk-breadcrumbs__link">RoATP gateway applications</a>
+            }
         </li>
         <li class="govuk-breadcrumbs__list-item">
             <a asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId" class="govuk-breadcrumbs__link">Application assessment overview</a>

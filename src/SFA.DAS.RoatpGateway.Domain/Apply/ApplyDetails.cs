@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.RoatpGateway.Domain.Apply
 {
-    public class RoatpApplyDetails
+    public class ApplyDetails
     {
         public string ReferenceNumber { get; set; }
         public string UKPRN { get; set; }

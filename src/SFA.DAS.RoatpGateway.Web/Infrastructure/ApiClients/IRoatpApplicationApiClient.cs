@@ -1,4 +1,5 @@
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Domain.CharityCommission;
 using SFA.DAS.RoatpGateway.Domain.CompaniesHouse;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
@@ -11,7 +12,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
     public interface IRoatpApplicationApiClient
     {
-        Task<RoatpApplicationResponse> GetApplication(Guid applicationId);
+        Task<Apply> GetApplication(Guid applicationId);
         Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications();
         Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications();
         Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications();

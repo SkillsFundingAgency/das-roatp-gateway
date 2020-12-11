@@ -32,9 +32,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
 
             var contact = await _applyApiClient.GetContactDetails(request.ApplicationId);
-            var applicationData = GetApplicationData(application);
-
-            var viewmodel = new RoatpGatewayApplicationViewModel(applicationData)
+            var viewmodel = new RoatpGatewayApplicationViewModel(application)
             {
                 ApplicationEmailAddress  = contact?.Email,
                 Sequences = GetCoreGatewayApplicationViewModel()
@@ -50,8 +48,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             {
                 foreach (var currentStatus in savedStatuses ?? new List<GatewayPageAnswerSummary>())
                 {
-                    // Inject the statuses into viewmodel
+                    // Inject the statuses and comments into viewmodel
                     viewmodel.Sequences.SelectMany(seq => seq.Sections).FirstOrDefault(sec => sec.PageId == currentStatus.PageId).Status = currentStatus?.Status;
+                    viewmodel.Sequences.SelectMany(seq => seq.Sections).FirstOrDefault(sec => sec.PageId == currentStatus.PageId).Comment = currentStatus?.Comments;
                 }
             }
 
@@ -91,9 +90,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 return null;
             }
 
-            var applicationData = GetApplicationData(application);
-
-            var viewmodel = new RoatpGatewayApplicationViewModel(applicationData)
+            var viewmodel = new RoatpGatewayApplicationViewModel(application)
             {
                 Sequences = GetCoreGatewayApplicationViewModel()
             };
@@ -260,32 +257,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             return true;
 
-        }
-
-        private static Apply GetApplicationData(RoatpApplicationResponse application)
-        {
-            return new Apply
-            {
-                ApplyData = new RoatpApplyData
-                {
-                    ApplyDetails = new RoatpApplyDetails
-                    {
-                        ReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber,
-                        ProviderRoute = application.ApplyData.ApplyDetails.ProviderRoute,
-                        ProviderRouteName = application.ApplyData.ApplyDetails.ProviderRouteName,
-                        UKPRN = application.ApplyData.ApplyDetails.UKPRN,
-                        OrganisationName = application.ApplyData.ApplyDetails.OrganisationName,
-                        ApplicationSubmittedOn = application.ApplyData.ApplyDetails.ApplicationSubmittedOn
-                    }
-                },
-                Id = application.Id,
-                ApplicationId = application.ApplicationId,
-                OrganisationId = application.OrganisationId,
-                ApplicationStatus = application.ApplicationStatus,
-                GatewayReviewStatus = application.GatewayReviewStatus,
-                AssessorReviewStatus = application.AssessorReviewStatus,
-                FinancialReviewStatus = application.FinancialReviewStatus
-            };
         }
 
         // APR-1467 Code Stubbed Data

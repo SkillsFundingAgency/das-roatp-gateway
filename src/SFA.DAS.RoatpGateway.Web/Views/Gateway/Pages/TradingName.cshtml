@@ -51,16 +51,19 @@
 
         </div>
     </div>
-    @if (Model.ApplicationId != Guid.Empty)
+    @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <form class="js-disable-on-submit" asp-action="EvaluateTradingNamePage" asp-controller="RoatpGatewayOrganisationChecks">
-
-                    @{ await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalSection.cshtml"); }
+                    <partial name="~/Views/Gateway/Pages/_GatewayApprovalSection.cshtml" />
                     <button class="govuk-button" type="submit">Save and continue</button>
                 </form>
             </div>
         </div>
+    }
+    else
+    {
+        <partial name="~/Views/Gateway/Pages/_GatewayCheckOutcome.cshtml" />
     }
 </main>

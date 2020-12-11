@@ -1,9 +1,7 @@
 ﻿using SFA.DAS.AdminService.Common.Validation;
-using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SFA.DAS.RoatpGateway.Web.ViewModels
 {
@@ -19,7 +17,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string OptionFailedText { get; set; }
         public string OptionApprovedText { get; set; }
         public string OptionRejectedText { get; set; }
-        public string GatewayReviewComment { get; set; }
+
         public List<ValidationErrorDetail> ErrorMessages { get; set; }
 
         public bool IsGatewayApproved { get; set; }
@@ -28,6 +26,11 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public bool ReadyToConfirm { get; set; }
 
         public bool TwoInTwoMonthsPassed { get; set; }
+
+        // Read only
+        public string GatewayReviewComment { get; set; }
+        public DateTime? GatewayOutcomeDateTime { get; set; }
+        public string GatewayUserName { get; set; }
 
         // Model On Error
         public bool IsInvalid { get; set; }
@@ -63,6 +66,8 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
             ApplicationStatus = application.ApplicationStatus;
             GatewayReviewStatus = application.GatewayReviewStatus;
 
+            GatewayUserName = application.GatewayUserName;
+
             if (application.GatewayReviewStatus == RoatpGateway.Domain.GatewayReviewStatus.Pass)
             {
                 IsGatewayApproved = true;
@@ -79,6 +84,12 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
                 Ukprn = application.ApplyData.ApplyDetails.UKPRN;
                 OrganisationName = application.ApplyData.ApplyDetails.OrganisationName;
                 SubmittedDate = application.ApplyData.ApplyDetails.ApplicationSubmittedOn;
+            }
+
+            if (application.ApplyData?.GatewayReviewDetails != null)
+            {
+                GatewayOutcomeDateTime = application.ApplyData.GatewayReviewDetails.OutcomeDateTime;
+                GatewayReviewComment = application.ApplyData.GatewayReviewDetails.Comments;
             }
         }
     }
