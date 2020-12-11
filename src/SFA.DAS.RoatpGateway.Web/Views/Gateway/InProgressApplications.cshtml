@@ -70,13 +70,15 @@
                                         @{
                                             var cssModifierClassName = CssStylingHelper.GetGatewayReviewStatusStyle(item.GatewayReviewStatus);
                                             <div class="das-tag @cssModifierClassName das-no-wrap">
-                                                @item.GatewayReviewStatus
+                                                @if (item.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
+                                                {
+                                                    @Html.Raw("Clarification")
+                                                }
+                                                else
+                                                {
+                                                    @item.GatewayReviewStatus
+                                                }
                                             </div>
-                                                case GatewayReviewStatus.ClarificationSent:
-                                                    <div class="das-tag das-tag--solid-purple">
-                                                        Clarification
-                                                    </div>
-                                                    break;
                                         }
                                     </td>
                                 </tr>

@@ -71,9 +71,8 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
 
             var contact = await _applyApiClient.GetContactDetails(request.ApplicationId);
-            var applicationData = GetApplicationData(application);
 
-            var viewmodel = new RoatpGatewayClarificationsViewModel(applicationData)
+            var viewmodel = new RoatpGatewayClarificationsViewModel(application)
             {
                 ApplicationEmailAddress = contact?.Email
             };

@@ -45,6 +45,9 @@ namespace SFA.DAS.RoatpGateway.Web.Helpers
                 case GatewayReviewStatus.Reject:
                     cssModifierClassName = "das-tag--solid-orange";
                     break;
+                case GatewayReviewStatus.ClarificationSent:
+                    cssModifierClassName = "das-tag--solid-purple";
+                    break;
                 default:
                     cssModifierClassName = "";
                     break;
