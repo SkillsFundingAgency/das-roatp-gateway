@@ -35,7 +35,7 @@
                         <ul class="govuk-list govuk-error-summary__list">
                             @foreach (var error in Model.ErrorMessages)
                             {
-                                <li><a href="#@error.Field">@error.ErrorMessage</a></li>
+                                <li><a href="#ConfirmAskForClarificationYes">@error.ErrorMessage</a></li>
                             }
                         </ul>
                     </div>
@@ -115,9 +115,7 @@
                                     Comments
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    <pre class="govuk-body">
-                                        @clarSection.Comment
-                                    </pre>
+                                    <pre class="govuk-body das-body--preformatted">@clarSection.Comment</pre>
                                 </dd>
                             </div>
                         }

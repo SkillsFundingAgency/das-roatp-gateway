@@ -1285,3 +1285,7 @@ TODO: change to 'das-page-navigation' and BEM
 .das-tag--solid-purple {
     background-color: #4c2c92;
 }
+
+.das-body--preformatted {
+    white-space: pre-wrap;
+}
