@@ -10,6 +10,7 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NLog.Web.LayoutRenderers;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 
@@ -398,6 +399,98 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             Assert.AreEqual(1, resultViewModel.ApplicationCounts.NewApplicationsCount);
             Assert.AreEqual(2, resultViewModel.ApplicationCounts.InProgressApplicationsCount);
             Assert.AreEqual(3, resultViewModel.ApplicationCounts.ClosedApplicationsCount);
+        }
+
+
+        [Test]
+        public async Task AskForClarification_no_view_model_returned()
+        {
+            _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
+                .ReturnsAsync((RoatpGatewayClarificationsViewModel) null);
+
+            var result = await _controller.AskForClarification(new Guid());
+            var viewResult = result as RedirectToActionResult;
+            Assert.AreEqual("NewApplications",viewResult.ActionName);
+        }
+
+        [Test]
+        public async Task AskForClarification_view_model_returned()
+        {
+            _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
+                .ReturnsAsync(new RoatpGatewayClarificationsViewModel());
+
+            var result = await _controller.AskForClarification(new Guid());
+            var viewResult = result as ViewResult;
+            Assert.IsTrue(viewResult.ViewName.Contains("AskForClarification.cshtml"));
+        }
+
+
+
+        [Test]
+        public async Task AboutToAskForClarification_with_errors_no_view_model_returned()
+        {
+            var applicationId = Guid.NewGuid();
+
+            _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
+                .ReturnsAsync((RoatpGatewayClarificationsViewModel)null);
+
+            var confirmAskForClarification = string.Empty;
+            var result = await _controller.AboutToAskForClarification(applicationId,confirmAskForClarification);
+            var viewResult = result as RedirectToActionResult;
+            Assert.AreEqual("NewApplications", viewResult.ActionName);
+        }
+
+        [Test]
+        public async Task AboutToAskForClarification_with_errors_view_model_returned()
+        {
+            var applicationId = Guid.NewGuid();
+
+            _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
+                .ReturnsAsync(new RoatpGatewayClarificationsViewModel());
+
+            var confirmAskForClarification = string.Empty;
+            var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
+            var viewResult = result as ViewResult;
+            var model = viewResult.Model as RoatpGatewayClarificationsViewModel;
+            Assert.IsTrue(viewResult.ViewName.Contains("AskForClarification.cshtml"));
+            Assert.AreEqual(1, model.ErrorMessages.Count);
+            Assert.AreEqual("ConfirmAskForClarification", model.ErrorMessages[0].Field);
+        }
+
+        [Test]
+        public async Task AboutToAskForClarification_with_no_then_redirected_to_applications_page()
+        {
+            var applicationId = Guid.NewGuid();
+
+            _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
+                .ReturnsAsync(new RoatpGatewayClarificationsViewModel());
+            _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>()))
+                .ReturnsAsync(new RoatpGatewayApplicationViewModel());
+
+            var confirmAskForClarification = "No";
+            var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
+            var viewResult = result as ViewResult;
+            Assert.IsTrue(viewResult.ViewName.Contains("Gateway/Application.cshtml"));
+        }
+
+
+        [Test]
+        public async Task AboutToAskForClarification_with_yes_then_redirected_to_successful_page()
+        {
+            var applicationId = Guid.NewGuid();
+
+            _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
+                .ReturnsAsync(new RoatpGatewayClarificationsViewModel());
+            _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>()))
+                .ReturnsAsync(new RoatpGatewayApplicationViewModel());
+
+            ApplyApiClient.Setup(x=>x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(), It.IsAny<string>()));
+
+            var confirmAskForClarification = "Yes";
+            var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
+            var viewResult = result as ViewResult;
+            Assert.IsTrue(viewResult.ViewName.Contains("ConfirmApplicationClarification.cshtml"));
+            ApplyApiClient.Verify(x=>x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(),It.IsAny<string>()),Times.Once);
         }
     }
 }
