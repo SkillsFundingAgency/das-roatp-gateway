@@ -149,6 +149,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     new ValidationErrorDetail("ConfirmAskForClarification",
                         "Select if you are sure you want to ask for clarification")
                 };
+                viewModel.CssFormGroupError = "govuk-form-group--error";
                 return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
             }
 
