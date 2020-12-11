@@ -1260,7 +1260,7 @@ TODO: change to 'das-page-navigation' and BEM
   on page load if inside limits 
 */
 .govuk-textarea--error-override {
-    border: 4px solid #b10e1e;
+    border: 2px solid #d4351c;
 }
 
 .das-table--condensed .govuk-link {
