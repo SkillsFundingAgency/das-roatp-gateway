@@ -34,7 +34,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         [Test]
         public async Task GetClarificationViewModel_returns_null_if_no_application()
         {
-            _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync((RoatpApplicationResponse)null);
+            _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync((Apply)null);
             var request = new GetApplicationClarificationsRequest(_applicationId, UserName);
             var result = await _orchestrator.GetClarificationViewModel(request);
             Assert.IsNull(result);
@@ -43,16 +43,16 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         [Test]
         public async Task GetClarificationViewModel_returns_model()
         {
-            var applyData = new RoatpApplyData
+            var applyData = new ApplyData
             {
-                ApplyDetails = new RoatpApplyDetails
+                ApplyDetails = new ApplyDetails
                 {
                     UKPRN = Ukprn,
                     OrganisationName = OrganisationName
                 }
             };
         
-            var returnedRoatpApplicationResponse = new RoatpApplicationResponse
+            var returnedRoatpApplicationResponse = new Apply
             {
                 ApplicationId = _applicationId,
                 ApplyData = applyData,
