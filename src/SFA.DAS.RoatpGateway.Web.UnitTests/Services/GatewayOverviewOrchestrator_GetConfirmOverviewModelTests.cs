@@ -40,23 +40,23 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             var applicationId = Guid.NewGuid();
             var gatewayReviewStatus = GatewayReviewStatus.InProgress;
 
-            var applyData = new RoatpApplyData
+            var applyData = new ApplyData
             {
-                ApplyDetails = new RoatpApplyDetails
+                ApplyDetails = new ApplyDetails
                 {
                     UKPRN = ukprn,
                     OrganisationName = organisationName
                 }
             };
 
-            var returnedRoatpApplicationResponse = new RoatpApplicationResponse
+            var application = new Apply
             {
                 ApplicationId = applicationId,
                 ApplyData = applyData,
                 GatewayReviewStatus = GatewayReviewStatus.InProgress
             };
 
-            _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(returnedRoatpApplicationResponse);
+            _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(application);
 
             var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>
             {
@@ -92,23 +92,23 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             var applicationId = Guid.NewGuid();
             var gatewayReviewStatus = GatewayReviewStatus.InProgress;
 
-            var applyData = new RoatpApplyData
+            var applyData = new ApplyData
             {
-                ApplyDetails = new RoatpApplyDetails
+                ApplyDetails = new ApplyDetails
                 {
                     UKPRN = ukprn,
                     OrganisationName = organisationName
                 }
             };
 
-            var returnedRoatpApplicationResponse = new RoatpApplicationResponse
+            var application = new Apply
             {
                 ApplicationId = applicationId,
                 ApplyData = applyData,
                 GatewayReviewStatus = GatewayReviewStatus.InProgress
             };
 
-            _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(returnedRoatpApplicationResponse);
+            _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(application);
 
             // No Saved Statuses
             var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>();

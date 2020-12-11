@@ -2,10 +2,11 @@
 
 namespace SFA.DAS.RoatpGateway.Domain.Apply
 {
-    public class RoatpApplyData
+    public class ApplyData
     {
         public List<RoatpApplySequence> Sequences { get; set; }
-        public RoatpApplyDetails ApplyDetails { get; set; }
+        public ApplyDetails ApplyDetails { get; set; }
+        public ApplyGatewayDetails GatewayReviewDetails { get; set; }
     }
 
 }

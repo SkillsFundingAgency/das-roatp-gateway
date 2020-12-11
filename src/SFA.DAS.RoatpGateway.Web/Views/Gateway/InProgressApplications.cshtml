@@ -1,4 +1,5 @@
 @using SFA.DAS.AdminService.Common.Extensions;
+@using SFA.DAS.RoatpGateway.Web.Helpers;
 @using SFA.DAS.RoatpGateway.Domain;
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayDashboardViewModel
 
@@ -32,7 +33,7 @@
 
             <partial name="_TabList" />
             <div class="govuk-tabs__panel" id="in-progress">
-                
+
                 @if (@Model.Applications.Items.Any())
                 {
                     <table class="govuk-table das-table--condensed das-table--responsive">
@@ -67,17 +68,10 @@
                                     </td>
                                     <td class="govuk-table__cell govuk-table__cell--numeric" data-label="Current status">
                                         @{
-                                            switch (item.GatewayReviewStatus)
-                                            {
-                                                case GatewayReviewStatus.InProgress:
-                                                    <div class="das-tag das-no-wrap">
-                                                        in progress
-                                                    </div>
-                                                    break;
-                                                default:
-                                                    <text>---</text>
-                                                    break;
-                                            }
+                                            var cssModifierClassName = CssStylingHelper.GetGatewayReviewStatusStyle(item.GatewayReviewStatus);
+                                            <div class="das-tag @cssModifierClassName das-no-wrap">
+                                                @item.GatewayReviewStatus
+                                            </div>
                                         }
                                     </td>
                                 </tr>
@@ -94,9 +88,9 @@
                                     @if (Model.Applications.HasPreviousPage)
                                     {
                                         <a asp-action="InProgressApplications"
-                                        asp-controller="RoatpGateway"
-                                        asp-route-page="@(Model.Applications.PageIndex - 1)"
-                                        class="govuk-link previous">
+                                           asp-controller="RoatpGateway"
+                                           asp-route-page="@(Model.Applications.PageIndex - 1)"
+                                           class="govuk-link previous">
                                             <i class="arrow-button icon-left-open">&#xe800;</i>
                                             <span class="description">Previous <span class="hide-mob">page</span></span>
                                             <span class="counter">Page <span class="prevPage">@(Model.Applications.PageIndex - 1)</span> of <span class="totalPage">@(Model.Applications.TotalPages)</span></span>
@@ -106,9 +100,9 @@
                                     @if (Model.Applications.HasNextPage)
                                     {
                                         <a asp-action="InProgressApplications"
-                                        asp-controller="RoatpGateway"
-                                        asp-route-page="@(Model.Applications.PageIndex + 1)"
-                                        class="govuk-link next">
+                                           asp-controller="RoatpGateway"
+                                           asp-route-page="@(Model.Applications.PageIndex + 1)"
+                                           class="govuk-link next">
                                             <i class="arrow-button icon-right-open">&#xe801;</i>
                                             <span class="description">Next <span class="hide-mob">page</span></span>
                                             <span class="counter">Page <span class="nextPage">@(Model.Applications.PageIndex + 1)</span> of <span class="totalPage">@(Model.Applications.TotalPages)</span></span>
@@ -121,7 +115,7 @@
                 }
                 else
                 {
-            <p class="govuk-body-l">No applications to assess</p>
+                    <p class="govuk-body-l">No applications to assess</p>
                 }
 
             </div>

@@ -1,0 +1,60 @@
+﻿@using SFA.DAS.AdminService.Common.Extensions;
+@using SFA.DAS.RoatpGateway.Web.Helpers;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayPageViewModel
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <dl class="govuk-summary-list">
+            @if (!string.IsNullOrWhiteSpace(Model.Status))
+            {
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Outcome of check
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @{
+                            var outcomeCssModifierClassName = CssStylingHelper.GetSectionReviewStatusStyle(Model.Status);
+                            <strong class="das-tag @outcomeCssModifierClassName das-no-wrap">@Model.Status</strong>
+                        }
+                    </dd>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(""))
+            {
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Outcome submitted
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        {PLACEHOLDER} - @DateTime.UtcNow.ToSfaShortDateString()
+                    </dd>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(""))
+            {
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Comments
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        {PLACEHOLDER}
+                    </dd>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(""))
+            {
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Outcome made by
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        {PLACEHOLDER}
+                    </dd>
+                </div>
+            }
+        </dl>
+    </div>
+
+    <a class="govuk-back-link" asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId">Back to gateway outcome</a>
+</div>

@@ -1,4 +1,5 @@
 @using SFA.DAS.AdminService.Common.Extensions;
+@using SFA.DAS.RoatpGateway.Web.Helpers;
 @using SFA.DAS.RoatpGateway.Domain; 
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayApplicationViewModel
 
@@ -144,27 +145,7 @@
                                         {
                                             @if (!currentSection.Status.Equals(SectionReviewStatus.New))
                                             {
-                                                var cssModifierClassName = "";
-                                                switch (currentSection.Status)
-                                                {
-                                                    case SectionReviewStatus.NotRequired:
-                                                        cssModifierClassName = "govuk-tag--inactive";
-                                                        break;
-                                                    case SectionReviewStatus.Pass:
-                                                        cssModifierClassName = "das-tag--solid-green";
-                                                        break;
-                                                    case SectionReviewStatus.Fail:
-                                                        cssModifierClassName = "das-tag--solid-red";
-                                                        break;
-                                                    case SectionReviewStatus.Clarification:
-                                                        cssModifierClassName = "das-tag--solid-purple";
-                                                        break;
-                                                    case SectionReviewStatus.InProgress:
-                                                    default:
-                                                        cssModifierClassName = "";
-                                                        break;
-                                                }
-
+                                                var cssModifierClassName = CssStylingHelper.GetSectionReviewStatusStyle(currentSection.Status);
                                                 <strong class="das-task-list__task-tag das-tag @cssModifierClassName das-no-wrap">@currentSection.Status</strong>
                                             }
                                         }
