@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Security.Policy;
-using System.Threading.Tasks;
+﻿using System;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.Models;
 
 namespace SFA.DAS.RoatpGateway.Web.Services
 {
@@ -61,7 +62,24 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             return viewmodel;
         }
 
-        
+        public async Task<RoatpGatewayClarificationsViewModel> GetClarificationViewModel(GetApplicationClarificationsRequest request)
+        {
+            var application = await _applyApiClient.GetApplication(request.ApplicationId);
+            if (application is null)
+            {
+                return null;
+            }
+
+            var contact = await _applyApiClient.GetContactDetails(request.ApplicationId);
+
+            var viewmodel = new RoatpGatewayClarificationsViewModel(application)
+            {
+                ApplicationEmailAddress = contact?.Email
+            };
+
+            viewmodel.Sequences = await ConstructClarificationSequences(request.ApplicationId);
+            return viewmodel;
+        }
 
         public async Task<RoatpGatewayApplicationViewModel> GetConfirmOverviewViewModel(GetApplicationOverviewRequest request)
         {
@@ -149,6 +167,41 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     }
                 }
             }
+        }
+
+        private async Task<List<ClarificationSequence>> ConstructClarificationSequences(Guid applicationId)
+        {
+            var clarificationSequences = new List<ClarificationSequence>();
+            var coreSequences = GetCoreGatewayApplicationViewModel();
+
+            var savedStatuses = await _applyApiClient.GetGatewayPageAnswers(applicationId);
+
+            foreach (var sequence in coreSequences.OrderBy(x => x.SequenceNumber))
+            {
+                foreach (var section in sequence.Sections.OrderBy(x => x.SectionNumber))
+                {
+                    foreach (var status in savedStatuses.Where(x => x.Status == SectionReviewStatus.Clarification))
+                    {
+                        if (section.PageId != status.PageId) continue;
+
+                        if (clarificationSequences.All(x => x.SequenceNumber != sequence.SequenceNumber))
+                            clarificationSequences.Add(new ClarificationSequence
+                            {
+                                Sections = new List<ClarificationSection>(),
+                                SequenceNumber = sequence.SequenceNumber,
+                                SequenceTitle = sequence.SequenceTitle
+                            });
+
+                        clarificationSequences.FirstOrDefault(x => x.SequenceNumber == sequence.SequenceNumber)
+                            ?.Sections.Add(new ClarificationSection { PageTitle = section.LinkTitle, Comment = status.Comments });
+
+                        if (status.PageId == GatewayPageIds.TwoInTwelveMonths)
+                            return clarificationSequences;
+                    }
+                }
+            }
+
+            return clarificationSequences;
         }
 
         private static bool TwoInTwelveMonthsPassed(IEnumerable<GatewaySection> sections)
