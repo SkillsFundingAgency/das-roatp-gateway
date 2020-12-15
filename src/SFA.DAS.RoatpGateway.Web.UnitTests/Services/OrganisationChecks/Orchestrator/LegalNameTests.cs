@@ -44,7 +44,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
-                CheckedOn = DateTime.Now,
+                SourcesCheckedOn = DateTime.Now,
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
@@ -94,7 +94,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
-                CheckedOn = DateTime.Now,
+                SourcesCheckedOn = DateTime.Now,
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
@@ -141,7 +141,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
-                CheckedOn = DateTime.Now,
+                SourcesCheckedOn = DateTime.Now,
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };

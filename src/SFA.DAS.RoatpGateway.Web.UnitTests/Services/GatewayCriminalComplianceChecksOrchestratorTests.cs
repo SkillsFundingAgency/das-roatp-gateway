@@ -34,10 +34,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
                 GatewayReviewStatus = GatewayReviewStatus.InProgress,
                 LegalName = "Legal Eagle",
                 Status = "Pass",
-                OptionPassText = "No comment",
+                Comments = "No comment",
                 Ukprn = "10001234",
-                CheckedOn = DateTime.Now.AddHours(-2),
-                ApplicationSubmittedOn = DateTime.Now.AddMonths(-1)
+                SourcesCheckedOn = DateTime.Now.AddHours(-2),
+                ApplicationSubmittedOn = DateTime.Now.AddMonths(-1),
+                OutcomeMadeBy = "Test",
+                OutcomeMadeOn = DateTime.Now
             };
             _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(_commonDetails);
         }
@@ -48,6 +50,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             var pageId = GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors;
             var questionId = "CC-20";
             var furtherQuestionId = "CC-20_1";
+
+            _commonDetails.PageId = pageId;
 
             var criminalComplianceDetails = new CriminalComplianceCheckDetails
             {
@@ -80,6 +84,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             var pageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions;
             var questionId = "CC-40";
             var furtherQuestionId = "CC-40_1";
+
+            _commonDetails.PageId = pageId;
 
             var criminalComplianceDetails = new CriminalComplianceCheckDetails
             {

@@ -26,6 +26,12 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public DateTime? SourcesCheckedOn { get; set; }
         public DateTime? ApplicationSubmittedOn { get; set; }
 
+        public DateTime? GatewayOutcomeMadeOn { get; set; }
+        public string GatewayOutcomeMadeBy { get; set; }
+        public DateTime? OutcomeMadeOn { get; set; }
+        public string OutcomeMadeBy { get; set; }
+        public string Comments { get; set; }
+
         public string Heading { get; set; }
         public string Caption { get; set; }
         public string NoSelectionErrorMessage { get; set; }
