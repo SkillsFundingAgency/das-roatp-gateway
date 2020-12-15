@@ -56,7 +56,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<List<GatewayPageAnswerSummary>> GetGatewayPageAnswers(Guid applicationId)
         {
-            return await Get<List<GatewayPageAnswerSummary>>($"/Gateway/Pages?applicationId={applicationId}");
+            return await Get<List<GatewayPageAnswerSummary>>($"/Gateway/{applicationId}/Pages");
         }
 
         public async Task<GatewayCommonDetails> GetPageCommonDetails(Guid applicationId, string pageId, string userName)
