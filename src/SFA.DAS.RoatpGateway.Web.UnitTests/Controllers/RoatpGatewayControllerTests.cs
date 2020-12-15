@@ -23,9 +23,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         private Mock<IGatewayOverviewOrchestrator> _orchestrator;
         private Mock<IRoatpGatewayApplicationViewModelValidator> _validator;
         private Mock<IRoatpGatewayPageValidator> _pageValidator;
-        private Mock<IGatewayApplicationActionsOrchestrator> _applicationActionsOrchestrator;
-        private Mock<IRoatpRemoveApplicationViewModelValidator> _removeApplicationValidator;
-        private Mock<IRoatpWithdrawApplicationViewModelValidator> _withdrawApplicationValidator;
 
         [SetUp]
         public void Setup()
@@ -35,14 +32,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             _orchestrator = new Mock<IGatewayOverviewOrchestrator>();
             _validator = new Mock<IRoatpGatewayApplicationViewModelValidator>();
             _pageValidator = new Mock<IRoatpGatewayPageValidator>();
-            _applicationActionsOrchestrator = new Mock<IGatewayApplicationActionsOrchestrator>();
-            _removeApplicationValidator = new Mock<IRoatpRemoveApplicationViewModelValidator>();
-            _withdrawApplicationValidator = new Mock<IRoatpWithdrawApplicationViewModelValidator>();
 
             _controller = new RoatpGatewayController(ApplyApiClient.Object, _orchestrator.Object,
-                                                     _validator.Object, _applicationActionsOrchestrator.Object,
-                                                     _removeApplicationValidator.Object, _withdrawApplicationValidator.Object,
-                                                     Logger.Object, _pageValidator.Object);
+                                                     _validator.Object, Logger.Object, _pageValidator.Object);
 
             _controller.ControllerContext = MockedControllerContext.Setup();
             UserId = _controller.ControllerContext.HttpContext.User.UserId();

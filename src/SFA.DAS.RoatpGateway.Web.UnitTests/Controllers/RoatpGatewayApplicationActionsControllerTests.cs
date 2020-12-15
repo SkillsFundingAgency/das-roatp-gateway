@@ -12,16 +12,14 @@ using System.Threading.Tasks;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.RoatpGateway.Domain.Apply;
+using SFA.DAS.RoatpGateway.Domain;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 {
     [TestFixture]
-    public class RoatpGatewayControllerTests_ApplicationActions : RoatpGatewayControllerTestBase<RoatpGatewayController>
+    public class RoatpGatewayApplicationActionsControllerTests : RoatpGatewayControllerTestBase<RoatpGatewayController>
     {
-        private RoatpGatewayController _controller;
-        private Mock<IGatewayOverviewOrchestrator> _orchestrator;
-        private Mock<IRoatpGatewayApplicationViewModelValidator> _validator;
-        private Mock<IRoatpGatewayPageValidator> _pageValidator;
+        private RoatpGatewayApplicationActionsController _controller;
         private Mock<IGatewayApplicationActionsOrchestrator> _applicationActionsOrchestrator;
         private Mock<IRoatpRemoveApplicationViewModelValidator> _removeApplicationValidator;
         private Mock<IRoatpWithdrawApplicationViewModelValidator> _withdrawApplicationValidator;
@@ -31,17 +29,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         {
             CoreSetup();
 
-            _orchestrator = new Mock<IGatewayOverviewOrchestrator>();
-            _validator = new Mock<IRoatpGatewayApplicationViewModelValidator>();
-            _pageValidator = new Mock<IRoatpGatewayPageValidator>();
             _applicationActionsOrchestrator = new Mock<IGatewayApplicationActionsOrchestrator>();
             _removeApplicationValidator = new Mock<IRoatpRemoveApplicationViewModelValidator>();
             _withdrawApplicationValidator = new Mock<IRoatpWithdrawApplicationViewModelValidator>();
 
-            _controller = new RoatpGatewayController(ApplyApiClient.Object, _orchestrator.Object,
-                                                     _validator.Object, _applicationActionsOrchestrator.Object,
-                                                     _removeApplicationValidator.Object, _withdrawApplicationValidator.Object,
-                                                     Logger.Object, _pageValidator.Object);
+            _controller = new RoatpGatewayApplicationActionsController(ApplyApiClient.Object, _applicationActionsOrchestrator.Object,
+                                                                        _removeApplicationValidator.Object, _withdrawApplicationValidator.Object);
 
             _controller.ControllerContext = MockedControllerContext.Setup();
             UserId = _controller.ControllerContext.HttpContext.User.UserId();
@@ -69,7 +62,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpRemoveApplicationViewModel
             {
                 ApplicationId = applicationId,
-                ConfirmApplicationAction = "No"
+                ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueNo
             };
 
             ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId });
@@ -78,7 +71,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(_controller.ViewApplication), viewResult.ActionName);
+            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
+            Assert.AreEqual(nameof(RoatpGatewayController), viewResult.ControllerName);
         }
 
         [Test]
@@ -112,7 +106,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpRemoveApplicationViewModel
             {
                 ApplicationId = applicationId,
-                ConfirmApplicationAction = "Yes"
+                ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueYes
             };
 
             var validationErrors = new List<ValidationErrorDetail>();
@@ -148,7 +142,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpWithdrawApplicationViewModel
             {
                 ApplicationId = applicationId,
-                ConfirmApplicationAction = "No",
+                ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueNo,
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
 
@@ -158,7 +152,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(_controller.ViewApplication), viewResult.ActionName);
+            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
+            Assert.AreEqual(nameof(RoatpGatewayController), viewResult.ControllerName);
         }
 
         [Test]
@@ -169,7 +164,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpWithdrawApplicationViewModel
             {
                 ApplicationId = applicationId,
-                ConfirmApplicationAction = "Yes"
+                ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueYes
             };
 
             var validationErrors = new List<ValidationErrorDetail> { new ValidationErrorDetail() };
@@ -192,7 +187,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpWithdrawApplicationViewModel
             {
                 ApplicationId = applicationId,
-                ConfirmApplicationAction = "Yes"
+                ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueYes
             };
 
             var validationErrors = new List<ValidationErrorDetail>();
