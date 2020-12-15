@@ -167,8 +167,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
             var userId = HttpContext.User.UserId();
             await _applyApiClient.UpdateGatewayReviewStatusAsClarification(applicationId, userId, username);
-
-            return View("~/Views/Gateway/ConfirmApplicationClarification.cshtml");
+            var vm = new RoatpGatewayOutcomeViewModel { ApplicationId = applicationId};
+            return View("~/Views/Gateway/ConfirmApplicationClarification.cshtml", vm);
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]
