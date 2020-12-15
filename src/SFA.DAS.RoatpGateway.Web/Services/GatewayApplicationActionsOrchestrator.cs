@@ -54,6 +54,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     else if (error.Field.Equals("OptionYesText"))
                     {
                         viewModelOnError.CssOnErrorOptionYesText = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                        viewModelOnError.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
                     }
                 }
             }
@@ -95,10 +96,12 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     else if (error.Field.Equals("OptionYesText"))
                     {
                         viewModelOnError.CssOnErrorOptionYesText = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                        viewModelOnError.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
                     }
                     else if (error.Field.Equals("OptionYesTextExternal"))
                     {
                         viewModelOnError.CssOnErrorOptionYesTextExternal = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                        viewModelOnError.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
                     }
                 }
             }

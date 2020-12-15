@@ -2,22 +2,22 @@
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpWithdrawApplicationViewModel
 
 @{
-    ViewBag.Title = "Gateway - Application action";
+    ViewBag.Title = "Are you sure the applicant wants to withdraw their application?";
     Layout = "_Layout";
 }
 
 <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
-            <a asp-controller="Dashboard" asp-action="Index" class="govuk-breadcrumbs__link">RoATP dashboard</a>
+            <a asp-controller="Dashboard" asp-action="Index" class="govuk-breadcrumbs__link">Dashboard</a>
         </li>
         <li class="govuk-breadcrumbs__list-item">
-            <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-breadcrumbs__link">RoATP applications</a>
+            <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-breadcrumbs__link">Gateway applications</a>
         </li>
         <li class="govuk-breadcrumbs__list-item">
             <a asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId" class="govuk-breadcrumbs__link">Application assessment overview</a>
         </li>
-        <li class="govuk-breadcrumbs__list-item" aria-current="page">Application action</li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Application actions</li>
     </ol>
 </div>
 <main class="govuk-main-wrapper " id="main-content" role="main">
@@ -51,10 +51,10 @@
                 <div class="govuk-form-group @Model.CssFormGroupError">
                     <fieldset class="govuk-fieldset" aria-describedby="ConfirmApplicationAction-error">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-7">
-                            <span class="govuk-caption-l">Application action</span>
+                            <span class="govuk-caption-l">Application actions</span>
                             <h1 class="govuk-fieldset__heading">Are you sure the applicant wants to withdraw their application?</h1>
                         </legend>
-                        <div class="govuk-!-margin-bottom-4">
+                        <div class="govuk-!-margin-bottom-7">
                             <p class="govuk-body govuk-!-margin-bottom-0">
                                 UKPRN: @Model.Ukprn
                             </p>
@@ -65,7 +65,7 @@
                                 Provider Route: @Model.ApplicationRoute
                             </p>
                             <p class="govuk-body govuk-!-margin-bottom-0">
-                                Application submitted on: @Model.ApplicationSubmittedOn.ToSfaShortDateString()
+                                Date application submitted: @Model.ApplicationSubmittedOn.ToSfaShortDateString()
                             </p>
                         </div>
 
@@ -87,7 +87,7 @@
                                 <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
                                     <div class="govuk-form-group">
                                         <label for="OptionYesText" class="govuk-label">
-                                            Enter your internal comments
+                                            Add your internal comments
                                         </label>
                                         <span class="govuk-hint">
                                             These comments will be seen by governance.
