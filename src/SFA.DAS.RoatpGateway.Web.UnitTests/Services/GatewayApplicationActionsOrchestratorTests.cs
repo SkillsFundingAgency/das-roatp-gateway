@@ -88,7 +88,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.IsNotNull(viewModelOnError.ErrorMessages);
             Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
             Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
-            Assert.IsNull(viewModelOnError.CssFormGroupError);
+            Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
             Assert.AreEqual(HtmlAndCssElements.CssTextareaErrorOverrideClass, viewModelOnError.CssOnErrorOptionYesText);
         }
 
@@ -178,7 +178,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.IsNotNull(viewModelOnError.ErrorMessages);
             Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
             Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
-            Assert.IsNull(viewModelOnError.CssFormGroupError);
+            Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
             Assert.AreEqual(HtmlAndCssElements.CssTextareaErrorOverrideClass, viewModelOnError.CssOnErrorOptionYesText);
             Assert.IsNull(viewModelOnError.CssOnErrorOptionYesTextExternal);
         }
@@ -196,7 +196,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.IsNotNull(viewModelOnError.ErrorMessages);
             Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
             Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
-            Assert.IsNull(viewModelOnError.CssFormGroupError);
+            Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
             Assert.IsNull(viewModelOnError.CssOnErrorOptionYesText);
             Assert.AreEqual(HtmlAndCssElements.CssTextareaErrorOverrideClass, viewModelOnError.CssOnErrorOptionYesTextExternal);
         }
