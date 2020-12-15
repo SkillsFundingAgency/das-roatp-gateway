@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.AdminService.Common.Extensions;
 @using SFA.DAS.RoatpGateway.Domain;
-@model SFA.DAS.RoatpGateway.Web.ViewModels.TwoInTwelveMonthsViewModel 
+@model SFA.DAS.RoatpGateway.Web.ViewModels.TwoInTwelveMonthsViewModel
 
 @{
     ViewBag.Title = $"Gateway - {Model.Heading}";
@@ -14,7 +14,6 @@
         <div class="govuk-grid-column-two-thirds">
             @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
             @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayHeader.cshtml"); }
-            </div>
         </div>
     </div>
     <div class="govuk-grid-row">
