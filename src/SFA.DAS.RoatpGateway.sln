@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.RoatpGateway.Web.Un
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.RoatpGateway.Web", "SFA.DAS.RoatpGateway.Web\SFA.DAS.RoatpGateway.Web.csproj", "{1A5F2493-2E43-414B-BB7A-729C31CA44C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.RoatpGateway.Domain", "SFA.DAS.RoatpGateway.Domain\SFA.DAS.RoatpGateway.Domain.csproj", "{6FB5B798-1C06-4F90-B663-14230D7B5DBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.RoatpGateway.Domain", "SFA.DAS.RoatpGateway.Domain\SFA.DAS.RoatpGateway.Domain.csproj", "{6FB5B798-1C06-4F90-B663-14230D7B5DBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

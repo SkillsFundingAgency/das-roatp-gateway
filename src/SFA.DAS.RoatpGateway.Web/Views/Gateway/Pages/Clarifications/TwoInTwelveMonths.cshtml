@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.AdminService.Common.Extensions;
 @using SFA.DAS.RoatpGateway.Domain;
+@using SFA.DAS.RoatpGateway.Web.ViewModels
 @model SFA.DAS.RoatpGateway.Web.ViewModels.TwoInTwelveMonthsViewModel 
 
 @{
@@ -14,7 +15,6 @@
         <div class="govuk-grid-column-two-thirds">
             @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
             @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayHeader.cshtml"); }
-            </div>
         </div>
     </div>
     <div class="govuk-grid-row">
@@ -37,6 +37,38 @@
             </table>
         </div>
     </div>
+
+
+
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <table class="govuk-table govuk-!-margin-bottom-9">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Outcome of check</td>
+                        <td class="govuk-table__cell">
+                            <strong class="das-task-list__task-tag das-tag das-tag--solid-purple das-no-wrap">Clarification</strong>
+                        </td>
+                    </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Date of check</td>
+                    <td class="govuk-table__cell">
+                        @Model.ClarificationRequestedOn.ToSfaShortDateString()
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Comments</td>
+                    <td class="govuk-table__cell">
+                        @Model.OptionClarificationText
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
     @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress)
     {
         <div class="govuk-grid-row">

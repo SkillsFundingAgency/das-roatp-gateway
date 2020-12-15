@@ -48,5 +48,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task<ContactDetails> GetContactDetails(Guid applicationId);
 
+
+        Task<DateTime?> GetClarificationRequestedOn(Guid applicationId);
+
     }
 }

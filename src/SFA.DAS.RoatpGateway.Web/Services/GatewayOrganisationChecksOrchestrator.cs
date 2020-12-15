@@ -35,6 +35,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             model.SubmittedTwoInTwelveMonths = await _applyApiClient.GetTwoInTwelveMonths(request.ApplicationId);
 
+            var apply = await _applyApiClient.GetApplication(request.ApplicationId);
+
+            model.ClarificationRequestedOn = apply?.ApplyData?.GatewayReviewDetails?.ClarificationRequestedOn;
             return model;
         }
 

@@ -31,6 +31,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, username));
+            if (viewModel.Status==SectionReviewStatus.Clarification)
+                return View($"{GatewayViewsLocation}/Clarifications/TwoInTwelveMonths.cshtml", viewModel);
             return View($"{GatewayViewsLocation}/TwoInTwelveMonths.cshtml", viewModel);
         }
 

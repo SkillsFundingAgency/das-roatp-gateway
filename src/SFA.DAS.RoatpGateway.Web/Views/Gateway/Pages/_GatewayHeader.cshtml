@@ -1,0 +1,21 @@
+﻿@using SFA.DAS.RoatpGateway.Domain;
+@using SFA.DAS.AdminService.Common.Extensions;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayPageViewModel
+<span class="govuk-caption-xl">
+    @Model?.Caption
+</span>
+<h1 class="govuk-heading-xl">@Model.Heading</h1>
+<div class="govuk-!-margin-bottom-4">
+    <p class="govuk-body govuk-!-margin-bottom-0">
+        UKPRN: @Model?.Ukprn
+    </p>
+    <p class="govuk-body govuk-!-margin-bottom-0">
+        Legal name: @Model?.ApplyLegalName
+    </p>
+    <p class="govuk-body govuk-!-margin-bottom-0">
+        Provider Route: @Model?.ApplicationRoute
+    </p>
+    <p class="govuk-body govuk-!-margin-bottom-0">
+        Application submitted on: @Model?.ApplicationSubmittedOn.ToSfaShortDateString()
+    </p>
+</div>
