@@ -63,7 +63,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         {
             try
             {
-                return await Get<GatewayCommonDetails>($"Gateway/Page/CommonDetails/{applicationId}/{pageId}/{userName}");
+                return await Get<GatewayCommonDetails>($"Gateway/{applicationId}/Pages/{pageId}/CommonDetails");
             }
             catch (RoatpApiClientException ex)
             {
@@ -234,7 +234,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<DateTime?> GetClarificationRequestedOn(Guid applicationId)
         {
-            return await Get<DateTime?>($"/Gateway/{applicationId}/ClarificationRequestedOn");
+            return await Get<DateTime?>($"/Gateway/{applicationId}/DateOfClarificationCheck");
         }
     }
 }

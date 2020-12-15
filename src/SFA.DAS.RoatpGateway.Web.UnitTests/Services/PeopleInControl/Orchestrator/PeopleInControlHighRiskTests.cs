@@ -22,7 +22,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
         private static string ukprn => "12344321";
         private static string UKRLPLegalName => "Mark's workshop";
         private static string UserName = "GatewayUser";
-
+        private string GatewayPageId => GatewayPageIds.PeopleInControlRisk;
 
         const string PersonInControlName = "Bob";
         const string PersonInControlDob = "Jan 1990";
@@ -44,18 +44,17 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             _commonDetails = new GatewayCommonDetails
             {
+                ApplicationId = _applicationId,
+                PageId = GatewayPageId,
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
-                CheckedOn = DateTime.Now,
+                SourcesCheckedOn = DateTime.Now,
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn,
                 GatewayReviewStatus = "RevStatus",
-                OptionFailText = "Fail",
-                OptionInProgressText = "In progress",
-                OptionClarificationText = "Clarification",
-                OptionPassText = "Pass",
-                Status = "Status"
+                Comments = "Fail",
+                Status = "Fail"
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, GatewayPageIds.PeopleInControlRisk, UserName)).ReturnsAsync(_commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, GatewayPageId, UserName)).ReturnsAsync(_commonDetails);
         }
 
         [Test]
@@ -67,12 +66,12 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(GatewayPageIds.PeopleInControlRisk, viewModel.PageId);
+            Assert.AreEqual(GatewayPageId, viewModel.PageId);
             Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(_commonDetails.OptionFailText, viewModel.OptionFailText);
-            Assert.AreEqual(_commonDetails.OptionInProgressText, viewModel.OptionInProgressText);
-            Assert.AreEqual(_commonDetails.OptionClarificationText, viewModel.OptionClarificationText);
-            Assert.AreEqual(_commonDetails.OptionPassText, viewModel.OptionPassText);
+            Assert.AreEqual(_commonDetails.Comments, viewModel.OptionFailText);
+            Assert.Null(viewModel.OptionInProgressText);
+            Assert.Null(viewModel.OptionClarificationText);
+            Assert.Null(viewModel.OptionPassText);
             Assert.AreEqual(_commonDetails.Status, viewModel.Status);
             Assert.AreEqual(_commonDetails.Ukprn, viewModel.Ukprn);
             Assert.AreEqual(_commonDetails.LegalName, viewModel.ApplyLegalName);

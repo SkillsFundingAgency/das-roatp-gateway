@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 
@@ -12,22 +13,41 @@ namespace SFA.DAS.RoatpGateway.Web.Extensions
         {
             var commonDetails = await applyApiClient.GetPageCommonDetails(applicationId, pageId, userName);
 
-            viewModel.ApplicationId = applicationId;
-            viewModel.PageId = pageId;
+            viewModel.ApplicationId = commonDetails.ApplicationId;
+            viewModel.PageId = commonDetails.PageId;
             viewModel.GatewayReviewStatus = commonDetails.GatewayReviewStatus;
             viewModel.ApplyLegalName = commonDetails.LegalName;
             viewModel.ApplicationRoute = commonDetails.ProviderRouteName;
             viewModel.Ukprn = commonDetails.Ukprn;
             viewModel.Status = commonDetails.Status;
-            viewModel.OptionPassText = commonDetails.OptionPassText;
-            viewModel.OptionFailText = commonDetails.OptionFailText;
-            viewModel.OptionInProgressText = commonDetails.OptionInProgressText;
-            viewModel.OptionClarificationText = commonDetails.OptionClarificationText;
-            viewModel.SourcesCheckedOn = commonDetails.CheckedOn;
+
+            viewModel.SourcesCheckedOn = commonDetails.SourcesCheckedOn;
             viewModel.ApplicationSubmittedOn = commonDetails.ApplicationSubmittedOn;
             viewModel.Caption = caption;
             viewModel.Heading = heading;
             viewModel.NoSelectionErrorMessage = noSelectionErrorMessage;
+
+            viewModel.GatewayOutcomeMadeOn = commonDetails.GatewayOutcomeMadeOn;
+            viewModel.GatewayOutcomeMadeBy = commonDetails.GatewayOutcomeMadeBy;
+            viewModel.OutcomeMadeOn = commonDetails.OutcomeMadeOn;
+            viewModel.OutcomeMadeBy = commonDetails.OutcomeMadeBy;
+            viewModel.Comments = commonDetails.Comments;
+
+            switch (commonDetails.Status)
+            {
+                case SectionReviewStatus.Pass:
+                    viewModel.OptionPassText = commonDetails.Comments;
+                    break;
+                case SectionReviewStatus.InProgress:
+                    viewModel.OptionInProgressText = commonDetails.Comments;
+                    break;
+                case SectionReviewStatus.Fail:
+                    viewModel.OptionFailText = commonDetails.Comments;
+                    break;
+                case SectionReviewStatus.Clarification:
+                    viewModel.OptionClarificationText = commonDetails.Comments;
+                    break;
+            }
         }
     }
 }

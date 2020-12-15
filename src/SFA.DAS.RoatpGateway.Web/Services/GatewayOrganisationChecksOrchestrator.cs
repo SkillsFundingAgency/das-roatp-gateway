@@ -37,7 +37,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             var apply = await _applyApiClient.GetApplication(request.ApplicationId);
 
-            model.ClarificationRequestedOn = apply?.ApplyData?.GatewayReviewDetails?.ClarificationRequestedOn;
+            model.DateOfClarificationCheck = apply?.ApplyData?.GatewayReviewDetails?.ClarificationRequestedOn;
             return model;
         }
 
