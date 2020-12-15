@@ -26,7 +26,20 @@
             }
         </li>
         <li class="govuk-breadcrumbs__list-item">
-            <a asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId" class="govuk-breadcrumbs__link">Application assessment overview</a>
+            <a asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId" class="govuk-breadcrumbs__link">
+                @{
+                    switch (Model.GatewayReviewStatus)
+                    {
+                        case GatewayReviewStatus.Pass:
+                        case GatewayReviewStatus.Fail:
+                            <text>Gateway outcome overview</text>
+                            break;
+                        default:
+                            <text>Application assessment overview</text>
+                            break;
+                    }
+                }
+            </a>
         </li>
         <li class="govuk-breadcrumbs__list-item" aria-current="page">@Model.Caption</li>
     </ol>
