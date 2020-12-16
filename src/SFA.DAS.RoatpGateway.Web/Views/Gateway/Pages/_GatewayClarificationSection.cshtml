@@ -2,28 +2,49 @@
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayPageViewModel
 
 @{
-    var formGroupError = Model.ErrorMessages != null && Model.ErrorMessages.Any() ? "govuk-form-group--error" : "";
+    var isErrorClarificationAnswer = "";
+    var isErrorPassText = "";
     var isErrorFailText = "";
-    var isErrorClarificationText = "";
+    var isErrorInProgressText = "";
     var noSelectionMessage = "";
+    var clarificationAnswerFormGroupError = "";
+    var outcomeCheckFormGroupError = "";
+
     if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
     {
         foreach (var error in Model.ErrorMessages)
         {
+
+            if (error.Field == "ClarificationAnswer")
+            {
+                isErrorClarificationAnswer = "govuk-textarea--error-override";
+                clarificationAnswerFormGroupError = "govuk-form-group--error";
+            }
+
             if (error.Field == "OptionPass")
             {
                 noSelectionMessage = error.ErrorMessage;
+                outcomeCheckFormGroupError = "govuk-form-group--error";
+            }
+
+            if (error.Field == "OptionPassText")
+            {
+                isErrorPassText = "govuk-textarea--error-override";
+                outcomeCheckFormGroupError = "govuk-form-group--error";
             }
 
             if (error.Field == "OptionFailText")
             {
                 isErrorFailText = "govuk-textarea--error-override";
+                outcomeCheckFormGroupError = "govuk-form-group--error";
             }
 
-            if (error.Field == "OptionClarificationText")
+            if (error.Field == "OptionInProgressText")
             {
-                isErrorClarificationText = "govuk-textarea--error-override";
+                isErrorInProgressText = "govuk-textarea--error-override";
+                outcomeCheckFormGroupError = "govuk-form-group--error";
             }
+
         }
     }
 }
@@ -32,13 +53,24 @@
     Clarified answer
 </h2>
 <div class="govuk-character-count govuk-!-margin-bottom-6" data-module="govuk-character-count" data-maxwords="300">
-    <div class="govuk-form-group @formGroupError">
+    <div class="govuk-form-group @clarificationAnswerFormGroupError">
         <label for="OptionInProgressText" class="govuk-label govuk-label--m">
             Add applicant's response
         </label>
-        
+        @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
+        {
+            @foreach (var error in Model.ErrorMessages)
+            {
+                @if (error.Field == "ClarificationAnswer")
+                {
+                    <span class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> @error.ErrorMessage
+                    </span>
+                }
+            }
+        }
         <textarea 
-            class="govuk-textarea govuk-js-character-count"
+            class="govuk-textarea govuk-js-character-count @isErrorClarificationAnswer"
             id="ClarificationAnswer"
             name="ClarificationAnswer"
             rows="5"
@@ -49,7 +81,7 @@
 
     </div>
 </div>
-<div class="govuk-form-group @formGroupError">
+<div class="govuk-form-group @outcomeCheckFormGroupError">
     <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             <h2 class="govuk-fieldset__heading">
@@ -106,7 +138,7 @@
                                     }
                                 }
                             }
-                            <textarea class="govuk-textarea govuk-js-character-count"
+                            <textarea class="govuk-textarea govuk-js-character-count @isErrorPassText"
                                       id="OptionPassText"
                                       name="OptionPassText"
                                       rows="5"
@@ -188,7 +220,7 @@
                                     }
                                 }
                             }
-                            <textarea class="govuk-textarea govuk-js-character-count"
+                            <textarea class="govuk-textarea govuk-js-character-count @isErrorInProgressText"
                                       id="OptionInProgressText"
                                       name="OptionInProgressText"
                                       rows="5"
