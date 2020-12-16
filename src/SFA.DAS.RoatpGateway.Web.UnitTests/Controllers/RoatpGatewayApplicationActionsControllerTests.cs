@@ -93,7 +93,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as RedirectToActionResult;
 
             Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual(nameof(RoatpGatewayController), viewResult.ControllerName);
+            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as RedirectToActionResult;
 
             Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual(nameof(RoatpGatewayController), viewResult.ControllerName);
+            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
         }
 
         [Test]

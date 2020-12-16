@@ -43,7 +43,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             if (viewModel is null)
             {
-                return RedirectToAction(nameof(RoatpGatewayController.NewApplications), nameof(RoatpGatewayController));
+                return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
 
             return View("~/Views/Gateway/ConfirmRemoveApplication.cshtml", viewModel);
@@ -55,7 +55,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             var application = await _applyApiClient.GetApplication(applicationId);
             if (application is null)
             {
-                return RedirectToAction(nameof(RoatpGatewayController.NewApplications), nameof(RoatpGatewayController));
+                return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
             else if(application.OversightStatus != OversightReviewStatus.New)
             {
@@ -75,7 +75,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), nameof(RoatpGatewayController), new { applicationId });
+                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), "RoatpGateway", new { applicationId });
             }
         }
 
@@ -87,7 +87,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             if (viewModel is null)
             {
-                return RedirectToAction(nameof(RoatpGatewayController.NewApplications), nameof(RoatpGatewayController));
+                return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
 
             return View("~/Views/Gateway/ConfirmWithdrawApplication.cshtml", viewModel);
@@ -99,7 +99,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             var application = await _applyApiClient.GetApplication(applicationId);
             if (application is null)
             {
-                return RedirectToAction(nameof(RoatpGatewayController.NewApplications), nameof(RoatpGatewayController));
+                return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
             else if (application.OversightStatus != OversightReviewStatus.New)
             {
@@ -119,7 +119,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), nameof(RoatpGatewayController), new { applicationId });
+                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), "RoatpGateway", new { applicationId });
             }
         }
     }
