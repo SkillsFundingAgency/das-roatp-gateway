@@ -1,20 +1,26 @@
 ﻿@using SFA.DAS.AdminService.Common.Extensions;
 @using SFA.DAS.RoatpGateway.Domain;
 @using SFA.DAS.RoatpGateway.Web.ViewModels
-@model SFA.DAS.RoatpGateway.Web.ViewModels.TwoInTwelveMonthsViewModel 
+@model SFA.DAS.RoatpGateway.Web.ViewModels.TwoInTwelveMonthsViewModel
 
 @{
     ViewBag.Title = $"Gateway - {Model.Heading}";
     Layout = "_Layout";
 }
 
-@{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml"); }
+@{
+    await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml");
+}
 <main class="govuk-main-wrapper " id="main-content" role="main">
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
-            @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayHeader.cshtml"); }
+            @{
+                await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml");
+            }
+            @{
+                await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayHeader.cshtml");
+            }
         </div>
     </div>
     <div class="govuk-grid-row">
@@ -39,33 +45,32 @@
     </div>
 
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            <table class="govuk-table govuk-!-margin-bottom-9">
-                <tbody class="govuk-table__body">
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">Outcome of check</td>
-                        <td class="govuk-table__cell">
-                            <strong class="das-task-list__task-tag das-tag das-tag--solid-purple das-no-wrap">Clarification</strong>
-                        </td>
-                    </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Date of check</td>
-                    <td class="govuk-table__cell">
-                        @Model.OutcomeMadeOn.ToSfaShortDateString()
-                    </td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">Comments</td>
-                    <td class="govuk-table__cell">
-                        @Model.Comments
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+    <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Outcome of check
+            </dt>
+            <dd class="govuk-summary-list__value">
+                <strong class="das-tag das-tag--solid-purple">Clarification</strong>
+            </dd>
         </div>
-    </div>
-
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Date of check
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @Model.OutcomeMadeOn.ToSfaShortDateString()
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Comments
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @Model.Comments
+            </dd>
+        </div>
+    </dl>
 
     @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress)
     {
@@ -74,7 +79,7 @@
                 <form class="js-disable-on-submit" asp-action="ClarifyTwoInTwelveMonthsPage" asp-controller="RoatpGatewayOrganisationChecks">
                     <partial name="~/Views/Gateway/Pages/_GatewayClarificationSection.cshtml" />
                     <button class="govuk-button" type="submit" name="submit">Save and continue</button>
-                   
+
                 </form>
             </div>
         </div>
