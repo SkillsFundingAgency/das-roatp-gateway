@@ -28,25 +28,29 @@
     }
 }
 
-<div class="govuk-form-group @formGroupError">
-    <fieldset class="govuk-fieldset">
-        
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h2 class="govuk-fieldset__heading">
-           Clarified answer
-        </h2>
-    </legend>
-        <label for="OptionInProgressText" class="govuk-label">
+<h2 class="govuk-heading-l">
+    Clarified answer
+</h2>
+<div class="govuk-character-count govuk-!-margin-bottom-6" data-module="govuk-character-count" data-maxwords="300">
+    <div class="govuk-form-group @formGroupError">
+        <label for="OptionInProgressText" class="govuk-label govuk-label--m">
             Add applicant's response
         </label>
         
-    <textarea class="govuk-textarea govuk-js-character-count"
-                                      id="ClarificationAnswer"
-                                      name="ClarificationAnswer"
-                                      rows="5"
-                                      maxlength="10000"
-                                      aria-describedby="OptionPassText-info">@Model.ClarificationAnswer</textarea>
-    <span>you have 300 words remaining</span>
+        <textarea 
+            class="govuk-textarea govuk-js-character-count"
+            id="ClarificationAnswer"
+            name="ClarificationAnswer"
+            rows="5"
+            maxlength="10000"
+            aria-describedby="ClarificationAnswer-info"
+        >@Model.ClarificationAnswer</textarea>
+        <span id="ClarificationAnswer-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+
+    </div>
+</div>
+<div class="govuk-form-group @formGroupError">
+    <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             <h2 class="govuk-fieldset__heading">
                 What is the outcome of this check?
