@@ -58,6 +58,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetLegalNameViewModel(new GetLegalNameRequest(applicationId, username));
+            if (viewModel.Status == SectionReviewStatus.Clarification)
+                return View($"{GatewayViewsLocation}/Clarifications/LegalName.cshtml", viewModel);
             return View($"{GatewayViewsLocation}/LegalName.cshtml", viewModel);
         }
 
@@ -68,12 +70,21 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/LegalName.cshtml");
         }
 
+        [HttpPost("/Roatp/Gateway/{applicationId}/Page/LegalName/Clarifications")]
+        public async Task<IActionResult> ClarifyLegalNamePage(SubmitGatewayPageAnswerCommand command)
+        {
+            Func<Task<LegalNamePageViewModel>> viewModelBuilder = () => _orchestrator.GetLegalNameViewModel(new GetLegalNameRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/LegalName.cshtml");
+        }
+
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/TradingName")]
         public async Task<IActionResult> GetGatewayTradingNamePage(Guid applicationId, string pageId)
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetTradingNameViewModel(new GetTradingNameRequest(applicationId, username));
-            return View($"{GatewayViewsLocation}/TradingName.cshtml", viewModel);
+            return View(viewModel.Status == SectionReviewStatus.Clarification 
+                ? $"{GatewayViewsLocation}/Clarifications/TradingName.cshtml" 
+                : $"{GatewayViewsLocation}/TradingName.cshtml", viewModel);
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/TradingName")]
@@ -83,6 +94,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/TradingName.cshtml");
         }
 
+        [HttpPost("/Roatp/Gateway/{applicationId}/Page/TradingName/Clarifications")]
+        public async Task<IActionResult> ClarifyTradingNamePage(SubmitGatewayPageAnswerCommand command)
+        {
+            Func<Task<TradingNamePageViewModel>> viewModelBuilder = () => _orchestrator.GetTradingNameViewModel(new GetTradingNameRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/TradingName.cshtml");
+        }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/OrganisationStatus")]
         public async Task<IActionResult> GetOrganisationStatusPage(Guid applicationId, string pageId)

@@ -1,0 +1,110 @@
+﻿@using SFA.DAS.AdminService.Common.Extensions;
+@using SFA.DAS.RoatpGateway.Domain;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.LegalNamePageViewModel
+
+@{
+    ViewBag.Title = $"Gateway - {Model.Heading}";
+    Layout = "_Layout";
+}
+
+@{ await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml"); }
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @{ await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
+            <span class="govuk-caption-xl">@Model.Caption</span>
+            <h1 class="govuk-heading-xl">@Model.Heading</h1>
+            <div class="govuk-!-margin-bottom-4">
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    UKPRN: @Model.Ukprn
+                </p>
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    Application submitted on: @Model.ApplicationSubmittedOn.ToSfaShortDateString()
+                </p>
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                    Sources checked on:  @Model.SourcesCheckedOn.ToSfaShortDateString()
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <table class="govuk-table govuk-!-margin-bottom-9">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="col">Source</th>
+                    <th class="govuk-table__header" scope="col">Legal name</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Submitted application data</td>
+                    <td class="govuk-table__cell">@Model.ApplyLegalName</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">UKRLP data</td>
+                    <td class="govuk-table__cell">@Model.UkrlpLegalName</td>
+                </tr>
+                @if (!string.IsNullOrEmpty(Model.CompaniesHouseLegalName))
+                {
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Companies House data</td>
+                        <td class="govuk-table__cell">@Model.CompaniesHouseLegalName</td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(Model.CharityCommissionLegalName))
+                {
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Charity Commission data</td>
+                        <td class="govuk-table__cell">@Model.CharityCommissionLegalName</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <table class="govuk-table govuk-!-margin-bottom-9">
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Outcome of check</td>
+                    <td class="govuk-table__cell">
+                        <strong class="das-task-list__task-tag das-tag das-tag--solid-purple das-no-wrap">Clarification</strong>
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Date of check</td>
+                    <td class="govuk-table__cell">
+                        @Model.OutcomeMadeOn.ToSfaShortDateString()
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Comments</td>
+                    <td class="govuk-table__cell">
+                        @Model.Comments
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <form class="js-disable-on-submit" asp-action="ClarifyLegalNamePage" asp-controller="RoatpGatewayOrganisationChecks">
+                    <partial name="~/Views/Gateway/Pages/_GatewayClarificationSection.cshtml" />
+                    <button class="govuk-button" type="submit">Save and continue</button>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <partial name="~/Views/Gateway/Pages/_GatewayCheckOutcome.cshtml" />
+    }
+</main>

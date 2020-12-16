@@ -40,7 +40,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var applicationId = Guid.NewGuid();
             var pageId = "1-10";
 
-            _orchestrator.Setup(x => x.GetLegalNameViewModel(new GetLegalNameRequest(applicationId, Username)))
+            _orchestrator.Setup(x => x.GetLegalNameViewModel(It.IsAny<GetLegalNameRequest>()))
                 .ReturnsAsync(new LegalNamePageViewModel())
                 .Verifiable("view model not returned");
 

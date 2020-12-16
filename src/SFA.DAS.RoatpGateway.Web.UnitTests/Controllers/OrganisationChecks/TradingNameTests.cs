@@ -39,7 +39,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var applicationId = Guid.NewGuid();
             var pageId = "1-10";
 
-            _orchestrator.Setup(x => x.GetTradingNameViewModel(new GetTradingNameRequest(applicationId, Username)))
+            _orchestrator.Setup(x => x.GetTradingNameViewModel(It.IsAny<GetTradingNameRequest>()))
                 .ReturnsAsync(new TradingNamePageViewModel())
                 .Verifiable("view model not returned");
 
