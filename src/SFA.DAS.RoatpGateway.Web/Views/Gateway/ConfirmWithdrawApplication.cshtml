@@ -40,7 +40,7 @@
                 </div>
             }
 
-            <form class="form" method="post" asp-action="ConfirmWithdrawApplication" asp-controller="RoatpGateway" asp-route-applicationId="@Model.ApplicationId">
+            <form class="form" method="post" asp-action="ConfirmWithdrawApplication" asp-controller="RoatpGatewayApplicationActions" asp-route-applicationId="@Model.ApplicationId">
                 <input type="hidden" asp-for="ApplicationId" />
                 <input type="hidden" asp-for="ApplicationStatus" />
                 <input type="hidden" asp-for="Ukprn" />
