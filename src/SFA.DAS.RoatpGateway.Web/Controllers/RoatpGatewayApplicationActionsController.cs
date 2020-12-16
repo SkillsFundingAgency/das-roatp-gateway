@@ -57,6 +57,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 return RedirectToAction(nameof(RoatpGatewayController.NewApplications), nameof(RoatpGatewayController));
             }
+            else if(application.OversightStatus != OversightReviewStatus.New)
+            {
+                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), nameof(RoatpGatewayController), new { applicationId });
+            }
 
             var validationResponse = await _removeApplicationValidator.Validate(viewModel);
             if (validationResponse.Errors != null && validationResponse.Errors.Any())
@@ -96,6 +100,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             if (application is null)
             {
                 return RedirectToAction(nameof(RoatpGatewayController.NewApplications), nameof(RoatpGatewayController));
+            }
+            else if (application.OversightStatus != OversightReviewStatus.New)
+            {
+                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), nameof(RoatpGatewayController), new { applicationId });
             }
 
             var validationResponse = await _withdrawApplicationValidator.Validate(viewModel);

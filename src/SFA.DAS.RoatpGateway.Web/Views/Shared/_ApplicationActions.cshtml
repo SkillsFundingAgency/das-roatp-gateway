@@ -1,11 +1,10 @@
 @using SFA.DAS.RoatpGateway.Domain;
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayApplicationViewModel
 
-@{
-    var sections = Model.Sequences?.SelectMany(seq => seq.Sections);
-}
 
-    <div class="govuk-grid-row">
+@if (Model.OversightStatus == OversightReviewStatus.New)
+{
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="das-actions-box">
             <h2 class="govuk-heading-m">Application actions</h2>
@@ -30,3 +29,4 @@
         </div>
     </div>
 </div>
+}
