@@ -34,10 +34,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                                                                                             NoSelectionErrorMessages.Errors[GatewayPageIds.TwoInTwelveMonths]);
 
             model.SubmittedTwoInTwelveMonths = await _applyApiClient.GetTwoInTwelveMonths(request.ApplicationId);
-
-            var apply = await _applyApiClient.GetApplication(request.ApplicationId);
-
-            model.DateOfClarificationCheck = apply?.ApplyData?.GatewayReviewDetails?.ClarificationRequestedOn;
+            
             return model;
         }
 

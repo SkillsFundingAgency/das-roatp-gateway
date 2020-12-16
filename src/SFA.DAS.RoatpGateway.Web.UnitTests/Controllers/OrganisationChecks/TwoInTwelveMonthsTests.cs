@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.AdminService.Common.Testing.MockedObjects;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 {
@@ -49,8 +50,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
 
-            _orchestrator.Setup(x => x.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, Username))).ReturnsAsync(vm);
-
+            _orchestrator.Setup(x => x.GetTwoInTwelveMonthsViewModel(It.IsAny<GetTwoInTwelveMonthsRequest>())).ReturnsAsync(vm);
             var result = await _controller.GetTwoInTwelveMonthsPage(applicationId);
             var viewResult = result as ViewResult;
             Assert.AreEqual(viewname, viewResult.ViewName);
