@@ -43,7 +43,7 @@ namespace SFA.DAS.RoatpGateway.Web.Helpers
                     cssModifierClassName = "das-tag--solid-red";
                     break;
                 case GatewayReviewStatus.Reject:
-                    cssModifierClassName = "das-tag--solid-orange";
+                    cssModifierClassName = "das-tag--solid-brown";
                     break;
                 case GatewayReviewStatus.ClarificationSent:
                     cssModifierClassName = "das-tag--solid-purple";
