@@ -75,7 +75,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             await _controller.EvaluateTwoInTwelveMonthsPage(command);
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment));
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment,null));
             _orchestrator.Verify(x => x.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, Username)), Times.Never());
         }
 

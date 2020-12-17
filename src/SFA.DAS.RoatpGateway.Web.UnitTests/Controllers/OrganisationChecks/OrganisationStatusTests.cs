@@ -39,7 +39,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var applicationId = Guid.NewGuid();
             var pageId = "1-10";
 
-            _orchestrator.Setup(x => x.GetOrganisationStatusViewModel(new GetOrganisationStatusRequest(applicationId, Username)))
+            _orchestrator.Setup(x => x.GetOrganisationStatusViewModel(It.IsAny<GetOrganisationStatusRequest>()))
                 .ReturnsAsync(new OrganisationStatusViewModel())
                 .Verifiable("view model not returned");
 
@@ -68,7 +68,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.EvaluateOrganisationStatus(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),null), Times.Once);
             _orchestrator.Verify(x => x.GetOrganisationStatusViewModel(It.IsAny<GetOrganisationStatusRequest>()), Times.Never());
         }
 

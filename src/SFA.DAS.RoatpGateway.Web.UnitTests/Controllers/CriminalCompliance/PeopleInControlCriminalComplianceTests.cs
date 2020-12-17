@@ -99,7 +99,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
             redirectResult.Should().NotBeNull();
             redirectResult.ActionName.Should().Be("ViewApplication");
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText), Times.Once);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText, null), Times.Once);
         }
 
         [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions)]

@@ -97,7 +97,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
 
             var result = await _controller.EvaluateRoepaoPage(command);
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText), Times.Once);
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText,null), Times.Once);
         }
 
         [Test]

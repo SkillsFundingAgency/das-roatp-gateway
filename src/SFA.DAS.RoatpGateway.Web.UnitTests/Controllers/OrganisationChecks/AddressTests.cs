@@ -39,7 +39,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         {
             var applicationId = Guid.NewGuid();
 
-            _orchestrator.Setup(x => x.GetAddressViewModel(new GetAddressRequest(applicationId, Username)))
+            _orchestrator.Setup(x => x.GetAddressViewModel(It.IsAny<GetAddressRequest>()))
                 .ReturnsAsync(new AddressCheckViewModel())
                 .Verifiable("view model not returned");
 
@@ -70,7 +70,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.EvaluateAddressPage(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),null), Times.Once);
             _orchestrator.Verify(x => x.GetAddressViewModel(It.IsAny<GetAddressRequest>()), Times.Never());
         }
 

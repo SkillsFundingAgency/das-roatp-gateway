@@ -71,7 +71,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.EvaluateLegalNamePage(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),null), Times.Once);
             _orchestrator.Verify(x => x.GetLegalNameViewModel(It.IsAny<GetLegalNameRequest>()), Times.Never());
         }
 

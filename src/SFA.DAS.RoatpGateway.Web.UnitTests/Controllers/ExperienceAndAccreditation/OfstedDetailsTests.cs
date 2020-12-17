@@ -68,7 +68,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
 
             await _controller.EvaluateOfstedDetailsPage(command);
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText));
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText,null));
         }
 
         [Test]

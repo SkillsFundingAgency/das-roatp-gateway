@@ -48,7 +48,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
 
-            _orchestrator.Setup(x => x.GetWebsiteViewModel(new GetWebsiteRequest(applicationId, Username))).ReturnsAsync(vm);
+            _orchestrator.Setup(x => x.GetWebsiteViewModel(It.IsAny<GetWebsiteRequest>())).ReturnsAsync(vm);
 
             var result = _controller.GetWebsitePage(applicationId).Result;
             var viewResult = result as ViewResult;
@@ -74,7 +74,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.EvaluateWebsitePage(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment));
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment,null));
             _orchestrator.Verify(x => x.GetWebsiteViewModel(new GetWebsiteRequest(applicationId, Username)), Times.Never());
         }
 

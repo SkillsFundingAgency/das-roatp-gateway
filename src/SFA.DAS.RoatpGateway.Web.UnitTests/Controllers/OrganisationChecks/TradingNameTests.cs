@@ -37,13 +37,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         public void check_trading_name_request_is_called()
         {
             var applicationId = Guid.NewGuid();
-            var pageId = "1-10";
 
             _orchestrator.Setup(x => x.GetTradingNameViewModel(It.IsAny<GetTradingNameRequest>()))
                 .ReturnsAsync(new TradingNamePageViewModel())
                 .Verifiable("view model not returned");
 
-            var _result = _controller.GetGatewayTradingNamePage(applicationId, pageId).Result;
+            var _result = _controller.GetGatewayTradingNamePage(applicationId).Result;
             _orchestrator.Verify(x => x.GetTradingNameViewModel(It.IsAny<GetTradingNameRequest>()), Times.Once());
         }
 
@@ -68,7 +67,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.EvaluateTradingNamePage(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),null), Times.Once);
             _orchestrator.Verify(x => x.GetTradingNameViewModel(It.IsAny<GetTradingNameRequest>()), Times.Never());
         }
 

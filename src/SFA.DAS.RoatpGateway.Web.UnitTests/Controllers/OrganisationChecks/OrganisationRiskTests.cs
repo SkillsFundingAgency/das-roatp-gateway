@@ -78,7 +78,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
 
-            _orchestrator.Setup(x => x.GetOrganisationRiskViewModel(new GetOrganisationRiskRequest(applicationId, username)))
+            _orchestrator.Setup(x => x.GetOrganisationRiskViewModel(It.IsAny<GetOrganisationRiskRequest>()))
                 .ReturnsAsync(vm);
 
             var result = _controller.GetOrganisationRiskPage(applicationId).Result;
@@ -107,7 +107,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             await _controller.EvaluateOrganisationRiskPage(command);
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText));
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText, null));
         }
 
         [Test]
