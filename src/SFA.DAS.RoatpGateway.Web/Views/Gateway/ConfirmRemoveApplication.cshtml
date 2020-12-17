@@ -84,7 +84,7 @@
                                 <label for="ConfirmApplicationActionYes" class="govuk-label govuk-radios__label">Yes</label>
                             </div>
                             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-ConfirmApplicationActionYes">
-                                <div class="govuk-character-count data-module="govuk-character-count" data-maxwords="150">
+                                <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
                                     <div class="govuk-form-group">
                                         <label for="OptionYesText" class="govuk-label">
                                             Add your internal comments
@@ -130,7 +130,7 @@
                                                   asp-for="OptionYesTextExternal"
                                                   rows="5"
                                                   maxlength="10000"
-                                                  aria-describedby="OptionPassText-info">@Model.OptionYesTextExternal</textarea>
+                                                  aria-describedby="OptionPassTextExternal-info">@Model.OptionYesTextExternal</textarea>
                                     </div>
                                     <span id="OptionYesTextExternal-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
                                 </div>
