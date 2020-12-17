@@ -31,7 +31,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(applicationId, username));
-            return View($"{GatewayViewsLocation}/PeopleInControl.cshtml", viewModel);
+            return View(viewModel.Status == SectionReviewStatus.Clarification
+                ? $"{GatewayViewsLocation}/Clarifications/PeopleInControl.cshtml"
+                : $"{GatewayViewsLocation}/PeopleInControl.cshtml", viewModel);
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/PeopleInControl")]
@@ -42,12 +44,22 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
 
+        [HttpPost("/Roatp/Gateway/{applicationId}/Page/PeopleInControl/Clarification")]
+        public async Task<IActionResult> ClarifyPeopleInControlPage(SubmitGatewayPageAnswerCommand command)
+        {
+            Func<Task<PeopleInControlPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/PeopleInControl.cshtml");
+        }
+
+
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/PeopleInControlRisk")]
         public async Task<IActionResult> GetGatewayPeopleInControlRiskPage(Guid applicationId)
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(applicationId, username));
-            return View($"{GatewayViewsLocation}/PeopleInControlHighRisk.cshtml", viewModel);
+            return View(viewModel.Status == SectionReviewStatus.Clarification
+                ? $"{GatewayViewsLocation}/Clarifications/PeopleInControlHighRisk.cshtml"
+                : $"{GatewayViewsLocation}/PeopleInControlHighRisk.cshtml", viewModel);
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/PeopleInControlRisk")]
@@ -56,6 +68,14 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             Func<Task<PeopleInControlHighRiskPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/PeopleInControlHighRisk.cshtml");
         }
+
+        [HttpPost("/Roatp/Gateway/{applicationId}/Page/PeopleInControlRisk/Clarification")]
+        public async Task<IActionResult> ClarifyPeopleInControlHighRiskPage(SubmitGatewayPageAnswerCommand command)
+        {
+            Func<Task<PeopleInControlHighRiskPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/PeopleInControlHighRisk.cshtml");
+        }
+    
     }
 
 }

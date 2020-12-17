@@ -1,0 +1,76 @@
+﻿@using SFA.DAS.AdminService.Common.Extensions;
+@using SFA.DAS.RoatpGateway.Domain;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.SubcontractorDeclarationViewModel
+
+@{
+    ViewBag.Title = $"Gateway - {Model.Heading}";
+    Layout = "_Layout";
+}
+
+@{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml"); }
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
+            <span class="govuk-caption-xl">
+                @Model.Caption
+            </span>
+            <h1 class="govuk-heading-xl">@Model.Heading</h1>
+            <div class="govuk-!-margin-bottom-4">
+                @if (Model.Ukprn != null)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        UKPRN: @Model.Ukprn
+                    </p>
+                }
+                @if (Model.ApplyLegalName != null)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Legal name: @Model.ApplyLegalName
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <table class="govuk-table govuk-!-margin-bottom-9">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">Application question</th>
+                        <th class="govuk-table__header" scope="col">Applicant's answer</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Has your organisation delivered apprenticeship training as a subcontractor in the last 12 months?</td>
+                        <td class="govuk-table__cell">@(Model.HasDeliveredTrainingAsSubcontractor ? "Yes" : "No")</td>
+                    </tr>
+                    @if (Model.HasDeliveredTrainingAsSubcontractor)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">Upload a copy of a legally binding contract between your organisation and a main or employer provider</td>
+                            <td class="govuk-table__cell"><a href="@Url.Action("SubcontractorDeclarationContractFile", "RoatpGatewayExperienceAndAccreditation")">@Model.ContractFileName</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <partial name="~/Views/Gateway/Pages/_GatewayClarificationDetails.cshtml" />
+    @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <form class="js-disable-on-submit" asp-action="ClarifySubcontractorDeclarationPage" asp-controller="RoatpGatewayExperienceAndAccreditation">
+                    <partial name="~/Views/Gateway/Pages/_GatewayClarificationSection.cshtml" />
+                    <button class="govuk-button" type="submit">Save and continue</button>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <partial name="~/Views/Gateway/Pages/_GatewayCheckOutcome.cshtml" />
+    }
+</main>

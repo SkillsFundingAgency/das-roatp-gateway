@@ -67,7 +67,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
         {
             var applicationId = Guid.NewGuid();
 
-            _orchestrator.Setup(x => x.GetRoatpViewModel(new GetRoatpRequest(applicationId, username)))
+            _orchestrator.Setup(x => x.GetRoatpViewModel(It.IsAny<GetRoatpRequest>()))
                 .ReturnsAsync(new RoatpPageViewModel())
                 .Verifiable("view model not returned");
 
