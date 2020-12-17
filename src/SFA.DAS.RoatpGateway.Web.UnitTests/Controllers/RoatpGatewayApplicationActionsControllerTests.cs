@@ -177,8 +177,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
         }
 
-        [Test]
-        public async Task ConfirmWithdrawApplication_When_oversight_performed_selected_returns_to_ViewApplication()
+        [TestCase(OversightReviewStatus.Successful)]
+        [TestCase(OversightReviewStatus.Unsuccessful)]
+        public async Task ConfirmWithdrawApplication_When_oversight_performed_returns_to_ViewApplication(string oversightStatus)
         {
             var applicationId = Guid.NewGuid();
 
@@ -189,7 +190,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
 
-            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId, OversightStatus = OversightReviewStatus.Successful });
+            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId, OversightStatus = oversightStatus });
             _withdrawApplicationValidator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
 
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);

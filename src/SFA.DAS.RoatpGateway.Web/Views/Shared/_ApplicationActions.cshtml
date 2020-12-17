@@ -1,13 +1,18 @@
 @using SFA.DAS.RoatpGateway.Domain;
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayApplicationViewModel
 
+@{
+    var hasOversightOutcome = (Model.OversightStatus == OversightReviewStatus.Successful
+                || Model.OversightStatus == OversightReviewStatus.Unsuccessful);
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="das-actions-box">
             <h2 class="govuk-heading-m">Application actions</h2>
 
             <p class="govuk-body govuk-body govuk-!-margin-bottom-1">
-                @if (Model.IsClarificationsSelectedAndAllFieldsSet && Model.OversightStatus == OversightReviewStatus.New)
+                @if (Model.IsClarificationsSelectedAndAllFieldsSet && !hasOversightOutcome)
                 {
                     <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGateway" asp-action="AskForClarification" asp-route-applicationId="@Model.ApplicationId" asp-route-gatewayReviewStatus="@GatewayReviewStatus.ClarificationSent">Ask for clarification</a>
                 }
@@ -20,7 +25,7 @@
                 <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGatewayApplicationActions" asp-action="RemoveApplication" asp-route-applicationId="@Model.ApplicationId">Internal removal of application</a>
             </p>
             <p class="govuk-body govuk-!-margin-bottom-0">
-                @if (Model.OversightStatus == OversightReviewStatus.New)
+                @if (!hasOversightOutcome)
                 {
                     <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGatewayApplicationActions" asp-action="WithdrawApplication" asp-route-applicationId="@Model.ApplicationId">Applicant withdrawal of application</a>
                 }
