@@ -109,11 +109,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             var username = HttpContext.User.UserDisplayName();
             var userId = HttpContext.User.UserId();
             var comments = SetupGatewayPageOptionTexts(command);
+            var clarificationAnswer = command.ClarificationAnswer;
 
-            _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswer - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}'");
+            _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswer - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer {clarificationAnswer}");
             try
             {
-                await _applyApiClient.SubmitGatewayPageAnswer(command.ApplicationId, command.PageId, command.Status, userId, username, comments);
+                await _applyApiClient.SubmitGatewayPageAnswer(command.ApplicationId, command.PageId, command.Status, userId, username, comments, clarificationAnswer);
             }
             catch (Exception ex)
             {
@@ -123,6 +124,5 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId });
         }
-
     }
 }

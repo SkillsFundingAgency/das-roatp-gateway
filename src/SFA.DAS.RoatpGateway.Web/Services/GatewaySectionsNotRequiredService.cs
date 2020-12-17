@@ -48,7 +48,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     page.Status = SectionReviewStatus.NotRequired;
 
                 _logger.LogInformation($"GetApplicationOverviewHandler-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{GatewayPageIds.TradingName}' - Status '{SectionReviewStatus.NotRequired}' - UserName '{userName}' - PageData = 'null'");
-                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.TradingName, SectionReviewStatus.NotRequired, null, null, null);
+                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.TradingName, SectionReviewStatus.NotRequired, null, null, null, null);
             }
         }
 
@@ -63,7 +63,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 if (page != null)
                     page.Status = SectionReviewStatus.NotRequired;
                 _logger.LogInformation($"GetApplicationOverviewHandler-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{GatewayPageIds.WebsiteAddress}' - Status '{SectionReviewStatus.NotRequired}' - UserName '{userName}' - PageData = 'null'");
-                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.WebsiteAddress, SectionReviewStatus.NotRequired, null, null, null);
+                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.WebsiteAddress, SectionReviewStatus.NotRequired, null, null, null, null);
             }
         }
 
@@ -77,7 +77,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 if (page != null)
                     page.Status = SectionReviewStatus.NotRequired;
                 _logger.LogInformation($"GetApplicationOverviewHandler-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{GatewayPageIds.OfficeForStudents}' - Status '{SectionReviewStatus.NotRequired}' - UserName '{userName}' - PageData = 'null'");
-                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.OfficeForStudents, SectionReviewStatus.NotRequired, null, null, null);
+                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.OfficeForStudents, SectionReviewStatus.NotRequired, null, null, null, null);
             }
         }
         private async Task SetupNotRequiredLinkForInitialTeacherTraining(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
@@ -91,7 +91,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 page.Status = SectionReviewStatus.NotRequired;
 
                 _logger.LogInformation($"GetApplicationOverviewHandler-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{GatewayPageIds.InitialTeacherTraining}' - Status '{SectionReviewStatus.NotRequired}' - UserName '{userName}' - PageData = 'null'");
-                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.InitialTeacherTraining, SectionReviewStatus.NotRequired, null, null, null);
+                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.InitialTeacherTraining, SectionReviewStatus.NotRequired, null, null, null, null);
             }
         }
 
@@ -113,7 +113,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     page.Status = SectionReviewStatus.NotRequired;
 
                 _logger.LogInformation($"GetApplicationOverviewHandler-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{GatewayPageIds.Ofsted}' - Status '{SectionReviewStatus.NotRequired}' - UserName '{userName}' - PageData = 'null'");
-                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.Ofsted, SectionReviewStatus.NotRequired, null, null, null);
+                await _applyApiClient.SubmitGatewayPageAnswer(applicationId, GatewayPageIds.Ofsted, SectionReviewStatus.NotRequired, null, null, null, null);
             }
         }
 

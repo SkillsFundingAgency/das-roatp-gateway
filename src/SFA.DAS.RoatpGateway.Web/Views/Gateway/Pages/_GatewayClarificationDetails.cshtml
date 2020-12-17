@@ -1,0 +1,29 @@
+﻿@using SFA.DAS.AdminService.Common.Extensions
+@using SFA.DAS.RoatpGateway.Domain;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayPageViewModel
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Outcome of check
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <strong class="das-tag das-tag--solid-purple">Clarification</strong>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Date of check
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @Model.OutcomeMadeOn.ToSfaShortDateString()
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Comments
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @Model.Comments
+        </dd>
+    </div>
+</dl>
