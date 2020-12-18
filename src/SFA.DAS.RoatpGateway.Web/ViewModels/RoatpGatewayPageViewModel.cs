@@ -37,6 +37,5 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string NoSelectionErrorMessage { get; set; }
     
         public string ClarificationAnswer { get; set; }
-        public DateTime? DateOfClarificationCheck { get; set; }
     }
 }
