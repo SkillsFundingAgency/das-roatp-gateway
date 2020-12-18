@@ -119,7 +119,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/Ofsted/Clarification")]
-        public async Task<IActionResult> clarifyOfstedDetailsPage(SubmitGatewayPageAnswerCommand command)
+        public async Task<IActionResult> ClarifyOfstedDetailsPage(SubmitGatewayPageAnswerCommand command)
         {
             Func<Task<OfstedDetailsViewModel>> viewModelBuilder = () => _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/OfstedDetails.cshtml");

@@ -20,6 +20,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
     {
         private RoatpGatewayExperienceAndAccreditationController _controller;
         private Mock<IGatewayExperienceAndAccreditationOrchestrator> _orchestrator;
+        private string ClarificationAnswer => "Clarification answer";
 
         [SetUp]
         public void Setup()
@@ -72,6 +73,32 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
         }
 
         [Test]
+        public async Task clarifying_office_for_students_saves_evaluation_result()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.OfficeForStudents;
+
+            var vm = new OfficeForStudentsViewModel
+            {
+                ApplicationId = applicationId,
+                PageId = pageId,
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                OptionPassText = "Some pass text",
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            await _controller.ClarifyOfficeForStudentsPage(command);
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, ClarificationAnswer));
+        }
+
+        [Test]
         public async Task saving_office_for_students_without_required_fields_does_not_save()
         {
             var applicationId = Guid.NewGuid();
@@ -104,6 +131,43 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             await _controller.EvaluateOfficeForStudentsPage(command);
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),null), Times.Never);
+        }
+
+
+        [Test]
+        public async Task clarifying_office_for_students_without_required_fields_does_not_save()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.OfficeForStudents;
+
+            var vm = new OfficeForStudentsViewModel
+            {
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ApplicationId = applicationId,
+                PageId = pageId,
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+
+            _orchestrator.Setup(x => x.GetOfficeForStudentsViewModel(It.Is<GetOfficeForStudentsRequest>(y => y.ApplicationId == vm.ApplicationId
+                && y.UserName == Username))).ReturnsAsync(vm);
+
+            await _controller.ClarifyOfficeForStudentsPage(command);
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), ClarificationAnswer), Times.Never);
         }
     }
 }
