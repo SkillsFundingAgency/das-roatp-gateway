@@ -1,8 +1,12 @@
-@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayApplicationViewModel
+@using SFA.DAS.RoatpGateway.Domain;
+@using SFA.DAS.AdminService.Common.Extensions;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayClarificationsViewModel
+
 @{
-    ViewBag.Title = "Gateway - Ask for clarification";
+    ViewBag.Title = "Are you sure you want to ask for clarification?";
     Layout = "_Layout";
 }
+
 <div class="govuk-breadcrumbs">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
@@ -11,20 +15,158 @@
         <li class="govuk-breadcrumbs__list-item">
             <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-breadcrumbs__link">RoATP applications</a>
         </li>
-        <li class="govuk-breadcrumbs__list-item" aria-current="page"> Gateway clarification holding page </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId" class="govuk-breadcrumbs__link">Application assessment overview</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Application actions</li>
     </ol>
 </div>
 <main class="govuk-main-wrapper " id="main-content" role="main">
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <div class="govuk-panel govuk-panel--confirmation  govuk-!-margin-bottom-9">
-                <h1 class="govuk-panel__title">
-                    Are you sure you want clarification?
-                </h1>
-                <div class="govuk-panel__body">
-                    <strong>holding page</strong>
+            @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
+            {
+                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                    <h2 class="govuk-error-summary__title" id="error-summary-title">
+                        There is a problem
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                            @foreach (var error in Model.ErrorMessages)
+                            {
+                                <li><a href="#ConfirmAskForClarificationYes">@error.ErrorMessage</a></li>
+                            }
+                        </ul>
+                    </div>
                 </div>
+            }
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <span class="govuk-caption-l">Application actions</span>
+            <h1 class="govuk-heading-xl">Are you sure you want to ask for clarification?</h1>
+
+            <div class="govuk-!-margin-bottom-7">
+                @if (!string.IsNullOrWhiteSpace(Model.Ukprn))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        UKPRN: @Model.Ukprn
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.OrganisationName))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Legal name: @Model.OrganisationName
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.ApplicationRoute))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Provider route: @Model.ApplicationRoute
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.ApplicationReference))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Application reference: @Model.ApplicationReference
+                    </p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.ApplicationEmailAddress))
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Applicant's email address: @Model.ApplicationEmailAddress
+                    </p>
+                }
+                @if (Model.SubmittedDate.HasValue)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Date application submitted: @Model.SubmittedDate.ToSfaShortDateString()
+                    </p>
+                }
             </div>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            @foreach (var sequence in Model.Sequences)
+            {
+                if (sequence.Sections != null && sequence.Sections.Any())
+                {
+                    <h2 class="govuk-heading-l">@sequence.SequenceTitle checks</h2>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    <dl class="govuk-summary-list govuk-summary-list--no-border">
+                        @foreach (var clarSection in sequence.Sections)
+                        {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Check
+                                </dt>
+                                <dd class="govuk-summary-list__value govuk-!-font-weight-bold">
+                                    @clarSection.PageTitle
+                                </dd>
+                            </div>
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Comments
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    <pre class="govuk-body das-body--preformatted">@clarSection.Comment</pre>
+                                </dd>
+                            </div>
+                        }
+                    </dl>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-bottom-8">
+                }
+            }
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form class="form" method="post" asp-action="AboutToAskForClarification" asp-controller="RoatpGateway">
+                <input type="hidden" asp-for="ApplicationId" />
+
+                <div class="govuk-form-group @Model.CssFormGroupError">
+                    <fieldset class="govuk-fieldset" aria-describedby="ConfirmAskForClarification-error">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                            Are you sure you want to ask for clarification?
+                        </legend>
+
+                        <a name="ConfirmAskForClarification"></a>
+
+                        @if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
+                        {
+                            <span class="govuk-error-message">
+                                <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessages.First().ErrorMessage
+                            </span>
+                        }
+
+                        <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+                            <div class="govuk-radios__item">
+                                <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationYes" value="Yes" type="radio" class="govuk-radios__input" data-aria-controls="conditional-ConfirmAskForClarificationYes" />
+                                <label for="ConfirmAskForClarificationYes" class="govuk-label govuk-radios__label">Yes</label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-ConfirmAskForClarificationYes">
+                                <div class="govuk-form-group">
+                                    <span class="govuk-hint">You need to use the <span class="govuk-!-font-weight-bold">due.diligence@education.gov.uk</span> mailbox to ask for clarification from this applicant.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input asp-for="ConfirmAskForClarification" id="ConfirmAskForClarificationNo" value="No" type="radio" class="govuk-radios__input" />
+                            <label for="ConfirmAskForClarificationNo" class="govuk-label govuk-radios__label">No</label>
+                        </div>
+                    </fieldset>
+                </div>
+                <button type="submit" class="govuk-button">
+                    Save and continue
+                </button>
+            </form>
         </div>
     </div>
 </main>

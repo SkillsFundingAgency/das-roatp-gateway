@@ -4,8 +4,8 @@
 @{
     var formGroupError = Model.ErrorMessages != null && Model.ErrorMessages.Any() ? "govuk-form-group--error" : "";
     var isErrorFailText = "";
+    var isErrorClarificationText = "";
     var noSelectionMessage = "";
-    var failTextMessage = "";
     if (Model.ErrorMessages != null && Model.ErrorMessages.Any())
     {
         foreach (var error in Model.ErrorMessages)
@@ -18,7 +18,11 @@
             if (error.Field == "OptionFailText")
             {
                 isErrorFailText = "govuk-textarea--error-override";
-                failTextMessage = error.ErrorMessage;
+            }
+
+            if (error.Field == "OptionClarificationText")
+            {
+                isErrorClarificationText = "govuk-textarea--error-override";
             }
         }
     }
@@ -205,7 +209,7 @@
                                     }
                                 }
                             }
-                            <textarea class="govuk-textarea govuk-js-character-count"
+                            <textarea class="govuk-textarea govuk-js-character-count @isErrorClarificationText"
                                       id="OptionClarificationText"
                                       name="OptionClarificationText"
                                       rows="5"

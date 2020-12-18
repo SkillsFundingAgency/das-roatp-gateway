@@ -118,6 +118,26 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         }
 
+        public async Task UpdateGatewayReviewStatusAsClarification(Guid applicationId, string userId, string userName)
+        {
+            _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - ApplicationId '{applicationId}' - UserName '{userName}'");
+
+            try
+            {
+                var responseCode = await Post($"/Gateway/UpdateGatewayClarification", new { applicationId, userId, userName });
+                if (responseCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException($"Unable to update RoATP gateway review status as clarification, response code {responseCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - Error: '" + ex.Message + "'");
+                throw;
+            }
+        }
+
+
         public async Task<ProviderDetails> GetUkrlpDetails(Guid applicationId)
         {
             try
