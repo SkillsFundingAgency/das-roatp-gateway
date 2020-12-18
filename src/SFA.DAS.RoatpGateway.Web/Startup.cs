@@ -196,6 +196,9 @@ namespace SFA.DAS.RoatpGateway.Web
             services.AddTransient<IGatewayCriminalComplianceChecksOrchestrator, GatewayCriminalComplianceChecksOrchestrator>();
             services.AddTransient<IRoatpGatewayPageValidator, RoatpGatewayPageValidator>();
             services.AddTransient<IRoatpGatewayApplicationViewModelValidator, RoatpGatewayApplicationViewModelValidator>();
+            services.AddTransient<IGatewayApplicationActionsOrchestrator, GatewayApplicationActionsOrchestrator>();
+            services.AddTransient<IRoatpWithdrawApplicationViewModelValidator, RoatpWithdrawApplicationViewModelValidator>();
+            services.AddTransient<IRoatpRemoveApplicationViewModelValidator, RoatpRemoveApplicationViewModelValidator>();
             DependencyInjection.ConfigureDependencyInjection(services);
         }
 

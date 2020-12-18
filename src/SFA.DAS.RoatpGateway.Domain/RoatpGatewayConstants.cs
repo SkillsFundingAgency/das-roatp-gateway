@@ -107,6 +107,7 @@ namespace SFA.DAS.RoatpGateway.Domain
     {
         public static string CheckBoxChecked = "checked";
         public static string RadioButtonValueYes = "Yes";
+        public static string RadioButtonValueNo = "No";
         public static string CssFormGroupErrorClass = "govuk-form-group--error";
         public static string CssTextareaErrorOverrideClass = "govuk-textarea--error-override";
 

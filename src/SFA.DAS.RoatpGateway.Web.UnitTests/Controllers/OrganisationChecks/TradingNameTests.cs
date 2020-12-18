@@ -19,6 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
     {
         private RoatpGatewayOrganisationChecksController _controller;
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
+        private static string ClarificationAnswer => "Clarification answer";
 
         [SetUp]
         public void Setup()
@@ -72,6 +73,34 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         }
 
         [Test]
+        public void post_trading_name_clarification_happy_path()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = "1-20";
+
+            var vm = new TradingNamePageViewModel
+            {
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            vm.SourcesCheckedOn = DateTime.Now;
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            ApplyApiClient.Setup(x =>
+                x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, It.IsAny<string>()));
+
+            var result = _controller.ClarifyTradingNamePage(command).Result;
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), ClarificationAnswer), Times.Once);
+            _orchestrator.Verify(x => x.GetTradingNameViewModel(It.IsAny<GetTradingNameRequest>()), Times.Never());
+        }
+        
+        [Test]
         public void post_trading_name_path_with_errors()
         {
             var applicationId = Guid.NewGuid();
@@ -109,6 +138,48 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var result = _controller.EvaluateTradingNamePage(command).Result;
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+        }
+
+        [Test]
+        public void post_trading_name_clarification_path_with_errors()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = "1-20";
+
+            var vm = new TradingNamePageViewModel
+            {
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ClarificationAnswer = ClarificationAnswer
+
+            };
+
+            vm.ApplicationId = applicationId;
+            vm.PageId = vm.PageId;
+            vm.SourcesCheckedOn = DateTime.Now;
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+
+            _orchestrator.Setup(x => x.GetTradingNameViewModel(It.Is<GetTradingNameRequest>(y => y.ApplicationId == vm.ApplicationId
+                && y.UserName == Username))).ReturnsAsync(vm);
+
+            ApplyApiClient.Setup(x =>
+                x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, It.IsAny<string>()));
+
+            var result = _controller.ClarifyTradingNamePage(command).Result;
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
         }
     }

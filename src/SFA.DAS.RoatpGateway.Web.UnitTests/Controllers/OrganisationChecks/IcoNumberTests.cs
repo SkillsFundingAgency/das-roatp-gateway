@@ -20,6 +20,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
     {
         private RoatpGatewayOrganisationChecksController _controller;
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
+        private static string ClarificationAnswer => "Clarification answer";
 
         [SetUp]
         public void Setup()
@@ -73,6 +74,32 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         }
 
         [Test]
+        public async Task IcoNumber_saves_clarification_result()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.IcoNumber;
+
+            var vm = new IcoNumberViewModel
+            {
+                ApplicationId = applicationId,
+                PageId = pageId,
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                OptionPassText = "Some pass text",
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            await _controller.ClarifyIcoNumberPage(command);
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, ClarificationAnswer));
+        }
+
+        [Test]
         public async Task IcoNumber_without_required_fields_does_not_save()
         {
             var applicationId = Guid.NewGuid();
@@ -105,6 +132,43 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             await _controller.EvaluateIcoNumberPage(command);
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, null), Times.Never);
+        }
+
+
+        [Test]
+        public async Task IcoNumber_without_required_fields_clarification_does_not_save()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.IcoNumber;
+
+            var vm = new IcoNumberViewModel()
+            {
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ApplicationId = applicationId,
+                PageId = pageId,
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+
+            _orchestrator.Setup(x => x.GetIcoNumberViewModel(It.Is<GetIcoNumberRequest>(y => y.ApplicationId == vm.ApplicationId
+                && y.UserName == Username))).ReturnsAsync(vm);
+
+            await _controller.ClarifyIcoNumberPage(command);
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, ClarificationAnswer), Times.Never);
         }
     }
 }

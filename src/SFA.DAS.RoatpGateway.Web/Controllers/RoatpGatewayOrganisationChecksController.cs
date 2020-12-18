@@ -46,8 +46,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/TwoInTwelveMonths/Clarification")]
         public async Task<IActionResult> ClarifyTwoInTwelveMonthsPage(SubmitGatewayPageAnswerCommand command)
         {
-            var buttonPressed = HttpContext.Request.Form["submitClarificationOutcome"];
-
+            
             Func<Task<TwoInTwelveMonthsViewModel>> viewModelBuilder = () => _orchestrator.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/TwoInTwelveMonths.cshtml");
         }

@@ -13,6 +13,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
         private RoatpGatewayPageViewModel _viewModel;
 
         private IRoatpGatewayPageValidator _validator;
+        private const string ClarificationAnswer = "Clarification answer";
+
         [SetUp]
         public void Setup()
         {
@@ -64,6 +66,65 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             var command = new SubmitGatewayPageAnswerCommand(_viewModel);
 
             var result = _validator.Validate(command).Result;
+
+            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+
+        }
+
+
+
+
+        [TestCase(SectionReviewStatus.Pass, "", "", "", "", ClarificationAnswer, false)]
+        [TestCase(SectionReviewStatus.Pass, "pass message goes here", "", "", "", ClarificationAnswer, false)]
+        [TestCase(SectionReviewStatus.InProgress, "", "", "", "", ClarificationAnswer, false)]
+        [TestCase(SectionReviewStatus.InProgress, "", "in progress message goes here", "", "", ClarificationAnswer, false)]
+        [TestCase(SectionReviewStatus.Fail, "", "", "fail message goes here", "", ClarificationAnswer, false)] 
+        [TestCase(null, "", "", "", "", ClarificationAnswer, true)]
+        [TestCase(SectionReviewStatus.Pass, "", "", "", "", null, true)]
+        [TestCase(SectionReviewStatus.Pass, "pass message goes here", "", "", "", null, true)]
+        [TestCase(SectionReviewStatus.InProgress, "", "", "", "", null, true)]
+        [TestCase(SectionReviewStatus.InProgress, "", "in progress message goes here", "", "", null, true)]
+        [TestCase(SectionReviewStatus.Fail, "", "", "", "", null, true)]
+        [TestCase(SectionReviewStatus.Fail, "", "", "fail message goes here", "", null, true)]
+
+        public void clarification_test_cases_for_no_status_and_no_fail_text_to_check_messages_as_expected(string status, string passMessage, string inProgressMessage, string failMessage, string clarificationMessage, string clarificationAnswer, bool hasErrorMessage)
+        {
+            _viewModel = new RoatpGatewayPageViewModel
+            {
+                Status = status,
+                OptionPassText = passMessage,
+                OptionFailText = failMessage,
+                OptionInProgressText = inProgressMessage,
+                OptionClarificationText = clarificationMessage,
+                PageId = GatewayPageIds.LegalName,
+                ClarificationAnswer = clarificationAnswer
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(_viewModel);
+
+            var result = _validator.ValidateClarification(command).Result;
+
+            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+        }
+
+        [TestCase(300, false)]
+        [TestCase(301, true)]
+        public void clarification_test_cases_where_input_is_too_long(int wordCount, bool hasErrorMessage)
+        {
+            var words = string.Empty;
+            for (var i = 0; i < wordCount; i++)
+            {
+                words = $"{words}{i} ";
+            }
+
+            _viewModel = new RoatpGatewayPageViewModel();
+            _viewModel.Status = SectionReviewStatus.Pass;
+            _viewModel.OptionPassText = "words";
+            _viewModel.ClarificationAnswer = words;
+
+            var command = new SubmitGatewayPageAnswerCommand(_viewModel);
+
+            var result = _validator.ValidateClarification(command).Result;
 
             Assert.AreEqual(hasErrorMessage, result.Errors.Any());
 

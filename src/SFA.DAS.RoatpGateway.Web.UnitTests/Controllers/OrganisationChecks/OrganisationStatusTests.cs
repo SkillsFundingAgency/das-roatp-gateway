@@ -19,6 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
     {
         private RoatpGatewayOrganisationChecksController _controller;
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
+        private static string ClarificationAnswer => "Clarification answer";
 
         [SetUp]
         public void Setup()
@@ -73,6 +74,34 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         }
 
         [Test]
+        public void post_organisation_status_clarification_happy_path()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = "1-30";
+
+            var viewModel = new OrganisationStatusViewModel()
+            {
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            viewModel.SourcesCheckedOn = DateTime.Now;
+            var command = new SubmitGatewayPageAnswerCommand(viewModel);
+            GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            ApplyApiClient.Setup(x =>
+                x.SubmitGatewayPageAnswer(applicationId, pageId, viewModel.Status, UserId, Username, It.IsAny<string>()));
+
+            var result = _controller.ClarifyOrganisationStatus(command).Result;
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), ClarificationAnswer), Times.Once);
+            _orchestrator.Verify(x => x.GetOrganisationStatusViewModel(It.IsAny<GetOrganisationStatusRequest>()), Times.Never());
+        }
+
+
+        [Test]
         public void post_organisation_status_path_with_errors()
         {
             var applicationId = Guid.NewGuid();
@@ -111,6 +140,49 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var result = _controller.EvaluateOrganisationStatus(command).Result;
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _orchestrator.Verify(x => x.GetTradingNameViewModel(It.IsAny<GetTradingNameRequest>()), Times.Never());
+        }
+
+
+        [Test]
+        public void post_organisation_status_clarification_path_with_errors()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = "1-20";
+
+            var viewModel = new OrganisationStatusViewModel()
+            {
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            viewModel.ApplicationId = applicationId;
+            viewModel.PageId = viewModel.PageId;
+            viewModel.SourcesCheckedOn = DateTime.Now;
+            var command = new SubmitGatewayPageAnswerCommand(viewModel);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+
+            _orchestrator.Setup(x => x.GetOrganisationStatusViewModel(It.IsAny<GetOrganisationStatusRequest>()))
+                .ReturnsAsync(viewModel)
+                .Verifiable("view model not returned");
+
+            ApplyApiClient.Setup(x =>
+                x.SubmitGatewayPageAnswer(applicationId, pageId, viewModel.Status, UserId, Username, It.IsAny<string>()));
+
+            var result = _controller.ClarifyOrganisationStatus(command).Result;
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _orchestrator.Verify(x => x.GetTradingNameViewModel(It.IsAny<GetTradingNameRequest>()), Times.Never());
         }
     }
