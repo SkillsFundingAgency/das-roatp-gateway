@@ -98,7 +98,7 @@
         </div>
     </div>
     <partial name="~/Views/Gateway/Pages/_GatewayClarificationDetails.cshtml" />
-    @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress)
+    @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress || Model.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
