@@ -68,7 +68,14 @@
                                         @item.GatewayUserName
                                     </td>
                                     <td class="govuk-table__cell" data-label="Outcome">
-                                        @{
+                                        @if (item.ApplicationStatus == ApplicationStatus.Withdrawn)
+                                        {
+                                            <div class="das-tag govuk-tag--inactive das-no-wrap">
+                                                @item.ApplicationStatus
+                                            </div>
+                                        }
+                                        else
+                                        {
                                             var cssModifierClassName = CssStylingHelper.GetGatewayReviewStatusStyle(item.GatewayReviewStatus);
                                             <div class="das-tag @cssModifierClassName das-no-wrap">
                                                 @item.GatewayReviewStatus
