@@ -20,6 +20,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string evaluatedBy);
 
+        Task WithdrawApplication(Guid applicationId, string comments, string userId, string userName);
+
         Task<List<GatewayPageAnswerSummary>> GetGatewayPageAnswers(Guid applicationId);
         Task<GatewayCommonDetails> GetPageCommonDetails(Guid applicationId, string pageId, string userName);
         Task<ContactAddress> GetOrganisationAddress(Guid applicationId);

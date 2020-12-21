@@ -223,7 +223,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         }
 
         [Test]
-        [Ignore("This test is not yet ready as functionality is not implemented")]
         public async Task ConfirmWithdrawApplication_Yes_selected_And_passed_validation_performs_Application_Withdrawal()
         {
             var applicationId = Guid.NewGuid();
@@ -231,7 +230,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpWithdrawApplicationViewModel
             {
                 ApplicationId = applicationId,
-                ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueYes
+                ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueYes,
+                OptionYesText = "Comments"
             };
 
             var validationErrors = new List<ValidationErrorDetail>();
@@ -242,7 +242,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.Inconclusive();
+            Assert.IsTrue(viewResult.ViewName.EndsWith("ApplicationWithdrawn.cshtml"));
+            ApplyApiClient.Verify(x => x.WithdrawApplication(viewModel.ApplicationId, viewModel.OptionYesText, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }
 }
