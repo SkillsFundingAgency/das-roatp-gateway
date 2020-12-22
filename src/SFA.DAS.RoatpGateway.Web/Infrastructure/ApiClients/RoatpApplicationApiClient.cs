@@ -238,10 +238,5 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         {
             return await Get<ContactDetails>($"/Application/{applicationId}/Contact");
         }
-
-        public async Task<DateTime?> GetClarificationRequestedOn(Guid applicationId)
-        {
-            return await Get<DateTime?>($"/Gateway/{applicationId}/DateOfClarificationCheck");
-        }
     }
 }

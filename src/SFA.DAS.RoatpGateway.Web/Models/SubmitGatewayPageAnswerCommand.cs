@@ -13,6 +13,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
         public string OptionInProgressText { get; set; }
         public string OptionClarificationText { get; set; }
         public string ClarificationAnswer { get; set; }
+
         public SubmitGatewayPageAnswerCommand()
         {
 

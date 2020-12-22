@@ -49,6 +49,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclaration/Clarification")]
         public async Task<IActionResult> ClarifySubcontractorDeclarationPage(SubmitGatewayPageAnswerCommand command)
         {
+            var isClarificationFileUpdate = HttpContext.Request.Form["submitClarificationFile"].Count!=0;
+
             Func<Task<SubcontractorDeclarationViewModel>> viewModelBuilder = () => _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml");
         }
