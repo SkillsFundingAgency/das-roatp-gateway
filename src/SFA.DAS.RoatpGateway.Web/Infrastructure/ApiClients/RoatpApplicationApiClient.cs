@@ -11,6 +11,7 @@ using SFA.DAS.RoatpGateway.Domain.Roatp;
 using System.Net.Http;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
 using System.Net.Http.Headers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 
@@ -82,15 +83,21 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<IcoNumber>($"/Gateway/{applicationId}/IcoNumber");
         }
 
-
         public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username,
             string comments)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}'");
+                await SubmitGatewayPageAnswer(applicationId, pageId, status, userId, username, comments, null);
+        }
+
+
+        public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username,
+            string comments, string clarificationAnswer)
+        {
+            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'");
 
             try
             {
-                await Post($"/Gateway/Page/Submit", new { applicationId, pageId, status, comments, userId, username });
+                await Post($"/Gateway/Page/Submit", new { applicationId, pageId, status, comments, userId, username, clarificationAnswer });
             }
             catch (Exception ex)
             {
@@ -231,6 +238,5 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         {
             return await Get<ContactDetails>($"/Application/{applicationId}/Contact");
         }
-
     }
 }

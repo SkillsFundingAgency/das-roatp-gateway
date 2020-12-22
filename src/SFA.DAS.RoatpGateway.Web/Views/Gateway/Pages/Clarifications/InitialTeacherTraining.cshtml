@@ -1,0 +1,84 @@
+﻿@using SFA.DAS.RoatpGateway.Domain;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.InitialTeacherTrainingViewModel
+
+@{
+    ViewBag.Title = $"Gateway - {@Model.Heading}";
+    Layout = "_Layout";
+}
+
+@{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml"); }
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
+
+            <span class="govuk-caption-xl">
+                @Model.Caption
+            </span>
+
+            <h1 class="govuk-heading-xl">@Model.Heading</h1>
+
+
+            <div class="govuk-!-margin-bottom-4">
+                @if (Model.Ukprn != null)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        UKPRN: @Model.Ukprn
+                    </p>
+                }
+
+                @if (Model.ApplyLegalName != null)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Legal name: @Model.ApplyLegalName
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <table class="govuk-table govuk-!-margin-bottom-9">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">Application question</th>
+                        <th class="govuk-table__header" scope="col">Applicant's answer</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Does your organisation offer initial teacher training?</td>
+                        <td class="govuk-table__cell">@(Model.DoesOrganisationOfferInitialTeacherTraining ? "Yes" : "No")</td>
+                    </tr>
+                    @if (Model.IsPostGradOnlyApprenticeship.HasValue)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">Is the postgraduate teaching apprenticeship the only apprenticeship your organisation intends to deliver?</td>
+                            <td class="govuk-table__cell">@(Model.IsPostGradOnlyApprenticeship.Value ? "Yes" : "No")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <partial name="~/Views/Gateway/Pages/_GatewayClarificationDetails.cshtml" />
+    @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress || Model.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <form class="js-disable-on-submit" asp-action="ClarifyInitialTeacherTrainingPage" asp-controller="RoatpGatewayExperienceAndAccreditation">
+                    <partial name="~/Views/Gateway/Pages/_GatewayClarificationSection.cshtml" />
+                    <button class="govuk-button" type="submit">Save and continue</button>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <partial name="~/Views/Gateway/Pages/_GatewayCheckOutcome.cshtml" />
+    }
+</main>

@@ -18,6 +18,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         private readonly IGatewayCriminalComplianceChecksOrchestrator _orchestrator;
 
         private const string CriminalComplianceView = "~/Views/Gateway/pages/CriminalComplianceChecks.cshtml";
+        private const string ClarificationCriminalComplianceView = "~/Views/Gateway/pages/Clarifications/CriminalComplianceChecks.cshtml";
 
         public RoatpCriminalComplianceChecksController(IRoatpApplicationApiClient applyApiClient,
                                                               IRoatpGatewayPageValidator gatewayValidator,
@@ -32,7 +33,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(applicationId, gatewayPageId, username));
-
+            if (viewModel.Status == SectionReviewStatus.Clarification)
+                return View(ClarificationCriminalComplianceView, viewModel);
             return View(CriminalComplianceView, viewModel);
         }
 
@@ -41,6 +43,14 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, CriminalComplianceView);
+        }
+
+
+        [HttpPost("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}/Clarification")]
+        public async Task<IActionResult> ClarifyCriminalCompliancePage(SubmitGatewayPageAnswerCommand command)
+        {
+            Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, HttpContext.User.UserDisplayName()));
+            return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, ClarificationCriminalComplianceView);
         }
     }
 }

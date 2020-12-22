@@ -99,7 +99,51 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
             redirectResult.Should().NotBeNull();
             redirectResult.ActionName.Should().Be("ViewApplication");
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText), Times.Once);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText, null), Times.Once);
+        }
+
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FraudIrregularities)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.OngoingInvestigation)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.ContractTerminated)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt)]
+        public void PeopleInControl_criminal_compliance_check_clarification_answer_is_saved(string gatewayPageId)
+        {
+            var clarificationAnswer = "clarification answer";
+            var model = new CriminalCompliancePageViewModel
+            {
+                ApplicationId = Guid.NewGuid(),
+                ApplyLegalName = "legal name",
+                ComplianceCheckQuestionId = "CC-40",
+                ComplianceCheckAnswer = "No",
+                OptionPassText = "check passed",
+                Status = "Pass",
+                PageId = gatewayPageId,
+                QuestionText = "Question text",
+                Ukprn = "10001234",
+                ClarificationAnswer = clarificationAnswer
+            };
+
+            var validationResponse = new ValidationResponse
+            {
+                Errors = new List<ValidationErrorDetail>()
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(model);
+
+            GatewayValidator.Setup(x => x.ValidateClarification(command)).ReturnsAsync(validationResponse);
+
+            var result = _controller.ClarifyCriminalCompliancePage(command).GetAwaiter().GetResult();
+
+            var redirectResult = result as RedirectToActionResult;
+            redirectResult.Should().NotBeNull();
+            redirectResult.ActionName.Should().Be("ViewApplication");
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText, clarificationAnswer), Times.Once);
         }
 
         [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions)]
@@ -152,7 +196,63 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
             viewModel.Should().NotBeNull();
             viewModel.ErrorMessages.Count.Should().BeGreaterThan(0);
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText), Times.Never);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText, null), Times.Never);
+        }
+
+
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.FraudIrregularities)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.OngoingInvestigation)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.ContractTerminated)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt)]
+        public void PeopleInControl_criminal_compliance_clarification_check_has_validation_error(string gatewayPageId)
+        {
+            var clarificationAnswer = "clarification answer";
+            var model = new CriminalCompliancePageViewModel
+            {
+                ApplicationId = Guid.NewGuid(),
+                ApplyLegalName = "legal name",
+                ComplianceCheckQuestionId = "CC-40",
+                ComplianceCheckAnswer = "No",
+                OptionFailText = null,
+                Status = "Fail",
+                PageId = gatewayPageId,
+                QuestionText = "Question text",
+                Ukprn = "10001234",
+                ClarificationAnswer = clarificationAnswer
+            };
+
+            var validationResponse = new ValidationResponse
+            {
+                Errors = new List<ValidationErrorDetail>()
+                {
+                    new ValidationErrorDetail
+                    {
+                        ErrorMessage = "Comments are mandatory",
+                        Field = "OptionFailText"
+                    }
+                }
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(model);
+
+            GatewayValidator.Setup(x => x.ValidateClarification(command)).ReturnsAsync(validationResponse);
+
+            _orchestrator.Setup(x => x.GetCriminalComplianceCheckViewModel(It.Is<GetCriminalComplianceCheckRequest>(y => y.ApplicationId == model.ApplicationId
+                                                                                && y.UserName == Username))).ReturnsAsync(model);
+
+            var result = _controller.ClarifyCriminalCompliancePage(command).GetAwaiter().GetResult();
+
+            var viewResult = result as ViewResult;
+            var viewModel = viewResult.Model as CriminalCompliancePageViewModel;
+            viewModel.Should().NotBeNull();
+            viewModel.ErrorMessages.Count.Should().BeGreaterThan(0);
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText, clarificationAnswer), Times.Never);
         }
     }
 }

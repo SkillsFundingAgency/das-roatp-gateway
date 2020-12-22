@@ -20,6 +20,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
     {
         private RoatpGatewayOrganisationChecksController _controller;
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
+        private static string ClarificationAnswer => "Clarification answer";
 
         [SetUp]
         public void Setup()
@@ -40,7 +41,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var applicationId = Guid.NewGuid();
             var pageId = "1-10";
 
-            _orchestrator.Setup(x => x.GetLegalNameViewModel(new GetLegalNameRequest(applicationId, Username)))
+            _orchestrator.Setup(x => x.GetLegalNameViewModel(It.IsAny<GetLegalNameRequest>()))
                 .ReturnsAsync(new LegalNamePageViewModel())
                 .Verifiable("view model not returned");
 
@@ -71,7 +72,37 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.EvaluateLegalNamePage(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),null), Times.Once);
+            _orchestrator.Verify(x => x.GetLegalNameViewModel(It.IsAny<GetLegalNameRequest>()), Times.Never());
+        }
+
+
+        [Test]
+        public void post_legal_name_clarification_happy_path()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = "1-10";
+
+            var vm = new LegalNamePageViewModel
+            {
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            vm.SourcesCheckedOn = DateTime.Now;
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            var pageData = JsonConvert.SerializeObject(vm);
+            GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            ApplyApiClient.Setup(x =>
+                x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, It.IsAny<string>()));
+
+            var result = _controller.ClarifyIcoNumberPage(command).Result;
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), ClarificationAnswer), Times.Once);
             _orchestrator.Verify(x => x.GetLegalNameViewModel(It.IsAny<GetLegalNameRequest>()), Times.Never());
         }
 
@@ -115,6 +146,58 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var result = _controller.EvaluateLegalNamePage(command).Result;
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public void post_legal_name_clarification_path_with_errors()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = "1-20";
+
+            var vm = new LegalNamePageViewModel
+            {
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ClarificationAnswer = ClarificationAnswer
+
+            };
+
+            vm.ApplicationId = applicationId;
+            vm.PageId = vm.PageId;
+            vm.SourcesCheckedOn = DateTime.Now;
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+
+            _orchestrator.Setup(x => x.GetLegalNameViewModel(It.Is<GetLegalNameRequest>(y => y.ApplicationId == vm.ApplicationId
+                && y.UserName == Username))).ReturnsAsync(vm);
+
+            var pageData = JsonConvert.SerializeObject(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+            ApplyApiClient.Setup(x =>
+                x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, It.IsAny<string>()));
+
+            var result = _controller.ClarifyLegalNamePage(command).Result;
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

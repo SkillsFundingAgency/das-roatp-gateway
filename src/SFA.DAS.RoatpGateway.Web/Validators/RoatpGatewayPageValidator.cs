@@ -13,6 +13,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
         private const string ClarificationDetailsRequired = "Enter comments";
         private const string FailDetailsRequired = "Enter comments";
         private const string TooManyWords = "Your comments must be 150 words or less";
+        private const string TooManyWordsClarificationAnswer = "Your comments must be 300 words or less";
 
         public async Task<ValidationResponse> Validate(SubmitGatewayPageAnswerCommand command)
         {
@@ -96,10 +97,42 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
 
             return await Task.FromResult(validationResponse);
         }
+
+        public async Task<ValidationResponse> ValidateClarification(SubmitGatewayPageAnswerCommand command)
+        {
+            var validationResponse = new ValidationResponse
+            {
+                Errors = new List<ValidationErrorDetail>()
+            };
+            // var result = await Validate(command);
+            if (string.IsNullOrWhiteSpace(command.ClarificationAnswer))
+            {
+                validationResponse.Errors.Add(new ValidationErrorDetail("ClarificationAnswer", "Add applicant's response"));
+            }
+            else
+            {
+                var wordCount = command.ClarificationAnswer.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries)
+                    .Length;
+                if (wordCount > 300)
+                {
+                    validationResponse.Errors.Add(new ValidationErrorDetail("ClarificationAnswer",
+                        TooManyWordsClarificationAnswer));
+                }
+            }
+            var otherValidationResults = await Validate(command);
+
+            foreach (var error in otherValidationResults.Errors)
+            {
+                validationResponse.Errors.Add(error);
+            }
+
+            return validationResponse;
+        }
     }
 
     public interface IRoatpGatewayPageValidator
     {
         Task<ValidationResponse> Validate(SubmitGatewayPageAnswerCommand command);
+        Task<ValidationResponse> ValidateClarification(SubmitGatewayPageAnswerCommand command);
     }
 }

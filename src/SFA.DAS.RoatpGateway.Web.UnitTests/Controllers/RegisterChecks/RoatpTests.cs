@@ -26,6 +26,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
         private Mock<IRoatpGatewayPageValidator> _gatewayValidator;
         private Mock<IGatewayRegisterChecksOrchestrator> _orchestrator;
         private Mock<ILogger<RoatpGatewayRegisterChecksController>> _logger;
+        private static string ClarificationAnswer => "Clarification answer";
 
         private string userId = "user123";
         private string username = "john smith";
@@ -67,7 +68,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
         {
             var applicationId = Guid.NewGuid();
 
-            _orchestrator.Setup(x => x.GetRoatpViewModel(new GetRoatpRequest(applicationId, username)))
+            _orchestrator.Setup(x => x.GetRoatpViewModel(It.IsAny<GetRoatpRequest>()))
                 .ReturnsAsync(new RoatpPageViewModel())
                 .Verifiable("view model not returned");
 
@@ -97,7 +98,33 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
 
             var result = await _controller.EvaluateRoatpPage(command);
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText), Times.Once);
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText,null), Times.Once);
+        }
+
+        [Test]
+        public async Task saving_roatp_clarification_happy_path_saves_evaluation_result()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.Roatp;
+
+            var vm = new RoatpPageViewModel
+            {
+                ApplicationId = applicationId,
+                PageId = pageId,
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                OptionPassText = "Some pass text",
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            _gatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            var result = await _controller.ClarifyRoatpPage(command);
+
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText, ClarificationAnswer), Times.Once);
         }
 
         [Test]
@@ -133,6 +160,42 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
             var result = await _controller.EvaluateRoatpPage(command);
 
             _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText), Times.Never);
+        }
+
+        [Test]
+        public async Task clarifying_roatp_without_required_fields_does_not_save()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.Roatp;
+
+            var vm = new RoatpPageViewModel
+            {
+                ApplicationId = applicationId,
+                PageId = pageId,
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                OptionFailText = null,
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            _gatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                {
+                    Errors = new List<ValidationErrorDetail>
+                    {
+                        new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                    }
+                });
+
+            _orchestrator.Setup(x => x.GetRoatpViewModel(It.Is<GetRoatpRequest>(y => y.ApplicationId == vm.ApplicationId
+                && y.UserName == username))).ReturnsAsync(vm);
+
+            var result = await _controller.ClarifyRoatpPage(command);
+
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText, ClarificationAnswer), Times.Never);
         }
     }
 }
