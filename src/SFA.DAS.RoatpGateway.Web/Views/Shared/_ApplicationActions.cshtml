@@ -2,16 +2,17 @@
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayApplicationViewModel
 
 @{
-    var sections = Model.Sequences?.SelectMany(seq => seq.Sections);
+    var hasOversightOutcome = (Model.OversightStatus == OversightReviewStatus.Successful
+                || Model.OversightStatus == OversightReviewStatus.Unsuccessful);
 }
 
-    <div class="govuk-grid-row">
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="das-actions-box">
             <h2 class="govuk-heading-m">Application actions</h2>
 
             <p class="govuk-body govuk-body govuk-!-margin-bottom-1">
-                @if (Model.IsClarificationsSelectedAndAllFieldsSet)
+                @if (Model.IsClarificationsSelectedAndAllFieldsSet && !hasOversightOutcome)
                 {
                     <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGateway" asp-action="AskForClarification" asp-route-applicationId="@Model.ApplicationId" asp-route-gatewayReviewStatus="@GatewayReviewStatus.ClarificationSent">Ask for clarification</a>
                 }
@@ -20,12 +21,19 @@
                     <span class="das-!-color-dark-grey">Ask for clarification</span>
                 }
             </p>
-             <p class="govuk-body govuk-!-margin-bottom-1"> 
+            <p class="govuk-body govuk-!-margin-bottom-1">
                 <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGatewayApplicationActions" asp-action="RemoveApplication" asp-route-applicationId="@Model.ApplicationId">Internal removal of application</a>
-             </p> 
-             <p class="govuk-body govuk-!-margin-bottom-0"> 
-                <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGatewayApplicationActions" asp-action="WithdrawApplication" asp-route-applicationId="@Model.ApplicationId">Applicant withdrawal of application</a>
-            </p> 
+            </p>
+            <p class="govuk-body govuk-!-margin-bottom-0">
+                @if (!hasOversightOutcome)
+                {
+                    <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGatewayApplicationActions" asp-action="WithdrawApplication" asp-route-applicationId="@Model.ApplicationId">Applicant withdrawal of application</a>
+                }
+                else
+                {
+                    <span class="das-!-color-dark-grey">Applicant withdrawal of application</span>
+                }
+            </p>
 
         </div>
     </div>

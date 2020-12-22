@@ -7,12 +7,13 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
 {
     public class RoatpGatewayApplicationViewModel : OrganisationDetailsViewModel
     {
-        public Guid Id { get; }
         public Guid ApplicationId { get; set; }
         public Guid OrgId { get; }
 
         public string ApplicationStatus { get; }
+        public string OversightStatus { get; }
         public string GatewayReviewStatus { get; set; }
+
         public string OptionAskClarificationText { get; set; }
         public string OptionFailedText { get; set; }
         public string OptionApprovedText { get; set; }
@@ -59,11 +60,11 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
 
         public RoatpGatewayApplicationViewModel(Apply application)
         {
-            Id = application.Id;
             ApplicationId = application.ApplicationId;
             OrgId = application.OrganisationId;
 
             ApplicationStatus = application.ApplicationStatus;
+            OversightStatus = application.OversightStatus;
             GatewayReviewStatus = application.GatewayReviewStatus;
 
             GatewayUserName = application.GatewayUserName;
