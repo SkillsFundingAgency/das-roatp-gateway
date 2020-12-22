@@ -1,0 +1,61 @@
+﻿@using SFA.DAS.AdminService.Common.Extensions;
+@using SFA.DAS.RoatpGateway.Domain;
+@model SFA.DAS.RoatpGateway.Web.ViewModels.RoepaoPageViewModel
+
+@{
+    ViewBag.Title = $"Gateway - {Model.Heading}";
+    Layout = "_Layout";
+}
+
+<partial name="~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml" />
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <partial name="~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml" />
+            <span class="govuk-caption-xl">
+                @Model.Caption
+            </span>
+            <h1 class="govuk-heading-xl">@Model.Heading</h1>
+
+            <div class="govuk-!-margin-bottom-4">
+                @if (Model.Ukprn != null)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        UKPRN: @Model.Ukprn
+                    </p>
+                }
+
+                @if (Model.ApplyLegalName != null)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Legal name: @Model.ApplyLegalName
+                    </p>
+                }
+
+                @if (Model.ApplicationSubmittedOn != null)
+                {
+                    <p class="govuk-body govuk-!-margin-bottom-0">
+                        Application submitted on: @Model.ApplicationSubmittedOn.ToSfaShortDateString()
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+    <partial name="~/Views/Gateway/Pages/_GatewayClarificationDetails.cshtml" />
+    @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress || Model.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <form class="js-disable-on-submit" asp-action="ClarifyRoepaoPage" asp-controller="RoatpGatewayRegisterChecks">
+                    <partial name="~/Views/Gateway/Pages/_GatewayClarificationSection.cshtml" />
+                    <button class="govuk-button" type="submit">Save and continue</button>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <partial name="~/Views/Gateway/Pages/_GatewayCheckOutcome.cshtml" />
+    }
+</main>

@@ -29,7 +29,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
             var fileStream = await response.Content.ReadAsStreamAsync();
             var result = new FileStreamResult(fileStream, response.Content.Headers.ContentType.MediaType);
-            result.FileDownloadName = response.Content.Headers.ContentDisposition.FileName;
+            result.FileDownloadName = response.Content.Headers.ContentDisposition.FileName.Replace("\"","");
             return result;
         }
 

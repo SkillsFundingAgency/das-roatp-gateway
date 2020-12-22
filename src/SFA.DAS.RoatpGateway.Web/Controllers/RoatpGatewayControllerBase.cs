@@ -81,16 +81,40 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             return await SubmitGatewayPageAnswer(command);
         }
 
+
+        protected async Task<IActionResult> ValidateAndUpdateClarificationPageAnswer<VM>(SubmitGatewayPageAnswerCommand command,
+            Func<Task<VM>> viewModelBuilder,
+            string errorView) where VM : RoatpGatewayPageViewModel
+        {
+            var validationResponse = await GatewayValidator.ValidateClarification(command);
+            if (validationResponse.Errors != null && validationResponse.Errors.Any())
+            {
+                var viewModel = await viewModelBuilder.Invoke();
+                viewModel.Status = command.Status;
+                viewModel.OptionFailText = command.OptionFailText;
+                viewModel.OptionInProgressText = command.OptionInProgressText;
+                viewModel.OptionClarificationText = command.OptionClarificationText;
+                viewModel.OptionPassText = command.OptionPassText;
+                viewModel.ClarificationAnswer = command.ClarificationAnswer;
+                viewModel.ErrorMessages = validationResponse.Errors;
+                
+                return View(errorView, viewModel);
+            }
+
+            return await SubmitGatewayPageAnswer(command);
+        }
+
         protected async Task<IActionResult> SubmitGatewayPageAnswer(SubmitGatewayPageAnswerCommand command)
         {
             var username = HttpContext.User.UserDisplayName();
             var userId = HttpContext.User.UserId();
             var comments = SetupGatewayPageOptionTexts(command);
+            var clarificationAnswer = command.ClarificationAnswer;
 
-            _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswer - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}'");
+            _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswer - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer {clarificationAnswer}");
             try
             {
-                await _applyApiClient.SubmitGatewayPageAnswer(command.ApplicationId, command.PageId, command.Status, userId, username, comments);
+                await _applyApiClient.SubmitGatewayPageAnswer(command.ApplicationId, command.PageId, command.Status, userId, username, comments, clarificationAnswer);
             }
             catch (Exception ex)
             {
@@ -100,6 +124,5 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId });
         }
-
     }
 }

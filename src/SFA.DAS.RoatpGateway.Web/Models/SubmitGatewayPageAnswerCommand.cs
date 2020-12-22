@@ -12,6 +12,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
         public string OptionFailText { get; set; }
         public string OptionInProgressText { get; set; }
         public string OptionClarificationText { get; set; }
+        public string ClarificationAnswer { get; set; }
 
         public SubmitGatewayPageAnswerCommand()
         {
@@ -27,6 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
             OptionFailText = viewModel.OptionFailText;
             OptionInProgressText = viewModel.OptionInProgressText;
             OptionClarificationText = viewModel.OptionClarificationText;
+            ClarificationAnswer = viewModel.ClarificationAnswer;
         }
     }
 }

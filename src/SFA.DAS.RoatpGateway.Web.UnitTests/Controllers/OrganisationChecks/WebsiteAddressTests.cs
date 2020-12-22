@@ -19,6 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
     {
         private RoatpGatewayOrganisationChecksController _controller;
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
+        private static string ClarificationAnswer => "Clarification answer";
 
         private string comment = "test comment";
         private string viewname = "~/Views/Gateway/pages/Website.cshtml";
@@ -48,7 +49,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
 
-            _orchestrator.Setup(x => x.GetWebsiteViewModel(new GetWebsiteRequest(applicationId, Username))).ReturnsAsync(vm);
+            _orchestrator.Setup(x => x.GetWebsiteViewModel(It.IsAny<GetWebsiteRequest>())).ReturnsAsync(vm);
 
             var result = _controller.GetWebsitePage(applicationId).Result;
             var viewResult = result as ViewResult;
@@ -74,7 +75,32 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.EvaluateWebsitePage(command).Result;
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment));
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment,null));
+            _orchestrator.Verify(x => x.GetWebsiteViewModel(new GetWebsiteRequest(applicationId, Username)), Times.Never());
+        }
+
+        [Test]
+        public void post_website_address_clarification_happy_path()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.WebsiteAddress;
+
+            var vm = new WebsiteViewModel
+            {
+                ApplicationId = applicationId,
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                OptionPassText = comment,
+                PageId = pageId,
+                ClarificationAnswer = ClarificationAnswer
+            };
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+            GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            var result = _controller.ClarifyWebsitePage(command).Result;
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment, ClarificationAnswer));
             _orchestrator.Verify(x => x.GetWebsiteViewModel(new GetWebsiteRequest(applicationId, Username)), Times.Never());
         }
 
@@ -110,6 +136,41 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var result = _controller.EvaluateWebsitePage(command).Result;
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public void post_website_address_clarification_path_with_errors()
+        {
+            var applicationId = Guid.NewGuid();
+
+            var vm = new WebsiteViewModel
+            {
+                ApplicationId = applicationId,
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ClarificationAnswer = ClarificationAnswer
+
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+
+            _orchestrator.Setup(x => x.GetWebsiteViewModel(It.Is<GetWebsiteRequest>(y => y.ApplicationId == vm.ApplicationId
+                && y.UserName == Username))).ReturnsAsync(vm);
+
+            var result = _controller.ClarifyWebsitePage(command).Result;
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

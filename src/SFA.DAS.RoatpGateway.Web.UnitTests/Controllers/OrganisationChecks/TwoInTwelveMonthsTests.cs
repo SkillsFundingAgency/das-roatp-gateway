@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.AdminService.Common.Testing.MockedObjects;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 {
@@ -20,6 +21,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
     {
         private RoatpGatewayOrganisationChecksController _controller;
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
+        private static string ClarificationAnswer => "Clarification answer";
 
         private string comment = "test comment";
         private string viewname = "~/Views/Gateway/pages/TwoInTwelveMonths.cshtml";
@@ -49,8 +51,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
 
-            _orchestrator.Setup(x => x.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, Username))).ReturnsAsync(vm);
-
+            _orchestrator.Setup(x => x.GetTwoInTwelveMonthsViewModel(It.IsAny<GetTwoInTwelveMonthsRequest>())).ReturnsAsync(vm);
             var result = await _controller.GetTwoInTwelveMonthsPage(applicationId);
             var viewResult = result as ViewResult;
             Assert.AreEqual(viewname, viewResult.ViewName);
@@ -75,9 +76,35 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             await _controller.EvaluateTwoInTwelveMonthsPage(command);
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment));
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment,null));
             _orchestrator.Verify(x => x.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, Username)), Times.Never());
         }
+
+        [Test]
+        public async Task post_two_in_twelve_months_clarification_happy_path()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.TwoInTwelveMonths;
+
+            var vm = new TwoInTwelveMonthsViewModel
+            {
+                ApplicationId = applicationId,
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                OptionPassText = comment,
+                PageId = pageId,
+                ClarificationAnswer = ClarificationAnswer
+            };
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+            GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            await _controller.ClarifyTwoInTwelveMonthsPage(command);
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment, ClarificationAnswer));
+            _orchestrator.Verify(x => x.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, Username)), Times.Never());
+        }
+
 
         [Test]
         public async Task post_two_in_twelve_months_path_with_errors()
@@ -111,6 +138,41 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             await _controller.EvaluateTwoInTwelveMonthsPage(command);
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public async Task post_two_in_twelve_months_clarification_path_with_errors()
+        {
+            var applicationId = Guid.NewGuid();
+
+            var vm = new TwoInTwelveMonthsViewModel
+            {
+                ApplicationId = applicationId,
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ClarificationAnswer = ClarificationAnswer
+
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+
+            _orchestrator.Setup(x => x.GetTwoInTwelveMonthsViewModel(It.Is<GetTwoInTwelveMonthsRequest>(y => y.ApplicationId == vm.ApplicationId
+                && y.UserName == Username))).ReturnsAsync(vm);
+
+            await _controller.ClarifyTwoInTwelveMonthsPage(command);
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }
