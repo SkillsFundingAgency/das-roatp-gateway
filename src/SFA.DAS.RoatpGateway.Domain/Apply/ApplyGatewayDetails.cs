@@ -7,5 +7,6 @@ namespace SFA.DAS.RoatpGateway.Domain.Apply
         public DateTime? SourcesCheckedOn { get; set; }
         public string Comments { get; set; }
         public DateTime? OutcomeDateTime { get; set; }
+        public string GatewaySubcontractorDeclarationClarificationUpload { get; set; }
     }
 }

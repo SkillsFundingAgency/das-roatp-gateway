@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,10 +50,63 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclaration/Clarification")]
         public async Task<IActionResult> ClarifySubcontractorDeclarationPage(SubmitGatewayPageAnswerCommand command)
         {
-            var isClarificationFileUpdate = HttpContext.Request.Form["submitClarificationFile"].Count!=0;
+            var isClarificationFileUpdate = HttpContext.Request.Form["submitClarificationFile"].Count != 0;
+            var isClarificationForm = HttpContext.Request.Form["submitClarificationForm"].Count != 0;
+            var filesToUpload = HttpContext.Request.Form.Files;
+
+            if (isClarificationFileUpdate)
+            {
+                
+                var validationResponse = GatewayValidator.ValidateClarificationFileUpload(filesToUpload);
+                if (validationResponse.Errors != null && validationResponse.Errors.Count > 0)
+                {
+                    var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
+                        new GetSubcontractorDeclarationRequest(command.ApplicationId,
+                            HttpContext.User.UserDisplayName()));
+                    viewModel.ErrorMessages = validationResponse.Errors;
+                    
+                    return View($"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml", viewModel);
+                }
+            }
+
+            if (isClarificationFileUpdate)
+            {
+                var newClarificationVm = await ProcessUploadedFilesAndRebuildViewModel(command,filesToUpload);
+                return View($"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml", newClarificationVm);
+            }
+
 
             Func<Task<SubcontractorDeclarationViewModel>> viewModelBuilder = () => _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml");
+        }
+
+        private async Task<SubcontractorDeclarationViewModel> ProcessUploadedFilesAndRebuildViewModel(SubmitGatewayPageAnswerCommand command, IFormFileCollection filesToUpload)
+        {
+            var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
+                new GetSubcontractorDeclarationRequest(command.ApplicationId,
+                    HttpContext.User.UserDisplayName()));
+
+            if (filesToUpload != null && filesToUpload.Count > 0)
+            {
+                var fileToUpload = filesToUpload[0].FileName;
+               
+                    var fileUploadedSuccessfully = await _applyApiClient.UploadClarificationFile(applicationId,
+                        _contextAccessor.HttpContext.User.UserId(), vm.FilesToUpload);
+
+
+                    if (fileUploadedSuccessfully)
+                    {
+                        if (financialReviewDets.ClarificationFiles == null)
+                            financialReviewDets.ClarificationFiles = new List<ClarificationFile>();
+
+                        financialReviewDets.ClarificationFiles.Add(new ClarificationFile
+                            { Filename = fileToUpload });
+                    }
+                
+            }
+
+
+            return viewModel;
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/OfficeForStudents")]

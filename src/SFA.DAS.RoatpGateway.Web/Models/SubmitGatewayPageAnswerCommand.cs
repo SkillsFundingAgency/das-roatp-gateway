@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.RoatpGateway.Web.Models
 {
@@ -13,7 +14,8 @@ namespace SFA.DAS.RoatpGateway.Web.Models
         public string OptionInProgressText { get; set; }
         public string OptionClarificationText { get; set; }
         public string ClarificationAnswer { get; set; }
-
+        public string ClarificationFile { get; set; }
+        public IFormFileCollection ClarificationFileUploads { get; set; }
         public SubmitGatewayPageAnswerCommand()
         {
 
