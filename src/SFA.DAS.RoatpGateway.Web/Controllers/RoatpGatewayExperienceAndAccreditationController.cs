@@ -90,18 +90,18 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 var fileToUpload = filesToUpload[0].FileName;
                
-                    var fileUploadedSuccessfully = await _applyApiClient.UploadClarificationFile(applicationId,
-                        _contextAccessor.HttpContext.User.UserId(), vm.FilesToUpload);
-
-
-                    if (fileUploadedSuccessfully)
-                    {
-                        if (financialReviewDets.ClarificationFiles == null)
-                            financialReviewDets.ClarificationFiles = new List<ClarificationFile>();
-
-                        financialReviewDets.ClarificationFiles.Add(new ClarificationFile
-                            { Filename = fileToUpload });
-                    }
+                    // var fileUploadedSuccessfully = await _applyApiClient.UploadClarificationFile(applicationId,
+                    //     _contextAccessor.HttpContext.User.UserId(), vm.FilesToUpload);
+                    //
+                    //
+                    // if (fileUploadedSuccessfully)
+                    // {
+                    //     if (financialReviewDets.ClarificationFiles == null)
+                    //         financialReviewDets.ClarificationFiles = new List<ClarificationFile>();
+                    //
+                    //     financialReviewDets.ClarificationFiles.Add(new ClarificationFile
+                    //         { Filename = fileToUpload });
+                    // }
                 
             }
 
