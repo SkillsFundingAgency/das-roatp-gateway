@@ -33,6 +33,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             var subcontractorDeclaration = await _experienceAndAccreditationApiClient.GetSubcontractorDeclaration(request.ApplicationId);
 
+            var commonDetails = await _applyApiClient.GetPageCommonDetails(request.ApplicationId, GatewayPageIds.SubcontractorDeclaration, request.UserName);
+            model.ClarificationFile = commonDetails.GatewaySubcontractorDeclarationClarificationUpload;
+
             model.HasDeliveredTrainingAsSubcontractor = subcontractorDeclaration.HasDeliveredTrainingAsSubcontractor;
             model.ContractFileName = subcontractorDeclaration.ContractFileName;
 

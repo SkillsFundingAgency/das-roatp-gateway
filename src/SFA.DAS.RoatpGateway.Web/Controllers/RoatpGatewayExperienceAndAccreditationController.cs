@@ -50,8 +50,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclaration/Clarification")]
         public async Task<IActionResult> ClarifySubcontractorDeclarationPage(SubmitGatewayPageAnswerCommand command)
         {
+
             var isClarificationFileUpdate = HttpContext.Request.Form["submitClarificationFile"].Count != 0;
             var isClarificationForm = HttpContext.Request.Form["submitClarificationForm"].Count != 0;
+            var isRemoveClarificationFile = HttpContext.Request.Form["removeClarificationFile"].Count != 0;
             var filesToUpload = HttpContext.Request.Form.Files;
 
             if (isClarificationFileUpdate)
@@ -67,11 +69,14 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     
                     return View($"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml", viewModel);
                 }
+            
+                var newClarificationVm = await ProcessSubcontractorDeclarationuploadAndRebuildViewModel(command,filesToUpload);
+                return View($"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml", newClarificationVm);
             }
 
-            if (isClarificationFileUpdate)
+            if (isRemoveClarificationFile)
             {
-                var newClarificationVm = await ProcessUploadedFilesAndRebuildViewModel(command,filesToUpload);
+                var newClarificationVm = await RemoveSubcontractorDeclarationuploadAndRebuildViewModel(command);
                 return View($"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml", newClarificationVm);
             }
 
@@ -80,7 +85,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml");
         }
 
-        private async Task<SubcontractorDeclarationViewModel> ProcessUploadedFilesAndRebuildViewModel(SubmitGatewayPageAnswerCommand command, IFormFileCollection filesToUpload)
+        private async Task<SubcontractorDeclarationViewModel> ProcessSubcontractorDeclarationuploadAndRebuildViewModel(SubmitGatewayPageAnswerCommand command, IFormFileCollection filesToUpload)
         {
             var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
                 new GetSubcontractorDeclarationRequest(command.ApplicationId,
@@ -90,22 +95,35 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 var fileToUpload = filesToUpload[0].FileName;
                
-                    // var fileUploadedSuccessfully = await _applyApiClient.UploadClarificationFile(applicationId,
-                    //     _contextAccessor.HttpContext.User.UserId(), vm.FilesToUpload);
-                    //
-                    //
-                    // if (fileUploadedSuccessfully)
-                    // {
-                    //     if (financialReviewDets.ClarificationFiles == null)
-                    //         financialReviewDets.ClarificationFiles = new List<ClarificationFile>();
-                    //
-                    //     financialReviewDets.ClarificationFiles.Add(new ClarificationFile
-                    //         { Filename = fileToUpload });
-                    // }
-                
+                    var fileUploadedSuccessfully = await _applyApiClient.UploadSubcontractorDeclarationClarificationFile(command.ApplicationId,
+                        HttpContext.User.UserId(), HttpContext.User.UserDisplayName(), filesToUpload);
+                    
+                    if (fileUploadedSuccessfully)
+                        viewModel.ClarificationFile = fileToUpload;
+
             }
 
+            return viewModel;
+        }
 
+        private async Task<SubcontractorDeclarationViewModel> RemoveSubcontractorDeclarationuploadAndRebuildViewModel(SubmitGatewayPageAnswerCommand command)
+        {
+            var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
+                new GetSubcontractorDeclarationRequest(command.ApplicationId,
+                    HttpContext.User.UserDisplayName()));
+
+
+
+
+            // var fileRemoved = await _applyApiClient.RemoveClarificationFile(applicationId,
+            //     _contextAccessor.HttpContext.User.UserId(), removeClarificationFileName);
+            //MFCMFC
+            var fileRemovedSuccessfully = true;
+
+                if (fileRemovedSuccessfully)
+                    viewModel.ClarificationFile = null;
+
+            
             return viewModel;
         }
 

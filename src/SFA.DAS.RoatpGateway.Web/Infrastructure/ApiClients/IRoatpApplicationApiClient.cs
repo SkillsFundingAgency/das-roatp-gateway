@@ -7,6 +7,7 @@ using SFA.DAS.RoatpGateway.Domain.Ukrlp;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
@@ -49,5 +50,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task<ContactDetails> GetContactDetails(Guid applicationId);
 
+        Task<bool> UploadSubcontractorDeclarationClarificationFile(Guid applicationId, string userId, string userName, IFormFileCollection clarificationFiles);
     }
 }

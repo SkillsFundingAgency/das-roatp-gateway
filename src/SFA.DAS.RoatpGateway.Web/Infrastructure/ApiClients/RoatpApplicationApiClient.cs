@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RoatpGateway.Domain;
@@ -11,6 +13,7 @@ using SFA.DAS.RoatpGateway.Domain.Roatp;
 using System.Net.Http;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain.Apply;
@@ -237,6 +240,46 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task<ContactDetails> GetContactDetails(Guid applicationId)
         {
             return await Get<ContactDetails>($"/Application/{applicationId}/Contact");
+        }
+
+        public async Task<bool> UploadSubcontractorDeclarationClarificationFile(Guid applicationId, string userId, string userName,
+            IFormFileCollection clarificationFiles)
+        {
+            var fileName = string.Empty;
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(userId), "userId");
+            content.Add(new StringContent(userName), "userName");
+
+            if (clarificationFiles != null && clarificationFiles.Any())
+            {
+                foreach (var file in clarificationFiles)
+                {
+                    fileName = file.FileName;
+                    var fileContent = new StreamContent(file.OpenReadStream())
+                    {
+                        Headers =
+                        {
+                            ContentLength = file.Length, ContentType = new MediaTypeHeaderValue(file.ContentType)
+                        }
+                    };
+                    content.Add(fileContent, file.FileName, file.FileName);
+                }
+
+                try
+                {
+                    var response = await _httpClient.PostAsync($"/Gateway/SubcontractorDeclarationClarification/{applicationId}/Upload", content);
+
+                    return response.StatusCode == HttpStatusCode.OK;
+                }
+                catch (HttpRequestException ex)
+                {
+                    _logger.LogError(ex,
+                        $"Error when submitting Clarification File update for Application: {applicationId} | Filename: {fileName}");
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
