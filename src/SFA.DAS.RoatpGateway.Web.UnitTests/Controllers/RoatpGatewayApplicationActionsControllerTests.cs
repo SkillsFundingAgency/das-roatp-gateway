@@ -124,6 +124,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         {
             var applicationId = Guid.NewGuid();
 
+            var application = new Apply
+            {
+                ApplicationId = applicationId,
+                OversightStatus = OversightReviewStatus.New,
+                ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
+            };
+
             var viewModel = new RoatpRemoveApplicationViewModel
             {
                 ApplicationId = applicationId,
@@ -132,7 +139,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var validationErrors = new List<ValidationErrorDetail>();
 
-            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId, OversightStatus = OversightReviewStatus.New });
+            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(application);
             _removeApplicationValidator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = validationErrors });
 
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
@@ -227,16 +234,23 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         {
             var applicationId = Guid.NewGuid();
 
+            var application = new Apply
+            {
+                ApplicationId = applicationId,
+                OversightStatus = OversightReviewStatus.New,
+                ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
+            };
+
             var viewModel = new RoatpWithdrawApplicationViewModel
             {
                 ApplicationId = applicationId,
                 ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueYes,
                 OptionYesText = "Comments"
-            };
+            };       
 
             var validationErrors = new List<ValidationErrorDetail>();
 
-            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId, OversightStatus = OversightReviewStatus.New });
+            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(application);
             _withdrawApplicationValidator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = validationErrors });
 
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
