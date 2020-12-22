@@ -4,13 +4,13 @@ namespace SFA.DAS.RoatpGateway.Domain.Apply
 {
     public class Apply
     {
-        public Guid Id { get; set; }
         public Guid ApplicationId { get; set; }
         public Guid OrganisationId { get; set; }
+
         public string ApplicationStatus { get; set; }
-        public string AssessorReviewStatus { get; set; }
         public string GatewayReviewStatus { get; set; }
-        public string FinancialReviewStatus { get; set; }
+        public string OversightStatus { get; set; }
+
         public ApplyData ApplyData { get; set; }
         public FinancialReviewDetails FinancialGrade { get; set; }
 

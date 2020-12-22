@@ -97,6 +97,11 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
+            else if (application.OversightStatus == OversightReviewStatus.Successful
+                || application.OversightStatus == OversightReviewStatus.Unsuccessful)
+            {
+                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), "RoatpGateway", new { applicationId });
+            }
 
             var validationResponse = await _withdrawApplicationValidator.Validate(viewModel);
             if (validationResponse.Errors != null && validationResponse.Errors.Any())
