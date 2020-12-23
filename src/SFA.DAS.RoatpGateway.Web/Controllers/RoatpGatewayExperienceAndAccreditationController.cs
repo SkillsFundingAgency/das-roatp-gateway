@@ -195,8 +195,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/OfstedDetails.cshtml");
         }
 
-
-
         private static void HydrateSucontractorDeclarationViewModelFromCommand(SubmitGatewayPageAnswerCommand command,
             SubcontractorDeclarationViewModel viewModel)
         {
