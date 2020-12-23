@@ -13,6 +13,7 @@ namespace SFA.DAS.RoatpGateway.Domain
         public DateTime? SubmittedDate { get; set; }
         public DateTime? FeedbackAddedDate { get; set; }
         public DateTime? ClosedDate { get; set; }
+        public DateTime? ClarificationRequestedDate { get; set; }
         public string ApplicationStatus { get; set; }
         public string GatewayReviewStatus { get; set; }
         public string AssessorReviewStatus { get; set; }
