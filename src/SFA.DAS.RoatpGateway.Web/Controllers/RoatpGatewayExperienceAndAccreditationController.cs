@@ -65,6 +65,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
                         new GetSubcontractorDeclarationRequest(command.ApplicationId,
                             HttpContext.User.UserDisplayName()));
+                    HydrateSucontractorDeclarationViewModelFromCommand(command, viewModel);
                     viewModel.ErrorMessages = validationResponse.Errors;
                     
                     return View($"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml", viewModel);
@@ -91,13 +92,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 new GetSubcontractorDeclarationRequest(command.ApplicationId,
                     HttpContext.User.UserDisplayName()));
 
-            viewModel.ClarificationAnswer = command.ClarificationAnswer;
-            viewModel.ClarificationFile = command.ClarificationFile;
-            viewModel.OptionClarificationText = command.OptionClarificationText;
-            viewModel.OptionPassText = command.OptionPassText;
-            viewModel.OptionFailText = command.OptionFailText;
-            viewModel.OptionInProgressText = command.OptionInProgressText;
-            viewModel.Status = command.Status;
+            HydrateSucontractorDeclarationViewModelFromCommand(command, viewModel);
             if (filesToUpload != null && filesToUpload.Count > 0)
             {
                 var fileToUpload = filesToUpload[0].FileName;
@@ -120,14 +115,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
                 new GetSubcontractorDeclarationRequest(command.ApplicationId,
                     HttpContext.User.UserDisplayName()));
-
-            viewModel.ClarificationAnswer = command.ClarificationAnswer;
-            viewModel.ClarificationFile = command.ClarificationFile;
-            viewModel.OptionClarificationText = command.OptionClarificationText;
-            viewModel.OptionPassText = command.OptionPassText;
-            viewModel.OptionFailText = command.OptionFailText;
-            viewModel.OptionInProgressText = command.OptionInProgressText;
-            viewModel.Status = command.Status;
+            HydrateSucontractorDeclarationViewModelFromCommand(command, viewModel);
 
             if (fileRemovedSuccessfully)
                     viewModel.ClarificationFile = null;
@@ -205,6 +193,20 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             Func<Task<OfstedDetailsViewModel>> viewModelBuilder = () => _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/OfstedDetails.cshtml");
+        }
+
+
+
+        private static void HydrateSucontractorDeclarationViewModelFromCommand(SubmitGatewayPageAnswerCommand command,
+            SubcontractorDeclarationViewModel viewModel)
+        {
+            viewModel.ClarificationAnswer = command.ClarificationAnswer;
+            viewModel.ClarificationFile = command.ClarificationFile;
+            viewModel.OptionClarificationText = command.OptionClarificationText;
+            viewModel.OptionPassText = command.OptionPassText;
+            viewModel.OptionFailText = command.OptionFailText;
+            viewModel.OptionInProgressText = command.OptionInProgressText;
+            viewModel.Status = command.Status;
         }
     }
 }
