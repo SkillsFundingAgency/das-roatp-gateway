@@ -105,7 +105,7 @@
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">Upload a copy of a legally binding contract between your organisation and a main or employer provider</td>
-                            <td class="govuk-table__cell"><a href="@Url.Action("SubcontractorDeclarationContractFile", "RoatpGatewayExperienceAndAccreditation")">@Model.ContractFileName</a></td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("SubcontractorDeclarationContractFile", "RoatpGatewayExperienceAndAccreditation")">@Model.ContractFileName</a></td>
                         </tr>
                     }
                 </tbody>
@@ -121,8 +121,7 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
 
-                <form class="js-disable-on-submit"
-                      method="post" enctype="multipart/form-data" asp-action="ClarifySubcontractorDeclarationPage" asp-controller="RoatpGatewayExperienceAndAccreditation">
+                <form method="post" enctype="multipart/form-data" asp-action="ClarifySubcontractorDeclarationPage" asp-controller="RoatpGatewayExperienceAndAccreditation">
                     <h2 class="govuk-heading-l">
                         Clarified answer
                     </h2>
@@ -154,50 +153,56 @@
                         </div>
                     </div>
                     
-                @if (string.IsNullOrEmpty(Model.ClarificationFile))
-                {
-                    <div class="govuk-form-group @clarificationFileFormGroupError">
-                        <label class="govuk-label" asp-for="ClarificationFile">
-                            Upload a file (optional)
-                        </label>
-                        @if (!string.IsNullOrEmpty(clarificationFileErrorMessage))
-                        {
-                            <span class="govuk-error-message">@clarificationFileErrorMessage</span>
-                        }
-                        <input class="govuk-file-upload" type="file" asp-for="ClarificationFile"
-                               accept=".pdf,application/pdf"/>
-                    </div>
-                }
-                else
-                {
-                    <table class="govuk-table">
-                        <caption class="govuk-visually-hidden">Uploaded file</caption>
-                        <thead class="govuk-table__head">
-                        <tr class="govuk-table__row">
-                            <th scope="col" class="govuk-table__header">Uploaded file</th>
-                            <th scope="col" class="govuk-table__header govuk-table__header--numeric"></th>
-                        </tr>
-                        </thead>
-                        <tbody class="govuk-table__body">
-                        <tr class="govuk-table__row">
-                                <th scope="row" class="govuk-table__header">@Model.ClarificationFile</th>
-                                <td class="govuk-table__cell govuk-table__cell--numeric">
-                                    <button class="das-button--inline-link" data-module="govuk-button"
-                                            data-prevent-double-click="true" name="removeClarificationFile"
-                                            value="@Model.ClarificationFile">
-                                        Remove
-                                    </button>
-                                </td>
-                            </tr>
-                        
-                        </tbody>
-                    </table>
-                }
+                    @if (string.IsNullOrEmpty(Model.ClarificationFile))
+                    {
+                        <div class="govuk-form-group @clarificationFileFormGroupError">
+                            <label class="govuk-label" asp-for="ClarificationFile">
+                                Upload a file (optional)
+                            </label>
+                            @if (!string.IsNullOrEmpty(clarificationFileErrorMessage))
+                            {
+                                <span class="govuk-error-message">@clarificationFileErrorMessage</span>
+                            }
+                            <input class="govuk-file-upload" type="file" asp-for="ClarificationFile"
+                                accept=".pdf,application/pdf"/>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="govuk-form-group">
+                            <table class="govuk-table">
+                                <caption class="govuk-visually-hidden">Uploaded file</caption>
+                                <thead class="govuk-table__head">
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header">Uploaded file</th>
+                                    <th scope="col" class="govuk-table__header govuk-table__header--numeric"></th>
+                                </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+                                <tr class="govuk-table__row">
+                                        <th scope="row" class="govuk-table__header">@Model.ClarificationFile</th>
+                                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                                            <button class="das-button--inline-link"
+                                                     name="removeClarificationFile"
+                                                    value="@Model.ClarificationFile">
+                                                Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    }
 
-                <button class="govuk-butto govuk-button--secondary" data-module="govuk-button"
-                        data-prevent-double-click="true" name="submitClarificationFile">
-                    Upload File
-                </button><br />
+                    @if (string.IsNullOrEmpty(Model.ClarificationFile))
+                    {
+                        <div class="govuk-form-group">
+                            <button class="govuk-button govuk-button--secondary" name="submitClarificationFile">
+                                Upload File
+                            </button>
+                        </div>
+                    }
 
                     <div class="govuk-form-group @outcomeCheckFormGroupError">
                         <fieldset class="govuk-fieldset">
@@ -356,10 +361,8 @@
                             <input type="hidden" asp-for="ClarificationFile" />
                         </fieldset>
                     </div>
-                    <button class="govuk-butto" data-module="govuk-button" data-prevent-double-click="true" name="submitClarificationForm">Save and continue</button>
+                    <button class="govuk-button" name="submitClarificationForm">Save and continue</button>
 
-           
-                   
                 </form>
             </div>
         </div>
