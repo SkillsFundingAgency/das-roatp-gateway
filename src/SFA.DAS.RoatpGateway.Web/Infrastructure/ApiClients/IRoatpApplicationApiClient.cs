@@ -51,5 +51,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<ContactDetails> GetContactDetails(Guid applicationId);
 
         Task<bool> UploadSubcontractorDeclarationClarificationFile(Guid applicationId, string userId, string userName, IFormFileCollection clarificationFiles);
+        Task<bool> RemoveSubcontractorDeclarationClarificationFile(Guid application, string userId, string userName, string fileName);
     }
 }

@@ -91,6 +91,13 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 new GetSubcontractorDeclarationRequest(command.ApplicationId,
                     HttpContext.User.UserDisplayName()));
 
+            viewModel.ClarificationAnswer = command.ClarificationAnswer;
+            viewModel.ClarificationFile = command.ClarificationFile;
+            viewModel.OptionClarificationText = command.OptionClarificationText;
+            viewModel.OptionPassText = command.OptionPassText;
+            viewModel.OptionFailText = command.OptionFailText;
+            viewModel.OptionInProgressText = command.OptionInProgressText;
+            viewModel.Status = command.Status;
             if (filesToUpload != null && filesToUpload.Count > 0)
             {
                 var fileToUpload = filesToUpload[0].FileName;
@@ -108,22 +115,23 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         private async Task<SubcontractorDeclarationViewModel> RemoveSubcontractorDeclarationuploadAndRebuildViewModel(SubmitGatewayPageAnswerCommand command)
         {
+            var fileRemovedSuccessfully = await _applyApiClient.RemoveSubcontractorDeclarationClarificationFile(command.ApplicationId, HttpContext.User.UserId(), HttpContext.User.UserDisplayName(), command.ClarificationFile);
+
             var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
                 new GetSubcontractorDeclarationRequest(command.ApplicationId,
                     HttpContext.User.UserDisplayName()));
 
+            viewModel.ClarificationAnswer = command.ClarificationAnswer;
+            viewModel.ClarificationFile = command.ClarificationFile;
+            viewModel.OptionClarificationText = command.OptionClarificationText;
+            viewModel.OptionPassText = command.OptionPassText;
+            viewModel.OptionFailText = command.OptionFailText;
+            viewModel.OptionInProgressText = command.OptionInProgressText;
+            viewModel.Status = command.Status;
 
-
-
-            // var fileRemoved = await _applyApiClient.RemoveClarificationFile(applicationId,
-            //     _contextAccessor.HttpContext.User.UserId(), removeClarificationFileName);
-            //MFCMFC
-            var fileRemovedSuccessfully = true;
-
-                if (fileRemovedSuccessfully)
+            if (fileRemovedSuccessfully)
                     viewModel.ClarificationFile = null;
 
-            
             return viewModel;
         }
 

@@ -15,6 +15,7 @@ using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 
@@ -274,12 +275,28 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
                 catch (HttpRequestException ex)
                 {
                     _logger.LogError(ex,
-                        $"Error when submitting Clarification File update for Application: {applicationId} | Filename: {fileName}");
+                        $"Error when submitting Subcontractor Declaration Clarification File update for Application: {applicationId} | Filename: {fileName}");
                     return false;
                 }
             }
 
             return true;
+        }
+
+        public async Task<bool> RemoveSubcontractorDeclarationClarificationFile(Guid applicationId, string userId, string userName, string fileName)
+        {
+            try
+            {
+                var response = await Post($"/Gateway/SubcontractorDeclarationClarification/{applicationId}/Remove", new { userId, userName, fileName });
+
+                return response == HttpStatusCode.OK;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex,
+                    $"Error when removing Subcontractor Declaration Clarification File for Application: {applicationId} | Filename: {fileName}");
+                return false;
+            }
         }
     }
 }
