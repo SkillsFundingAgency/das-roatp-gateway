@@ -207,6 +207,27 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
         }
 
+        public async Task ConfirmWithdrawApplication_When_already_withdrawn_returns_to_ViewApplication(string oversightStatus)
+        {
+            var applicationId = Guid.NewGuid();
+
+            var viewModel = new RoatpWithdrawApplicationViewModel
+            {
+                ApplicationId = applicationId,
+                ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueNo,
+                ErrorMessages = new List<ValidationErrorDetail>()
+            };
+
+            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId, ApplicationStatus = ApplicationStatus.Withdrawn });
+            _withdrawApplicationValidator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
+            var viewResult = result as RedirectToActionResult;
+
+            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
+            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+        }
+
         [Test]
         public async Task ConfirmWithdrawApplication_Yes_selected_And_fails_validation_returns_back_to_View()
         {
