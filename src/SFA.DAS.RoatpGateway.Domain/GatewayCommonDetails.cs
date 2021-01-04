@@ -21,5 +21,6 @@ namespace SFA.DAS.RoatpGateway.Domain
         public string Comments { get; set; }
         public DateTime? OutcomeMadeOn { get; set; }
         public string OutcomeMadeBy { get; set; }
+        public string GatewaySubcontractorDeclarationClarificationUpload { get; set; }
     }
 }

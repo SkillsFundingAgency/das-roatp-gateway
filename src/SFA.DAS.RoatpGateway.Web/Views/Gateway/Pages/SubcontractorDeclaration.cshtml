@@ -7,11 +7,13 @@
     Layout = "_Layout";
 }
 
-@{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml"); }
+@{
+    await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml"); }
 <main class="govuk-main-wrapper " id="main-content" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
+            @{
+                await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
             <span class="govuk-caption-xl">
                 @Model.Caption
             </span>
@@ -50,7 +52,7 @@
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">Upload a copy of a legally binding contract between your organisation and a main or employer provider</td>
-                            <td class="govuk-table__cell"><a href="@Url.Action("SubcontractorDeclarationContractFile", "RoatpGatewayExperienceAndAccreditation")">@Model.ContractFileName</a></td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="@Url.Action("SubcontractorDeclarationContractFile", "RoatpGatewayExperienceAndAccreditation")">@Model.ContractFileName</a></td>
                         </tr>
                     }
                 </tbody>
