@@ -32,6 +32,10 @@ namespace SFA.DAS.RoatpGateway.Web.Extensions
             viewModel.OutcomeMadeOn = commonDetails.OutcomeMadeOn;
             viewModel.OutcomeMadeBy = commonDetails.OutcomeMadeBy;
             viewModel.Comments = commonDetails.Comments;
+            viewModel.ClarificationComments = commonDetails.ClarificationComments;
+            viewModel.ClarificationBy = commonDetails.ClarificationBy;
+            viewModel.ClarificationDate = commonDetails.ClarificationDate;
+            viewModel.ClarificationAnswer = commonDetails.ClarificationAnswer;
 
             switch (commonDetails.Status)
             {
