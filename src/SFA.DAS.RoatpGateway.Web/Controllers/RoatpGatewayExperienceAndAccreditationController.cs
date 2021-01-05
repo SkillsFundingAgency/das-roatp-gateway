@@ -39,6 +39,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             return await _orchestrator.GetSubcontractorDeclarationContractFile(new GetSubcontractorDeclarationContractFileRequest(applicationId));
         }
 
+        [HttpGet("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclarationFileClarification/{filename}")]
+        public async Task<FileStreamResult> SubcontractorDeclarationContractFileClarification(Guid applicationId, string filename)
+        {
+            return await _orchestrator.GetSubcontractorDeclarationContractFileClarification(new GetSubcontractorDeclarationContractFileClarificationRequest(applicationId, filename));
+        }
+
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclaration")]
         public async Task<IActionResult> EvaluateSubcontractorDeclarationPage(SubmitGatewayPageAnswerCommand command)
         {

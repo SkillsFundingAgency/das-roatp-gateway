@@ -14,7 +14,7 @@
                         Outcome of check
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        <strong class="das-tag das-no-wrap">Clarification</strong>
+                        <strong class="das-tag das-tag--solid-purple das-no-wrap">Clarification</strong>
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -50,11 +50,26 @@
                         @Model.ClarificationAnswer
                     </dd>
                 </div>
+                @if (!string.IsNullOrEmpty(Model.ClarificationFile))
+                {
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                           Clarified upload
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            <a class="govuk-link" href="@Url.Action("SubcontractorDeclarationContractFileClarification", "RoatpGatewayExperienceAndAccreditation", new {filename = Model.ClarificationFile})">@Model.ClarificationFile</a>
+                        </dd>
+                    </div>
+                }
+
             </dl>
         </div>
     </div>
 }
 
+<h2 class="govuk-heading-m">
+   Outcome of Check
+</h2>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <dl class="govuk-summary-list">

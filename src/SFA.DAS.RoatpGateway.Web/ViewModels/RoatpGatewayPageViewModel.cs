@@ -40,5 +40,6 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string ClarificationComments { get; set; }
         public string ClarificationBy { get; set; }
         public DateTime? ClarificationDate { get; set; }
+        public string ClarificationFile { get; set; }
     }
 }

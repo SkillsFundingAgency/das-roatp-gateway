@@ -8,7 +8,6 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
 
         public string ContractFileName { get; set; }
 
-        public string ClarificationFile { get; set; }
         public IFormFileCollection FilesToUpload { get; set; }
     }
 }
