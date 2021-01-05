@@ -94,6 +94,32 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             ApplyApiClient.Verify(x =>
                 x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, null));
         }
+        [Test]
+         public async Task Clarifying_subcontractor_declaration_saves_evaluation_result()
+         {
+             var applicationId = Guid.NewGuid();
+             var pageId = GatewayPageIds.SubcontractorDeclaration;
+        
+             var vm = new SubcontractorDeclarationViewModel
+             {
+                 ApplicationId = applicationId,
+                 PageId = pageId,
+                 Status = SectionReviewStatus.Pass,
+                 SourcesCheckedOn = DateTime.Now,
+                 ErrorMessages = new List<ValidationErrorDetail>(),
+                 OptionPassText = "Some pass text",
+                 ClarificationAnswer = ClarificationAnswer
+             };
+        
+             var command = new SubmitGatewayPageAnswerCommand(vm);
+        
+             GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+        
+             await _controller.ClarifySubcontractorDeclarationPage(command);
+        
+             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, ClarificationAnswer));
+         }
+        
     }
 }
 
