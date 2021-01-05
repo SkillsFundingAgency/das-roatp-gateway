@@ -8,7 +8,10 @@
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <dl class="govuk-summary-list">
+            <h2 class="govuk-heading-m">
+                Clarification
+            </h2>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-8">
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">
                         Outcome of check
@@ -54,7 +57,7 @@
                 {
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
-                           Clarified upload
+                            Clarified upload
                         </dt>
                         <dd class="govuk-summary-list__value">
                             <a class="govuk-link" href="@Url.Action("SubcontractorDeclarationContractFileClarification", "RoatpGatewayExperienceAndAccreditation", new {filename = Model.ClarificationFile})">@Model.ClarificationFile</a>
@@ -67,12 +70,13 @@
     </div>
 }
 
-<h2 class="govuk-heading-m">
-   Outcome of Check
-</h2>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <dl class="govuk-summary-list">
+        <h2 class="govuk-heading-m">
+            Outcome of Check
+        </h2>
+        <dl class="govuk-summary-list govuk-!-margin-bottom-8">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     Outcome of check
@@ -116,8 +120,9 @@
                 </dd>
             </div>
         </dl>
-    </div>
-    <div class="govuk-grid-column-two-thirds">
+   
+        <p class="govuk-body">
         <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId">Back to gateway outcome</a>
+        </p>
     </div>
 </div>
