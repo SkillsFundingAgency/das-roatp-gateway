@@ -57,6 +57,13 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
+            else if (application.OversightStatus == OversightReviewStatus.Successful
+                || application.OversightStatus == OversightReviewStatus.Unsuccessful
+                || application.ApplicationStatus == ApplicationStatus.Withdrawn
+                || application.ApplicationStatus == ApplicationStatus.Removed)
+            {
+                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), "RoatpGateway", new { applicationId });
+            }
 
             var validationResponse = await _removeApplicationValidator.Validate(viewModel);
             if (validationResponse.Errors != null && validationResponse.Errors.Any())
@@ -99,7 +106,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
             else if (application.OversightStatus == OversightReviewStatus.Successful
                 || application.OversightStatus == OversightReviewStatus.Unsuccessful
-                || application.ApplicationStatus == ApplicationStatus.Withdrawn)
+                || application.ApplicationStatus == ApplicationStatus.Withdrawn
+                || application.ApplicationStatus == ApplicationStatus.Removed)
             {
                 return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), "RoatpGateway", new { applicationId });
             }

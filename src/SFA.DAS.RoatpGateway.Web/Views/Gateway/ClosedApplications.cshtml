@@ -72,7 +72,8 @@
                                         @item.OutcomeMadeBy
                                     </td>
                                     <td class="govuk-table__cell" data-label="Outcome">
-                                        @if (item.ApplicationStatus == ApplicationStatus.Withdrawn)
+                                        @if (item.ApplicationStatus == ApplicationStatus.Withdrawn
+                                           || item.ApplicationStatus == ApplicationStatus.Removed)
                                         {
                                             <div class="das-tag govuk-tag--inactive das-no-wrap">
                                                 @item.ApplicationStatus
