@@ -1,0 +1,42 @@
+@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpApplicationActionsViewModel
+@{
+    ViewBag.Title = "Gateway - Application removed";
+    Layout = "_Layout";
+}
+
+<div class="govuk-breadcrumbs">
+    <ol class="govuk-breadcrumbs__list">
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="Dashboard" asp-action="Index" class="govuk-breadcrumbs__link">RoATP dashboard</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-breadcrumbs__link">RoATP gateway applications</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item">
+            <a asp-controller="RoatpGateway" asp-action="ViewApplication" asp-route-applicationId="@Model.ApplicationId" class="govuk-breadcrumbs__link">Application assessment overview</a>
+        </li>
+        <li class="govuk-breadcrumbs__list-item" aria-current="page">Application actions</li>
+    </ol>
+</div>
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-9">
+                <h1 class="govuk-panel__title">
+                    Application removed
+                </h1>
+                <div class="govuk-panel__body">
+                    <strong>Application reference: @Model.ApplicationReferenceNumber</strong>
+                </div>
+            </div>
+            <p class="govuk-body">
+                This application will no longer be assessed to join the register of apprenticeship training providers.
+            </p>
+            <p class="govuk-body">
+                <a asp-controller="RoatpGateway" asp-action="NewApplications" class="govuk-link govuk-link--no-visited-state">
+                    Go to RoATP applications
+                </a>
+            </p>
+        </div>
+    </div>
+</main>

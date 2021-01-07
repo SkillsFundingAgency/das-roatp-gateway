@@ -73,8 +73,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
             else if (viewModel.ConfirmApplicationAction == HtmlAndCssElements.RadioButtonValueYes)
             {
-                // This would normally do something - to be implemented
-                return View("~/Views/Gateway/ConfirmRemoveApplication.cshtml", viewModel);
+                var username = HttpContext.User.UserDisplayName();
+                var userId = HttpContext.User.UserId();
+                await _applyApiClient.RemoveApplication(viewModel.ApplicationId, viewModel.OptionYesText, viewModel.OptionYesTextExternal, userId, username);
+
+                viewModel.ApplicationReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber;
+                return View("~/Views/Gateway/ApplicationRemoved.cshtml", viewModel);
             }
             else
             {
