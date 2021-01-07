@@ -22,7 +22,14 @@
                 }
             </p>
             <p class="govuk-body govuk-!-margin-bottom-1">
-                <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGatewayApplicationActions" asp-action="RemoveApplication" asp-route-applicationId="@Model.ApplicationId">Internal removal of application</a>
+                @if (Model.ApplicationStatus != ApplicationStatus.Removed)
+                {
+                    <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGatewayApplicationActions" asp-action="RemoveApplication" asp-route-applicationId="@Model.ApplicationId">Internal removal of application</a>
+                }
+                else
+                {
+                    <span class="das-!-color-dark-grey">Internal removal of application</span>
+                }
             </p>
             <p class="govuk-body govuk-!-margin-bottom-0">
                 @if (!hasOversightOutcome && Model.ApplicationStatus != ApplicationStatus.Withdrawn)
