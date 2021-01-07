@@ -32,7 +32,7 @@
                 }
             </p>
             <p class="govuk-body govuk-!-margin-bottom-0">
-                @if (!hasOversightOutcome && Model.ApplicationStatus != ApplicationStatus.Withdrawn)
+                @if (!hasOversightOutcome && Model.ApplicationStatus != ApplicationStatus.Withdrawn && Model.ApplicationStatus != ApplicationStatus.Removed)
                 {
                     <a class="govuk-link govuk-link--no-visited-state" asp-controller="RoatpGatewayApplicationActions" asp-action="WithdrawApplication" asp-route-applicationId="@Model.ApplicationId">Applicant withdrawal of application</a>
                 }
