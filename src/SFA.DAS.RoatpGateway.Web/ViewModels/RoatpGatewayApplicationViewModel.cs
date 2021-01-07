@@ -33,6 +33,11 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public DateTime? GatewayOutcomeDateTime { get; set; }
         public string GatewayUserName { get; set; }
 
+        public DateTime? ApplicationClosedOn { get; set; }
+        public string ApplicationClosedBy { get; set; }
+        public string ApplicationComments { get; set; }
+        public string ApplicationExternalComments { get; set; }
+
         // Model On Error
         public bool IsInvalid { get; set; }
 
@@ -85,6 +90,17 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
                 Ukprn = application.ApplyData.ApplyDetails.UKPRN;
                 OrganisationName = application.ApplyData.ApplyDetails.OrganisationName;
                 SubmittedDate = application.ApplyData.ApplyDetails.ApplicationSubmittedOn;
+
+                if (application.ApplicationStatus == RoatpGateway.Domain.ApplicationStatus.Withdrawn)
+                {
+                    ApplicationClosedOn = application.ApplyData.ApplyDetails.ApplicationWithdrawnOn;
+                    ApplicationClosedBy = application.ApplyData.ApplyDetails.ApplicationWithdrawnBy;
+                }
+                else if (application.ApplicationStatus == RoatpGateway.Domain.ApplicationStatus.Removed)
+                {
+                    ApplicationClosedOn = application.ApplyData.ApplyDetails.ApplicationRemovedOn;
+                    ApplicationClosedBy = application.ApplyData.ApplyDetails.ApplicationRemovedBy;
+                }
             }
 
             if (application.ApplyData?.GatewayReviewDetails != null)
@@ -92,6 +108,9 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
                 GatewayOutcomeDateTime = application.ApplyData.GatewayReviewDetails.OutcomeDateTime;
                 GatewayReviewComment = application.ApplyData.GatewayReviewDetails.Comments;
             }
+
+            ApplicationComments = application.Comments;
+            ApplicationExternalComments = application.ExternalComments;
         }
     }
 
