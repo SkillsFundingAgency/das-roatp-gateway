@@ -57,6 +57,13 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
+            else if (application.OversightStatus == OversightReviewStatus.Successful
+                || application.OversightStatus == OversightReviewStatus.Unsuccessful
+                || application.ApplicationStatus == ApplicationStatus.Withdrawn
+                || application.ApplicationStatus == ApplicationStatus.Removed)
+            {
+                return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), "RoatpGateway", new { applicationId });
+            }
 
             var validationResponse = await _removeApplicationValidator.Validate(viewModel);
             if (validationResponse.Errors != null && validationResponse.Errors.Any())
@@ -98,7 +105,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
             else if (application.OversightStatus == OversightReviewStatus.Successful
-                || application.OversightStatus == OversightReviewStatus.Unsuccessful)
+                || application.OversightStatus == OversightReviewStatus.Unsuccessful
+                || application.ApplicationStatus == ApplicationStatus.Withdrawn
+                || application.ApplicationStatus == ApplicationStatus.Removed)
             {
                 return RedirectToAction(nameof(RoatpGatewayController.ViewApplication), "RoatpGateway", new { applicationId });
             }
@@ -111,8 +120,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
             else if (viewModel.ConfirmApplicationAction == HtmlAndCssElements.RadioButtonValueYes)
             {
-                // This would normally do something - to be implemented
-                return View("~/Views/Gateway/ConfirmWithdrawApplication.cshtml", viewModel);
+                var username = HttpContext.User.UserDisplayName();
+                var userId = HttpContext.User.UserId();
+                await _applyApiClient.WithdrawApplication(viewModel.ApplicationId, viewModel.OptionYesText, userId, username);
+
+                viewModel.ApplicationReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber;
+                return View("~/Views/Gateway/ApplicationWithdrawn.cshtml", viewModel);
             }
             else
             {

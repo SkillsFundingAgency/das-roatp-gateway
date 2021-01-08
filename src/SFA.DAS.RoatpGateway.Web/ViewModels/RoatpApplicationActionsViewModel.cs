@@ -9,6 +9,8 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public Guid ApplicationId { get; set; }
         public string ApplicationStatus { get; set; }
 
+        public string ApplicationReferenceNumber { get; set; }
+
         public string Ukprn { get; set; }
         public string ApplyLegalName { get; set; }
         public string ApplicationRoute { get; set; }

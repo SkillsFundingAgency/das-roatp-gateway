@@ -16,6 +16,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Attributes
         {
             "PingController",
             "ErrorPageController",
+            "AccountController",
             "HomeController"
         };
 

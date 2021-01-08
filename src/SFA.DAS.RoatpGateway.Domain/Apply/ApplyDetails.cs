@@ -12,5 +12,7 @@ namespace SFA.DAS.RoatpGateway.Domain.Apply
         public string ProviderRouteName { get; set; }
         public DateTime? ApplicationSubmittedOn { get; set; }
         public Guid? ApplicationSubmittedBy { get; set; }
+        public DateTime? ApplicationWithdrawnOn { get; set; }
+        public string ApplicationWithdrawnBy { get; set; }
     }
 }
