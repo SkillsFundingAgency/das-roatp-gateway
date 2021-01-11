@@ -150,8 +150,9 @@
                             <div class="govuk-form-group">
                                 <a name="OptionApprovedText"></a>
                                 <label class="govuk-label" for="OptionApprovedText">
-                                    Add comments (optional)
+                                    Add your internal comments (optional)
                                 </label>
+                                <span id="OptionApprovedText--visibility-info" class="govuk-hint" aria-live="polite">These comments will be seen by governance</span>
                                 @if (!string.IsNullOrEmpty(Model.ErrorTextApproved))
                                 {
                                     <span class="govuk-error-message">
