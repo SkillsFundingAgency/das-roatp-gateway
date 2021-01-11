@@ -186,8 +186,9 @@
                             <div class="govuk-form-group">
                                 <a name="OptionFailedText"></a>
                                 <label class="govuk-label" for="OptionFailedText">
-                                    Add comments
+                                    Add your internal comments
                                 </label>
+                                <span id="OptionFailedText--visibility-info" class="govuk-hint" aria-live="polite">These comments will be seen by governance</span>
                                 @if (!string.IsNullOrEmpty(Model.ErrorTextFailed))
                                 {
                                     <span class="govuk-error-message">
