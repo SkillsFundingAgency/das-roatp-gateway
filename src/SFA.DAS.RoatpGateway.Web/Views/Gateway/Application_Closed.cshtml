@@ -27,72 +27,54 @@
             <h2 class="govuk-heading-m">Organisation details</h2>
 
             <dl class="govuk-summary-list">
-                @if (!string.IsNullOrWhiteSpace(Model.Ukprn))
-                {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            UKPRN
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.Ukprn
-                        </dd>
-                    </div>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.OrganisationName))
-                {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Organisation name
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.OrganisationName
-                        </dd>
-                    </div>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.ApplicationRoute))
-                {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Provider route
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.ApplicationRoute
-                        </dd>
-                    </div>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.ApplicationReference))
-                {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Application reference
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.ApplicationReference
-                        </dd>
-                    </div>
-                }
-                @if (!string.IsNullOrWhiteSpace(Model.ApplicationEmailAddress))
-                {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Applicant's email address
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.ApplicationEmailAddress
-                        </dd>
-                    </div>
-                }
-                @if (Model.SubmittedDate.HasValue)
-                {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Date application submitted
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.SubmittedDate.ToSfaShortDateString()
-                        </dd>
-                    </div>
-                }
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        UKPRN
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.Ukprn
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Organisation name
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.OrganisationName
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Provider route
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.ApplicationRoute
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Application reference
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.ApplicationReference
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Applicant's email address
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.ApplicationEmailAddress
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Date application submitted
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.SubmittedDate.ToSfaShortDateString()
+                    </dd>
+                </div>
             </dl>
         </div>
     </div>
@@ -127,16 +109,16 @@
                         @Model.ApplicationClosedBy
                     </dd>
                 </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        Internal Comments
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.ApplicationComments
+                    </dd>
+                </div>
                 @if (Model.ApplicationStatus == ApplicationStatus.Removed)
                 {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Internal Comments
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.ApplicationComments
-                        </dd>
-                    </div>
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
                             External Comments
@@ -146,18 +128,9 @@
                         </dd>
                     </div>
                 }
-                else
-                {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Comments
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.ApplicationComments
-                        </dd>
-                    </div>
-                }
             </dl>
         </div>
+
+        <p class="govuk-body"><a asp-controller="RoatpGateway" asp-action="ClosedApplications" class="govuk-link">Back to gateway applications</a></p>
     </div>
 </main>
