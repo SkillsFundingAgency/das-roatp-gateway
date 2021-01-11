@@ -235,15 +235,15 @@
                         <label class="govuk-label govuk-radios__label" for="OptionRejected">
                             Reject this application
                         </label>
-                        <span id="OptionRejectedText--visibility-info" class="govuk-hint" aria-live="polite">These comments will be seen by governance</span>
                     </div>
                     <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionRejected">
                         <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
                             <div class="govuk-form-group">
-                                <a name="OptionRejectedText"></a>
+                                <a name="OptionFailedRejectedText"></a>
                                 <label class="govuk-label" for="OptionRejectedText">
                                     Add your internal comments
                                 </label>
+                                <span id="OptionRejectedText--visibility-info" class="govuk-hint" aria-live="polite">These comments will be seen by governance</span>
                                 @if (!string.IsNullOrEmpty(Model.ErrorTextRejected))
                                 {
                                     <span class="govuk-error-message">
@@ -256,6 +256,26 @@
                                           rows="5"
                                           aria-describedby="OptionFailedText-info">@Model.OptionRejectedText</textarea>
                                 <span id="OptionRejectedText-info" class="govuk-hint govuk-character-count__message" aria-live="polite"></span>
+
+
+                                <br />
+                                <a name="OptionFailedExternalRejectedText"></a>
+                                <label class="govuk-label" for="OptionExternalRejectedText">
+                                    Add your external comments
+                                </label>
+                                <span id="OptionRejectedText--visibility-info" class="govuk-hint" aria-live="polite">These comments will be seen by the applicant</span>
+                                @if (!string.IsNullOrEmpty(Model.ErrorTextExternalRejected))
+                                {
+                                    <span class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">Error:</span> @Model.ErrorTextExternalRejected
+                                    </span>
+                                }
+                                <textarea class="govuk-textarea govuk-js-character-count @Model.CssOnErrorExternalRejected"
+                                          id="OptionExternalRejectedText"
+                                          name="OptionExternalRejectedText"
+                                          rows="5"
+                                          aria-describedby="OptionExternalRejectedText-info">@Model.OptionExternalRejectedText</textarea>
+
                             </div>
                         </div>
                     </div>
