@@ -235,13 +235,14 @@
                         <label class="govuk-label govuk-radios__label" for="OptionRejected">
                             Reject this application
                         </label>
+                        <span id="OptionRejectedText--visibility-info" class="govuk-hint" aria-live="polite">These comments will be seen by governance</span>
                     </div>
                     <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-OptionRejected">
                         <div class="govuk-character-count" data-module="govuk-character-count" data-maxwords="150">
                             <div class="govuk-form-group">
                                 <a name="OptionRejectedText"></a>
                                 <label class="govuk-label" for="OptionRejectedText">
-                                    Add comments
+                                    Add your internal comments
                                 </label>
                                 @if (!string.IsNullOrEmpty(Model.ErrorTextRejected))
                                 {
