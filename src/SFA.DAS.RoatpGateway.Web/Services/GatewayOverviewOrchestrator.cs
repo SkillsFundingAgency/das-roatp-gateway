@@ -127,6 +127,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 viewModelOnError.GatewayReviewStatus = viewModel.GatewayReviewStatus;
                 viewModelOnError.OptionAskClarificationText = viewModel.OptionAskClarificationText;
                 viewModelOnError.OptionFailedText = viewModel.OptionFailedText;
+                viewModelOnError.OptionFailedExternalText = viewModel.OptionFailedExternalText;
                 viewModelOnError.OptionApprovedText = viewModel.OptionApprovedText;
                 viewModelOnError.OptionRejectedText = viewModel.OptionRejectedText;
                
@@ -152,6 +153,12 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     {
                         viewModelOnError.ErrorTextFailed = error.ErrorMessage;
                         viewModelOnError.CssOnErrorFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                    }
+
+                    if (error.Field.Equals(nameof(viewModelOnError.OptionFailedExternalText)))
+                    {
+                        viewModelOnError.ErrorTextExternalFailed = error.ErrorMessage;
+                        viewModelOnError.CssOnErrorExternalFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
                     if (error.Field.Equals(nameof(viewModelOnError.OptionApprovedText)))

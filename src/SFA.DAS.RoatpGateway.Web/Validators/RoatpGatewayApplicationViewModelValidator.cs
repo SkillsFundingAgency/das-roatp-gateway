@@ -13,6 +13,8 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
         private const string NoSelectionErrorMessage = "Select what you want to do";
         private const string ErrorEnterClarificationComments = "Enter your clarification comments";
         private const string ErrorEnterDeclinedComments = "Enter your comments";
+        private const string ErrorEnterInternalComments = "Enter your internal comments";
+        private const string ErrorEnterExternalComments = "Enter your external comments";
         private const string TooManyWords = "Your comments must be 150 words or less";
 
         public async Task<ValidationResponse> Validate(RoatpGatewayApplicationViewModel viewModel)
@@ -59,7 +61,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                     {
                         if (string.IsNullOrEmpty(viewModel.OptionFailedText))
                         {
-                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedText", ErrorEnterDeclinedComments));
+                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedText", ErrorEnterInternalComments));
                         }
                         else
                         {
@@ -67,6 +69,19 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                             if (wordCount > 150)
                             {
                                 validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedText", TooManyWords));
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(viewModel.OptionFailedExternalText))
+                        {
+                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedExternalText", ErrorEnterExternalComments));
+                        }
+                        else
+                        {
+                            var wordCount = viewModel.OptionFailedExternalText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
+                            if (wordCount > 150)
+                            {
+                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedExternalText", TooManyWords));
                             }
                         }
                         break;
