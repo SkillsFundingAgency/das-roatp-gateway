@@ -14,7 +14,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
         private const string ErrorEnterClarificationComments = "Enter your clarification comments";
         private const string ErrorEnterInternalComments = "Enter your internal comments";
         private const string ErrorEnterExternalComments = "Enter your external comments";
-        private const string TooManyWords = "Your comments must be 150 words or less";
+        private const string TooManyWords = "Your comments must be 500 words or less";
 
         public async Task<ValidationResponse> Validate(RoatpGatewayApplicationViewModel viewModel)
         {
@@ -78,7 +78,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                         else
                         {
                             var wordCount = viewModel.OptionFailedExternalText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
-                            if (wordCount > 150)
+                            if (wordCount > 500)
                             {
                                 validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedExternalText", TooManyWords));
                             }
@@ -107,7 +107,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                     else
                     {
                         var wordCount = viewModel.OptionExternalRejectedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
-                        if (wordCount > 150)
+                        if (wordCount > 500)
                         {
                             validationResponse.Errors.Add(new ValidationErrorDetail("OptionExternalRejectedText", TooManyWords));
                         }

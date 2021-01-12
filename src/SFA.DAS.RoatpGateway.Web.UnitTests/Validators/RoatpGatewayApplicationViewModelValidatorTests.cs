@@ -53,7 +53,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
         [TestCase(GatewayReviewStatus.Pass, 151, true)]
         [TestCase(GatewayReviewStatus.Reject, 150, false)]
         [TestCase(GatewayReviewStatus.Reject, 151, true)]
-        public void Test_cases_where_input_is_too_long(string gatewayReviewStatus, int wordCount, bool hasErrorMessage)
+        public void Test_cases_where_internal_comment_is_too_long(string gatewayReviewStatus, int wordCount, bool hasErrorMessage)
         {
             var words = string.Empty;
             for (var i = 0; i < wordCount; i++)
@@ -67,6 +67,32 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             _viewModel.OptionFailedText = words;
             _viewModel.OptionApprovedText = words;
             _viewModel.OptionRejectedText = words;
+            _viewModel.OptionFailedExternalText = "valid";
+            _viewModel.OptionExternalRejectedText = "valid";
+
+            var result = _validator.Validate(_viewModel).Result;
+
+            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+        }
+
+        [TestCase(GatewayReviewStatus.Fail, 500, false)]
+        [TestCase(GatewayReviewStatus.Fail, 501, true)]
+        [TestCase(GatewayReviewStatus.Reject, 500, false)]
+        [TestCase(GatewayReviewStatus.Reject, 501, true)]
+        public void Test_cases_where_external_comment_is_too_long(string gatewayReviewStatus, int wordCount, bool hasErrorMessage)
+        {
+            var words = string.Empty;
+            for (var i = 0; i < wordCount; i++)
+            {
+                words = $"{words}{i} ";
+            }
+
+            _viewModel = new RoatpGatewayApplicationViewModel();
+            _viewModel.GatewayReviewStatus = gatewayReviewStatus;
+            _viewModel.OptionAskClarificationText = "valid";
+            _viewModel.OptionFailedText = "valid";
+            _viewModel.OptionApprovedText = "valid";
+            _viewModel.OptionRejectedText = "valid";
             _viewModel.OptionFailedExternalText = words;
             _viewModel.OptionExternalRejectedText = words;
 
