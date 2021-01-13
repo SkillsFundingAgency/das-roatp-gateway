@@ -11,13 +11,16 @@ namespace SFA.DAS.RoatpGateway.Domain
         public string Ukprn { get; set; }
         public string ApplicationReferenceNumber { get; set; }
         public DateTime? SubmittedDate { get; set; }
-        public DateTime? FeedbackAddedDate { get; set; }
-        public DateTime? ClosedDate { get; set; }
         public string ApplicationStatus { get; set; }
         public string GatewayReviewStatus { get; set; }
         public string AssessorReviewStatus { get; set; }
         public string FinancialReviewStatus { get; set; }
-        public string GatewayUserName { get; set; }
+
+        public string LastCheckedBy { get; set; }
+        public DateTime? ClarificationRequestedDate { get; set; }
+        public DateTime? OutcomeMadeDate { get; set; }
+        public string OutcomeMadeBy { get; set; }
+
 
         public string ApplicationRouteShortText
         {
