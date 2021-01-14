@@ -14,7 +14,8 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
         private const string ErrorEnterClarificationComments = "Enter your clarification comments";
         private const string ErrorEnterInternalComments = "Enter your internal comments";
         private const string ErrorEnterExternalComments = "Enter your external comments";
-        private const string TooManyWords = "Your comments must be 500 words or less";
+        private const string TooManyWords150 = "Your comments must be 150 words or less";
+        private const string TooManyWords500 = "Your comments must be 500 words or less";
 
         public async Task<ValidationResponse> Validate(RoatpGatewayApplicationViewModel viewModel)
         {
@@ -49,7 +50,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                             var wordCount = viewModel.OptionAskClarificationText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
                             if (wordCount > 150)
                             {
-                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionAskClarificationText", TooManyWords));
+                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionAskClarificationText", TooManyWords150));
                             }
                         }
 
@@ -67,7 +68,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                             var wordCount = viewModel.OptionFailedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
                             if (wordCount > 150)
                             {
-                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedText", TooManyWords));
+                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedText", TooManyWords150));
                             }
                         }
 
@@ -80,7 +81,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                             var wordCount = viewModel.OptionFailedExternalText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
                             if (wordCount > 500)
                             {
-                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedExternalText", TooManyWords));
+                                validationResponse.Errors.Add(new ValidationErrorDetail("OptionFailedExternalText", TooManyWords500));
                             }
                         }
                         break;
@@ -96,7 +97,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                         var wordCount = viewModel.OptionRejectedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
                         if (wordCount > 150)
                         {
-                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionRejectedText", TooManyWords));
+                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionRejectedText", TooManyWords150));
                         }
                     }
 
@@ -109,7 +110,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                         var wordCount = viewModel.OptionExternalRejectedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
                         if (wordCount > 500)
                         {
-                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionExternalRejectedText", TooManyWords));
+                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionExternalRejectedText", TooManyWords500));
                         }
                     }
                     break;
@@ -119,7 +120,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                         var wordCount = viewModel.OptionApprovedText.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Length;
                         if (wordCount > 150)
                         {
-                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionApprovedText", TooManyWords));
+                            validationResponse.Errors.Add(new ValidationErrorDetail("OptionApprovedText", TooManyWords150));
                         }
 
                         break;
