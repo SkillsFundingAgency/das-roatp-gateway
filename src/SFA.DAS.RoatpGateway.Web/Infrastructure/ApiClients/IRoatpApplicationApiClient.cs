@@ -30,7 +30,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username, string comments); 
         Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username, string comments, string clarificationAnswer);
-        Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string userId, string userName);
+        Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string gatewayReviewExternalComment, string userId, string userName);
         Task UpdateGatewayReviewStatusAsClarification(Guid applicationId, string userId, string userName);
 
         Task<ProviderDetails> GetUkrlpDetails(Guid applicationId);

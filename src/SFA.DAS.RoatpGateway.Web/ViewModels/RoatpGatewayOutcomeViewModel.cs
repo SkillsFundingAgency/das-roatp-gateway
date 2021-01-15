@@ -8,6 +8,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string ApplicationStatus { get; set; }
         public string GatewayReviewStatus { get; set; }
         public string GatewayReviewComment { get; set; }
+        public string GatewayReviewExternalComment { get; set; }
 
         public string CssFormGroupError { get; set; }
     }
