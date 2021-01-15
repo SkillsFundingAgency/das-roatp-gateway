@@ -73,7 +73,13 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         {
             try
             {
-                return await Get<GatewayCommonDetails>($"Gateway/{applicationId}/Pages/{pageId}/CommonDetails");
+               var result = await Get<GatewayCommonDetails>($"Gateway/{applicationId}/Pages/{pageId}/CommonDetails");
+               var logging =
+                   $"Getting common page details for applcationId [{applicationId}] for PageId [{pageId}]: {Newtonsoft.Json.JsonConvert.SerializeObject(result)}";
+               _logger.LogInformation(logging);
+
+
+               return result;
             }
             catch (RoatpApiClientException ex)
             {
