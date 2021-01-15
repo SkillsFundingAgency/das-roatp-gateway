@@ -127,8 +127,10 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 viewModelOnError.GatewayReviewStatus = viewModel.GatewayReviewStatus;
                 viewModelOnError.OptionAskClarificationText = viewModel.OptionAskClarificationText;
                 viewModelOnError.OptionFailedText = viewModel.OptionFailedText;
+                viewModelOnError.OptionFailedExternalText = viewModel.OptionFailedExternalText;
                 viewModelOnError.OptionApprovedText = viewModel.OptionApprovedText;
                 viewModelOnError.OptionRejectedText = viewModel.OptionRejectedText;
+                viewModelOnError.OptionExternalRejectedText = viewModel.OptionExternalRejectedText;
                
                 viewModelOnError.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
                 viewModelOnError.RadioCheckedAskClarification = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
@@ -154,6 +156,12 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         viewModelOnError.CssOnErrorFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
+                    if (error.Field.Equals(nameof(viewModelOnError.OptionFailedExternalText)))
+                    {
+                        viewModelOnError.ErrorTextExternalFailed = error.ErrorMessage;
+                        viewModelOnError.CssOnErrorExternalFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                    }
+
                     if (error.Field.Equals(nameof(viewModelOnError.OptionApprovedText)))
                     {
                         viewModelOnError.ErrorTextApproved = error.ErrorMessage;
@@ -164,6 +172,12 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     {
                         viewModelOnError.ErrorTextRejected = error.ErrorMessage;
                         viewModelOnError.CssOnErrorRejected = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                    }
+
+                    if (error.Field.Equals(nameof(viewModelOnError.OptionExternalRejectedText)))
+                    {
+                        viewModelOnError.ErrorTextExternalRejected = error.ErrorMessage;
+                        viewModelOnError.CssOnErrorExternalRejected = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
                 }
             }
