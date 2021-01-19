@@ -14,5 +14,7 @@ namespace SFA.DAS.RoatpGateway.Domain.Apply
         public Guid? ApplicationSubmittedBy { get; set; }
         public DateTime? ApplicationWithdrawnOn { get; set; }
         public string ApplicationWithdrawnBy { get; set; }
+        public DateTime? ApplicationRemovedOn { get; set; }
+        public string ApplicationRemovedBy { get; set; }
     }
 }

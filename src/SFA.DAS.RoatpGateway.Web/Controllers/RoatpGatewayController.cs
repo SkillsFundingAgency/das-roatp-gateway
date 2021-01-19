@@ -96,19 +96,26 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 return RedirectToAction(nameof(NewApplications));
             }
-
-            switch (viewModel.GatewayReviewStatus)
+            else if (viewModel.ApplicationStatus == ApplicationStatus.Removed
+                    || viewModel.ApplicationStatus == ApplicationStatus.Withdrawn)
             {
-                case GatewayReviewStatus.New:
-                case GatewayReviewStatus.InProgress:
-                case GatewayReviewStatus.ClarificationSent:
-                    return View("~/Views/Gateway/Application.cshtml", viewModel);
-                case GatewayReviewStatus.Pass:
-                case GatewayReviewStatus.Fail:
-                case GatewayReviewStatus.Reject:
-                    return View("~/Views/Gateway/Application_ReadOnly.cshtml", viewModel);
-                default:
-                    return RedirectToAction(nameof(NewApplications));
+                return View("~/Views/Gateway/Application_Closed.cshtml", viewModel);
+            }
+            else
+            {
+                switch (viewModel.GatewayReviewStatus)
+                {
+                    case GatewayReviewStatus.New:
+                    case GatewayReviewStatus.InProgress:
+                    case GatewayReviewStatus.ClarificationSent:
+                        return View("~/Views/Gateway/Application.cshtml", viewModel);
+                    case GatewayReviewStatus.Pass:
+                    case GatewayReviewStatus.Fail:
+                    case GatewayReviewStatus.Reject:
+                        return View("~/Views/Gateway/Application_ReadOnly.cshtml", viewModel);
+                    default:
+                        return RedirectToAction(nameof(NewApplications));
+                }
             }
         }
 

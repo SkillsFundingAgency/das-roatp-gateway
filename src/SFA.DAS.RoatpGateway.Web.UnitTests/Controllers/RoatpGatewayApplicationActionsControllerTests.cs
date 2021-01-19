@@ -145,7 +145,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.Inconclusive();
+            Assert.IsTrue(viewResult.ViewName.EndsWith("ApplicationRemoved.cshtml"));
+            ApplyApiClient.Verify(x => x.RemoveApplication(viewModel.ApplicationId, viewModel.OptionYesText, viewModel.OptionYesTextExternal,  It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
 
