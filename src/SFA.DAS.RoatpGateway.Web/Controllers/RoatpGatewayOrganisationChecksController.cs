@@ -81,7 +81,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetTradingNameViewModel(new GetTradingNameRequest(applicationId, username));
-            return View(ShowClarificationAnswerSection(viewModel.GatewayReviewStatus, viewModel.ClarificationAnswer) 
+            return View(ShowClarificationAnswerSection(viewModel.Status,viewModel.GatewayReviewStatus, viewModel.ClarificationAnswer) 
                 ? $"{GatewayViewsLocation}/Clarifications/TradingName.cshtml" 
                 : $"{GatewayViewsLocation}/TradingName.cshtml", viewModel);
         }
@@ -223,10 +223,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
 
 
-        private bool ShowClarificationAnswerSection(string gatewayReviewStatus, string clarificationAnswer)
+        private bool ShowClarificationAnswerSection(string status, string gatewayReviewStatus, string clarificationAnswer)
         {
-            return !string.IsNullOrEmpty(clarificationAnswer)
-                   && gatewayReviewStatus == GatewayReviewStatus.ClarificationSent;
+            // return !string.IsNullOrEmpty(clarificationAnswer)
+            //        && gatewayReviewStatus == GatewayReviewStatus.ClarificationSent;
+            return gatewayReviewStatus == GatewayReviewStatus.ClarificationSent;
+
         }
     }
 }

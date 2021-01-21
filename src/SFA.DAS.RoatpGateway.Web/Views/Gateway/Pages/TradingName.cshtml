@@ -31,26 +31,27 @@
         <div class="govuk-grid-column-full">
             <table class="govuk-table govuk-!-margin-bottom-9">
                 <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">Source</th>
-                        <th class="govuk-table__header" scope="col">Trading name</th>
-                    </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="col">Source</th>
+                    <th class="govuk-table__header" scope="col">Trading name</th>
+                </tr>
                 </thead>
                 <tbody class="govuk-table__body">
 
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">Submitted application data</td>
-                        <td class="govuk-table__cell">@Model.ApplyTradingName</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">UKRLP data</td>
-                        <td class="govuk-table__cell">@Model.UkrlpTradingName</td>
-                    </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">Submitted application data</td>
+                    <td class="govuk-table__cell">@Model.ApplyTradingName</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">UKRLP data</td>
+                    <td class="govuk-table__cell">@Model.UkrlpTradingName</td>
+                </tr>
                 </tbody>
             </table>
 
         </div>
     </div>
+
     @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress || Model.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
     {
         <div class="govuk-grid-row">
