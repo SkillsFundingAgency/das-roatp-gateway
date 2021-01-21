@@ -26,5 +26,6 @@ namespace SFA.DAS.RoatpGateway.Domain
         public string ClarificationBy { get; set; }
         public DateTime? ClarificationDate { get; set; }
         public string ClarificationAnswer { get; set; }
+
     }
 }

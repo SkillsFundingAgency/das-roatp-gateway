@@ -10,12 +10,13 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string PageId { get; set; }
         public string GatewayReviewStatus { get; set; }
 
+        public string OriginalStatus { get; set; }
         public string Status { get; set; }
 
         public string Ukprn { get; set; }
         public string ApplyLegalName { get; set; }
         public string ApplicationRoute { get; set; }
-
+        public string ApplicationStatus { get; set; }
         public string OptionPassText { get; set; }
         public string OptionFailText { get; set; }
         public string OptionInProgressText { get; set; }

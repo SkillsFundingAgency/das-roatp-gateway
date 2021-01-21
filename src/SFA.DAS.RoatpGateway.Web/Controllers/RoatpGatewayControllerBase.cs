@@ -78,6 +78,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 return View(errorView, viewModel);
             }
 
+            if (command.Status == SectionReviewStatus.Clarification)
+                return await SubmitGatewayPageAnswerClarification(command);
+
             return await SubmitGatewayPageAnswer(command);
         }
 
@@ -101,7 +104,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 return View(errorView, viewModel);
             }
 
-            return await SubmitGatewayPageAnswer(command);
+            // MFCMFC this will need changing
+            return await SubmitGatewayPageAnswerPostClarification(command);
         }
 
         protected async Task<IActionResult> SubmitGatewayPageAnswer(SubmitGatewayPageAnswerCommand command)
@@ -119,6 +123,49 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{typeof(T).Name}-SubmitGatewayPageAnswer - Error: '{ex.Message}'");
+                throw;
+            }
+
+            return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId });
+        }
+
+        protected async Task<IActionResult> SubmitGatewayPageAnswerClarification(SubmitGatewayPageAnswerCommand command)
+        {
+            var username = HttpContext.User.UserDisplayName();
+            var userId = HttpContext.User.UserId();
+            var comments = SetupGatewayPageOptionTexts(command);
+            var clarificationAnswer = command.ClarificationAnswer;
+
+            _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswerClarification - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer {clarificationAnswer}");
+            try
+            {
+                await _applyApiClient.SubmitGatewayPageAnswerClarification(command.ApplicationId, command.PageId, command.Status, userId, username, comments, clarificationAnswer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{typeof(T).Name}-SubmitGatewayPageAnswerClarification - Error: '{ex.Message}'");
+                throw;
+            }
+
+            return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId });
+        }
+
+
+        protected async Task<IActionResult> SubmitGatewayPageAnswerPostClarification(SubmitGatewayPageAnswerCommand command)
+        {
+            var username = HttpContext.User.UserDisplayName();
+            var userId = HttpContext.User.UserId();
+            var comments = SetupGatewayPageOptionTexts(command);
+            var clarificationAnswer = command.ClarificationAnswer;
+
+            _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswerPostClarification - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer {clarificationAnswer}");
+            try
+            {
+                await _applyApiClient.SubmitGatewayPageAnswerPostClarification(command.ApplicationId, command.PageId, command.Status, userId, username, comments, clarificationAnswer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{typeof(T).Name}-SubmitGatewayPageAnswerPostClarification - Error: '{ex.Message}'");
                 throw;
             }
 

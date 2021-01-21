@@ -81,7 +81,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetTradingNameViewModel(new GetTradingNameRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification 
+            return View(ShowClarificationAnswerSection(viewModel.GatewayReviewStatus, viewModel.ClarificationAnswer) 
                 ? $"{GatewayViewsLocation}/Clarifications/TradingName.cshtml" 
                 : $"{GatewayViewsLocation}/TradingName.cshtml", viewModel);
         }
@@ -219,6 +219,14 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             Func<Task<OrganisationRiskViewModel>> viewModelBuilder = () => _orchestrator.GetOrganisationRiskViewModel(new GetOrganisationRiskRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/OrganisationRisk.cshtml");
+        }
+
+
+
+        private bool ShowClarificationAnswerSection(string gatewayReviewStatus, string clarificationAnswer)
+        {
+            return !string.IsNullOrEmpty(clarificationAnswer)
+                   && gatewayReviewStatus == GatewayReviewStatus.ClarificationSent;
         }
     }
 }

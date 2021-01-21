@@ -20,13 +20,13 @@ namespace SFA.DAS.RoatpGateway.Web.Extensions
             viewModel.ApplicationRoute = commonDetails.ProviderRouteName;
             viewModel.Ukprn = commonDetails.Ukprn;
             viewModel.Status = commonDetails.Status;
-
+            viewModel.OriginalStatus = commonDetails.Status;
             viewModel.SourcesCheckedOn = commonDetails.SourcesCheckedOn;
             viewModel.ApplicationSubmittedOn = commonDetails.ApplicationSubmittedOn;
             viewModel.Caption = caption;
             viewModel.Heading = heading;
             viewModel.NoSelectionErrorMessage = noSelectionErrorMessage;
-
+            viewModel.ApplicationStatus = commonDetails.ApplicationStatus;
             viewModel.GatewayOutcomeMadeOn = commonDetails.GatewayOutcomeMadeOn;
             viewModel.GatewayOutcomeMadeBy = commonDetails.GatewayOutcomeMadeBy;
             viewModel.OutcomeMadeOn = commonDetails.OutcomeMadeOn;
