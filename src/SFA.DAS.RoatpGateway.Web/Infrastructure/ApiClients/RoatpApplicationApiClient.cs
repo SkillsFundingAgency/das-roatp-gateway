@@ -62,6 +62,11 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             await Post($"/GatewayReview/{applicationId}/Withdraw", new { comments, userId, userName });
         }
 
+        public async Task RemoveApplication(Guid applicationId, string comments, string externalComments, string userId, string userName)
+        {
+            await Post($"/GatewayReview/{applicationId}/Remove", new { comments, externalComments, userId, userName });
+        }
+
         public async Task<List<GatewayPageAnswerSummary>> GetGatewayPageAnswers(Guid applicationId)
         {
             return await Get<List<GatewayPageAnswerSummary>>($"/Gateway/{applicationId}/Pages");

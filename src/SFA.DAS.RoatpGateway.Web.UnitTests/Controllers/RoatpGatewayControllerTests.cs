@@ -495,5 +495,98 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             Assert.IsTrue(viewResult.ViewName.Contains("ConfirmApplicationClarification.cshtml"));
             ApplyApiClient.Verify(x=>x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(),It.IsAny<string>()),Times.Once);
         }
+
+
+        [TestCase(GatewayReviewStatus.New)]
+        [TestCase(GatewayReviewStatus.InProgress)]
+        [TestCase( GatewayReviewStatus.ClarificationSent)]
+        public async Task ViewApplication_when_submitted_for_review_shows_expected_view(string gatewayReviewStatus)
+        {
+            var applicationId = Guid.NewGuid();
+
+            var application = new Apply
+            {
+                ApplicationId = applicationId,
+                ApplicationStatus = ApplicationStatus.Submitted,
+                GatewayReviewStatus = gatewayReviewStatus,
+                ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
+            };
+
+            var viewmodel = new RoatpGatewayApplicationViewModel(application);
+            _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
+
+            var result = await _controller.ViewApplication(applicationId);
+            var viewResult = result as ViewResult;
+
+            Assert.IsTrue(viewResult.ViewName.EndsWith("Application.cshtml"));
+        }
+
+        [TestCase(GatewayReviewStatus.Pass)]
+        [TestCase(GatewayReviewStatus.Fail)]
+        [TestCase(GatewayReviewStatus.Reject)]
+        public async Task ViewApplication_when_gateway_assessed_shows_expected_view(string gatewayReviewStatus)
+        {
+            var applicationId = Guid.NewGuid();
+
+            var application = new Apply
+            {
+                ApplicationId = applicationId,
+                ApplicationStatus = ApplicationStatus.GatewayAssessed,
+                GatewayReviewStatus = gatewayReviewStatus,
+                ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
+            };
+
+            var viewmodel = new RoatpGatewayApplicationViewModel(application);
+            _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
+
+            var result = await _controller.ViewApplication(applicationId);
+            var viewResult = result as ViewResult;
+
+            Assert.IsTrue(viewResult.ViewName.EndsWith("Application_ReadOnly.cshtml"));
+        }
+
+        [Test]
+        public async Task ViewApplication_when_Application_Withdrawn_shows_expected_view()
+        {
+            var applicationId = Guid.NewGuid();
+
+            var application = new Apply
+            {
+                ApplicationId = applicationId,
+                ApplicationStatus = ApplicationStatus.Withdrawn,
+                GatewayReviewStatus = GatewayReviewStatus.InProgress,
+                ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
+            };
+
+            var viewmodel = new RoatpGatewayApplicationViewModel(application);
+            _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
+
+            var result = await _controller.ViewApplication(applicationId);
+            var viewResult = result as ViewResult;
+
+            Assert.IsTrue(viewResult.ViewName.EndsWith("Application_Closed.cshtml"));
+        }
+
+        [Test]
+        public async Task ViewApplication_when_Application_Removed_shows_expected_view()
+        {
+            var applicationId = Guid.NewGuid();
+
+            var application = new Apply
+            {
+                ApplicationId = applicationId,
+                ApplicationStatus = ApplicationStatus.Removed,
+                GatewayReviewStatus = GatewayReviewStatus.InProgress,
+                ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
+            };
+
+            var viewmodel = new RoatpGatewayApplicationViewModel(application);
+            _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
+
+            var result = await _controller.ViewApplication(applicationId);
+            var viewResult = result as ViewResult;
+
+            Assert.IsTrue(viewResult.ViewName.EndsWith("Application_Closed.cshtml"));
+        }
     }
 }

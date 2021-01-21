@@ -23,6 +23,9 @@ namespace SFA.DAS.RoatpGateway.Domain.Apply
         public string UpdatedBy { get; set; }
         public DateTime? DeletedAt { get; set; }
         public string DeletedBy { get; set; }
+
+        public string Comments { get; set; }
+        public string ExternalComments { get; set; }
     }
 
 }
