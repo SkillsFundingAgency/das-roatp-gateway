@@ -134,7 +134,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             await _controller.ClarifyOrganisationRiskPage(command);
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText, ClarificationAnswer));
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswerPostClarification(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText, ClarificationAnswer));
         }
 
         [Test]

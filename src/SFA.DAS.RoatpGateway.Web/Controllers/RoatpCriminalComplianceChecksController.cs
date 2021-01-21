@@ -33,7 +33,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(applicationId, gatewayPageId, username));
-            if (viewModel.Status == SectionReviewStatus.Clarification)
+            if (viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy))
                 return View(ClarificationCriminalComplianceView, viewModel);
             return View(CriminalComplianceView, viewModel);
         }

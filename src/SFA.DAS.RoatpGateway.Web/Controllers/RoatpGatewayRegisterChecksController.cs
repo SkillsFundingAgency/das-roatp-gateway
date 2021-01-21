@@ -30,7 +30,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetRoatpViewModel(new GetRoatpRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/Roatp.cshtml"
                 : $"{GatewayViewsLocation}/Roatp.cshtml", viewModel);
         }
@@ -55,7 +55,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetRoepaoViewModel(new GetRoepaoRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/Roepao.cshtml"
                 : $"{GatewayViewsLocation}/Roepao.cshtml", viewModel);
         }

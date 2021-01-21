@@ -104,7 +104,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 return View(errorView, viewModel);
             }
 
-            // MFCMFC this will need changing
             return await SubmitGatewayPageAnswerPostClarification(command);
         }
 
