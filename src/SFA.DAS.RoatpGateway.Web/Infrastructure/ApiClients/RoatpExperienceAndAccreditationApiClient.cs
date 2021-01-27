@@ -33,6 +33,16 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return result;
         }
 
+        public async Task<FileStreamResult> GetSubcontractorDeclarationContractFileClarification(Guid applicationId, string fileName)
+        {
+            var response = await GetResponse($"/Accreditation/{applicationId}/SubcontractDeclaration/ContractFileClarification/{fileName}");
+
+            var fileStream = await response.Content.ReadAsStreamAsync();
+            var result = new FileStreamResult(fileStream, response.Content.Headers.ContentType.MediaType);
+            result.FileDownloadName = response.Content.Headers.ContentDisposition.FileName.Replace("\"", "");
+            return result;
+        }
+
         public async Task<string> GetOfficeForStudents(Guid applicationId)
         {
             return await Get<string>($"/Accreditation/{applicationId}/OfficeForStudents");

@@ -14,8 +14,6 @@ using System.Net.Http;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 
@@ -78,7 +76,13 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         {
             try
             {
-                return await Get<GatewayCommonDetails>($"Gateway/{applicationId}/Pages/{pageId}/CommonDetails");
+               var result = await Get<GatewayCommonDetails>($"Gateway/{applicationId}/Pages/{pageId}/CommonDetails");
+               var logging =
+                   $"Getting common page details for applcationId [{applicationId}] for PageId [{pageId}]: {Newtonsoft.Json.JsonConvert.SerializeObject(result)}";
+               _logger.LogInformation(logging);
+
+
+               return result;
             }
             catch (RoatpApiClientException ex)
             {
@@ -116,6 +120,36 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '" + ex.Message + "'");
+            }
+        }
+
+        public async Task SubmitGatewayPageAnswerClarification(Guid applicationId, string pageId, string status, string userId, string username,
+            string comments, string clarificationAnswer)
+        {
+            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswerClarification - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'");
+
+            try
+            {
+                await Post($"/Gateway/Page/SubmitClarification", new { applicationId, pageId, status, comments, userId, username, clarificationAnswer });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswerClarification - Error: '" + ex.Message + "'");
+            }
+        }
+
+        public async Task SubmitGatewayPageAnswerPostClarification(Guid applicationId, string pageId, string status, string userId, string username,
+            string comments, string clarificationAnswer)
+        {
+            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswerPostClarification - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'");
+
+            try
+            {
+                await Post($"/Gateway/Page/SubmitPostClarification", new { applicationId, pageId, status, comments, userId, username, clarificationAnswer });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswerPostClarification - Error: '" + ex.Message + "'");
             }
         }
 

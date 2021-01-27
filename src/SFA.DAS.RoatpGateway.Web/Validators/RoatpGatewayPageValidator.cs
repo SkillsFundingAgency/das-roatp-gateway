@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using SFA.DAS.AdminService.Common.Validation;
@@ -27,6 +28,14 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
             {
                 Errors = new List<ValidationErrorDetail>()
             };
+
+            if (command.OriginalStatus == SectionReviewStatus.Clarification && string.IsNullOrEmpty(command.Status) &&
+                command.GatewayReviewStatus == GatewayReviewStatus.InProgress)
+                {
+                validationResponse.Errors.Add(new ValidationErrorDetail("OptionPass",
+                    NoSelectionErrorMessages.Errors[command.PageId]));
+                return await Task.FromResult(validationResponse);
+            }
 
             if (string.IsNullOrWhiteSpace(command.Status))
             {

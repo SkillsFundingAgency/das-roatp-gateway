@@ -124,7 +124,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.RegisterChecks
 
             var result = await _controller.ClarifyRoatpPage(command);
 
-            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText, ClarificationAnswer), Times.Once);
+            _applyApiClient.Verify(x => x.SubmitGatewayPageAnswerPostClarification(applicationId, pageId, vm.Status, userId, username, vm.OptionPassText, ClarificationAnswer), Times.Once);
         }
 
         [Test]
