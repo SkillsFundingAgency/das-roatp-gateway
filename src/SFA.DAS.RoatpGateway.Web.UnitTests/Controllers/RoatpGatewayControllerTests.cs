@@ -512,7 +512,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
             };
 
-            var viewmodel = new RoatpGatewayApplicationViewModel(application);
+            var oversightDetails = new ApplicationOversightDetails {OversightStatus = OversightReviewStatus.None};
+
+            var viewmodel = new RoatpGatewayApplicationViewModel(application, oversightDetails);
             _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
 
             var result = await _controller.ViewApplication(applicationId);
@@ -536,7 +538,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
             };
 
-            var viewmodel = new RoatpGatewayApplicationViewModel(application);
+            var viewmodel = new RoatpGatewayApplicationViewModel(application, new ApplicationOversightDetails());
             _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
 
             var result = await _controller.ViewApplication(applicationId);
@@ -558,7 +560,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
             };
 
-            var viewmodel = new RoatpGatewayApplicationViewModel(application);
+            var viewmodel = new RoatpGatewayApplicationViewModel(application, new ApplicationOversightDetails());
             _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
 
             var result = await _controller.ViewApplication(applicationId);
@@ -580,7 +582,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
             };
 
-            var viewmodel = new RoatpGatewayApplicationViewModel(application);
+            var viewmodel = new RoatpGatewayApplicationViewModel(application, new ApplicationOversightDetails());
             _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
 
             var result = await _controller.ViewApplication(applicationId);

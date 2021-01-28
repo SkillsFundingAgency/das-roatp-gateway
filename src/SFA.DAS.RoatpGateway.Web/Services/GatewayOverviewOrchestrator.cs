@@ -26,13 +26,16 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         public async Task<RoatpGatewayApplicationViewModel> GetOverviewViewModel(GetApplicationOverviewRequest request)
         {
             var application = await _applyApiClient.GetApplication(request.ApplicationId);
+
             if (application is null)
             {
                 return null;
             }
 
+            var oversightDetails = await _applyApiClient.GetOversightDetails(request.ApplicationId);
+
             var contact = await _applyApiClient.GetContactDetails(request.ApplicationId);
-            var viewmodel = new RoatpGatewayApplicationViewModel(application)
+            var viewmodel = new RoatpGatewayApplicationViewModel(application, oversightDetails)
             {
                 ApplicationEmailAddress  = contact?.Email,
                 Sequences = GetCoreGatewayApplicationViewModel()
@@ -84,12 +87,15 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         public async Task<RoatpGatewayApplicationViewModel> GetConfirmOverviewViewModel(GetApplicationOverviewRequest request)
         {
             var application = await _applyApiClient.GetApplication(request.ApplicationId);
+
             if (application is null)
             {
                 return null;
             }
 
-            var viewmodel = new RoatpGatewayApplicationViewModel(application)
+            var oversightDetails = await _applyApiClient.GetOversightDetails(request.ApplicationId);
+
+            var viewmodel = new RoatpGatewayApplicationViewModel(application, oversightDetails)
             {
                 Sequences = GetCoreGatewayApplicationViewModel()
             };

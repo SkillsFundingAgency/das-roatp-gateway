@@ -1,10 +1,15 @@
 ﻿namespace SFA.DAS.RoatpGateway.Domain
 {
-    public static class OversightReviewStatus
+    public enum OversightReviewStatus
     {
-        public const string New = "New";
-        public const string InProgress = "In Progress";
-        public const string Successful = "Successful";
-        public const string Unsuccessful = "Unsuccessful";
+        None = 0,
+        Successful = 1,
+        SuccessfulAlreadyActive = 2,
+        SuccessfulFitnessForFunding = 3,
+        Unsuccessful = 4,
+        InProgress = 5,
+        Rejected = 6,
+        Withdrawn = 7,
+        Removed = 8
     }
 }

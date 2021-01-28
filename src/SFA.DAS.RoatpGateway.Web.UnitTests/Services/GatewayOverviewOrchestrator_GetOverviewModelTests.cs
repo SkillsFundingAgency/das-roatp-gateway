@@ -53,6 +53,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var contactDetails = new ContactDetails {Email = Email};
             _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync(application);
+            _applyApiClient.Setup(x => x.GetOversightDetails(_applicationId)).ReturnsAsync(() =>
+                new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None });
             _applyApiClient.Setup(x => x.GetContactDetails(_applicationId)).ReturnsAsync(contactDetails);
             const string sectionReviewStatus = SectionReviewStatus.Pass;
             const string comment = "comments go here";
@@ -110,6 +112,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             var contactDetails = new ContactDetails { Email = Email };
             _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync(returnedRoatpApplicationResponse);
             _applyApiClient.Setup(x => x.GetContactDetails(_applicationId)).ReturnsAsync(contactDetails);
+            _applyApiClient.Setup(x => x.GetOversightDetails(_applicationId)).ReturnsAsync(() =>
+                new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None });
+
             const string sectionReviewStatus = SectionReviewStatus.Clarification;
             const string comment = "comments go here";
 

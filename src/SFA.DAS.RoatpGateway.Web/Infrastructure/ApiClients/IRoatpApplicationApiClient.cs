@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
@@ -57,5 +58,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task<bool> UploadSubcontractorDeclarationClarificationFile(Guid applicationId, string userId, string userName, IFormFileCollection clarificationFiles);
         Task<bool> RemoveSubcontractorDeclarationClarificationFile(Guid application, string userId, string userName, string fileName);
+        Task<ApplicationOversightDetails> GetOversightDetails(Guid applicationId);
     }
 }

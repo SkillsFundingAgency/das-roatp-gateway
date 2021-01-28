@@ -57,7 +57,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             };
 
             _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(application);
-
+            _applyApiClient.Setup(x => x.GetOversightDetails(applicationId)).ReturnsAsync(() =>
+                new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None });
+            
             var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>
             {
                 new GatewayPageAnswerSummary
@@ -109,6 +111,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             };
 
             _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(application);
+            _applyApiClient.Setup(x => x.GetOversightDetails(applicationId)).ReturnsAsync(() =>
+                new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None });
 
             // No Saved Statuses
             var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>();
