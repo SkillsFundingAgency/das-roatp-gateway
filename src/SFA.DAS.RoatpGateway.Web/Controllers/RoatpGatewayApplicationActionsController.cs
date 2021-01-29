@@ -107,7 +107,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
-            else if (oversightDetails.HasFinalOutcome
+            else if (oversightDetails.OversightStatus != OversightReviewStatus.None
                 || application.ApplicationStatus == ApplicationStatus.Withdrawn
                 || application.ApplicationStatus == ApplicationStatus.Removed)
             {

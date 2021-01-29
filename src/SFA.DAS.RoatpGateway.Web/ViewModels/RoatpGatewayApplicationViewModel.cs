@@ -76,7 +76,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
             OrgId = application.OrganisationId;
 
             ApplicationStatus = application.ApplicationStatus;
-            HasOversightOutcome = oversightDetails.HasFinalOutcome;
+            HasOversightOutcome = oversightDetails.OversightStatus != OversightReviewStatus.None;
             GatewayReviewStatus = application.GatewayReviewStatus;
 
             GatewayUserName = application.GatewayUserName;
