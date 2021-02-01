@@ -47,6 +47,12 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             return await _experienceAndAccreditationApiClient.GetSubcontractorDeclarationContractFile(request.ApplicationId);
         }
 
+        public async Task<FileStreamResult> GetSubcontractorDeclarationContractFileClarification(
+            GetSubcontractorDeclarationContractFileClarificationRequest request)
+        {
+            return await _experienceAndAccreditationApiClient.GetSubcontractorDeclarationContractFileClarification(request.ApplicationId, request.FileName);
+        }
+
         public async Task<OfficeForStudentsViewModel> GetOfficeForStudentsViewModel(GetOfficeForStudentsRequest request)
         {
             _logger.LogInformation($"Retrieving office for students details for application {request.ApplicationId}");

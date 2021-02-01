@@ -31,7 +31,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/PeopleInControl.cshtml"
                 : $"{GatewayViewsLocation}/PeopleInControl.cshtml", viewModel);
         }
@@ -57,7 +57,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/PeopleInControlHighRisk.cshtml"
                 : $"{GatewayViewsLocation}/PeopleInControlHighRisk.cshtml", viewModel);
         }

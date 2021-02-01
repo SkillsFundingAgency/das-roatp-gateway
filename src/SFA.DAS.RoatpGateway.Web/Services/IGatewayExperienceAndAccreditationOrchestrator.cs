@@ -9,6 +9,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
     {
         Task<SubcontractorDeclarationViewModel> GetSubcontractorDeclarationViewModel(GetSubcontractorDeclarationRequest subcontractorDeclarationRequest);
         Task<FileStreamResult> GetSubcontractorDeclarationContractFile(GetSubcontractorDeclarationContractFileRequest subcontractorDeclarationRequest);
+        Task<FileStreamResult> GetSubcontractorDeclarationContractFileClarification(GetSubcontractorDeclarationContractFileClarificationRequest request);
         Task<OfficeForStudentsViewModel> GetOfficeForStudentsViewModel(GetOfficeForStudentsRequest request);
         Task<OfstedDetailsViewModel> GetOfstedDetailsViewModel(GetOfstedDetailsRequest request);
         Task<InitialTeacherTrainingViewModel> GetInitialTeacherTrainingViewModel(GetInitialTeacherTrainingRequest request);

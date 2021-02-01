@@ -68,6 +68,25 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             Assert.AreSame(expectedContractFile, result);
         }
 
+
+
+        [Test]
+        public async Task subcontractor_contract_file_clarification_is_returned()
+        {
+            var applicationId = Guid.NewGuid();
+            var fileName = "something.pdf";
+            var expectedContractFile = new FileStreamResult(new MemoryStream(), "application/pdf");
+
+            _orchestrator
+                .Setup(x => x.GetSubcontractorDeclarationContractFileClarification(
+                    It.Is<GetSubcontractorDeclarationContractFileClarificationRequest>(y => y.ApplicationId == applicationId && y.FileName == fileName)))
+                .ReturnsAsync(expectedContractFile);
+
+            var result = await _controller.SubcontractorDeclarationContractFileClarification(applicationId, fileName);
+            Assert.AreSame(expectedContractFile, result);
+        }
+
+
         [Test]
         public async Task saving_subcontractor_declaration_saves_evaluation_result()
         {
@@ -94,7 +113,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             ApplyApiClient.Verify(x =>
                 x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, null));
         }
-
         [Test]
          public async Task Clarifying_subcontractor_declaration_saves_evaluation_result()
          {
@@ -118,79 +136,81 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
         
              await _controller.ClarifySubcontractorDeclarationPage(command);
         
-             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, ClarificationAnswer));
+             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswerPostClarification(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, ClarificationAnswer));
          }
-        
-        // [Test]
-        // public async Task saving_subcontractor_declaration_without_required_fields_does_not_save()
-        // {
-        //     var applicationId = Guid.NewGuid();
-        //     var pageId = GatewayPageIds.SubcontractorDeclaration;
-        //
-        //     var vm = new SubcontractorDeclarationViewModel
-        //     {
-        //         Status = SectionReviewStatus.Fail,
-        //         SourcesCheckedOn = DateTime.Now,
-        //         ErrorMessages = new List<ValidationErrorDetail>(),
-        //         ApplicationId = applicationId,
-        //         PageId = pageId
-        //     };
-        //
-        //     var command = new SubmitGatewayPageAnswerCommand(vm);
-        //
-        //     GatewayValidator.Setup(v => v.Validate(command))
-        //         .ReturnsAsync(new ValidationResponse
-        //         {
-        //             Errors = new List<ValidationErrorDetail>
-        //                 {
-        //                     new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
-        //                 }
-        //         }
-        //         );
-        //
-        //     _orchestrator.Setup(x => x.GetSubcontractorDeclarationViewModel(It.Is<GetSubcontractorDeclarationRequest>(y => y.ApplicationId == vm.ApplicationId
-        //                                                                         && y.UserName == Username))).ReturnsAsync(vm);
-        //
-        //     await _controller.EvaluateSubcontractorDeclarationPage(command);
-        //
-        //     ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-        // }
 
-        // [Test]
-        // public async Task clarifying_subcontractor_declaration_without_required_fields_does_not_save()
-        // {
-        //     var applicationId = Guid.NewGuid();
-        //     var pageId = GatewayPageIds.SubcontractorDeclaration;
-        //
-        //     var vm = new SubcontractorDeclarationViewModel
-        //     {
-        //         Status = SectionReviewStatus.Fail,
-        //         SourcesCheckedOn = DateTime.Now,
-        //         ErrorMessages = new List<ValidationErrorDetail>(),
-        //         ApplicationId = applicationId,
-        //         PageId = pageId,
-        //         ClarificationAnswer = ClarificationAnswer
-        //     };
-        //
-        //     var command = new SubmitGatewayPageAnswerCommand(vm);
-        //
-        //     GatewayValidator.Setup(v => v.ValidateClarification(command))
-        //         .ReturnsAsync(new ValidationResponse
-        //             {
-        //                 Errors = new List<ValidationErrorDetail>
-        //                 {
-        //                     new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
-        //                 }
-        //             }
-        //         );
-        //
-        //     _orchestrator.Setup(x => x.GetSubcontractorDeclarationViewModel(It.Is<GetSubcontractorDeclarationRequest>(y => y.ApplicationId == vm.ApplicationId
-        //         && y.UserName == Username))).ReturnsAsync(vm);
-        //
-        //     await _controller.ClarifySubcontractorDeclarationPage(command);
-        //
-        //     ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-        // }
+
+        [Test]
+        public async Task saving_subcontractor_declaration_without_required_fields_does_not_save()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.SubcontractorDeclaration;
+        
+            var vm = new SubcontractorDeclarationViewModel
+            {
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ApplicationId = applicationId,
+                PageId = pageId
+            };
+        
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+        
+            GatewayValidator.Setup(v => v.Validate(command))
+                .ReturnsAsync(new ValidationResponse
+                {
+                    Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                }
+                );
+        
+            _orchestrator.Setup(x => x.GetSubcontractorDeclarationViewModel(It.Is<GetSubcontractorDeclarationRequest>(y => y.ApplicationId == vm.ApplicationId
+                                                                                && y.UserName == Username))).ReturnsAsync(vm);
+        
+            await _controller.EvaluateSubcontractorDeclarationPage(command);
+        
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public async Task clarifying_subcontractor_declaration_without_required_fields_does_not_save()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.SubcontractorDeclaration;
+        
+            var vm = new SubcontractorDeclarationViewModel
+            {
+                Status = SectionReviewStatus.Fail,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                ApplicationId = applicationId,
+                PageId = pageId,
+                ClarificationAnswer = ClarificationAnswer
+            };
+        
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+        
+            GatewayValidator.Setup(v => v.ValidateClarification(command))
+                .ReturnsAsync(new ValidationResponse
+                    {
+                        Errors = new List<ValidationErrorDetail>
+                        {
+                            new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
+                        }
+                    }
+                );
+        
+            _orchestrator.Setup(x => x.GetSubcontractorDeclarationViewModel(It.Is<GetSubcontractorDeclarationRequest>(y => y.ApplicationId == vm.ApplicationId
+                && y.UserName == Username))).ReturnsAsync(vm);
+        
+            await _controller.ClarifySubcontractorDeclarationPage(command);
+        
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
     }
 }
 

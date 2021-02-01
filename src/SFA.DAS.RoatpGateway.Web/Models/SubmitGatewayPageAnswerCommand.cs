@@ -8,6 +8,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
     {
         public Guid ApplicationId { get; set; }
         public string PageId { get; set; }
+        public string OriginalStatus { get; set; }
         public string Status { get; set; }
         public string OptionPassText { get; set; }
         public string OptionFailText { get; set; }
@@ -15,6 +16,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
         public string OptionClarificationText { get; set; }
         public string ClarificationAnswer { get; set; }
         public string ClarificationFile { get; set; }
+        public string GatewayReviewStatus { get; set; }
         public IFormFileCollection ClarificationFileUploads { get; set; }
         public SubmitGatewayPageAnswerCommand()
         {
@@ -26,6 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
             ApplicationId = viewModel.ApplicationId;
             PageId = viewModel.PageId;
             Status = viewModel.Status;
+            OriginalStatus = viewModel.OriginalStatus;
             OptionPassText = viewModel.OptionPassText;
             OptionFailText = viewModel.OptionFailText;
             OptionInProgressText = viewModel.OptionInProgressText;

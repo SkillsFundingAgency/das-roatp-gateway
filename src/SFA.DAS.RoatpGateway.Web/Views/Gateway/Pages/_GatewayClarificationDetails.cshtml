@@ -15,7 +15,7 @@
             Date of check
         </dt>
         <dd class="govuk-summary-list__value">
-            @Model.OutcomeMadeOn.ToSfaShortDateString()
+            @Model.ClarificationDate.ToSfaShortDateString()
         </dd>
     </div>
     <div class="govuk-summary-list__row">
@@ -23,7 +23,7 @@
             Comments
         </dt>
         <dd class="govuk-summary-list__value">
-            @Model.Comments
+            @Model.ClarificationComments
         </dd>
     </div>
     <div class="govuk-summary-list__row">
@@ -31,7 +31,7 @@
             Outcome made by
         </dt>
         <dd class="govuk-summary-list__value">
-            @Model.OutcomeMadeBy
+            @Model.ClarificationBy
         </dd>
     </div>
 </dl>

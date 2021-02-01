@@ -28,7 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var userName = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(applicationId, userName));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml"
                 : $"{GatewayViewsLocation}/SubcontractorDeclaration.cshtml", viewModel);
         }
@@ -37,6 +37,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         public async Task<FileStreamResult> SubcontractorDeclarationContractFile(Guid applicationId)
         {
             return await _orchestrator.GetSubcontractorDeclarationContractFile(new GetSubcontractorDeclarationContractFileRequest(applicationId));
+        }
+
+        [HttpGet("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclarationFileClarification/{filename}")]
+        public async Task<FileStreamResult> SubcontractorDeclarationContractFileClarification(Guid applicationId, string filename)
+        {
+            return await _orchestrator.GetSubcontractorDeclarationContractFileClarification(new GetSubcontractorDeclarationContractFileClarificationRequest(applicationId, filename));
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclaration")]
@@ -128,7 +134,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var userName = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetOfficeForStudentsViewModel(new GetOfficeForStudentsRequest(applicationId, userName));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/OfficeForStudents.cshtml"
                 : $"{GatewayViewsLocation}/OfficeForStudents.cshtml", viewModel);
         }
@@ -152,7 +158,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var userName = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetInitialTeacherTrainingViewModel(new GetInitialTeacherTrainingRequest(applicationId, userName));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/InitialTeacherTraining.cshtml"
                 : $"{GatewayViewsLocation}/InitialTeacherTraining.cshtml", viewModel);
         }
@@ -176,7 +182,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var userName = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(applicationId, userName));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/OfstedDetails.cshtml"
                 : $"{GatewayViewsLocation}/OfstedDetails.cshtml", viewModel);
         }

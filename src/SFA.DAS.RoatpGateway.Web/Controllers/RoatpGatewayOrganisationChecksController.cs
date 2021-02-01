@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.AdminService.Common.Extensions;
@@ -31,7 +32,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, username));
-            if (viewModel.Status==SectionReviewStatus.Clarification)
+            if (viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy))
                 return View($"{GatewayViewsLocation}/Clarifications/TwoInTwelveMonths.cshtml", viewModel);
             return View($"{GatewayViewsLocation}/TwoInTwelveMonths.cshtml", viewModel);
         }
@@ -57,7 +58,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetLegalNameViewModel(new GetLegalNameRequest(applicationId, username));
-            if (viewModel.Status == SectionReviewStatus.Clarification)
+            if (viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy))
                 return View($"{GatewayViewsLocation}/Clarifications/LegalName.cshtml", viewModel);
             return View($"{GatewayViewsLocation}/LegalName.cshtml", viewModel);
         }
@@ -81,7 +82,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetTradingNameViewModel(new GetTradingNameRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification 
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/TradingName.cshtml" 
                 : $"{GatewayViewsLocation}/TradingName.cshtml", viewModel);
         }
@@ -105,7 +106,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetOrganisationStatusViewModel(new GetOrganisationStatusRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/OrganisationStatus.cshtml"
                 : $"{GatewayViewsLocation}/OrganisationStatus.cshtml", viewModel);
         }
@@ -129,7 +130,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetAddressViewModel(new GetAddressRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/AddressCheck.cshtml"
                 : $"{GatewayViewsLocation}/AddressCheck.cshtml", viewModel);
         }
@@ -153,7 +154,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetIcoNumberViewModel(new GetIcoNumberRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/IcoNumber.cshtml"
                 : $"{GatewayViewsLocation}/IcoNumber.cshtml", viewModel);
         }
@@ -177,7 +178,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetWebsiteViewModel(new GetWebsiteRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/Website.cshtml"
                 : $"{GatewayViewsLocation}/Website.cshtml", viewModel);
         }
@@ -201,7 +202,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var viewModel = await _orchestrator.GetOrganisationRiskViewModel(new GetOrganisationRiskRequest(applicationId, username));
-            return View(viewModel.Status == SectionReviewStatus.Clarification
+            return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/OrganisationRisk.cshtml"
                 : $"{GatewayViewsLocation}/OrganisationRisk.cshtml", viewModel);
         }
