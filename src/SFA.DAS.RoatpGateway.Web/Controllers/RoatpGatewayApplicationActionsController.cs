@@ -101,12 +101,13 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         public async Task<IActionResult> ConfirmWithdrawApplication(Guid applicationId, RoatpWithdrawApplicationViewModel viewModel)
         {
             var application = await _applyApiClient.GetApplication(applicationId);
+            var oversightDetails = await _applyApiClient.GetOversightDetails(applicationId);
+
             if (application is null)
             {
                 return RedirectToAction(nameof(RoatpGatewayController.NewApplications), "RoatpGateway");
             }
-            else if (application.OversightStatus == OversightReviewStatus.Successful
-                || application.OversightStatus == OversightReviewStatus.Unsuccessful
+            else if (oversightDetails.HasFinalOutcome
                 || application.ApplicationStatus == ApplicationStatus.Withdrawn
                 || application.ApplicationStatus == ApplicationStatus.Removed)
             {

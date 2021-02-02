@@ -2,6 +2,7 @@
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using System;
 using System.Collections.Generic;
+using SFA.DAS.RoatpGateway.Domain;
 
 namespace SFA.DAS.RoatpGateway.Web.ViewModels
 {
@@ -11,7 +12,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public Guid OrgId { get; }
 
         public string ApplicationStatus { get; }
-        public string OversightStatus { get; }
+        public bool HasOversightOutcome { get; }
         public string GatewayReviewStatus { get; set; }
 
         public string OptionAskClarificationText { get; set; }
@@ -69,13 +70,13 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
 
         }
 
-        public RoatpGatewayApplicationViewModel(Apply application)
+        public RoatpGatewayApplicationViewModel(Apply application, ApplicationOversightDetails oversightDetails)
         {
             ApplicationId = application.ApplicationId;
             OrgId = application.OrganisationId;
 
             ApplicationStatus = application.ApplicationStatus;
-            OversightStatus = application.OversightStatus;
+            HasOversightOutcome = oversightDetails.HasFinalOutcome;
             GatewayReviewStatus = application.GatewayReviewStatus;
 
             GatewayUserName = application.GatewayUserName;

@@ -37,7 +37,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             _service = new GatewaySectionsNotRequiredService(_apiClient.Object, _accreditationClient.Object, _logger.Object);
 
             var application = new Apply();
-            _viewModel = new RoatpGatewayApplicationViewModel(application)
+            _viewModel = new RoatpGatewayApplicationViewModel(application, new ApplicationOversightDetails{OversightStatus = OversightReviewStatus.None})
             {
                 Sequences = new List<GatewaySequence>
                 {
