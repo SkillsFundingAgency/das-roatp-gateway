@@ -342,5 +342,10 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
                 return false;
             }
         }
+
+        public async Task<ApplicationOversightDetails> GetOversightDetails(Guid applicationId)
+        {
+            return await Get<ApplicationOversightDetails>($"/Oversights/{applicationId}");
+        }
     }
 }

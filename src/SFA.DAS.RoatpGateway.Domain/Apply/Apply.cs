@@ -9,8 +9,6 @@ namespace SFA.DAS.RoatpGateway.Domain.Apply
 
         public string ApplicationStatus { get; set; }
         public string GatewayReviewStatus { get; set; }
-        public string OversightStatus { get; set; }
-
         public ApplyData ApplyData { get; set; }
         public FinancialReviewDetails FinancialGrade { get; set; }
 
