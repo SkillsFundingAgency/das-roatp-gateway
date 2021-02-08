@@ -25,11 +25,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         protected readonly IRoatpGatewayPageValidator GatewayValidator;
         protected const string GatewayViewsLocation = "~/Views/Gateway/pages";
 
-        public RoatpGatewayControllerBase()
-        {
-
-        }
-
         public RoatpGatewayControllerBase(IRoatpApplicationApiClient applyApiClient,
                                           ILogger<T> logger, IRoatpGatewayPageValidator gatewayValidator)
         {
@@ -125,7 +120,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 throw;
             }
 
-            return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId });
+            return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId }, $"Sequence_{command.SequenceNumber}");
         }
 
         protected async Task<IActionResult> SubmitGatewayPageAnswerClarification(SubmitGatewayPageAnswerCommand command)
@@ -146,7 +141,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 throw;
             }
 
-            return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId });
+            return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId }, $"Sequence_{command.SequenceNumber}");
         }
 
 
@@ -168,7 +163,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 throw;
             }
 
-            return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId });
+            return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId }, $"Sequence_{command.SequenceNumber}");
         }
     }
 }

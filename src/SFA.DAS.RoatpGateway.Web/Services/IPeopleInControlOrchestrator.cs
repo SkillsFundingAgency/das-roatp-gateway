@@ -6,7 +6,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 {
     public interface IPeopleInControlOrchestrator
     {
-        Task<PeopleInControlPageViewModel> GetPeopleInControlViewModel(GetPeopleInControlRequest getPeopleInControlRequest);
-        Task<PeopleInControlHighRiskPageViewModel> GetPeopleInControlHighRiskViewModel(GetPeopleInControlHighRiskRequest getPeopleInControlRequest);
+        Task<PeopleInControlPageViewModel> GetPeopleInControlViewModel(GetPeopleInControlRequest request);
+        Task<PeopleInControlHighRiskPageViewModel> GetPeopleInControlHighRiskViewModel(GetPeopleInControlHighRiskRequest request);
     }
 }
