@@ -98,7 +98,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             model.HasMaintainedFullGradeInShortInspection = ofstedDetails.HasMaintainedFullGradeInShortInspection;
             model.HasMaintainedFundingSinceInspection = ofstedDetails.HasMaintainedFundingSinceInspection;
             model.ReceivedFullInspectionGradeForApprenticeships = ofstedDetails.ReceivedFullInspectionGradeForApprenticeships;
-
+            model.Has2MonitoringVisitsGradedInadequate = ofstedDetails.Has2MonitoringVisitsGradedInadequate;
+            model.HasMonitoringVisitGradedInadequateInLast18Months =
+                ofstedDetails.HasMonitoringVisitGradedInadequateInLast18Months;
             return model;
         }
     }
