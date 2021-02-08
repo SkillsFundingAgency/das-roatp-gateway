@@ -22,7 +22,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
                 HasHadShortInspectionWithinLast3Years = false,
                 HasMaintainedFullGradeInShortInspection = true,
                 HasMaintainedFundingSinceInspection = false,
-                ReceivedFullInspectionGradeForApprenticeships = true
+                ReceivedFullInspectionGradeForApprenticeships = true,
+                Has2MonitoringVisitsGradedInadequate = false,
+                HasMonitoringVisitGradedInadequateInLast18Months = true
             };
             ExperienceAndAccreditationApiClient.Setup(x => x.GetOfstedDetails(ApplicationId)).ReturnsAsync(ofstedDetails);
 
@@ -43,6 +45,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
             Assert.AreEqual(ofstedDetails.HasMaintainedFullGradeInShortInspection, viewModel.HasMaintainedFullGradeInShortInspection);
             Assert.AreEqual(ofstedDetails.HasMaintainedFundingSinceInspection, viewModel.HasMaintainedFundingSinceInspection);
             Assert.AreEqual(ofstedDetails.ReceivedFullInspectionGradeForApprenticeships, viewModel.ReceivedFullInspectionGradeForApprenticeships);
+            Assert.AreEqual(ofstedDetails.Has2MonitoringVisitsGradedInadequate, viewModel.Has2MonitoringVisitsGradedInadequate); 
+            Assert.AreEqual(ofstedDetails.HasMonitoringVisitGradedInadequateInLast18Months, viewModel.HasMonitoringVisitGradedInadequateInLast18Months);
         }
     }
 }
