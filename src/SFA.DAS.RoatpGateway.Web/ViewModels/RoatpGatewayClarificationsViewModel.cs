@@ -10,6 +10,9 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
     {
 
         public Guid ApplicationId { get; set; }
+
+        public string GatewayReviewStatus { get; set; }
+
         public string ConfirmAskForClarification { get; set; }
         public List<ValidationErrorDetail> ErrorMessages { get; set; }
         public List<ClarificationSequence> Sequences { get; set; }
@@ -24,6 +27,8 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public RoatpGatewayClarificationsViewModel(Apply application)
         {
             ApplicationId = application.ApplicationId;
+
+            GatewayReviewStatus = application.GatewayReviewStatus;
 
             if (application.ApplyData?.ApplyDetails == null) return;
             ApplicationReference = application.ApplyData.ApplyDetails.ReferenceNumber;

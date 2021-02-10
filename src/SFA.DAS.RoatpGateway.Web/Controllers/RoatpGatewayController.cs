@@ -142,36 +142,29 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToAskForClarification")]
         public async Task<IActionResult> AboutToAskForClarification(Guid applicationId, string confirmAskForClarification)
         {
-
             var username = HttpContext.User.UserDisplayName();
+            var viewModel = await _orchestrator.GetClarificationViewModel(new GetApplicationClarificationsRequest(applicationId, username));
 
-            if (string.IsNullOrEmpty(confirmAskForClarification))
+            if (viewModel is null)
             {
-                var viewModel = await _orchestrator.GetClarificationViewModel(new GetApplicationClarificationsRequest(applicationId, username));
-                if (viewModel is null)
-                {
-                    return RedirectToAction(nameof(NewApplications));
-                }
+                return RedirectToAction(nameof(NewApplications));
+            }
+            else if (string.IsNullOrEmpty(confirmAskForClarification))
+            {
                 viewModel.ErrorMessages = new List<ValidationErrorDetail>
                 {
                     new ValidationErrorDetail("ConfirmAskForClarification",
                         "Select if you are sure you want to ask for clarification")
                 };
+
                 viewModel.CssFormGroupError = "govuk-form-group--error";
                 return View("~/Views/Gateway/AskForClarification.cshtml", viewModel);
             }
-
-            if (confirmAskForClarification == "No")
+            else if (confirmAskForClarification == "No" || viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
             {
-                var viewModel =
-                    await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
-                
-                if (viewModel is null)
-                {
-                    return RedirectToAction(nameof(NewApplications));
-                }
-                return View("~/Views/Gateway/Application.cshtml", viewModel);
+                return RedirectToAction(nameof(ViewApplication), new { applicationId });
             }
+
             var userId = HttpContext.User.UserId();
             await _applyApiClient.UpdateGatewayReviewStatusAsClarification(applicationId, userId, username);
             var vm = new RoatpGatewayOutcomeViewModel { ApplicationId = applicationId};

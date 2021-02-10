@@ -467,13 +467,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
                 .ReturnsAsync(new RoatpGatewayClarificationsViewModel());
-            _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>()))
-                .ReturnsAsync(new RoatpGatewayApplicationViewModel());
 
             var confirmAskForClarification = "No";
             var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
-            var viewResult = result as ViewResult;
-            Assert.IsTrue(viewResult.ViewName.Contains("Gateway/Application.cshtml"));
+
+            var viewResult = result as RedirectToActionResult;
+            Assert.AreEqual("ViewApplication", viewResult.ActionName);
         }
 
 
@@ -484,8 +483,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
                 .ReturnsAsync(new RoatpGatewayClarificationsViewModel());
-            _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>()))
-                .ReturnsAsync(new RoatpGatewayApplicationViewModel());
 
             ApplyApiClient.Setup(x=>x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(), It.IsAny<string>()));
 
@@ -496,6 +493,20 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             ApplyApiClient.Verify(x=>x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(),It.IsAny<string>()),Times.Once);
         }
 
+        [Test]
+        public async Task AboutToAskForClarification_with_ClarificationSent_then_redirected_to_applications_page()
+        {
+            var applicationId = Guid.NewGuid();
+
+            _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
+                .ReturnsAsync(new RoatpGatewayClarificationsViewModel { GatewayReviewStatus = GatewayReviewStatus.ClarificationSent });
+
+            var confirmAskForClarification = "Yes";
+            var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
+
+            var viewResult = result as RedirectToActionResult;
+            Assert.AreEqual("ViewApplication", viewResult.ActionName);
+        }
 
         [TestCase(GatewayReviewStatus.New)]
         [TestCase(GatewayReviewStatus.InProgress)]
