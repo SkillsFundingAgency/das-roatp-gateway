@@ -28,7 +28,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _logger.LogInformation($"Retrieving RoATP details for application {request.ApplicationId}");
 
             var model = new RoatpPageViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, pageId, request.UserName,
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.RegisterChecks,
+                                                    pageId,
+                                                    request.UserName,
                                                     RoatpGatewayConstants.Captions.RegisterChecks,
                                                     RoatpGatewayConstants.Headings.Roatp,
                                                     NoSelectionErrorMessages.Errors[GatewayPageIds.Roatp]);
@@ -55,7 +57,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _logger.LogInformation($"Retrieving RoEPAO details for application {request.ApplicationId}");
 
             var model = new RoepaoPageViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, pageId, request.UserName,
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.RegisterChecks,
+                                                    pageId,
+                                                    request.UserName,
                                                     RoatpGatewayConstants.Captions.RegisterChecks,
                                                     RoatpGatewayConstants.Headings.Roepao,
                                                     NoSelectionErrorMessages.Errors[GatewayPageIds.Roepao]);

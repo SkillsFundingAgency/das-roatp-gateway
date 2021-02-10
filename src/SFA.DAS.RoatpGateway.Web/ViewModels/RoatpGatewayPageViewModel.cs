@@ -7,6 +7,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
     public class RoatpGatewayPageViewModel
     {
         public Guid ApplicationId { get; set; }
+        public int SequenceNumber { get; set; }
         public string PageId { get; set; }
         public string GatewayReviewStatus { get; set; }
 

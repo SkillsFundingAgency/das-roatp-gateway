@@ -26,7 +26,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _logger.LogInformation($"Retrieving people in control details for application {request.ApplicationId}");
 
             var model = new PeopleInControlPageViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewayPageIds.PeopleInControl, request.UserName,
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.PeopleInControlChecks,
+                GatewayPageIds.PeopleInControl,
+                request.UserName,
                 RoatpGatewayConstants.Captions.PeopleInControlChecks,
                 RoatpGatewayConstants.Headings.PeopleInControl,
                 NoSelectionErrorMessages.Errors[GatewayPageIds.PeopleInControl]);
@@ -84,7 +86,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         public async Task<PeopleInControlHighRiskPageViewModel> GetPeopleInControlHighRiskViewModel(GetPeopleInControlHighRiskRequest request)
         {
             var model = new PeopleInControlHighRiskPageViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewayPageIds.PeopleInControlRisk, request.UserName,
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.PeopleInControlChecks,
+                GatewayPageIds.PeopleInControlRisk,
+                request.UserName,
                 RoatpGatewayConstants.Captions.PeopleInControlChecks,
                 RoatpGatewayConstants.Headings.PeopleInControlHighRisk,
                 NoSelectionErrorMessages.Errors[GatewayPageIds.PeopleInControlRisk]);

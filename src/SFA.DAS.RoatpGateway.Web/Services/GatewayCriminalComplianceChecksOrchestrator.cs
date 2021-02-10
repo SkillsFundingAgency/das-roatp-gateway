@@ -26,7 +26,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         public async Task<CriminalCompliancePageViewModel> GetCriminalComplianceCheckViewModel(GetCriminalComplianceCheckRequest request)
         {
             var model = new CriminalCompliancePageViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, request.PageId, request.UserName,
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GetSequenceNumberForPage(request.PageId),
+                                                    request.PageId,
+                                                    request.UserName,
                                                     GetCaptionForPage(request.PageId),
                                                     CriminalCompliancePageConfiguration.Headings[request.PageId],
                                                     NoSelectionErrorMessages.Errors[request.PageId]);
@@ -77,6 +79,38 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     return RoatpGatewayConstants.Captions.PeopleInControlCriminalAndComplianceChecks;
                 default:
                     return string.Empty;
+            }
+        }
+
+        private static int GetSequenceNumberForPage(string gatewayPageId)
+        {
+            switch (gatewayPageId)
+            {
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.ContractTermination:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.ContractWithdrawnEarly:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRoTO:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.FundingRemoved:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRegister:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency:
+                    return GatewaySequences.OrganisationCriminalComplianceChecks;
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.FraudIrregularities:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.OngoingInvestigation:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.ContractTerminated:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt:
+                    return GatewaySequences.PeopleInControlCriminalComplianceChecks;
+                default:
+                    return int.MinValue;
             }
         }
     }

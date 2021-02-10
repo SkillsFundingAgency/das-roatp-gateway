@@ -7,6 +7,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
     public class SubmitGatewayPageAnswerCommand
     {
         public Guid ApplicationId { get; set; }
+        public int SequenceNumber { get; set; }
         public string PageId { get; set; }
         public string OriginalStatus { get; set; }
         public string Status { get; set; }
@@ -18,6 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
         public string ClarificationFile { get; set; }
         public string GatewayReviewStatus { get; set; }
         public IFormFileCollection ClarificationFileUploads { get; set; }
+
         public SubmitGatewayPageAnswerCommand()
         {
 
@@ -26,6 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
         public SubmitGatewayPageAnswerCommand(RoatpGatewayPageViewModel viewModel)
         {
             ApplicationId = viewModel.ApplicationId;
+            SequenceNumber = viewModel.SequenceNumber;
             PageId = viewModel.PageId;
             Status = viewModel.Status;
             OriginalStatus = viewModel.OriginalStatus;

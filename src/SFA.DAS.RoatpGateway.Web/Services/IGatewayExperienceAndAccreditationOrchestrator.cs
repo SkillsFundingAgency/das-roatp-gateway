@@ -7,8 +7,8 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 {
     public interface IGatewayExperienceAndAccreditationOrchestrator
     {
-        Task<SubcontractorDeclarationViewModel> GetSubcontractorDeclarationViewModel(GetSubcontractorDeclarationRequest subcontractorDeclarationRequest);
-        Task<FileStreamResult> GetSubcontractorDeclarationContractFile(GetSubcontractorDeclarationContractFileRequest subcontractorDeclarationRequest);
+        Task<SubcontractorDeclarationViewModel> GetSubcontractorDeclarationViewModel(GetSubcontractorDeclarationRequest request);
+        Task<FileStreamResult> GetSubcontractorDeclarationContractFile(GetSubcontractorDeclarationContractFileRequest request);
         Task<FileStreamResult> GetSubcontractorDeclarationContractFileClarification(GetSubcontractorDeclarationContractFileClarificationRequest request);
         Task<OfficeForStudentsViewModel> GetOfficeForStudentsViewModel(GetOfficeForStudentsRequest request);
         Task<OfstedDetailsViewModel> GetOfstedDetailsViewModel(GetOfstedDetailsRequest request);
