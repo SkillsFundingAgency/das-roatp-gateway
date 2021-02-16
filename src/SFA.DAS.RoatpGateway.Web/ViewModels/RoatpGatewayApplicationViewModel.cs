@@ -33,6 +33,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
 
         // Read only
         public string GatewayReviewComment { get; set; }
+        public string GatewayReviewExternalComment { get; set; }
         public DateTime? GatewayOutcomeDateTime { get; set; }
         public string GatewayUserName { get; set; }
 
@@ -114,6 +115,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
             {
                 GatewayOutcomeDateTime = application.ApplyData.GatewayReviewDetails.OutcomeDateTime;
                 GatewayReviewComment = application.ApplyData.GatewayReviewDetails.Comments;
+                GatewayReviewExternalComment = application.ApplyData.GatewayReviewDetails.ExternalComments;
             }
 
             ApplicationComments = application.Comments;

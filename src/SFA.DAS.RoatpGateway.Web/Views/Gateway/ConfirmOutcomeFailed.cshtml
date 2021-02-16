@@ -46,9 +46,14 @@
                             <h1 class="govuk-fieldset__heading">Are you sure you want to fail this application?</h1>
                         </legend>
 
-                        <h2 class="govuk-heading-l">Comments</h2>
+                        <h2 class="govuk-heading-l">Internal comments</h2>
                         <div class="govuk-inset-text govuk-!-margin-bottom-7">
                             @Model.GatewayReviewComment
+                        </div>
+
+                        <h2 class="govuk-heading-l">External comments</h2>
+                        <div class="govuk-inset-text govuk-!-margin-bottom-7">
+                            @Model.GatewayReviewExternalComment
                         </div>
 
                         <div class="govuk-warning-text">
