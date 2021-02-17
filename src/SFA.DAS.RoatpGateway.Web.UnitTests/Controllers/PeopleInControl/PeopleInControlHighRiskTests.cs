@@ -65,6 +65,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.PeopleInControl
             {
                 Status = SectionReviewStatus.Pass,
                 ApplicationId = ViewModel.ApplicationId,
+                SequenceNumber = ViewModel.SequenceNumber,
                 PageId = ViewModel.PageId
             };
 

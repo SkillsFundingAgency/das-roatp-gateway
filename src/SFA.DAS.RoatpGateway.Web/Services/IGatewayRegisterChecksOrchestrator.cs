@@ -6,7 +6,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 {
     public interface IGatewayRegisterChecksOrchestrator
     {
-        Task<RoatpPageViewModel> GetRoatpViewModel(GetRoatpRequest getRoatpRequest);
-        Task<RoepaoPageViewModel> GetRoepaoViewModel(GetRoepaoRequest getRoatpRequest);
+        Task<RoatpPageViewModel> GetRoatpViewModel(GetRoatpRequest request);
+        Task<RoepaoPageViewModel> GetRoepaoViewModel(GetRoepaoRequest request);
     }
 }
