@@ -178,7 +178,7 @@
                         @{
                             var cssModifierClassName = CssStylingHelper.GetGatewayReviewStatusStyle(@Model.GatewayReviewStatus);
                             <strong class="das-tag @cssModifierClassName das-no-wrap">@Model.GatewayReviewStatus</strong>
-                        } 
+                        }
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -199,7 +199,7 @@
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">
-                        Comments
+                        Internal comments
                     </dt>
                     <dd class="govuk-summary-list__value">
                         @if (string.IsNullOrWhiteSpace(Model.GatewayReviewComment))
@@ -209,6 +209,21 @@
                         else
                         {
                             @Model.GatewayReviewComment
+                        }
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        External comments
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @if (string.IsNullOrWhiteSpace(Model.GatewayReviewExternalComment))
+                        {
+                            <text>N/A</text>
+                        }
+                        else
+                        {
+                            @Model.GatewayReviewExternalComment
                         }
                     </dd>
                 </div>
