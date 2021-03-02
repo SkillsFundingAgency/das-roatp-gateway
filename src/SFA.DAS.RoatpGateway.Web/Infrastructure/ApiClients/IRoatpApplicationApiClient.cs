@@ -47,7 +47,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task<OrganisationRegisterStatus> GetOrganisationRegisterStatus(Guid applicationId);
 
-        Task<string> GetTwoInTwelveMonths(Guid applicationId);
+        Task<string> GetOneInTwelveMonths(Guid applicationId);
         Task<string> GetTradingName(Guid applicationId);
         Task<string> GetProviderRouteName(Guid applicationId);
         Task<string> GetWebsiteAddressSourcedFromUkrlp(Guid applicationId);

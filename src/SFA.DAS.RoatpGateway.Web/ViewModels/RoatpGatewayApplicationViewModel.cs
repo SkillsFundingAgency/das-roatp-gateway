@@ -29,7 +29,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public List<GatewaySequence> Sequences { get; set; }
         public bool ReadyToConfirm { get; set; }
 
-        public bool TwoInTwoMonthsPassed { get; set; }
+        public bool OneInTwoMonthsPassed { get; set; }
 
         // Read only
         public string GatewayReviewComment { get; set; }

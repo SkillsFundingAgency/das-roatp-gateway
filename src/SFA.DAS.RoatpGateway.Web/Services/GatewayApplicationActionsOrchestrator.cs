@@ -10,7 +10,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 {
     public class GatewayApplicationActionsOrchestrator : IGatewayApplicationActionsOrchestrator
     {
-        private const string _commonDetailsPageId = GatewayPageIds.TwoInTwelveMonths;
+        private const string _commonDetailsPageId = GatewayPageIds.OneInTwelveMonths;
         private readonly IRoatpApplicationApiClient _applyApiClient;
 
         public GatewayApplicationActionsOrchestrator(IRoatpApplicationApiClient applyApiClient)

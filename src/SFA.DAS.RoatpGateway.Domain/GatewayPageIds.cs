@@ -3,7 +3,7 @@ namespace SFA.DAS.RoatpGateway.Domain
 {
     public static class GatewayPageIds
     {
-        public const string TwoInTwelveMonths = "TwoInTwelveMonths";
+        public const string OneInTwelveMonths = "OneInTwelveMonths";
         public const string LegalName = "LegalName";
         public const string TradingName = "TradingName";
         public const string OrganisationStatus = "OrganisationStatus";

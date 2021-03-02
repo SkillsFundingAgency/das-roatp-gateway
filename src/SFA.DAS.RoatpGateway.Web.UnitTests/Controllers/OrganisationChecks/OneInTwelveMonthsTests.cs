@@ -17,14 +17,14 @@ using SFA.DAS.RoatpGateway.Domain.Apply;
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 {
     [TestFixture]
-    public class TwoInTwelveMonthsTests : RoatpGatewayControllerTestBase<RoatpGatewayOrganisationChecksController>
+    public class OneInTwelveMonthsTests : RoatpGatewayControllerTestBase<RoatpGatewayOrganisationChecksController>
     {
         private RoatpGatewayOrganisationChecksController _controller;
         private Mock<IGatewayOrganisationChecksOrchestrator> _orchestrator;
         private static string ClarificationAnswer => "Clarification answer";
 
         private string comment = "test comment";
-        private string viewname = "~/Views/Gateway/pages/TwoInTwelveMonths.cshtml";
+        private string viewname = "~/Views/Gateway/pages/OneInTwelveMonths.cshtml";
 
         [SetUp]
         public void Setup()
@@ -40,28 +40,28 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
         }
 
         [Test]
-        public async Task check_two_in_twelve_months_request_is_sent()
+        public async Task check_one_in_twelve_months_request_is_sent()
         {
             var applicationId = Guid.NewGuid();
 
-            var vm = new TwoInTwelveMonthsViewModel
+            var vm = new OneInTwelveMonthsViewModel
             {
                 Status = SectionReviewStatus.Pass,
                 SourcesCheckedOn = DateTime.Now,
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
 
-            _orchestrator.Setup(x => x.GetTwoInTwelveMonthsViewModel(It.IsAny<GetTwoInTwelveMonthsRequest>())).ReturnsAsync(vm);
-            var result = await _controller.GetTwoInTwelveMonthsPage(applicationId);
+            _orchestrator.Setup(x => x.GetOneInTwelveMonthsViewModel(It.IsAny<GetOneInTwelveMonthsRequest>())).ReturnsAsync(vm);
+            var result = await _controller.GetOneInTwelveMonthsPage(applicationId);
             var viewResult = result as ViewResult;
             Assert.AreEqual(viewname, viewResult.ViewName);
         }
 
         [Test]
-        public async Task post_two_in_twelve_months_happy_path()
+        public async Task post_one_in_twelve_months_happy_path()
         {
             var applicationId = Guid.NewGuid();
-            var pageId = GatewayPageIds.TwoInTwelveMonths;
+            var pageId = GatewayPageIds.OneInTwelveMonths;
 
             var vm = new WebsiteViewModel
             {
@@ -74,19 +74,19 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             };
             var command = new SubmitGatewayPageAnswerCommand(vm);
 
-            await _controller.EvaluateTwoInTwelveMonthsPage(command);
+            await _controller.EvaluateOneInTwelveMonthsPage(command);
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, comment,null));
-            _orchestrator.Verify(x => x.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, Username)), Times.Never());
+            _orchestrator.Verify(x => x.GetOneInTwelveMonthsViewModel(new GetOneInTwelveMonthsRequest(applicationId, Username)), Times.Never());
         }
 
         [Test]
-        public async Task post_two_in_twelve_months_clarification_happy_path()
+        public async Task post_one_in_twelve_months_clarification_happy_path()
         {
             var applicationId = Guid.NewGuid();
-            var pageId = GatewayPageIds.TwoInTwelveMonths;
+            var pageId = GatewayPageIds.OneInTwelveMonths;
 
-            var vm = new TwoInTwelveMonthsViewModel
+            var vm = new OneInTwelveMonthsViewModel
             {
                 ApplicationId = applicationId,
                 Status = SectionReviewStatus.Pass,
@@ -99,19 +99,19 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
             var command = new SubmitGatewayPageAnswerCommand(vm);
             GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
 
-            await _controller.ClarifyTwoInTwelveMonthsPage(command);
+            await _controller.ClarifyOneInTwelveMonthsPage(command);
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswerPostClarification(applicationId, pageId, vm.Status, UserId, Username, comment, ClarificationAnswer));
-            _orchestrator.Verify(x => x.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, Username)), Times.Never());
+            _orchestrator.Verify(x => x.GetOneInTwelveMonthsViewModel(new GetOneInTwelveMonthsRequest(applicationId, Username)), Times.Never());
         }
 
 
         [Test]
-        public async Task post_two_in_twelve_months_path_with_errors()
+        public async Task post_one_in_twelve_months_path_with_errors()
         {
             var applicationId = Guid.NewGuid();
 
-            var vm = new TwoInTwelveMonthsViewModel
+            var vm = new OneInTwelveMonthsViewModel
             {
                 ApplicationId = applicationId,
                 Status = SectionReviewStatus.Fail,
@@ -132,20 +132,20 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                 }
                 );
 
-            _orchestrator.Setup(x => x.GetTwoInTwelveMonthsViewModel(It.Is<GetTwoInTwelveMonthsRequest>(y => y.ApplicationId == vm.ApplicationId
+            _orchestrator.Setup(x => x.GetOneInTwelveMonthsViewModel(It.Is<GetOneInTwelveMonthsRequest>(y => y.ApplicationId == vm.ApplicationId
                                                                                  && y.UserName == Username))).ReturnsAsync(vm);
 
-            await _controller.EvaluateTwoInTwelveMonthsPage(command);
+            await _controller.EvaluateOneInTwelveMonthsPage(command);
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
-        public async Task post_two_in_twelve_months_clarification_path_with_errors()
+        public async Task post_one_in_twelve_months_clarification_path_with_errors()
         {
             var applicationId = Guid.NewGuid();
 
-            var vm = new TwoInTwelveMonthsViewModel
+            var vm = new OneInTwelveMonthsViewModel
             {
                 ApplicationId = applicationId,
                 Status = SectionReviewStatus.Fail,
@@ -167,10 +167,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
                     }
                 );
 
-            _orchestrator.Setup(x => x.GetTwoInTwelveMonthsViewModel(It.Is<GetTwoInTwelveMonthsRequest>(y => y.ApplicationId == vm.ApplicationId
+            _orchestrator.Setup(x => x.GetOneInTwelveMonthsViewModel(It.Is<GetOneInTwelveMonthsRequest>(y => y.ApplicationId == vm.ApplicationId
                 && y.UserName == Username))).ReturnsAsync(vm);
 
-            await _controller.ClarifyTwoInTwelveMonthsPage(command);
+            await _controller.ClarifyOneInTwelveMonthsPage(command);
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }

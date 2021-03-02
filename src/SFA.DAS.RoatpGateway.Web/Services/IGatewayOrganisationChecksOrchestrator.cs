@@ -6,7 +6,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 {
     public interface IGatewayOrganisationChecksOrchestrator
     {
-        Task<TwoInTwelveMonthsViewModel> GetTwoInTwelveMonthsViewModel(GetTwoInTwelveMonthsRequest request);
+        Task<OneInTwelveMonthsViewModel> GetOneInTwelveMonthsViewModel(GetOneInTwelveMonthsRequest request);
         Task<LegalNamePageViewModel> GetLegalNameViewModel(GetLegalNameRequest request);
         Task<TradingNamePageViewModel> GetTradingNameViewModel(GetTradingNameRequest request);
         Task<OrganisationStatusViewModel> GetOrganisationStatusViewModel(GetOrganisationStatusRequest request);

@@ -124,9 +124,9 @@
                                         <tr class="govuk-table__row">
                                             <td class="govuk-table__cell">
                                                 <span class="das-task-list__task-name das-task-list__task-name--inactive">
-                                                    @if (!Model.TwoInTwoMonthsPassed && currentSection.PageId != GatewayPageIds.TwoInTwelveMonths)
+                                                    @if (!Model.OneInTwoMonthsPassed && currentSection.PageId != GatewayPageIds.OneInTwelveMonths)
                                                     {
-                                                        @* TwoInTwelveMonths must be a Pass before unlocking any other section *@
+                                                        @* OneInTwelveMonths must be a Pass before unlocking any other section *@
                                                         @currentSection.LinkTitle@Html.Raw((string.IsNullOrWhiteSpace(currentSection.HiddenText) ? "" : $"<span class=\"govuk-visually-hidden\"> {currentSection.HiddenText}</span>"))
                                                     }
                                                     else if (currentSection.Status != null && currentSection.Status.Equals(SectionReviewStatus.NotRequired))

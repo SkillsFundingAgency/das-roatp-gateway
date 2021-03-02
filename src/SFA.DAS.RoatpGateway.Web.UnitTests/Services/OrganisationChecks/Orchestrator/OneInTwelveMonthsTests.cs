@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchestrator
 {
     [TestFixture]
-    public class TwoInTwelveMonthsTests
+    public class OneInTwelveMonthsTests
     {
         private GatewayOrganisationChecksOrchestrator _orchestrator;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
@@ -31,7 +31,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
         [TestCase("YES")]
         [TestCase("NO")]
-        public async Task check_orchestrator_builds_with_two_in_twelve_months(string twoInTwelveMonths)
+        public async Task check_orchestrator_builds_with_one_in_twelve_months(string oneInTwelveMonths)
         {
             var applicationId = Guid.NewGuid();
 
@@ -45,17 +45,17 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             };
             _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
-            _applyApiClient.Setup(x => x.GetTwoInTwelveMonths(applicationId)).ReturnsAsync(twoInTwelveMonths);
+            _applyApiClient.Setup(x => x.GetOneInTwelveMonths(applicationId)).ReturnsAsync(oneInTwelveMonths);
 
-            var request = new GetTwoInTwelveMonthsRequest(applicationId, UserName);
+            var request = new GetOneInTwelveMonthsRequest(applicationId, UserName);
 
-            var viewModel = await _orchestrator.GetTwoInTwelveMonthsViewModel(request);
+            var viewModel = await _orchestrator.GetOneInTwelveMonthsViewModel(request);
 
             Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
             Assert.AreEqual(ProviderRouteName, viewModel.ApplicationRoute);
             Assert.AreEqual(Ukprn, viewModel.Ukprn);
             Assert.AreEqual(commonDetails.ApplicationSubmittedOn, viewModel.ApplicationSubmittedOn);
-            Assert.AreEqual(twoInTwelveMonths, viewModel.SubmittedTwoInTwelveMonths);
+            Assert.AreEqual(oneInTwelveMonths, viewModel.SubmittedOneInTwelveMonths);
         }
     }
 }
