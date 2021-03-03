@@ -22,17 +22,20 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         {
             RoatpWithdrawApplicationViewModel viewModel = null;
 
-            var commonDetails = await _applyApiClient.GetPageCommonDetails(applicationId, _commonDetailsPageId, userName);
-            if (commonDetails != null)
+            var application = await _applyApiClient.GetApplication(applicationId);
+            var contact = await _applyApiClient.GetContactDetails(applicationId);
+            if (application != null && contact != null)
             {
                 viewModel = new RoatpWithdrawApplicationViewModel
                 {
-                    ApplicationId = commonDetails.ApplicationId,
-                    ApplicationStatus = commonDetails.ApplicationStatus,
-                    Ukprn = commonDetails.Ukprn,
-                    ApplyLegalName = commonDetails.LegalName,
-                    ApplicationRoute = commonDetails.ProviderRouteName,
-                    ApplicationSubmittedOn = commonDetails.ApplicationSubmittedOn
+                    ApplicationId = application.ApplicationId,
+                    ApplicationStatus = application.ApplicationStatus,
+                    Ukprn = application.ApplyData.ApplyDetails.UKPRN,
+                    ApplyLegalName = application.ApplyData.ApplyDetails.OrganisationName,
+                    ApplicationRoute = application.ApplyData.ApplyDetails.ProviderRouteName,
+                    ApplicationReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber,
+                    ApplicationEmailAddress = contact.Email,
+                    ApplicationSubmittedOn = application.ApplyData.ApplyDetails.ApplicationSubmittedOn
                 };
             }
 
