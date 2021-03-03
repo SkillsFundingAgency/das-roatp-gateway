@@ -293,9 +293,16 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     }
                 case GatewayReviewStatus.Reject:
                 {
+                    var contact = await _applyApiClient.GetContactDetails(viewModel.ApplicationId);
                     confirmViewModel = new RoatpGatewayRejectOutcomeViewModel
                     {
                         ApplicationId = viewModel.ApplicationId,
+                        Ukprn = application.ApplyData.ApplyDetails.UKPRN,
+                        ApplyLegalName = application.ApplyData.ApplyDetails.OrganisationName,
+                        ApplicationRoute = application.ApplyData.ApplyDetails.ProviderRouteName,
+                        ApplicationReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber,
+                        ApplicationEmailAddress = contact?.Email,
+                        ApplicationSubmittedOn = application.ApplyData.ApplyDetails.ApplicationSubmittedOn,
                         GatewayReviewStatus = viewModel.GatewayReviewStatus,
                         GatewayReviewComment = viewModel.OptionRejectedText,
                         GatewayReviewExternalComment = viewModel.OptionExternalRejectedText
