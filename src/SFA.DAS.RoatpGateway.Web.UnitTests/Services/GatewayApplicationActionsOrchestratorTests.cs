@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.Apply;
+using SFA.DAS.RoatpGateway.Domain.Roatp;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
@@ -34,19 +36,33 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
         public async Task GetWithdrawApplicationViewModel_returns_viewModel(string ukprn, string organisationName, string providerRouteName, string applicationStatus, string gatewayReviewStatus)
         {
             var submittedDate = DateTime.Now.AddDays(-1);
+            var referenceNumber = "APR100012";
+            var email = "test@test.com";
 
-            var commonDetails = new GatewayCommonDetails
+            var apply = new Apply
             {
                 ApplicationId = _applicationId,
-                Ukprn = ukprn,
-                ApplicationSubmittedOn = submittedDate,
-                LegalName = organisationName,
-                ProviderRouteName = providerRouteName,
                 ApplicationStatus = applicationStatus,
-                GatewayReviewStatus = gatewayReviewStatus
+                ApplyData = new ApplyData
+                {
+                    ApplyDetails = new ApplyDetails
+                    {
+                        UKPRN = ukprn,
+                        OrganisationName = organisationName,
+                        ProviderRouteName = providerRouteName,
+                        ReferenceNumber = referenceNumber,
+                        ApplicationSubmittedOn = submittedDate
+                    }
+                }
             };
 
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserName)).ReturnsAsync(commonDetails);
+            var contact = new ContactDetails
+            {
+                Email = email
+            };
+
+            _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync(apply);
+            _applyApiClient.Setup(x => x.GetContactDetails(_applicationId)).ReturnsAsync(contact);
 
             var viewModel = await _orchestrator.GetWithdrawApplicationViewModel(_applicationId, UserName);
 
@@ -56,6 +72,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.AreEqual(organisationName, viewModel.ApplyLegalName);
             Assert.AreEqual(providerRouteName, viewModel.ApplicationRoute);
             Assert.AreEqual(applicationStatus, viewModel.ApplicationStatus);
+            Assert.AreEqual(referenceNumber, viewModel.ApplicationReferenceNumber);
+            Assert.AreEqual(email, viewModel.ApplicationEmailAddress);
         }
 
         [Test]
