@@ -406,7 +406,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, userId, username);
 
                     var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
-                    return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);
+                    return View("~/Views/Gateway/ApplicationRejected.cshtml", vm);
                 }
                 else
                 {
