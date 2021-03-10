@@ -59,7 +59,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
             viewmodel.IsClarificationsSelectedAndAllFieldsSet = IsAskForClarificationActive(sections);
-            viewmodel.TwoInTwoMonthsPassed = TwoInTwelveMonthsPassed(sections);
+            viewmodel.OneInTwoMonthsPassed = OneInTwelveMonthsPassed(sections);
             viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
 
             return viewmodel;
@@ -118,7 +118,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
             viewmodel.IsClarificationsSelectedAndAllFieldsSet = sections.Any(x => x.Status == SectionReviewStatus.Clarification);
-            viewmodel.TwoInTwoMonthsPassed = TwoInTwelveMonthsPassed(sections);
+            viewmodel.OneInTwoMonthsPassed = OneInTwelveMonthsPassed(sections);
             viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
 
             return viewmodel;
@@ -215,7 +215,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         clarificationSequences.FirstOrDefault(x => x.SequenceNumber == sequence.SequenceNumber)
                             ?.Sections.Add(new ClarificationSection { PageTitle = section.LinkTitle, Comment = status.Comments });
 
-                        if (status.PageId == GatewayPageIds.TwoInTwelveMonths)
+                        if (status.PageId == GatewayPageIds.OneInTwelveMonths)
                             return clarificationSequences;
                     }
                 }
@@ -224,18 +224,18 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             return clarificationSequences;
         }
 
-        private static bool TwoInTwelveMonthsPassed(IEnumerable<GatewaySection> sections)
+        private static bool OneInTwelveMonthsPassed(IEnumerable<GatewaySection> sections)
         {
-            return sections.Where(sec => sec.PageId == GatewayPageIds.TwoInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Pass);
+            return sections.Where(sec => sec.PageId == GatewayPageIds.OneInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Pass);
         }
 
         private static bool IsReadyToConfirm(IEnumerable<GatewaySection> sections)
         {
             var isReadyToConfirm = true;
 
-            var twoInTwelveMonthsFailed = sections.Where(sec => sec.PageId == GatewayPageIds.TwoInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Fail);
+            var oneInTwelveMonthsFailed = sections.Where(sec => sec.PageId == GatewayPageIds.OneInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Fail);
 
-            if (!twoInTwelveMonthsFailed)
+            if (!oneInTwelveMonthsFailed)
             {
                 var gradedStatutes = new[] { SectionReviewStatus.Pass, SectionReviewStatus.Fail, SectionReviewStatus.NotRequired };
 
@@ -259,9 +259,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             if (!clarificationsPresent)
                 return false;
 
-            var twoInTwelveMonthClarification = sections.Where(sec => sec.PageId == GatewayPageIds.TwoInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Clarification);
+            var oneInTwelveMonthClarification = sections.Where(sec => sec.PageId == GatewayPageIds.OneInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Clarification);
             
-            if (twoInTwelveMonthClarification)
+            if (oneInTwelveMonthClarification)
                 return true;
 
             var gradedStatutes = new[] { SectionReviewStatus.Pass, SectionReviewStatus.Fail, SectionReviewStatus.NotRequired, SectionReviewStatus.Clarification };
@@ -289,7 +289,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     SequenceTitle = "Organisation checks",
                     Sections = new List<GatewaySection>
                     {
-                        new GatewaySection { SectionNumber = 1, PageId = GatewayPageIds.TwoInTwelveMonths,  LinkTitle = "2 applications in 12 months" },
+                        new GatewaySection { SectionNumber = 1, PageId = GatewayPageIds.OneInTwelveMonths,  LinkTitle = "1 application in 12 months" },
                         new GatewaySection { SectionNumber = 2, PageId = GatewayPageIds.LegalName,  LinkTitle = "Legal name" },
                         new GatewaySection { SectionNumber = 3, PageId = GatewayPageIds.TradingName, LinkTitle = "Trading name" },
                         new GatewaySection { SectionNumber = 4, PageId = GatewayPageIds.OrganisationStatus, LinkTitle = "Organisation status" },

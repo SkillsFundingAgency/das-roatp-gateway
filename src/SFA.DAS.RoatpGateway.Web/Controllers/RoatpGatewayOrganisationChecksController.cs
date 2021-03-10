@@ -27,29 +27,29 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
 
-        [HttpGet("/Roatp/Gateway/{applicationId}/Page/TwoInTwelveMonths")]
-        public async Task<IActionResult> GetTwoInTwelveMonthsPage(Guid applicationId)
+        [HttpGet("/Roatp/Gateway/{applicationId}/Page/OneInTwelveMonths")]
+        public async Task<IActionResult> GetOneInTwelveMonthsPage(Guid applicationId)
         {
             var username = HttpContext.User.UserDisplayName();
-            var viewModel = await _orchestrator.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(applicationId, username));
+            var viewModel = await _orchestrator.GetOneInTwelveMonthsViewModel(new GetOneInTwelveMonthsRequest(applicationId, username));
             if (viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy))
-                return View($"{GatewayViewsLocation}/Clarifications/TwoInTwelveMonths.cshtml", viewModel);
-            return View($"{GatewayViewsLocation}/TwoInTwelveMonths.cshtml", viewModel);
+                return View($"{GatewayViewsLocation}/Clarifications/OneInTwelveMonths.cshtml", viewModel);
+            return View($"{GatewayViewsLocation}/OneInTwelveMonths.cshtml", viewModel);
         }
 
-        [HttpPost("/Roatp/Gateway/{applicationId}/Page/TwoInTwelveMonths")]
-        public async Task<IActionResult> EvaluateTwoInTwelveMonthsPage(SubmitGatewayPageAnswerCommand command)
+        [HttpPost("/Roatp/Gateway/{applicationId}/Page/OneInTwelveMonths")]
+        public async Task<IActionResult> EvaluateOneInTwelveMonthsPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<TwoInTwelveMonthsViewModel>> viewModelBuilder = () => _orchestrator.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
-            return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/TwoInTwelveMonths.cshtml");
+            Func<Task<OneInTwelveMonthsViewModel>> viewModelBuilder = () => _orchestrator.GetOneInTwelveMonthsViewModel(new GetOneInTwelveMonthsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/OneInTwelveMonths.cshtml");
         }
 
-        [HttpPost("/Roatp/Gateway/{applicationId}/Page/TwoInTwelveMonths/Clarification")]
-        public async Task<IActionResult> ClarifyTwoInTwelveMonthsPage(SubmitGatewayPageAnswerCommand command)
+        [HttpPost("/Roatp/Gateway/{applicationId}/Page/OneInTwelveMonths/Clarification")]
+        public async Task<IActionResult> ClarifyOneInTwelveMonthsPage(SubmitGatewayPageAnswerCommand command)
         {
             
-            Func<Task<TwoInTwelveMonthsViewModel>> viewModelBuilder = () => _orchestrator.GetTwoInTwelveMonthsViewModel(new GetTwoInTwelveMonthsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
-            return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/TwoInTwelveMonths.cshtml");
+            Func<Task<OneInTwelveMonthsViewModel>> viewModelBuilder = () => _orchestrator.GetOneInTwelveMonthsViewModel(new GetOneInTwelveMonthsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/OneInTwelveMonths.cshtml");
         }
 
 

@@ -23,19 +23,19 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _organisationSummaryApiClient = organisationSummaryApiClient;
         }
 
-        public async Task<TwoInTwelveMonthsViewModel> GetTwoInTwelveMonthsViewModel(GetTwoInTwelveMonthsRequest request)
+        public async Task<OneInTwelveMonthsViewModel> GetOneInTwelveMonthsViewModel(GetOneInTwelveMonthsRequest request)
         {
-            _logger.LogInformation($"Retrieving two in twelve months check details for application {request.ApplicationId}");
+            _logger.LogInformation($"Retrieving one in twelve months check details for application {request.ApplicationId}");
 
-            var model = new TwoInTwelveMonthsViewModel();
+            var model = new OneInTwelveMonthsViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks,
-                                                                                            GatewayPageIds.TwoInTwelveMonths,
+                                                                                            GatewayPageIds.OneInTwelveMonths,
                                                                                             request.UserName,
                                                                                             RoatpGatewayConstants.Captions.OrganisationChecks,
-                                                                                            RoatpGatewayConstants.Headings.TwoInTwelveMonths,
-                                                                                            NoSelectionErrorMessages.Errors[GatewayPageIds.TwoInTwelveMonths]);
+                                                                                            RoatpGatewayConstants.Headings.OneInTwelveMonths,
+                                                                                            NoSelectionErrorMessages.Errors[GatewayPageIds.OneInTwelveMonths]);
 
-            model.SubmittedTwoInTwelveMonths = await _applyApiClient.GetTwoInTwelveMonths(request.ApplicationId);
+            model.SubmittedOneInTwelveMonths = await _applyApiClient.GetOneInTwelveMonths(request.ApplicationId);
             
             return model;
         }

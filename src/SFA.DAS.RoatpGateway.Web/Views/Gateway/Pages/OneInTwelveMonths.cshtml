@@ -1,26 +1,19 @@
 ﻿@using SFA.DAS.AdminService.Common.Extensions;
 @using SFA.DAS.RoatpGateway.Domain;
-@using SFA.DAS.RoatpGateway.Web.ViewModels
-@model SFA.DAS.RoatpGateway.Web.ViewModels.TwoInTwelveMonthsViewModel
+@model SFA.DAS.RoatpGateway.Web.ViewModels.OneInTwelveMonthsViewModel
 
 @{
     ViewBag.Title = $"Gateway - {Model.Heading}";
     Layout = "_Layout";
 }
 
-@{
-    await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml");
-}
+@{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayAssessmentBreadcrumb.cshtml"); }
 <main class="govuk-main-wrapper " id="main-content" role="main">
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @{
-                await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml");
-            }
-            @{
-                await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayHeader.cshtml");
-            }
+            @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayApprovalValidationSummary.cshtml"); }
+            @{await Html.RenderPartialAsync("~/Views/Gateway/Pages/_GatewayHeader.cshtml"); }
         </div>
     </div>
     <div class="govuk-grid-row">
@@ -34,27 +27,22 @@
                 </thead>
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">Have you submitted 2 applications to join the RoATP in the last 12 months?</td>
+                        <td class="govuk-table__cell">Have you had an unsuccessful application in the last 12 months?</td>
                         <td class="govuk-table__cell">
-                            @Model.SubmittedTwoInTwelveMonths
+                            @Model.SubmittedOneInTwelveMonths
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
-
-    <partial name="~/Views/Gateway/Pages/_GatewayClarificationDetails.cshtml" />
-
     @if (Model.GatewayReviewStatus == GatewayReviewStatus.New || Model.GatewayReviewStatus == GatewayReviewStatus.InProgress || Model.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
     {
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <form class="js-disable-on-submit" asp-action="ClarifyTwoInTwelveMonthsPage" asp-controller="RoatpGatewayOrganisationChecks">
-                    <partial name="~/Views/Gateway/Pages/_GatewayClarificationSection.cshtml" />
-                    <button class="govuk-button" type="submit" name="submit">Save and continue</button>
-
+                <form class="js-disable-on-submit" asp-action="EvaluateOneInTwelveMonthsPage" asp-controller="RoatpGatewayOrganisationChecks">
+                    <partial name="~/Views/Gateway/Pages/_GatewayApprovalSection.cshtml" />
+                    <button class="govuk-button" type="submit">Save and continue</button>
                 </form>
             </div>
         </div>

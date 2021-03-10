@@ -250,9 +250,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<DateTime?>($"Gateway/SourcesCheckedOn/{applicationId}");
         }
 
-        public async Task<string> GetTwoInTwelveMonths(Guid applicationId)
+        public async Task<string> GetOneInTwelveMonths(Guid applicationId)
         {
-            return await Get<string>($"/Gateway/{applicationId}/TwoInTwelveMonths");
+            return await Get<string>($"/Gateway/{applicationId}/OneInTwelveMonths");
         }
 
         public async Task<string> GetTradingName(Guid applicationId)
