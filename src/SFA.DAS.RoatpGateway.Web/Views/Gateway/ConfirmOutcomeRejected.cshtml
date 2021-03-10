@@ -1,4 +1,5 @@
 @using SFA.DAS.RoatpGateway.Domain;
+@using SFA.DAS.AdminService.Common.Extensions;
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayRejectOutcomeViewModel
 
 @{
@@ -46,12 +47,87 @@
                             <h1 class="govuk-fieldset__heading">Are you sure you want to reject this application?</h1>
                         </legend>
 
+                        <dl class="govuk-summary-list">
+                            @if (!string.IsNullOrWhiteSpace(Model.Ukprn))
+                            {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        UKPRN
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        @Model.Ukprn
+                                    </dd>
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.ApplyLegalName))
+                            {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        Legal name
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        @Model.ApplyLegalName
+                                    </dd>
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.ApplicationRoute))
+                            {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        Provider route
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        @Model.ApplicationRoute
+                                    </dd>
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.ApplicationReferenceNumber))
+                            {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        Application reference
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        @Model.ApplicationReferenceNumber
+                                    </dd>
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.ApplicationEmailAddress))
+                            {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        Applicant's email address
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        @Model.ApplicationEmailAddress
+                                    </dd>
+                                </div>
+                            }
+                            @if (Model.ApplicationSubmittedOn.HasValue)
+                            {
+                                <div class="govuk-summary-list__row">
+                                    <dt class="govuk-summary-list__key">
+                                        Date application submitted
+                                    </dt>
+                                    <dd class="govuk-summary-list__value">
+                                        @Model.ApplicationSubmittedOn.ToSfaShortDateString()
+                                    </dd>
+                                </div>
+                            }
+                        </dl>
+
                         <h2 class="govuk-heading-l">Internal comments</h2>
+                        <span class="govuk-hint">
+                            These will be seen by governance.
+                        </span>
                         <div class="govuk-inset-text govuk-!-margin-bottom-7">
                             @Model.GatewayReviewComment
                         </div>
 
                         <h2 class="govuk-heading-l">External comments</h2>
+                        <span class="govuk-hint">
+                            These will be seen by the applicant.
+                        </span>
                         <div class="govuk-inset-text govuk-!-margin-bottom-7">
                             @Model.GatewayReviewExternalComment
                         </div>

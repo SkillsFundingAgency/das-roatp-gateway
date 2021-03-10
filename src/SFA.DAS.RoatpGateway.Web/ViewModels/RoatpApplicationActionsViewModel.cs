@@ -14,6 +14,7 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string Ukprn { get; set; }
         public string ApplyLegalName { get; set; }
         public string ApplicationRoute { get; set; }
+        public string ApplicationEmailAddress { get; set; }
         public DateTime? ApplicationSubmittedOn { get; set; }
 
         public string CssFormGroupError { get; set; }
