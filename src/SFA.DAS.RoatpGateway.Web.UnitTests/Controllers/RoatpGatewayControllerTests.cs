@@ -51,7 +51,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId });
             _orchestrator.Setup(x => x.GetConfirmOverviewViewModel(It.Is<GetApplicationOverviewRequest>(y => y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
-            var result = await _controller.ConfirmOutcome(applicationId, GatewayReviewStatus.Pass, null);
+            var result = await _controller.ConfirmOutcome(applicationId, GatewayReviewStatus.Pass, null, null);
             var viewResult = result as ViewResult;
             Assert.AreSame(expectedViewModel, viewResult.Model);
         }
