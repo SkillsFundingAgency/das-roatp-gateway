@@ -172,7 +172,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]
-        public async Task<IActionResult> ConfirmOutcome(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment)
+        public async Task<IActionResult> ConfirmOutcome(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string gatewayReviewExternalComment)
         {
             var application = await _applyApiClient.GetApplication(applicationId);
             if (application is null)
@@ -197,6 +197,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         {
                             viewModel.RadioCheckedFailed = HtmlAndCssElements.CheckBoxChecked;
                             viewModel.OptionFailedText = gatewayReviewComment;
+                            viewModel.OptionFailedExternalText = gatewayReviewExternalComment;
                             break;
                         }
                     case GatewayReviewStatus.Pass:
@@ -209,6 +210,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     {
                         viewModel.RadioCheckedRejected = HtmlAndCssElements.CheckBoxChecked;
                         viewModel.OptionRejectedText = gatewayReviewComment;
+                        viewModel.OptionExternalRejectedText = gatewayReviewExternalComment;
                         break;
                     }
                 }
@@ -340,7 +342,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     {
                         applicationId = viewModel.ApplicationId,
                         gatewayReviewStatus = viewModel.GatewayReviewStatus,
-                        gatewayReviewComment = viewModel.GatewayReviewComment
+                        gatewayReviewComment = viewModel.GatewayReviewComment,
+                        gatewayReviewExternalComments = viewModel.GatewayReviewExternalComment
                     });
                 }
             }
