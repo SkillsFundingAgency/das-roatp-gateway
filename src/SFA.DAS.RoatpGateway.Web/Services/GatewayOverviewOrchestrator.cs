@@ -59,7 +59,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
             viewmodel.IsClarificationsSelectedAndAllFieldsSet = IsAskForClarificationActive(sections);
-            viewmodel.OneInTwoMonthsPassed = OneInTwelveMonthsPassed(sections);
             viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
 
             return viewmodel;
@@ -118,7 +117,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             var sections = viewmodel.Sequences.SelectMany(seq => seq.Sections);
             viewmodel.IsClarificationsSelectedAndAllFieldsSet = sections.Any(x => x.Status == SectionReviewStatus.Clarification);
-            viewmodel.OneInTwoMonthsPassed = OneInTwelveMonthsPassed(sections);
             viewmodel.ReadyToConfirm = IsReadyToConfirm(sections);
 
             return viewmodel;
@@ -137,7 +135,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 viewModelOnError.OptionApprovedText = viewModel.OptionApprovedText;
                 viewModelOnError.OptionRejectedText = viewModel.OptionRejectedText;
                 viewModelOnError.OptionExternalRejectedText = viewModel.OptionExternalRejectedText;
-               
+
                 viewModelOnError.CssFormGroupError = HtmlAndCssElements.CssFormGroupErrorClass;
                 viewModelOnError.RadioCheckedAskClarification = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedFailed = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Fail ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
@@ -214,9 +212,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
                         clarificationSequences.FirstOrDefault(x => x.SequenceNumber == sequence.SequenceNumber)
                             ?.Sections.Add(new ClarificationSection { PageTitle = section.LinkTitle, Comment = status.Comments });
-
-                        if (status.PageId == GatewayPageIds.OneInTwelveMonths)
-                            return clarificationSequences;
                     }
                 }
             }
@@ -224,28 +219,18 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             return clarificationSequences;
         }
 
-        private static bool OneInTwelveMonthsPassed(IEnumerable<GatewaySection> sections)
-        {
-            return sections.Where(sec => sec.PageId == GatewayPageIds.OneInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Pass);
-        }
-
         private static bool IsReadyToConfirm(IEnumerable<GatewaySection> sections)
         {
             var isReadyToConfirm = true;
 
-            var oneInTwelveMonthsFailed = sections.Where(sec => sec.PageId == GatewayPageIds.OneInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Fail);
+            var gradedStatutes = new[] { SectionReviewStatus.Pass, SectionReviewStatus.Fail, SectionReviewStatus.NotRequired };
 
-            if (!oneInTwelveMonthsFailed)
+            foreach (var section in sections)
             {
-                var gradedStatutes = new[] { SectionReviewStatus.Pass, SectionReviewStatus.Fail, SectionReviewStatus.NotRequired };
-
-                foreach (var section in sections)
+                if (section.Status is null || !gradedStatutes.Contains(section.Status))
                 {
-                    if (section.Status is null || !gradedStatutes.Contains(section.Status))
-                    {
-                        isReadyToConfirm = false;
-                        break;
-                    }
+                    isReadyToConfirm = false;
+                    break;
                 }
             }
 
@@ -254,15 +239,10 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
         private static bool IsAskForClarificationActive(IEnumerable<GatewaySection> sections)
         {
-            var clarificationsPresent= sections.Any(x => x.Status == SectionReviewStatus.Clarification);
+            var clarificationsPresent = sections.Any(x => x.Status == SectionReviewStatus.Clarification);
 
             if (!clarificationsPresent)
                 return false;
-
-            var oneInTwelveMonthClarification = sections.Where(sec => sec.PageId == GatewayPageIds.OneInTwelveMonths).Any(sec => sec.Status == SectionReviewStatus.Clarification);
-            
-            if (oneInTwelveMonthClarification)
-                return true;
 
             var gradedStatutes = new[] { SectionReviewStatus.Pass, SectionReviewStatus.Fail, SectionReviewStatus.NotRequired, SectionReviewStatus.Clarification };
 
@@ -275,7 +255,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
 
             return true;
-
         }
 
         // APR-1467 Code Stubbed Data
@@ -289,14 +268,13 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                     SequenceTitle = "Organisation checks",
                     Sections = new List<GatewaySection>
                     {
-                        new GatewaySection { SectionNumber = 1, PageId = GatewayPageIds.OneInTwelveMonths,  LinkTitle = "1 application in 12 months" },
-                        new GatewaySection { SectionNumber = 2, PageId = GatewayPageIds.LegalName,  LinkTitle = "Legal name" },
-                        new GatewaySection { SectionNumber = 3, PageId = GatewayPageIds.TradingName, LinkTitle = "Trading name" },
-                        new GatewaySection { SectionNumber = 4, PageId = GatewayPageIds.OrganisationStatus, LinkTitle = "Organisation status" },
-                        new GatewaySection { SectionNumber = 5, PageId = GatewayPageIds.Address, LinkTitle = "Address" },
-                        new GatewaySection { SectionNumber = 6, PageId = GatewayPageIds.IcoNumber, LinkTitle = "ICO registration number" },
-                        new GatewaySection { SectionNumber = 7, PageId = GatewayPageIds.WebsiteAddress,  LinkTitle = "Website address" },
-                        new GatewaySection { SectionNumber = 8, PageId = GatewayPageIds.OrganisationRisk,  LinkTitle = "Organisation high risk" }
+                        new GatewaySection { SectionNumber = 1, PageId = GatewayPageIds.LegalName,  LinkTitle = "Legal name" },
+                        new GatewaySection { SectionNumber = 2, PageId = GatewayPageIds.TradingName, LinkTitle = "Trading name" },
+                        new GatewaySection { SectionNumber = 3, PageId = GatewayPageIds.OrganisationStatus, LinkTitle = "Organisation status" },
+                        new GatewaySection { SectionNumber = 4, PageId = GatewayPageIds.Address, LinkTitle = "Address" },
+                        new GatewaySection { SectionNumber = 5, PageId = GatewayPageIds.IcoNumber, LinkTitle = "ICO registration number" },
+                        new GatewaySection { SectionNumber = 6, PageId = GatewayPageIds.WebsiteAddress,  LinkTitle = "Website address" },
+                        new GatewaySection { SectionNumber = 7, PageId = GatewayPageIds.OrganisationRisk,  LinkTitle = "Organisation high risk" }
                     }
                 },
 

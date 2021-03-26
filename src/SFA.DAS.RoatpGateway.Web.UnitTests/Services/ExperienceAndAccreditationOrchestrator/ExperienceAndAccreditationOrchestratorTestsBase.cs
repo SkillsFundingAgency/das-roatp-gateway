@@ -17,9 +17,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
         protected Mock<ILogger<GatewayExperienceAndAccreditationOrchestrator>> Logger;
         protected abstract string GatewayPageId { get; }
 
-        protected static string Ukprn => "12344321";
-        protected static string UKRLPLegalName => "Mark's workshop";
-        protected static string UserName = "GatewayUser";
+        protected const string Ukprn = "12344321";
+        protected const string UKRLPLegalName = "Mark's workshop";
+        protected const string UserName = "GatewayUser";
+        protected const string UserId = "GatewayUser@test.com";
         protected GatewayCommonDetails CommonDetails;
         protected Guid ApplicationId;
 
@@ -47,7 +48,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
                 OutcomeMadeBy = UserName,
                 OutcomeMadeOn = DateTime.Now
             };
-            ApplyApiClient.Setup(x => x.GetPageCommonDetails(ApplicationId, GatewayPageId, UserName)).ReturnsAsync(CommonDetails);
+            ApplyApiClient.Setup(x => x.GetPageCommonDetails(ApplicationId, GatewayPageId, UserId, UserName)).ReturnsAsync(CommonDetails);
         }
 
         protected void AssertCommonDetails(RoatpGatewayPageViewModel viewModel)

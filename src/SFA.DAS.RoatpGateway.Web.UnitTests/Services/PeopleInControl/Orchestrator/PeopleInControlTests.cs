@@ -19,10 +19,11 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
         private Mock<IRoatpOrganisationSummaryApiClient> _organisationSummaryApiClient;
         private Mock<ILogger<PeopleInControlOrchestrator>> _logger;
 
-        private static string ukprn => "12344321";
-        private static string UKRLPLegalName => "Mark's workshop";
-        private static string UserName = "GatewayUser";
-        private string GatewayPageId => GatewayPageIds.PeopleInControl;
+        private const string ukprn = "12344321";
+        private const string UKRLPLegalName = "Mark's workshop";
+        private const string UserName = "GatewayUser";
+        private const string UserId = "GatewayUser@test.com";
+        private const string GatewayPageId = GatewayPageIds.PeopleInControl;
 
         const string PersonInControlName = "Bob";
         const string PersonInControlDob = "Jan 1990";
@@ -56,14 +57,14 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
                 Comments = "Fail",
                 Status = "Fail"
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, GatewayPageId, UserName)).ReturnsAsync(_commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, GatewayPageId, UserId, UserName)).ReturnsAsync(_commonDetails);
         }
 
         [Test]
         public void check_people_in_control_common_details_are_returned()
         {
 
-            var request = new GetPeopleInControlRequest(_applicationId, UserName);
+            var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
@@ -93,7 +94,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             _organisationSummaryApiClient.Setup(x => x.GetDirectorsFromCompaniesHouse(_applicationId))
                 .ReturnsAsync(directorsFromCompaniesHouse);
 
-            var request = new GetPeopleInControlRequest(_applicationId, UserName);
+            var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
@@ -117,7 +118,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
                 } };
             _organisationSummaryApiClient.Setup(x => x.GetDirectorsFromSubmitted(_applicationId)).ReturnsAsync(directorsFromSubmitted);
 
-            var request = new GetPeopleInControlRequest(_applicationId, UserName);
+            var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
@@ -142,7 +143,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             };
             _organisationSummaryApiClient.Setup(x => x.GetPscsFromCompaniesHouse(_applicationId)).ReturnsAsync(pscsFromCompaniesHouse);
 
-            var request = new GetPeopleInControlRequest(_applicationId, UserName);
+            var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
@@ -167,7 +168,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             };
             _organisationSummaryApiClient.Setup(x => x.GetPscsFromSubmitted(_applicationId)).ReturnsAsync(pcsFromSubmitted);
 
-            var request = new GetPeopleInControlRequest(_applicationId, UserName);
+            var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
@@ -190,7 +191,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             _organisationSummaryApiClient.Setup(x => x.GetTrusteesFromCharityCommission(_applicationId)).ReturnsAsync(trusteesFromCharityCommission);
 
 
-            var request = new GetPeopleInControlRequest(_applicationId, UserName);
+            var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
@@ -213,7 +214,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             };
             _organisationSummaryApiClient.Setup(x => x.GetTrusteesFromSubmitted(_applicationId)).ReturnsAsync(trusteesFromSubmitted);
 
-            var request = new GetPeopleInControlRequest(_applicationId, UserName);
+            var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
@@ -236,7 +237,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             };
             _organisationSummaryApiClient.Setup(x => x.GetWhosInControlFromSubmitted(_applicationId)).ReturnsAsync(whosInControlFromSubmitted);
 
-            var request = new GetPeopleInControlRequest(_applicationId, UserName);
+            var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;

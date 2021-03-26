@@ -28,6 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new CriminalCompliancePageViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GetSequenceNumberForPage(request.PageId),
                                                     request.PageId,
+                                                    request.UserId,
                                                     request.UserName,
                                                     GetCaptionForPage(request.PageId),
                                                     CriminalCompliancePageConfiguration.Headings[request.PageId],

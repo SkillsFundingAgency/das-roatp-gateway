@@ -28,6 +28,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
         private static string UserName = "GatewayUser";
 
+        private static string UserId = "GatewayUser@test.com";
+
         [SetUp]
         public void Setup()
         {
@@ -48,7 +50,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             var ukrlpDetails = new ProviderDetails
             {
@@ -70,7 +72,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             };
             _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
 
-            var request = new GetLegalNameRequest(applicationId, UserName);
+            var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetLegalNameViewModel(request);
 
@@ -98,7 +100,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             var ukrlpDetails = new ProviderDetails
             {
@@ -117,7 +119,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             CharityCommissionSummary charityDetails = null;
             _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
 
-            var request = new GetLegalNameRequest(applicationId, UserName);
+            var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetLegalNameViewModel(request);
 
@@ -145,7 +147,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             var ukrlpDetails = new ProviderDetails
             {
@@ -164,7 +166,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             };
             _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
 
-            var request = new GetLegalNameRequest(applicationId, UserName);
+            var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetLegalNameViewModel(request);
 

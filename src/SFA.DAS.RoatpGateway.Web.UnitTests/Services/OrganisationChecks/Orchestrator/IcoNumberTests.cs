@@ -15,9 +15,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<ILogger<GatewayOrganisationChecksOrchestrator>> _logger;
 
-        private static string ukprn = "12345678";
-        private static string UKRLPLegalName = "John's workshop";
-        private static string UserName = "GatewayUser";
+        private const string ukprn = "12345678";
+        private const string UKRLPLegalName = "John's workshop";
+        private const string UserName = "GatewayUser";
+        private const string UserId = "GatewayUser@test.com";
 
         [SetUp]
         public void Setup()
@@ -39,7 +40,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             // SubmittedApplicationAddress
             var expectedOrganisationAddress = "1 QnA Street, Second Address, Third Address, Forth Address, Coventry, CV2 1WT";
@@ -66,7 +67,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
 
 
-            var request = new GetIcoNumberRequest(applicationId, UserName);
+            var request = new GetIcoNumberRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetIcoNumberViewModel(request);
 

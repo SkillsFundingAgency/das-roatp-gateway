@@ -26,7 +26,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task RemoveApplication(Guid applicationId, string comments, string externalComments, string userId, string userName);
 
         Task<List<GatewayPageAnswerSummary>> GetGatewayPageAnswers(Guid applicationId);
-        Task<GatewayCommonDetails> GetPageCommonDetails(Guid applicationId, string pageId, string userName);
+        Task<GatewayCommonDetails> GetPageCommonDetails(Guid applicationId, string pageId, string userId, string userName);
         Task<ContactAddress> GetOrganisationAddress(Guid applicationId);
         Task<IcoNumber> GetIcoNumber(Guid applicationId);
 
@@ -47,7 +47,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task<OrganisationRegisterStatus> GetOrganisationRegisterStatus(Guid applicationId);
 
-        Task<string> GetOneInTwelveMonths(Guid applicationId);
         Task<string> GetTradingName(Guid applicationId);
         Task<string> GetProviderRouteName(Guid applicationId);
         Task<string> GetWebsiteAddressSourcedFromUkrlp(Guid applicationId);

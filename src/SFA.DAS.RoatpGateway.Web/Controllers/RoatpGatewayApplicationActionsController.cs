@@ -38,8 +38,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}/Remove")]
         public async Task<IActionResult> RemoveApplication(Guid applicationId)
         {
+            var userId = HttpContext.User.UserId();
             var username = HttpContext.User.UserDisplayName();
-            var viewModel = await _applicationActionsOrchestrator.GetRemoveApplicationViewModel(applicationId, username);
+            var viewModel = await _applicationActionsOrchestrator.GetRemoveApplicationViewModel(applicationId, userId, username);
 
             if (viewModel is null)
             {

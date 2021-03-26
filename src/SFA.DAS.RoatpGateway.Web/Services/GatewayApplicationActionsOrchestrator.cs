@@ -10,7 +10,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 {
     public class GatewayApplicationActionsOrchestrator : IGatewayApplicationActionsOrchestrator
     {
-        private const string _commonDetailsPageId = GatewayPageIds.OneInTwelveMonths;
+        private const string _commonDetailsPageId = GatewayPageIds.LegalName;
         private readonly IRoatpApplicationApiClient _applyApiClient;
 
         public GatewayApplicationActionsOrchestrator(IRoatpApplicationApiClient applyApiClient)
@@ -63,11 +63,11 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             }
         }
 
-        public async Task<RoatpRemoveApplicationViewModel> GetRemoveApplicationViewModel(Guid applicationId, string userName)
+        public async Task<RoatpRemoveApplicationViewModel> GetRemoveApplicationViewModel(Guid applicationId, string userId, string userName)
         {
             RoatpRemoveApplicationViewModel viewModel = null;
 
-            var commonDetails = await _applyApiClient.GetPageCommonDetails(applicationId, _commonDetailsPageId, userName);
+            var commonDetails = await _applyApiClient.GetPageCommonDetails(applicationId, _commonDetailsPageId, userId, userName);
             if (commonDetails != null)
             {
                 viewModel = new RoatpRemoveApplicationViewModel
