@@ -15,7 +15,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
         private const string ClarificationDetailsRequired = "Enter comments";
         private const string FailDetailsRequired = "Enter comments";
         private const string TooManyWords = "Your comments must be 150 words or less";
-        private const string TooManyWordsClarificationAnswer = "Your comments must be 300 words or less";
+        private const string TooManyWordsClarificationAnswer = "Your comments must be {0} words or less";
 
         private const string ClarificationFile = "ClarificationFile";
         private const long MaxFileSizeInBytes = 5 * 1024 * 1024;
@@ -135,10 +135,10 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
             {
                 var wordCount = command.ClarificationAnswer.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries)
                     .Length;
-                if (wordCount > 300)
+                if (wordCount > command.ClarificationAnswerMaxWords)
                 {
                     validationResponse.Errors.Add(new ValidationErrorDetail("ClarificationAnswer",
-                        TooManyWordsClarificationAnswer));
+                        string.Format(TooManyWordsClarificationAnswer, command.ClarificationAnswerMaxWords)));
                 }
             }
 

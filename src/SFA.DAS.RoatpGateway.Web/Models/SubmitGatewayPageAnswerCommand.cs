@@ -15,6 +15,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
         public string OptionFailText { get; set; }
         public string OptionInProgressText { get; set; }
         public string OptionClarificationText { get; set; }
+        public int ClarificationAnswerMaxWords { get; set; }
         public string ClarificationAnswer { get; set; }
         public string ClarificationFile { get; set; }
         public string GatewayReviewStatus { get; set; }
@@ -37,6 +38,7 @@ namespace SFA.DAS.RoatpGateway.Web.Models
             OptionInProgressText = viewModel.OptionInProgressText;
             OptionClarificationText = viewModel.OptionClarificationText;
             ClarificationAnswer = viewModel.ClarificationAnswer;
+            ClarificationAnswerMaxWords = viewModel.ClarificationAnswerMaxWords;
         }
     }
 }
