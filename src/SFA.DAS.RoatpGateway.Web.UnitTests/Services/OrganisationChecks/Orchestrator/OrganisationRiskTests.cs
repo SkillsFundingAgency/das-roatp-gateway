@@ -15,11 +15,12 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<ILogger<GatewayOrganisationChecksOrchestrator>> _logger;
         private Mock<IRoatpOrganisationSummaryApiClient> _organisationSummaryApiClient;
-        private static string ukprn = "12345678";
-        private static string UKRLPLegalName = "John LTD.";
-        private static string UserName = "GatewayUser";
-        private static string CompanyNumber = "12345678";
-        private static string CharityNumber = "87654321";
+        private const string ukprn = "12345678";
+        private const string UKRLPLegalName = "John LTD.";
+        private const string UserName = "GatewayUser";
+        private const string UserId = "GatewayUser@test.com";
+        private const string CompanyNumber = "12345678";
+        private const string CharityNumber = "87654321";
 
         [SetUp]
         public void Setup()
@@ -46,14 +47,14 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, pageId, UserName)).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, pageId, UserId, UserName)).ReturnsAsync(commonDetails);
 
             _organisationSummaryApiClient.Setup(x => x.GetTypeOfOrganisation(applicationId)).ReturnsAsync(organisationType);
             _organisationSummaryApiClient.Setup(x => x.GetCharityNumber(applicationId)).ReturnsAsync(CharityNumber);
             _organisationSummaryApiClient.Setup(x => x.GetCompanyNumber(applicationId)).ReturnsAsync(CompanyNumber);
             _applyApiClient.Setup(x => x.GetTradingName(applicationId)).ReturnsAsync(tradingName);
             
-            var request = new GetOrganisationRiskRequest(applicationId, UserName);
+            var request = new GetOrganisationRiskRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetOrganisationRiskViewModel(request);
 

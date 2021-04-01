@@ -15,7 +15,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
         {
             ExperienceAndAccreditationApiClient.Setup(x => x.GetOfficeForStudents(ApplicationId)).ReturnsAsync(returnedAnswer);
 
-            var request = new GetOfficeForStudentsRequest(ApplicationId, UserName);
+            var request = new GetOfficeForStudentsRequest(ApplicationId, UserId, UserName);
             var response = Orchestrator.GetOfficeForStudentsViewModel(request);
 
             var viewModel = response.Result;

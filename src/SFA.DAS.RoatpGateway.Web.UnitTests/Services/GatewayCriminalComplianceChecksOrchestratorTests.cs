@@ -41,7 +41,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
                 OutcomeMadeBy = "Test",
                 OutcomeMadeOn = DateTime.Now
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(_commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(_commonDetails);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             _criminalChecksApiClient.Setup(x => x.GetCriminalComplianceQuestionDetails(It.IsAny<Guid>(), It.IsAny<string>())).ReturnsAsync(criminalComplianceDetails);
 
-            var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(Guid.NewGuid(), pageId, "user"));
+            var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(Guid.NewGuid(), pageId, "userId", "user"));
 
             viewModel.PageId.Should().Be(pageId);
             viewModel.Caption.Should().Be(RoatpGatewayConstants.Captions.OrganisationsCriminalAndComplianceChecks);
@@ -99,7 +99,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             _criminalChecksApiClient.Setup(x => x.GetCriminalComplianceQuestionDetails(It.IsAny<Guid>(), It.IsAny<string>())).ReturnsAsync(criminalComplianceDetails);
 
-            var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(Guid.NewGuid(), pageId, "user"));
+            var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(Guid.NewGuid(), pageId, "userId", "user"));
 
             viewModel.PageId.Should().Be(pageId);
             viewModel.Caption.Should().Be(RoatpGatewayConstants.Captions.PeopleInControlCriminalAndComplianceChecks);

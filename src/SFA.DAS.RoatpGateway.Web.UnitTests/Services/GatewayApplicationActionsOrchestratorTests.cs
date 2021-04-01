@@ -21,6 +21,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
         private Guid _applicationId;
         private const string UserName = "GatewayUser";
+        private const string UserId = "GatewayUser@test.com";
 
         [SetUp]
         public void Setup()
@@ -153,9 +154,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
                 GatewayReviewStatus = gatewayReviewStatus
             };
 
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserName)).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserId, UserName)).ReturnsAsync(commonDetails);
 
-            var viewModel = await _orchestrator.GetRemoveApplicationViewModel(_applicationId, UserName);
+            var viewModel = await _orchestrator.GetRemoveApplicationViewModel(_applicationId, UserId, UserName);
 
             Assert.AreEqual(_applicationId, viewModel.ApplicationId);
             Assert.AreEqual(ukprn, viewModel.Ukprn);

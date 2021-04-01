@@ -28,6 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new PeopleInControlPageViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.PeopleInControlChecks,
                 GatewayPageIds.PeopleInControl,
+                request.UserId,
                 request.UserName,
                 RoatpGatewayConstants.Captions.PeopleInControlChecks,
                 RoatpGatewayConstants.Headings.PeopleInControl,
@@ -88,6 +89,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new PeopleInControlHighRiskPageViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.PeopleInControlChecks,
                 GatewayPageIds.PeopleInControlRisk,
+                request.UserId,
                 request.UserName,
                 RoatpGatewayConstants.Captions.PeopleInControlChecks,
                 RoatpGatewayConstants.Headings.PeopleInControlHighRisk,

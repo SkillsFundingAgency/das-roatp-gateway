@@ -17,9 +17,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<ILogger<GatewayOrganisationChecksOrchestrator>> _logger;
 
-        private static string ukprn = "12345678";
-        private static string UKRLPLegalName = "John's workshop";
-        private static string UserName = "GatewayUser";
+        private const string ukprn = "12345678";
+        private const string UKRLPLegalName = "John's workshop";
+        private const string UserName = "GatewayUser";
+        private const string UserId = "GatewayUser@test.com";
 
         [SetUp]
         public void Setup()
@@ -44,7 +45,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             _applyApiClient.Setup(x => x.GetOrganisationWebsiteAddress(applicationId)).ReturnsAsync(organisationWebsite);
 
@@ -62,7 +63,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
             _applyApiClient.Setup(x => x.GetUkrlpDetails(applicationId)).ReturnsAsync(ukrlpDetails);
 
-            var request = new GetWebsiteRequest(applicationId, UserName);
+            var request = new GetWebsiteRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetWebsiteViewModel(request);
 

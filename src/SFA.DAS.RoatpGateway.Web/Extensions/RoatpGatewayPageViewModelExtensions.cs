@@ -9,9 +9,9 @@ namespace SFA.DAS.RoatpGateway.Web.Extensions
     internal static class RoatpGatewayPageViewModelExtensions
     {
         internal static async Task PopulatePageCommonDetails(this RoatpGatewayPageViewModel viewModel, IRoatpApplicationApiClient applyApiClient, Guid applicationId,
-            int sequenceNumber, string pageId, string userName, string caption, string heading, string noSelectionErrorMessage)
+            int sequenceNumber, string pageId, string userId, string userName, string caption, string heading, string noSelectionErrorMessage)
         {
-            var commonDetails = await applyApiClient.GetPageCommonDetails(applicationId, pageId, userName);
+            var commonDetails = await applyApiClient.GetPageCommonDetails(applicationId, pageId, userId, userName);
 
             viewModel.ApplicationId = commonDetails.ApplicationId;
             viewModel.SequenceNumber = sequenceNumber;
