@@ -72,17 +72,11 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<List<GatewayPageAnswerSummary>>($"/Gateway/{applicationId}/Pages");
         }
 
-        public async Task<GatewayCommonDetails> GetPageCommonDetails(Guid applicationId, string pageId, string userName)
+        public async Task<GatewayCommonDetails> GetPageCommonDetails(Guid applicationId, string pageId, string userId, string userName)
         {
             try
             {
-               var result = await Get<GatewayCommonDetails>($"Gateway/{applicationId}/Pages/{pageId}/CommonDetails");
-               var logging =
-                   $"Getting common page details for applcationId [{applicationId}] for PageId [{pageId}]: {Newtonsoft.Json.JsonConvert.SerializeObject(result)}";
-               _logger.LogInformation(logging);
-
-
-               return result;
+               return await Post<GatewayCommonDetailsRequest, GatewayCommonDetails> ($"Gateway/{applicationId}/CommonDetails", new GatewayCommonDetailsRequest(pageId, userId, userName));
             }
             catch (RoatpApiClientException ex)
             {
@@ -248,11 +242,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task<DateTime?> GetSourcesCheckedOnDate(Guid applicationId)
         {
             return await Get<DateTime?>($"Gateway/SourcesCheckedOn/{applicationId}");
-        }
-
-        public async Task<string> GetOneInTwelveMonths(Guid applicationId)
-        {
-            return await Get<string>($"/Gateway/{applicationId}/OneInTwelveMonths");
         }
 
         public async Task<string> GetTradingName(Guid applicationId)

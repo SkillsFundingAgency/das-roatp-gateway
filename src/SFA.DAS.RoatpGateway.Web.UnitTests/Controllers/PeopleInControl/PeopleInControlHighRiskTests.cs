@@ -37,7 +37,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.PeopleInControl
             _orchestrator = new Mock<IPeopleInControlOrchestrator>();
             ViewModel = new PeopleInControlHighRiskPageViewModel { ApplicationId = _applicationId };
 
-            Request = new GetPeopleInControlHighRiskRequest(_applicationId, Username);
+            Request = new GetPeopleInControlHighRiskRequest(_applicationId, UserId, Username);
             _orchestrator.Setup(x =>
                     x.GetPeopleInControlHighRiskViewModel(It.IsAny<GetPeopleInControlHighRiskRequest>()))
                 .ReturnsAsync(ViewModel)

@@ -47,7 +47,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var applicationId = Guid.NewGuid();
             var expectedViewModel = new RoatpRemoveApplicationViewModel { ApplicationId = applicationId };
 
-            _applicationActionsOrchestrator.Setup(x => x.GetRemoveApplicationViewModel(applicationId, Username)).ReturnsAsync(expectedViewModel);
+            _applicationActionsOrchestrator.Setup(x => x.GetRemoveApplicationViewModel(applicationId, UserId, Username)).ReturnsAsync(expectedViewModel);
 
             var result = await _controller.RemoveApplication(applicationId);
             var viewResult = result as ViewResult;

@@ -19,12 +19,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
         private Mock<IRoatpRegisterApiClient> _roatpApiClient;
         private Mock<ILogger<GatewayRegisterChecksOrchestrator>> _logger;
 
-        private static string ukprn = "12345678";
-        private static string UKRLPLegalName = "John's workshop";
-        private static string UserName = "GatewayUser";
+        private const string ukprn = "12345678";
+        private const string UKRLPLegalName = "John's workshop";
+        private const string UserName = "GatewayUser";
+        private const string UserId = "GatewayUser@test.com";
 
-        private static int roatpProviderTypeId = 1;
-        private static int roatpStatusId = 1;
+        private const int roatpProviderTypeId = 1;
+        private const int roatpStatusId = 1;
 
         private readonly Guid _applicationId = Guid.NewGuid();
 
@@ -44,7 +45,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserName)).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserId, UserName)).ReturnsAsync(commonDetails);
 
             _applyApiClient.Setup(x => x.GetProviderRouteName(_applicationId)).ReturnsAsync($"{roatpProviderTypeId}");
 
@@ -72,7 +73,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
             };
             _roatpApiClient.Setup(x => x.GetOrganisationRegisterStatus(ukprn.ToString())).ReturnsAsync(organisationRegisterStatus);
 
-            var request = new GetRoatpRequest(_applicationId, UserName);
+            var request = new GetRoatpRequest(_applicationId, UserId, UserName);
 
             var viewModel = await _orchestrator.GetRoatpViewModel(request);
 
@@ -94,7 +95,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
             };
             _roatpApiClient.Setup(x => x.GetOrganisationRegisterStatus(ukprn.ToString())).ReturnsAsync(organisationRegisterStatus);
 
-            var request = new GetRoatpRequest(_applicationId, UserName);
+            var request = new GetRoatpRequest(_applicationId, UserId, UserName);
 
             var viewModel = await _orchestrator.GetRoatpViewModel(request);
 
@@ -111,7 +112,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
         {
             _applyApiClient.Setup(x => x.GetProviderRouteName(_applicationId)).ReturnsAsync(providerRouteName);
 
-            var request = new GetRoatpRequest(_applicationId, UserName);
+            var request = new GetRoatpRequest(_applicationId, UserId, UserName);
 
             var viewModel = await _orchestrator.GetRoatpViewModel(request);
 

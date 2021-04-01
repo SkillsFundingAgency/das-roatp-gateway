@@ -28,7 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
             };
             ExperienceAndAccreditationApiClient.Setup(x => x.GetOfstedDetails(ApplicationId)).ReturnsAsync(ofstedDetails);
 
-            var request = new GetOfstedDetailsRequest(ApplicationId, UserName);
+            var request = new GetOfstedDetailsRequest(ApplicationId, UserId, UserName);
             var response = Orchestrator.GetOfstedDetailsViewModel(request);
 
             var viewModel = response.Result;

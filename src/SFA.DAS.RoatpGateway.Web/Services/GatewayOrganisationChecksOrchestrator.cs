@@ -23,23 +23,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _organisationSummaryApiClient = organisationSummaryApiClient;
         }
 
-        public async Task<OneInTwelveMonthsViewModel> GetOneInTwelveMonthsViewModel(GetOneInTwelveMonthsRequest request)
-        {
-            _logger.LogInformation($"Retrieving one in twelve months check details for application {request.ApplicationId}");
-
-            var model = new OneInTwelveMonthsViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks,
-                                                                                            GatewayPageIds.OneInTwelveMonths,
-                                                                                            request.UserName,
-                                                                                            RoatpGatewayConstants.Captions.OrganisationChecks,
-                                                                                            RoatpGatewayConstants.Headings.OneInTwelveMonths,
-                                                                                            NoSelectionErrorMessages.Errors[GatewayPageIds.OneInTwelveMonths]);
-
-            model.SubmittedOneInTwelveMonths = await _applyApiClient.GetOneInTwelveMonths(request.ApplicationId);
-            
-            return model;
-        }
-
         public async Task<LegalNamePageViewModel> GetLegalNameViewModel(GetLegalNameRequest request)
         {
             _logger.LogInformation($"Retrieving legal name details for application {request.ApplicationId}");
@@ -47,6 +30,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new LegalNamePageViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks,
                                                                                             GatewayPageIds.LegalName,
+                                                                                            request.UserId,
                                                                                             request.UserName,
                                                                                             RoatpGatewayConstants.Captions.OrganisationChecks,
                                                                                             RoatpGatewayConstants.Headings.LegalName,
@@ -87,6 +71,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new TradingNamePageViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks,
                                                                                             GatewayPageIds.TradingName,
+                                                                                            request.UserId,
                                                                                             request.UserName,
                                                                                             RoatpGatewayConstants.Captions.OrganisationChecks,
                                                                                             RoatpGatewayConstants.Headings.TradingName,
@@ -110,6 +95,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new OrganisationStatusViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks, 
                                                                                                 GatewayPageIds.OrganisationStatus,
+                                                                                                request.UserId,
                                                                                                 request.UserName,
                                                                                                 RoatpGatewayConstants.Captions.OrganisationChecks,
                                                                                                 RoatpGatewayConstants.Headings.OrganisationStatusCheck,
@@ -150,6 +136,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new AddressCheckViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks,
                                                                                             GatewayPageIds.Address,
+                                                                                            request.UserId,
                                                                                             request.UserName,
                                                                                             RoatpGatewayConstants.Captions.OrganisationChecks,
                                                                                             RoatpGatewayConstants.Headings.AddressCheck,
@@ -187,6 +174,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new IcoNumberViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks,
                                                                                             GatewayPageIds.IcoNumber,
+                                                                                            request.UserId,
                                                                                             request.UserName,
                                                                                             RoatpGatewayConstants.Captions.OrganisationChecks,
                                                                                             RoatpGatewayConstants.Headings.IcoNumber,
@@ -213,6 +201,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new WebsiteViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks,
                                                                                             GatewayPageIds.WebsiteAddress,
+                                                                                            request.UserId,
                                                                                             request.UserName,
                                                                                             RoatpGatewayConstants.Captions.OrganisationChecks,
                                                                                             RoatpGatewayConstants.Headings.Website,
@@ -248,6 +237,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new OrganisationRiskViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.OrganisationChecks,
                                                                                             GatewayPageIds.OrganisationRisk,
+                                                                                            request.UserId,
                                                                                             request.UserName,
                                                                                             RoatpGatewayConstants.Captions.OrganisationChecks,
                                                                                             RoatpGatewayConstants.Headings.OrganisationRisk,

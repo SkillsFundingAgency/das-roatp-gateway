@@ -15,7 +15,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
             var initialTeacherTraining = new InitialTeacherTraining { DoesOrganisationOfferInitialTeacherTraining = true, IsPostGradOnlyApprenticeship = false };
             ExperienceAndAccreditationApiClient.Setup(x => x.GetInitialTeacherTraining(ApplicationId)).ReturnsAsync(initialTeacherTraining);
 
-            var request = new GetInitialTeacherTrainingRequest(ApplicationId, UserName);
+            var request = new GetInitialTeacherTrainingRequest(ApplicationId, UserId, UserName);
             var response = Orchestrator.GetInitialTeacherTrainingViewModel(request);
 
             var viewModel = response.Result;

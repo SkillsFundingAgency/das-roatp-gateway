@@ -30,6 +30,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new RoatpPageViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.RegisterChecks,
                                                     pageId,
+                                                    request.UserId,
                                                     request.UserName,
                                                     RoatpGatewayConstants.Captions.RegisterChecks,
                                                     RoatpGatewayConstants.Headings.Roatp,
@@ -59,6 +60,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new RoepaoPageViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.RegisterChecks,
                                                     pageId,
+                                                    request.UserId,
                                                     request.UserName,
                                                     RoatpGatewayConstants.Captions.RegisterChecks,
                                                     RoatpGatewayConstants.Headings.Roepao,

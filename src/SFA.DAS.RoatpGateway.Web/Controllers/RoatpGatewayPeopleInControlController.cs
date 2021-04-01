@@ -29,8 +29,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/PeopleInControl")]
         public async Task<IActionResult> GetGatewayPeopleInControlPage(Guid applicationId)
         {
+            var userId = HttpContext.User.UserId();
             var username = HttpContext.User.UserDisplayName();
-            var viewModel = await _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(applicationId, username));
+            var viewModel = await _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(applicationId, userId, username));
             return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/PeopleInControl.cshtml"
                 : $"{GatewayViewsLocation}/PeopleInControl.cshtml", viewModel);
@@ -39,7 +40,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/PeopleInControl")]
         public async Task<IActionResult> EvaluatePeopleInControlPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<PeopleInControlPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<PeopleInControlPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/PeopleInControl.cshtml");
         }
 
@@ -47,7 +50,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/PeopleInControl/Clarification")]
         public async Task<IActionResult> ClarifyPeopleInControlPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<PeopleInControlPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<PeopleInControlPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlViewModel(new GetPeopleInControlRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/PeopleInControl.cshtml");
         }
 
@@ -55,8 +60,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/PeopleInControlRisk")]
         public async Task<IActionResult> GetGatewayPeopleInControlRiskPage(Guid applicationId)
         {
+            var userId = HttpContext.User.UserId();
             var username = HttpContext.User.UserDisplayName();
-            var viewModel = await _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(applicationId, username));
+            var viewModel = await _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(applicationId, userId, username));
             return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/PeopleInControlHighRisk.cshtml"
                 : $"{GatewayViewsLocation}/PeopleInControlHighRisk.cshtml", viewModel);
@@ -65,14 +71,18 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/PeopleInControlRisk")]
         public async Task<IActionResult> EvaluatePeopleInControlHighRiskPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<PeopleInControlHighRiskPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<PeopleInControlHighRiskPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/PeopleInControlHighRisk.cshtml");
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/PeopleInControlRisk/Clarification")]
         public async Task<IActionResult> ClarifyPeopleInControlHighRiskPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<PeopleInControlHighRiskPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<PeopleInControlHighRiskPageViewModel>> viewModelBuilder = () => _orchestrator.GetPeopleInControlHighRiskViewModel(new GetPeopleInControlHighRiskRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/PeopleInControlHighRisk.cshtml");
         }
     

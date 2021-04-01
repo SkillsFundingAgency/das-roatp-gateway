@@ -26,8 +26,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclaration")]
         public async Task<ViewResult> SubcontractorDeclaration(Guid applicationId)
         {
-            var userName = HttpContext.User.UserDisplayName();
-            var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(applicationId, userName));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(applicationId, userId, username));
             return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml"
                 : $"{GatewayViewsLocation}/SubcontractorDeclaration.cshtml", viewModel);
@@ -48,7 +49,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclaration")]
         public async Task<IActionResult> EvaluateSubcontractorDeclarationPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<SubcontractorDeclarationViewModel>> viewModelBuilder = () => _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<SubcontractorDeclarationViewModel>> viewModelBuilder = () => _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/SubcontractorDeclaration.cshtml");
         }
 
@@ -56,6 +59,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/SubcontractorDeclaration/Clarification")]
         public async Task<IActionResult> ClarifySubcontractorDeclarationPage(SubmitGatewayPageAnswerCommand command)
         {
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
 
             var isClarificationFileUpdate = HttpContext.Request.Form["submitClarificationFile"].Count != 0;
             var isClarificationForm = HttpContext.Request.Form["submitClarificationForm"].Count != 0;
@@ -69,8 +74,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 if (validationResponse.Errors != null && validationResponse.Errors.Count > 0)
                 {
                     var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
-                        new GetSubcontractorDeclarationRequest(command.ApplicationId,
-                            HttpContext.User.UserDisplayName()));
+                        new GetSubcontractorDeclarationRequest(command.ApplicationId, userId, username));
                     HydrateSucontractorDeclarationViewModelFromCommand(command, viewModel);
                     viewModel.ErrorMessages = validationResponse.Errors;
                     
@@ -88,15 +92,17 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
 
 
-            Func<Task<SubcontractorDeclarationViewModel>> viewModelBuilder = () => _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            Func<Task<SubcontractorDeclarationViewModel>> viewModelBuilder = () => _orchestrator.GetSubcontractorDeclarationViewModel(new GetSubcontractorDeclarationRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/SubcontractorDeclaration.cshtml");
         }
 
         private async Task<SubcontractorDeclarationViewModel> ProcessSubcontractorDeclarationuploadAndRebuildViewModel(SubmitGatewayPageAnswerCommand command, IFormFileCollection filesToUpload)
         {
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+
             var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
-                new GetSubcontractorDeclarationRequest(command.ApplicationId,
-                    HttpContext.User.UserDisplayName()));
+                new GetSubcontractorDeclarationRequest(command.ApplicationId, userId, username));
 
             HydrateSucontractorDeclarationViewModelFromCommand(command, viewModel);
             if (filesToUpload != null && filesToUpload.Count > 0)
@@ -116,11 +122,13 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
         private async Task<SubcontractorDeclarationViewModel> RemoveSubcontractorDeclarationuploadAndRebuildViewModel(SubmitGatewayPageAnswerCommand command)
         {
-            var fileRemovedSuccessfully = await _applyApiClient.RemoveSubcontractorDeclarationClarificationFile(command.ApplicationId, HttpContext.User.UserId(), HttpContext.User.UserDisplayName(), command.ClarificationFile);
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+
+            var fileRemovedSuccessfully = await _applyApiClient.RemoveSubcontractorDeclarationClarificationFile(command.ApplicationId, userId, username, command.ClarificationFile);
 
             var viewModel = await _orchestrator.GetSubcontractorDeclarationViewModel(
-                new GetSubcontractorDeclarationRequest(command.ApplicationId,
-                    HttpContext.User.UserDisplayName()));
+                new GetSubcontractorDeclarationRequest(command.ApplicationId, userId, username));
             HydrateSucontractorDeclarationViewModelFromCommand(command, viewModel);
 
             if (fileRemovedSuccessfully)
@@ -132,8 +140,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/OfficeForStudents")]
         public async Task<ViewResult> OfficeForStudents(Guid applicationId)
         {
-            var userName = HttpContext.User.UserDisplayName();
-            var viewModel = await _orchestrator.GetOfficeForStudentsViewModel(new GetOfficeForStudentsRequest(applicationId, userName));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            var viewModel = await _orchestrator.GetOfficeForStudentsViewModel(new GetOfficeForStudentsRequest(applicationId, userId, username));
             return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/OfficeForStudents.cshtml"
                 : $"{GatewayViewsLocation}/OfficeForStudents.cshtml", viewModel);
@@ -142,22 +151,27 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/OfficeForStudents")]
         public async Task<IActionResult> EvaluateOfficeForStudentsPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<OfficeForStudentsViewModel>> viewModelBuilder = () => _orchestrator.GetOfficeForStudentsViewModel(new GetOfficeForStudentsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<OfficeForStudentsViewModel>> viewModelBuilder = () => _orchestrator.GetOfficeForStudentsViewModel(new GetOfficeForStudentsRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/OfficeForStudents.cshtml");
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/OfficeForStudents/Clarification")]
         public async Task<IActionResult> ClarifyOfficeForStudentsPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<OfficeForStudentsViewModel>> viewModelBuilder = () => _orchestrator.GetOfficeForStudentsViewModel(new GetOfficeForStudentsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<OfficeForStudentsViewModel>> viewModelBuilder = () => _orchestrator.GetOfficeForStudentsViewModel(new GetOfficeForStudentsRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/OfficeForStudents.cshtml");
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/InitialTeacherTraining")]
         public async Task<ViewResult> InitialTeacherTraining(Guid applicationId)
         {
-            var userName = HttpContext.User.UserDisplayName();
-            var viewModel = await _orchestrator.GetInitialTeacherTrainingViewModel(new GetInitialTeacherTrainingRequest(applicationId, userName));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            var viewModel = await _orchestrator.GetInitialTeacherTrainingViewModel(new GetInitialTeacherTrainingRequest(applicationId, userId, username));
             return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/InitialTeacherTraining.cshtml"
                 : $"{GatewayViewsLocation}/InitialTeacherTraining.cshtml", viewModel);
@@ -166,22 +180,27 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/InitialTeacherTraining")]
         public async Task<IActionResult> EvaluateInitialTeacherTrainingPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<InitialTeacherTrainingViewModel>> viewModelBuilder = () => _orchestrator.GetInitialTeacherTrainingViewModel(new GetInitialTeacherTrainingRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<InitialTeacherTrainingViewModel>> viewModelBuilder = () => _orchestrator.GetInitialTeacherTrainingViewModel(new GetInitialTeacherTrainingRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/InitialTeacherTraining.cshtml");
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/InitialTeacherTraining/Clarification")]
         public async Task<IActionResult> ClarifyInitialTeacherTrainingPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<InitialTeacherTrainingViewModel>> viewModelBuilder = () => _orchestrator.GetInitialTeacherTrainingViewModel(new GetInitialTeacherTrainingRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<InitialTeacherTrainingViewModel>> viewModelBuilder = () => _orchestrator.GetInitialTeacherTrainingViewModel(new GetInitialTeacherTrainingRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/InitialTeacherTraining.cshtml");
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/Ofsted")]
         public async Task<ViewResult> OfstedDetails(Guid applicationId)
         {
-            var userName = HttpContext.User.UserDisplayName();
-            var viewModel = await _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(applicationId, userName));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            var viewModel = await _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(applicationId, userId, username));
             return View(viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy)
                 ? $"{GatewayViewsLocation}/Clarifications/OfstedDetails.cshtml"
                 : $"{GatewayViewsLocation}/OfstedDetails.cshtml", viewModel);
@@ -190,14 +209,18 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/Ofsted")]
         public async Task<IActionResult> EvaluateOfstedDetailsPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<OfstedDetailsViewModel>> viewModelBuilder = () => _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<OfstedDetailsViewModel>> viewModelBuilder = () => _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/OfstedDetails.cshtml");
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/Ofsted/Clarification")]
         public async Task<IActionResult> ClarifyOfstedDetailsPage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<OfstedDetailsViewModel>> viewModelBuilder = () => _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(command.ApplicationId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<OfstedDetailsViewModel>> viewModelBuilder = () => _orchestrator.GetOfstedDetailsViewModel(new GetOfstedDetailsRequest(command.ApplicationId, userId, username));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, $"{GatewayViewsLocation}/Clarifications/OfstedDetails.cshtml");
         }
 

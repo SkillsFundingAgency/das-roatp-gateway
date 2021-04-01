@@ -23,6 +23,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
         private static string LegalName => "My Legal Name";
 
         private static string UserName = "GatewayUser";
+        private static string UserId = "GatewayUser@test.com";
         private static string ApplyTradingName = "My Trading Name";
 
         private static string QuestionId => "PRE-46";
@@ -46,7 +47,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
                 LegalName = LegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             var ukrlpDetails = new ProviderDetails
             {
@@ -60,7 +61,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             _applyApiClient.Setup(x => x.GetUkrlpDetails(It.IsAny<Guid>())).ReturnsAsync(ukrlpDetails);
             _applyApiClient.Setup(x => x.GetTradingName(It.IsAny<Guid>())).ReturnsAsync(ApplyTradingName);
 
-            var request = new GetTradingNameRequest(applicationId, UserName);
+            var request = new GetTradingNameRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetTradingNameViewModel(request);
 

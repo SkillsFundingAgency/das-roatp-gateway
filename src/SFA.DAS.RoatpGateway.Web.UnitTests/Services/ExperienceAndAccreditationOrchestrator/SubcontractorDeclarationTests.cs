@@ -18,7 +18,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.ExperienceAndAccredita
             var subcontractorDeclaration = new SubcontractorDeclaration { HasDeliveredTrainingAsSubcontractor = true, ContractFileName = "fileName" };
             ExperienceAndAccreditationApiClient.Setup(x => x.GetSubcontractorDeclaration(ApplicationId)).ReturnsAsync(subcontractorDeclaration);
 
-            var request = new GetSubcontractorDeclarationRequest(ApplicationId, UserName);
+            var request = new GetSubcontractorDeclarationRequest(ApplicationId, UserId, UserName);
             var response = Orchestrator.GetSubcontractorDeclarationViewModel(request);
 
             var viewModel = response.Result;

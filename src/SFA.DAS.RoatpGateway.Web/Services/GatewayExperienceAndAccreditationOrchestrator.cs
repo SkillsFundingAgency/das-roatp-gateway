@@ -28,6 +28,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             var model = new SubcontractorDeclarationViewModel();
             await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.ExperienceAndAccreditationChecks,
                                                                                                 GatewayPageIds.SubcontractorDeclaration,
+                                                                                                request.UserId,
                                                                                                 request.UserName,
                                                                                                 RoatpGatewayConstants.Captions.ExperienceAndAccreditation,
                                                                                                 RoatpGatewayConstants.Headings.SubcontractorDeclaration,
@@ -35,7 +36,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
             var subcontractorDeclaration = await _experienceAndAccreditationApiClient.GetSubcontractorDeclaration(request.ApplicationId);
 
-            var commonDetails = await _applyApiClient.GetPageCommonDetails(request.ApplicationId, GatewayPageIds.SubcontractorDeclaration, request.UserName);
+            var commonDetails = await _applyApiClient.GetPageCommonDetails(request.ApplicationId, GatewayPageIds.SubcontractorDeclaration, request.UserId, request.UserName);
             model.ClarificationFile = commonDetails.GatewaySubcontractorDeclarationClarificationUpload;
 
             model.HasDeliveredTrainingAsSubcontractor = subcontractorDeclaration.HasDeliveredTrainingAsSubcontractor;
@@ -60,7 +61,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _logger.LogInformation($"Retrieving office for students details for application {request.ApplicationId}");
 
             var model = new OfficeForStudentsViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.ExperienceAndAccreditationChecks, GatewayPageIds.OfficeForStudents, request.UserName, RoatpGatewayConstants.Captions.ExperienceAndAccreditation, RoatpGatewayConstants.Headings.OfficeForStudents, NoSelectionErrorMessages.Errors[GatewayPageIds.OfficeForStudents]);
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.ExperienceAndAccreditationChecks, GatewayPageIds.OfficeForStudents, request.UserId, request.UserName, RoatpGatewayConstants.Captions.ExperienceAndAccreditation, RoatpGatewayConstants.Headings.OfficeForStudents, NoSelectionErrorMessages.Errors[GatewayPageIds.OfficeForStudents]);
 
             model.IsOrganisationFundedByOfficeForStudents = await _experienceAndAccreditationApiClient.GetOfficeForStudents(request.ApplicationId) == "Yes";
 
@@ -72,7 +73,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _logger.LogInformation($"Retrieving initial teacher training details for application {request.ApplicationId}");
 
             var model = new InitialTeacherTrainingViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.ExperienceAndAccreditationChecks, GatewayPageIds.InitialTeacherTraining, request.UserName, RoatpGatewayConstants.Captions.ExperienceAndAccreditation, RoatpGatewayConstants.Headings.InitialTeacherTraining, NoSelectionErrorMessages.Errors[GatewayPageIds.InitialTeacherTraining]);
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.ExperienceAndAccreditationChecks, GatewayPageIds.InitialTeacherTraining, request.UserId, request.UserName, RoatpGatewayConstants.Captions.ExperienceAndAccreditation, RoatpGatewayConstants.Headings.InitialTeacherTraining, NoSelectionErrorMessages.Errors[GatewayPageIds.InitialTeacherTraining]);
 
             var initialTeacherTraining = await _experienceAndAccreditationApiClient.GetInitialTeacherTraining(request.ApplicationId);
 
@@ -87,7 +88,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             _logger.LogInformation($"Retrieving Ofsted details for application {request.ApplicationId}");
 
             var model = new OfstedDetailsViewModel();
-            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.ExperienceAndAccreditationChecks, GatewayPageIds.Ofsted, request.UserName, RoatpGatewayConstants.Captions.ExperienceAndAccreditation, RoatpGatewayConstants.Headings.Ofsted, NoSelectionErrorMessages.Errors[GatewayPageIds.Ofsted]);
+            await model.PopulatePageCommonDetails(_applyApiClient, request.ApplicationId, GatewaySequences.ExperienceAndAccreditationChecks, GatewayPageIds.Ofsted, request.UserId, request.UserName, RoatpGatewayConstants.Captions.ExperienceAndAccreditation, RoatpGatewayConstants.Headings.Ofsted, NoSelectionErrorMessages.Errors[GatewayPageIds.Ofsted]);
 
             var ofstedDetails = await _experienceAndAccreditationApiClient.GetOfstedDetails(request.ApplicationId);
 

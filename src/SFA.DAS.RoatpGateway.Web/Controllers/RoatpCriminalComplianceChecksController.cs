@@ -31,8 +31,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}")]
         public async Task<IActionResult> GetCriminalCompliancePage(Guid applicationId, string gatewayPageId)
         {
+            var userId = HttpContext.User.UserId();
             var username = HttpContext.User.UserDisplayName();
-            var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(applicationId, gatewayPageId, username));
+            var viewModel = await _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(applicationId, gatewayPageId, userId, username));
             if (viewModel.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent && !string.IsNullOrEmpty(viewModel.ClarificationBy))
                 return View(ClarificationCriminalComplianceView, viewModel);
             return View(CriminalComplianceView, viewModel);
@@ -41,7 +42,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}")]
         public async Task<IActionResult> EvaluateCriminalCompliancePage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, userId, username));
             return await ValidateAndUpdatePageAnswer(command, viewModelBuilder, CriminalComplianceView);
         }
 
@@ -49,7 +52,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpPost("/Roatp/Gateway/{applicationId}/Page/{gatewayPageId}/Clarification")]
         public async Task<IActionResult> ClarifyCriminalCompliancePage(SubmitGatewayPageAnswerCommand command)
         {
-            Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, HttpContext.User.UserDisplayName()));
+            var userId = HttpContext.User.UserId();
+            var username = HttpContext.User.UserDisplayName();
+            Func<Task<CriminalCompliancePageViewModel>> viewModelBuilder = () => _orchestrator.GetCriminalComplianceCheckViewModel(new GetCriminalComplianceCheckRequest(command.ApplicationId, command.PageId, userId, username));
             return await ValidateAndUpdateClarificationPageAnswer(command, viewModelBuilder, ClarificationCriminalComplianceView);
         }
     }

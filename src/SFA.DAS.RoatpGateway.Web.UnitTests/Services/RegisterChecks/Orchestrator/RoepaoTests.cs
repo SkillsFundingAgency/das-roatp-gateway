@@ -17,9 +17,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
         private Mock<IRoatpRegisterApiClient> _roatpApiClient;
         private Mock<ILogger<GatewayRegisterChecksOrchestrator>> _logger;
 
-        private static string ukprn = "12345678";
-        private static string UKRLPLegalName = "John's workshop";
-        private static string UserName = "GatewayUser";
+        private const string ukprn = "12345678";
+        private const string UKRLPLegalName = "John's workshop";
+        private const string UserName = "GatewayUser";
+        private const string UserId = "GatewayUser@test.com";
 
         private readonly Guid _applicationId = Guid.NewGuid();
 
@@ -38,13 +39,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserName)).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserId, UserName)).ReturnsAsync(commonDetails);
         }
 
         [Test]
         public async Task check_orchestrator_builds_with_roepao_details()
         {
-            var request = new GetRoepaoRequest(_applicationId, UserName);
+            var request = new GetRoepaoRequest(_applicationId, UserId, UserName);
 
             var viewModel = await _orchestrator.GetRoepaoViewModel(request);
 

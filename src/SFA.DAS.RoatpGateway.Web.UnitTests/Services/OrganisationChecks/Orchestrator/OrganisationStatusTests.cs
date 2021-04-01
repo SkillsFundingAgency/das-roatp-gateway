@@ -29,7 +29,8 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
         private static string CharityStatusWithCapitalisation => "Closed";
         private static string ProviderStatus = "registered";
         private static string ProviderStatusWithCapitalisation = "Registered";
-        private static string UserName = "GatewayUser";              
+        private static string UserName = "GatewayUser";
+        private static string UserId = "GatewayUser@test.com";
 
         [SetUp]
         public void Setup()
@@ -51,7 +52,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             var ukrlpDetails = new ProviderDetails
             {
@@ -74,7 +75,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             };
             _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
 
-            var request = new GetOrganisationStatusRequest(applicationId, UserName);
+            var request = new GetOrganisationStatusRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetOrganisationStatusViewModel(request);
 
@@ -102,7 +103,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             var ukrlpDetails = new ProviderDetails
             {
@@ -126,7 +127,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
 
-            var request = new GetOrganisationStatusRequest(applicationId, UserName);
+            var request = new GetOrganisationStatusRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetOrganisationStatusViewModel(request);
 
@@ -154,7 +155,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
-            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
+            _applyApiClient.Setup(x => x.GetPageCommonDetails(applicationId, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(commonDetails);
 
             var ukrlpDetails = new ProviderDetails
             {
@@ -178,7 +179,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
 
-            var request = new GetOrganisationStatusRequest(applicationId, UserName);
+            var request = new GetOrganisationStatusRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetOrganisationStatusViewModel(request);
 
