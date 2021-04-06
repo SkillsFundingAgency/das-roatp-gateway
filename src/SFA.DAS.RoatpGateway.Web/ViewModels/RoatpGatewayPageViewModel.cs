@@ -37,7 +37,8 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string Heading { get; set; }
         public string Caption { get; set; }
         public string NoSelectionErrorMessage { get; set; }
-    
+
+        public virtual int ClarificationAnswerMaxWords => 300;
         public string ClarificationAnswer { get; set; }
         public string ClarificationComments { get; set; }
         public string ClarificationBy { get; set; }

@@ -11,5 +11,7 @@
         public string FurtherInformationAnswer { get; set; }
 
         public string PostBackAction { get; set; }
+
+        public override int ClarificationAnswerMaxWords => 525;
     }
 }

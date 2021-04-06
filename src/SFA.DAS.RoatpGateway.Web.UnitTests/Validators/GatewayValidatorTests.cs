@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Models;
@@ -107,27 +108,21 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             Assert.AreEqual(hasErrorMessage, result.Errors.Any());
         }
 
-        [TestCase(300, false)]
-        [TestCase(301, true)]
-        public void clarification_test_cases_where_input_is_too_long(int wordCount, bool hasErrorMessage)
+        [TestCase(typeof(RoatpGatewayPageViewModel))]
+        [TestCase(typeof(CriminalCompliancePageViewModel))]
+        public void clarification_test_cases_where_ClarificationAnswer_is_too_long(Type t)
         {
-            var words = string.Empty;
-            for (var i = 0; i < wordCount; i++)
-            {
-                words = $"{words}{i} ";
-            }
-
-            _viewModel = new RoatpGatewayPageViewModel();
+            _viewModel = (RoatpGatewayPageViewModel)Activator.CreateInstance(t);
             _viewModel.Status = SectionReviewStatus.Pass;
             _viewModel.OptionPassText = "words";
-            _viewModel.ClarificationAnswer = words;
+            _viewModel.ClarificationAnswer = string.Join(" ", Enumerable.Range(0, _viewModel.ClarificationAnswerMaxWords + 1));
 
             var command = new SubmitGatewayPageAnswerCommand(_viewModel);
 
             var result = _validator.ValidateClarification(command).Result;
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
-
+            CollectionAssert.IsNotEmpty(result.Errors);
+            Assert.IsTrue(result.Errors[0].ErrorMessage.Contains($"{_viewModel.ClarificationAnswerMaxWords} words"));
         }
     }
 }
