@@ -20,7 +20,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications();
         Task<GetGatewayApplicationCountsResponse> GetApplicationCounts();
 
-        Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string evaluatedBy);
+        Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string userId, string userName);
 
         Task WithdrawApplication(Guid applicationId, string comments, string userId, string userName);
         Task RemoveApplication(Guid applicationId, string comments, string externalComments, string userId, string userName);
