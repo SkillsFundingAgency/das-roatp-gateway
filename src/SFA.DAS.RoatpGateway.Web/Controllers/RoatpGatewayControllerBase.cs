@@ -18,7 +18,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
     [ExternalApiExceptionFilter]
     [Authorize(Roles = Roles.RoatpGatewayTeam)]
-    public class RoatpGatewayControllerBase<T> : Controller
+    public abstract class RoatpGatewayControllerBase<T> : Controller
     {
         protected readonly IRoatpApplicationApiClient _applyApiClient;
         protected readonly ILogger<T> _logger;
@@ -31,29 +31,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             _applyApiClient = applyApiClient;
             _logger = logger;
             GatewayValidator = gatewayValidator;
-        }
-
-        public string SetupGatewayPageOptionTexts(SubmitGatewayPageAnswerCommand command)
-        {
-            if (command?.Status == null) return string.Empty;
-            command.OptionInProgressText = command.Status == SectionReviewStatus.InProgress && !string.IsNullOrEmpty(command.OptionInProgressText) ? command.OptionInProgressText : string.Empty;
-            command.OptionPassText = command.Status == SectionReviewStatus.Pass && !string.IsNullOrEmpty(command.OptionPassText) ? command.OptionPassText : string.Empty;
-            command.OptionFailText = command.Status == SectionReviewStatus.Fail && !string.IsNullOrEmpty(command.OptionFailText) ? command.OptionFailText : string.Empty;
-            command.OptionClarificationText = command.Status == SectionReviewStatus.Clarification && !string.IsNullOrEmpty(command.OptionClarificationText) ? command.OptionClarificationText : string.Empty;
-
-            switch (command.Status)
-            {
-                case SectionReviewStatus.Pass:
-                    return command.OptionPassText;
-                case SectionReviewStatus.Fail:
-                    return command.OptionFailText;
-                case SectionReviewStatus.InProgress:
-                    return command.OptionInProgressText;
-                case SectionReviewStatus.Clarification:
-                    return command.OptionClarificationText;
-                default:
-                    return string.Empty;
-            }
         }
 
         protected async Task<IActionResult> ValidateAndUpdatePageAnswer<VM>(SubmitGatewayPageAnswerCommand command,
@@ -74,9 +51,13 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
 
             if (command.Status == SectionReviewStatus.Clarification)
+            {
                 return await SubmitGatewayPageAnswerClarification(command);
-
-            return await SubmitGatewayPageAnswer(command);
+            }
+            else
+            {
+                return await SubmitGatewayPageAnswer(command);
+            }
         }
 
 
@@ -106,7 +87,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var userId = HttpContext.User.UserId();
-            var comments = SetupGatewayPageOptionTexts(command);
+            var comments = GetCommentsFromCommand(command);
             var clarificationAnswer = command.ClarificationAnswer;
 
             _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswer - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer {clarificationAnswer}");
@@ -127,7 +108,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var userId = HttpContext.User.UserId();
-            var comments = SetupGatewayPageOptionTexts(command);
+            var comments = GetCommentsFromCommand(command);
             var clarificationAnswer = command.ClarificationAnswer;
 
             _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswerClarification - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer {clarificationAnswer}");
@@ -149,7 +130,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
             var userId = HttpContext.User.UserId();
-            var comments = SetupGatewayPageOptionTexts(command);
+            var comments = GetCommentsFromCommand(command);
             var clarificationAnswer = command.ClarificationAnswer;
 
             _logger.LogInformation($"{typeof(T).Name}-SubmitGatewayPageAnswerPostClarification - ApplicationId '{command.ApplicationId}' - PageId '{command.PageId}' - Status '{command.Status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer {clarificationAnswer}");
@@ -164,6 +145,25 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             }
 
             return RedirectToAction("ViewApplication", "RoatpGateway", new { command.ApplicationId }, $"Sequence_{command.SequenceNumber}");
+        }
+
+        private static string GetCommentsFromCommand(SubmitGatewayPageAnswerCommand command)
+        {
+            if (command is null) return null;
+
+            switch (command.Status)
+            {
+                case SectionReviewStatus.Pass:
+                    return !string.IsNullOrEmpty(command.OptionPassText) ? command.OptionPassText : null;
+                case SectionReviewStatus.Fail:
+                    return !string.IsNullOrEmpty(command.OptionFailText) ? command.OptionFailText : null;
+                case SectionReviewStatus.InProgress:
+                    return !string.IsNullOrEmpty(command.OptionInProgressText) ? command.OptionInProgressText : null;
+                case SectionReviewStatus.Clarification:
+                    return !string.IsNullOrEmpty(command.OptionClarificationText) ? command.OptionClarificationText : null;
+                default:
+                    return null;
+            }
         }
     }
 }
