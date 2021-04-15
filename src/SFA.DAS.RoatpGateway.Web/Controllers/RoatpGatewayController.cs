@@ -445,7 +445,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                await _applyApiClient.EvaluateGateway(viewModel.ApplicationId, isGatewayApproved.Value, HttpContext.User.UserDisplayName());
+                var username = HttpContext.User.UserDisplayName();
+                var userId = HttpContext.User.UserId();
+                await _applyApiClient.EvaluateGateway(viewModel.ApplicationId, isGatewayApproved.Value, userId, username);
                 return RedirectToAction(nameof(Evaluated), new { viewModel.ApplicationId });
             }
             else

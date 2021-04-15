@@ -52,9 +52,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/ClosedApplications");
         }
 
-        public async Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string evaluatedBy)
+        public async Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string userId, string userName)
         {
-            await Post($"/GatewayReview/{applicationId}/Evaluate", new { isGatewayApproved, evaluatedBy });
+            await Post($"/GatewayReview/{applicationId}/Evaluate", new { isGatewayApproved, userId, userName });
         }
 
         public async Task WithdrawApplication(Guid applicationId, string comments, string userId, string userName)
