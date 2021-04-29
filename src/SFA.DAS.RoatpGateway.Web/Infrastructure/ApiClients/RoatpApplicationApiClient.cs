@@ -147,13 +147,13 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
         }
 
-        public async Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string gatewayReviewExternalComment, string userId, string userName)
+        public async Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string gatewayReviewExternalComment, int? subcontractingLimit, string userId, string userName)
         {
             _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - ApplicationId '{applicationId}' - GatewayReviewStatus '{gatewayReviewStatus}' - GatewayReviewComment '{gatewayReviewComment}'- GatewayReviewExternalComment '{gatewayReviewExternalComment}' - UserName '{userName}'");
 
             try
             {
-                var responseCode = await Post($"/Gateway/UpdateGatewayReviewStatusAndComment", new { applicationId, gatewayReviewStatus, gatewayReviewComment, gatewayReviewExternalComment, userId, userName });
+                var responseCode = await Post($"/Gateway/UpdateGatewayReviewStatusAndComment", new { applicationId, gatewayReviewStatus, gatewayReviewComment, gatewayReviewExternalComment, subcontractingLimit, userId, userName });
                 if (responseCode != System.Net.HttpStatusCode.OK)
                 {
                     throw new HttpRequestException($"Unable to update RoATP gateway review status, response code {responseCode}");
