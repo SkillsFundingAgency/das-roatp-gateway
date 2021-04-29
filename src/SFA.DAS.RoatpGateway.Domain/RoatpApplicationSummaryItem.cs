@@ -35,7 +35,7 @@ namespace SFA.DAS.RoatpGateway.Domain
                 {
                     return ApplicationRoute;
                 }
-                return ApplicationRoute.Substring(0, index + 1);
+                return ApplicationRoute.Substring(0, index);
             }
         }
     }
