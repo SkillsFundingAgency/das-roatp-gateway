@@ -85,7 +85,7 @@ namespace SFA.DAS.RoatpGateway.Domain
             { GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "Select the outcome for Involuntary withdrawal from Initial Teacher Training accreditation in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "Select the outcome for removed from any charity register check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding,"Select the outcome for investigated due to safeguarding issues in the last 3 months check" },
-            { GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, "Select the outcome for investigated due to whistleblowing issues in the last 3 months check" },
+            { GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, "Select the outcome for Investigated by the ESFA or other public body or regulator" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "Select the outcome for subject to insolvency or winding up proceedings in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions, "Select the outcome for unspent criminal convictions check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds, "Select the outcome for failed to pay back funds in the last 3 years check" },
