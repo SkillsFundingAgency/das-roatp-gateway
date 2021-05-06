@@ -95,7 +95,9 @@ namespace SFA.DAS.RoatpGateway.Domain
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract, "Select the outcome for withdrawn from a contract with a public body in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments, "Select the outcome for breached tax payments or social security contributions in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees, "Select the outcome for Register of Removed Trustees check" },
-            { GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt, "Select the outcome for people in control or any partner organisations been made bankrupt in the last 3 years check" }
+            { GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt, "Select the outcome for people in control or any partner organisations been made bankrupt in the last 3 years check" },
+            { GatewayPageIds.CriminalComplianceWhosInControlChecks.TeachingRegulations, "Select the outcome for people in control subject to a prohibition order from the Teaching Regulation Agency" },
+            { GatewayPageIds.CriminalComplianceWhosInControlChecks.SchoolManagement, "Select the outcome for subject to a ban from management or governance of schools" }
         };
 
         public static IReadOnlyDictionary<string, string> Errors = new ReadOnlyDictionary<string, string>(errors);

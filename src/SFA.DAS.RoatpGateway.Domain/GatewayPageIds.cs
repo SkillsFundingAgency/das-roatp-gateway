@@ -49,6 +49,8 @@ namespace SFA.DAS.RoatpGateway.Domain
             public const string BreachedPayments = "BreachedPayments";
             public const string RegisterOfRemovedTrustees = "RegisterOfRemovedTrustees";
             public const string Bankrupt = "Bankrupt";
+            public const string TeachingRegulations = "TeachingRegulations";
+            public const string SchoolManagement = "SchoolManagement";
         }
 
     }

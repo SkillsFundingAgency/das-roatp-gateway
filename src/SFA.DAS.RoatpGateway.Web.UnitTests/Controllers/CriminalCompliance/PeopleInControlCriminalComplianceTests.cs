@@ -43,6 +43,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments)]
         [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees)]
         [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.TeachingRegulations)]
+        [TestCase(GatewayPageIds.CriminalComplianceWhosInControlChecks.SchoolManagement)]
         public void PeopleInControl_criminal_compliance_check_is_displayed(string gatewayPageId)
         {
             var applicationId = Guid.NewGuid();

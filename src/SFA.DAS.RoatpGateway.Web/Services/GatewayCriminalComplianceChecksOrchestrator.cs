@@ -109,6 +109,8 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 case GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments:
                 case GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees:
                 case GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.TeachingRegulations:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.SchoolManagement:
                     return GatewaySequences.PeopleInControlCriminalComplianceChecks;
                 default:
                     return int.MinValue;
