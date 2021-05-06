@@ -17,7 +17,7 @@ namespace SFA.DAS.RoatpGateway.Domain
             { GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "Involuntary withdrawal from Initial Teacher Training accreditation in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "Removed from any charity register check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, "Investigated due to safeguarding issues in the last 3 months check" },
-            { GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, "Investigated by the ESFA or other public body or regulator" },
+            { GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, "Investigated by the ESFA or other public body or regulator check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "Subject to insolvency or winding up proceedings in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions, "Unspent criminal convictions check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds, "Failed to pay back funds in the last 3 years check" },
@@ -27,7 +27,9 @@ namespace SFA.DAS.RoatpGateway.Domain
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract, "Withdrawn from a contract with a public body in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments, "Breached tax payments or social security contributions in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees, "Register of Removed Trustees check" },
-            { GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt, "People in control or any partner organisations been made bankrupt in the last 3 years check" }
+            { GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt, "People in control or any partner organisations been made bankrupt in the last 3 years check" },
+            { GatewayPageIds.CriminalComplianceWhosInControlChecks.TeachingRegulations, "Subject to a prohibition order from the Teaching Regulation Agency" },
+        { GatewayPageIds.CriminalComplianceWhosInControlChecks.SchoolManagement, "Subject to a ban from management or governance of schools" }
         };
 
         public static IReadOnlyDictionary<string, string> Headings = new ReadOnlyDictionary<string, string>(headings);

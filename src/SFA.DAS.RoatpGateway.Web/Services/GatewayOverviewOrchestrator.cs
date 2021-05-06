@@ -141,6 +141,11 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 viewModelOnError.RadioCheckedFailed = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Fail ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedApproved = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Pass ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedRejected = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Reject ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
+
+                viewModelOnError.SubcontractingLimit = viewModel.SubcontractingLimit;
+                viewModelOnError.RadioChecked100kSubcontractingLimit = viewModelOnError.SubcontractingLimit == 100000 ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
+                viewModelOnError.RadioChecked500kSubcontractingLimit = viewModelOnError.SubcontractingLimit == 500000 ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
+
                 foreach (var error in viewModelOnError.ErrorMessages)
                 {
                     if (error.Field.Equals(nameof(viewModelOnError.GatewayReviewStatus)))
@@ -148,40 +153,45 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         viewModelOnError.ErrorTextGatewayReviewStatus = error.ErrorMessage;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionAskClarificationText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionAskClarificationText)))
                     {
                         viewModelOnError.ErrorTextAskClarification = error.ErrorMessage;
                         viewModelOnError.CssOnErrorAskClarification = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionFailedText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionFailedText)))
                     {
                         viewModelOnError.ErrorTextFailed = error.ErrorMessage;
                         viewModelOnError.CssOnErrorFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionFailedExternalText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionFailedExternalText)))
                     {
                         viewModelOnError.ErrorTextExternalFailed = error.ErrorMessage;
                         viewModelOnError.CssOnErrorExternalFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionApprovedText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionApprovedText)))
                     {
                         viewModelOnError.ErrorTextApproved = error.ErrorMessage;
                         viewModelOnError.CssOnErrorApproved = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionRejectedText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionRejectedText)))
                     {
                         viewModelOnError.ErrorTextRejected = error.ErrorMessage;
                         viewModelOnError.CssOnErrorRejected = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionExternalRejectedText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionExternalRejectedText)))
                     {
                         viewModelOnError.ErrorTextExternalRejected = error.ErrorMessage;
                         viewModelOnError.CssOnErrorExternalRejected = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                    }
+
+                    else if (error.Field.Equals(nameof(viewModelOnError.SubcontractingLimit)))
+                    {
+                        viewModelOnError.ErrorTextSubcontractingLimit = error.ErrorMessage;
                     }
                 }
             }
@@ -329,7 +339,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         new GatewaySection { SectionNumber = 8, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation,  LinkTitle = "Initial Teacher Training accreditation" },
                         new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, LinkTitle = "Removed from any charity register" },
                         new GatewaySection { SectionNumber = 10, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding,  LinkTitle = "Investigated due to safeguarding issues" },
-                        new GatewaySection { SectionNumber = 11, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing,  LinkTitle = "Investigated due to whistleblowing issues" },
+                        new GatewaySection { SectionNumber = 11, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody,  LinkTitle = "Investigated by the ESFA or other public body or regulator" },
                         new GatewaySection { SectionNumber = 12, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, LinkTitle = "Insolvency or winding up proceedings" }
                     }
                 },
@@ -348,7 +358,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         new GatewaySection { SectionNumber = 6, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract,  LinkTitle = "Withdrawn from a contract with a public body", HiddenText = "for the people in control" },
                         new GatewaySection { SectionNumber = 7, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments,  LinkTitle = "Breached tax payments or social security contributions" },
                         new GatewaySection { SectionNumber = 8, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees, LinkTitle = "Register of Removed Trustees" },
-                        new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt,  LinkTitle = "Been made bankrupt" }
+                        new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt,  LinkTitle = "Been made bankrupt" },
+                        new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.TeachingRegulations,  LinkTitle = "Prohibition order from Teaching Regulation Agency" },
+                        new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.SchoolManagement,  LinkTitle = "Ban from management or governance of schools" }
                     }
                 }
             };

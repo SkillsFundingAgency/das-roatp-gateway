@@ -44,7 +44,7 @@
                             <span class="govuk-caption-l">Overall gateway outcome</span>
                             <h1 class="govuk-fieldset__heading">Are you sure you want to pass this application?</h1>
                         </legend>
-        
+
                         @if (!string.IsNullOrEmpty(Model.GatewayReviewComment))
                         {
                             <h2 class="govuk-heading-l">Comments</h2>
@@ -68,11 +68,12 @@
                                 <span class="govuk-visually-hidden">Error:</span> <span asp-validation-for="ConfirmGatewayOutcome"></span>
                             </span>
                         }
-                        
+
                         <input type="hidden" asp-for="ApplicationId" />
                         <input type="hidden" asp-for="ApplicationStatus" />
                         <input type="hidden" asp-for="GatewayReviewStatus" />
                         <input type="hidden" asp-for="GatewayReviewComment" />
+                        <input type="hidden" asp-for="SubcontractingLimit" />
 
                         <div class="govuk-radios">
                             <div class="govuk-radios__item">

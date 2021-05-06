@@ -29,8 +29,6 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public List<GatewaySequence> Sequences { get; set; }
         public bool ReadyToConfirm { get; set; }
 
-        public bool OneInTwoMonthsPassed { get; set; }
-
         // Read only
         public string GatewayReviewComment { get; set; }
         public string GatewayReviewExternalComment { get; set; }
@@ -42,6 +40,8 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string ApplicationComments { get; set; }
         public string ApplicationExternalComments { get; set; }
 
+        public int? SubcontractingLimit { get; set; }
+
         // Model On Error
         public bool IsInvalid { get; set; }
 
@@ -52,11 +52,14 @@ namespace SFA.DAS.RoatpGateway.Web.ViewModels
         public string ErrorTextApproved { get; set; }
         public string ErrorTextRejected { get; set; }
         public string ErrorTextExternalRejected { get; set; }
+        public string ErrorTextSubcontractingLimit { get; set; }
         public string RadioCheckedAskClarification { get; set; }
         public string RadioCheckedFailed { get; set; }
         public string RadioCheckedApproved { get; set; }
         public string RadioCheckedRejected { get; set; }
-   
+        public string RadioChecked100kSubcontractingLimit { get; set; }
+        public string RadioChecked500kSubcontractingLimit { get; set; }
+
         public string CssFormGroupError { get; set; }
         public string CssOnErrorAskClarification { get; set; }
         public string CssOnErrorApproved { get; set; }

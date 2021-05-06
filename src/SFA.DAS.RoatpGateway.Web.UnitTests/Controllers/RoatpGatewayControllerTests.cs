@@ -51,7 +51,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId });
             _orchestrator.Setup(x => x.GetConfirmOverviewViewModel(It.Is<GetApplicationOverviewRequest>(y => y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
-            var result = await _controller.ConfirmOutcome(applicationId, GatewayReviewStatus.Pass, null, null);
+            var result = await _controller.ConfirmOutcome(applicationId, GatewayReviewStatus.Pass, null, null, 0);
             var viewResult = result as ViewResult;
             Assert.AreSame(expectedViewModel, viewResult.Model);
         }
@@ -120,7 +120,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task ConfirmOutcome_evaluation_result_is_on_error()
         {
             var applicationId = Guid.NewGuid();
-            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId });
+            ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId, ApplyData = new ApplyData { ApplyDetails = new ApplyDetails { } } });
 
             var viewModel = new RoatpGatewayApplicationViewModel
             {
@@ -172,7 +172,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
             Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, string.Empty, UserId, Username), Times.Once);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, string.Empty, viewModel.SubcontractingLimit, UserId, Username), Times.Once);
         }
 
         [Test]
@@ -192,7 +192,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var redirectToActionResult = result as RedirectToActionResult;
 
             Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, UserId, Username), Times.Never);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
         [Test]
@@ -213,7 +213,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var resultViewModel = viewResult.Model as RoatpGatewayConfirmOutcomeViewModel;
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, UserId, Username), Times.Never);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
 
@@ -236,7 +236,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
             Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, UserId, Username), Times.Once);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Once);
         }
 
         [Test]
@@ -256,7 +256,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var redirectToActionResult = result as RedirectToActionResult;
 
             Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, UserId, Username), Times.Never);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
         [Test]
@@ -277,7 +277,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var resultViewModel = viewResult.Model as RoatpGatewayFailOutcomeViewModel;
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, UserId, Username), Times.Never);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
         [Test]
@@ -297,7 +297,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
             Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, UserId, Username), Times.Once);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Once);
         }
 
         [Test]
@@ -317,7 +317,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var redirectToActionResult = result as RedirectToActionResult;
 
             Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, UserId, Username), Times.Never);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
         [Test]
@@ -338,7 +338,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var resultViewModel = viewResult.Model as RoatpGatewayRejectOutcomeViewModel;
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
-            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, UserId, Username), Times.Never);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
         [Test]
