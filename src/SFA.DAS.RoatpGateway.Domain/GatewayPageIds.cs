@@ -34,7 +34,7 @@ namespace SFA.DAS.RoatpGateway.Domain
             public const string IttAccreditation = "IttAccreditation";
             public const string RemovedCharityRegister = "RemovedCharityRegister";
             public const string Safeguarding = "Safeguarding";
-            public const string Whistleblowing = "Whistleblowing";
+            public const string InvestigationPublicBody = "InvestigationPublicBody";
             public const string Insolvency = "Insolvency";
         }
 

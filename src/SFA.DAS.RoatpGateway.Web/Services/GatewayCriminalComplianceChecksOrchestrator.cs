@@ -65,7 +65,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 case GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation:
                 case GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister:
                 case GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding:
-                case GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody:
                 case GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency:
                     return RoatpGatewayConstants.Captions.OrganisationsCriminalAndComplianceChecks;
                 case GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions:
@@ -97,7 +97,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 case GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation:
                 case GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister:
                 case GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding:
-                case GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing:
+                case GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody:
                 case GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency:
                     return GatewaySequences.OrganisationCriminalComplianceChecks;
                 case GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions:

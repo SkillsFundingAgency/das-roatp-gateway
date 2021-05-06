@@ -44,7 +44,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding)]
-        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency)]
         public void Organisation_criminal_compliance_check_is_displayed(string gatewayPageId)
         {
@@ -73,7 +73,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, null)]
-        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, "clarification answer")]
@@ -85,7 +85,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, "clarification answer")]
-        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "clarification answer")]
         public void Organisation_criminal_compliance_check_result_is_saved(string gatewayPageId, string clarificationAnswer)
         {
@@ -131,7 +131,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, null)]
-        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, "clarification answer")]
@@ -143,7 +143,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, "clarification answer")]
-        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "clarification answer")]
         public void Organisation_criminal_compliance_check_clarification_result_is_saved(string gatewayPageId, string clarificationAnswer)
         {
@@ -189,7 +189,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, null)]
-        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, "clarification answer")]
@@ -201,7 +201,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, "clarification answer")]
-        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, "clarification answer")]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "clarification answer")]
         public void Organisation_criminal_compliance_check_has_validation_error(string gatewayPageId, string clarificationAnswer)
         {
@@ -260,7 +260,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, null)]
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, null)]
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, null)]
+    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, null)]
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, null)]
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, "clarification answer")]
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, "clarification answer")]
@@ -272,7 +272,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "clarification answer")]
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "clarification answer")]
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, "clarification answer")]
+    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, "clarification answer")]
     [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "clarification answer")]
     public void Organisation_criminal_compliance_clarification_check_has_validation_error(string gatewayPageId, string clarificationAnswer)
     {
