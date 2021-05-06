@@ -85,7 +85,7 @@ namespace SFA.DAS.RoatpGateway.Domain
             { GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "Select the outcome for Involuntary withdrawal from Initial Teacher Training accreditation in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "Select the outcome for removed from any charity register check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding,"Select the outcome for investigated due to safeguarding issues in the last 3 months check" },
-            { GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing, "Select the outcome for investigated due to whistleblowing issues in the last 3 months check" },
+            { GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, "Select the outcome for investigated by the ESFA or other public body or regulator check" },
             { GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "Select the outcome for subject to insolvency or winding up proceedings in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.UnspentCriminalConvictions, "Select the outcome for unspent criminal convictions check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.FailedToRepayFunds, "Select the outcome for failed to pay back funds in the last 3 years check" },
@@ -95,7 +95,9 @@ namespace SFA.DAS.RoatpGateway.Domain
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract, "Select the outcome for withdrawn from a contract with a public body in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments, "Select the outcome for breached tax payments or social security contributions in the last 3 years check" },
             { GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees, "Select the outcome for Register of Removed Trustees check" },
-            { GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt, "Select the outcome for people in control or any partner organisations been made bankrupt in the last 3 years check" }
+            { GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt, "Select the outcome for people in control or any partner organisations been made bankrupt in the last 3 years check" },
+            { GatewayPageIds.CriminalComplianceWhosInControlChecks.TeachingRegulations, "Select the outcome for people in control subject to a prohibition order from the Teaching Regulation Agency" },
+            { GatewayPageIds.CriminalComplianceWhosInControlChecks.SchoolManagement, "Select the outcome for subject to a ban from management or governance of schools" }
         };
 
         public static IReadOnlyDictionary<string, string> Errors = new ReadOnlyDictionary<string, string>(errors);

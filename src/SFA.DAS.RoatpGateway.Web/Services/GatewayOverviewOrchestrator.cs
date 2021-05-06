@@ -339,7 +339,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         new GatewaySection { SectionNumber = 8, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation,  LinkTitle = "Initial Teacher Training accreditation" },
                         new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, LinkTitle = "Removed from any charity register" },
                         new GatewaySection { SectionNumber = 10, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding,  LinkTitle = "Investigated due to safeguarding issues" },
-                        new GatewaySection { SectionNumber = 11, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.Whistleblowing,  LinkTitle = "Investigated due to whistleblowing issues" },
+                        new GatewaySection { SectionNumber = 11, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody,  LinkTitle = "Investigated by the ESFA or other public body or regulator" },
                         new GatewaySection { SectionNumber = 12, PageId = GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, LinkTitle = "Insolvency or winding up proceedings" }
                     }
                 },
@@ -358,7 +358,9 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         new GatewaySection { SectionNumber = 6, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.WithdrawnFromContract,  LinkTitle = "Withdrawn from a contract with a public body", HiddenText = "for the people in control" },
                         new GatewaySection { SectionNumber = 7, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments,  LinkTitle = "Breached tax payments or social security contributions" },
                         new GatewaySection { SectionNumber = 8, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees, LinkTitle = "Register of Removed Trustees" },
-                        new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt,  LinkTitle = "Been made bankrupt" }
+                        new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt,  LinkTitle = "Been made bankrupt" },
+                        new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.TeachingRegulations,  LinkTitle = "Prohibition order from Teaching Regulation Agency" },
+                        new GatewaySection { SectionNumber = 9, PageId = GatewayPageIds.CriminalComplianceWhosInControlChecks.SchoolManagement,  LinkTitle = "Ban from management or governance of schools" }
                     }
                 }
             };
