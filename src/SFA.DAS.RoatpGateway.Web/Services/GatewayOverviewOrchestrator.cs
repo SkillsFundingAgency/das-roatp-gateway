@@ -141,6 +141,11 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 viewModelOnError.RadioCheckedFailed = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Fail ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedApproved = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Pass ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedRejected = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Reject ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
+
+                viewModelOnError.SubcontractingLimit = viewModel.SubcontractingLimit;
+                viewModelOnError.RadioChecked100kSubcontractingLimit = viewModelOnError.SubcontractingLimit == 100000 ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
+                viewModelOnError.RadioChecked500kSubcontractingLimit = viewModelOnError.SubcontractingLimit == 500000 ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
+
                 foreach (var error in viewModelOnError.ErrorMessages)
                 {
                     if (error.Field.Equals(nameof(viewModelOnError.GatewayReviewStatus)))
@@ -148,40 +153,45 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                         viewModelOnError.ErrorTextGatewayReviewStatus = error.ErrorMessage;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionAskClarificationText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionAskClarificationText)))
                     {
                         viewModelOnError.ErrorTextAskClarification = error.ErrorMessage;
                         viewModelOnError.CssOnErrorAskClarification = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionFailedText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionFailedText)))
                     {
                         viewModelOnError.ErrorTextFailed = error.ErrorMessage;
                         viewModelOnError.CssOnErrorFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionFailedExternalText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionFailedExternalText)))
                     {
                         viewModelOnError.ErrorTextExternalFailed = error.ErrorMessage;
                         viewModelOnError.CssOnErrorExternalFailed = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionApprovedText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionApprovedText)))
                     {
                         viewModelOnError.ErrorTextApproved = error.ErrorMessage;
                         viewModelOnError.CssOnErrorApproved = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionRejectedText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionRejectedText)))
                     {
                         viewModelOnError.ErrorTextRejected = error.ErrorMessage;
                         viewModelOnError.CssOnErrorRejected = HtmlAndCssElements.CssTextareaErrorOverrideClass;
                     }
 
-                    if (error.Field.Equals(nameof(viewModelOnError.OptionExternalRejectedText)))
+                    else if (error.Field.Equals(nameof(viewModelOnError.OptionExternalRejectedText)))
                     {
                         viewModelOnError.ErrorTextExternalRejected = error.ErrorMessage;
                         viewModelOnError.CssOnErrorExternalRejected = HtmlAndCssElements.CssTextareaErrorOverrideClass;
+                    }
+
+                    else if (error.Field.Equals(nameof(viewModelOnError.SubcontractingLimit)))
+                    {
+                        viewModelOnError.ErrorTextSubcontractingLimit = error.ErrorMessage;
                     }
                 }
             }
