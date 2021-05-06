@@ -100,5 +100,24 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             Assert.AreEqual(hasErrorMessage, result.Errors.Any());
         }
+
+        [TestCase("Main", null, false)]
+        [TestCase("Supporting", null, true)]
+        [TestCase("Supporting", 100000, false)]
+        [TestCase("Employer", null, false)]
+        public void Test_cases_for_Pass_status_and_subcontracting_limit_check_message_as_expected(string applicationRoute, int? subcontractingLimit, bool hasErrorMessage)
+        {
+            _viewModel = new RoatpGatewayApplicationViewModel
+            {
+                GatewayReviewStatus = GatewayReviewStatus.Pass,
+                OptionApprovedText = "valid",
+                SubcontractingLimit = subcontractingLimit,
+                ApplicationRoute = applicationRoute
+            };
+
+            var result = _validator.Validate(_viewModel).Result;
+
+            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+        }
     }
 }

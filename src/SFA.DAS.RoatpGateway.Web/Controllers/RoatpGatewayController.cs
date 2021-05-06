@@ -172,7 +172,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpGet("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]
-        public async Task<IActionResult> ConfirmOutcome(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string gatewayReviewExternalComment)
+        public async Task<IActionResult> ConfirmOutcome(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string gatewayReviewExternalComment, int? subcontractingLimit)
         {
             var application = await _applyApiClient.GetApplication(applicationId);
             if (application is null)
@@ -202,6 +202,14 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         }
                     case GatewayReviewStatus.Pass:
                         {
+                            if(subcontractingLimit == 100000)
+                            {
+                                viewModel.RadioChecked100kSubcontractingLimit = HtmlAndCssElements.CheckBoxChecked;
+                            }
+                            else if (subcontractingLimit == 500000)
+                            {
+                                viewModel.RadioChecked500kSubcontractingLimit = HtmlAndCssElements.CheckBoxChecked;
+                            }
                             viewModel.RadioCheckedApproved = HtmlAndCssElements.CheckBoxChecked;
                             viewModel.OptionApprovedText = gatewayReviewComment;
                             break;
@@ -235,9 +243,13 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var application = await _applyApiClient.GetApplication(viewModel.ApplicationId);
 
-            if (application is null || application.ApplicationStatus == ApplicationStatus.GatewayAssessed)
+            if (application?.ApplyData?.ApplyDetails is null || application.ApplicationStatus == ApplicationStatus.GatewayAssessed)
             {
                 return RedirectToAction(nameof(NewApplications));
+            }
+            else
+            {
+                viewModel.ApplicationRoute = application.ApplyData.ApplyDetails.ProviderRouteName;
             }
 
             var validationResponse = await _validator.Validate(viewModel);
@@ -288,7 +300,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                             ApplicationId = viewModel.ApplicationId,
                             GatewayReviewStatus = viewModel.GatewayReviewStatus,
                             GatewayReviewComment = viewModel.OptionApprovedText,
-                            GatewayReviewExternalComment = string.Empty
+                            GatewayReviewExternalComment = string.Empty,
+                            SubcontractingLimit = viewModel.SubcontractingLimit
                         };
                         viewName = "~/Views/Gateway/ConfirmOutcomeApproved.cshtml";
                         break;
@@ -332,7 +345,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 {
                     var username = HttpContext.User.UserDisplayName();
                     var userId = HttpContext.User.UserId();
-                    await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, String.Empty, userId, username);
+                    await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, string.Empty, viewModel.SubcontractingLimit, userId, username);
                     var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
                     return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);
                 }
@@ -343,7 +356,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         applicationId = viewModel.ApplicationId,
                         gatewayReviewStatus = viewModel.GatewayReviewStatus,
                         gatewayReviewComment = viewModel.GatewayReviewComment,
-                        gatewayReviewExternalComments = viewModel.GatewayReviewExternalComment
+                        gatewayReviewExternalComments = viewModel.GatewayReviewExternalComment,
+                        subcontractingLimit = viewModel.SubcontractingLimit
                     });
                 }
             }
@@ -369,7 +383,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 {
                     var userId = HttpContext.User.UserId();
                     var username = HttpContext.User.UserDisplayName();
-                    await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, userId, username);
+                    await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, userId, username);
                     
                     var vm = new RoatpGatewayOutcomeViewModel {GatewayReviewStatus = viewModel.GatewayReviewStatus};
                     return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);
@@ -406,7 +420,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 {
                     var username = HttpContext.User.UserDisplayName();
                     var userId = HttpContext.User.UserId();
-                    await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, userId, username);
+                    await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, userId, username);
 
                     var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
                     return View("~/Views/Gateway/ApplicationRejected.cshtml", vm);
