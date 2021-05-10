@@ -77,6 +77,8 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 case GatewayPageIds.CriminalComplianceWhosInControlChecks.BreachedPayments:
                 case GatewayPageIds.CriminalComplianceWhosInControlChecks.RegisterOfRemovedTrustees:
                 case GatewayPageIds.CriminalComplianceWhosInControlChecks.Bankrupt:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.TeachingRegulations:
+                case GatewayPageIds.CriminalComplianceWhosInControlChecks.SchoolManagement:
                     return RoatpGatewayConstants.Captions.PeopleInControlCriminalAndComplianceChecks;
                 default:
                     return string.Empty;
