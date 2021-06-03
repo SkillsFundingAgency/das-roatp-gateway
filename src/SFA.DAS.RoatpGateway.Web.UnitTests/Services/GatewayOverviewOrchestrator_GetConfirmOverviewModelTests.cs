@@ -194,7 +194,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             viewModelOnError.ErrorTextFailed.Should().Be(errorMessage);
         }
 
-        [TestCase(GatewayReviewStatus.Reject, "OptionRejectedText", "Error - Decline")]
+        [TestCase(GatewayReviewStatus.Rejected, "OptionRejectedText", "Error - Decline")]
         public void ProcessViewModelOnError_process_view_model_correctly_OptionRejectedText(string gatewayReviewStatus, string field, string errorMessage)
         {
             var applicationId = Guid.NewGuid();

@@ -30,7 +30,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                 !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.ClarificationSent) &&
                 !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.Fail) &&
                 !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.Pass) &&
-                !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.Reject))
+                !viewModel.GatewayReviewStatus.Equals(GatewayReviewStatus.Rejected))
             {
                 validationResponse.Errors.Add(new ValidationErrorDetail("GatewayReviewStatus", NoSelectionErrorMessage));
             }
@@ -87,7 +87,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                         }
                         break;
                     }
-                case GatewayReviewStatus.Reject:
+                case GatewayReviewStatus.Rejected:
                     {
                         if (string.IsNullOrEmpty(viewModel.OptionRejectedText))
                         {
