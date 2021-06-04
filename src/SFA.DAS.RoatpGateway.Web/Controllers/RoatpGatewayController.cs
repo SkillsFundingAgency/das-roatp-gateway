@@ -309,7 +309,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 case GatewayReviewStatus.Rejected:
                 {
                     var contact = await _applyApiClient.GetContactDetails(viewModel.ApplicationId);
-                    confirmViewModel = new RoatpGatewayRejectOutcomeViewModel
+                    confirmViewModel = new RoatpGatewayRejectedOutcomeViewModel
                     {
                         ApplicationId = viewModel.ApplicationId,
                         Ukprn = application.ApplyData.ApplyDetails.UKPRN,
@@ -407,7 +407,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToRejectOutcome")]
-        public async Task<IActionResult> AboutToRejectOutcome(RoatpGatewayRejectOutcomeViewModel viewModel)
+        public async Task<IActionResult> AboutToRejectOutcome(RoatpGatewayRejectedOutcomeViewModel viewModel)
         {
             if (viewModel.ApplicationStatus == ApplicationStatus.GatewayAssessed)
             {

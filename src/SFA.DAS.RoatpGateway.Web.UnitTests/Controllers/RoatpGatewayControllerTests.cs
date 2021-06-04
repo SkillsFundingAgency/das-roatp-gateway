@@ -284,7 +284,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task AboutToRejectOutcome_selection_Yes()
         {
             var applicationId = Guid.NewGuid();
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
                 GatewayReviewStatus = GatewayReviewStatus.Rejected,
@@ -305,7 +305,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         {
             var applicationId = Guid.NewGuid();
             var expectedActionName = "ConfirmOutcome";
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
                 GatewayReviewStatus = GatewayReviewStatus.Rejected,
@@ -324,7 +324,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task AboutToRejectOutcome_no_selection()
         {
             var applicationId = Guid.NewGuid();
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
                 GatewayReviewStatus = GatewayReviewStatus.Rejected,
@@ -335,7 +335,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.AboutToRejectOutcome(viewModel);
             var viewResult = result as ViewResult;
-            var resultViewModel = viewResult.Model as RoatpGatewayRejectOutcomeViewModel;
+            var resultViewModel = viewResult.Model as RoatpGatewayRejectedOutcomeViewModel;
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
