@@ -111,7 +111,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         return View("~/Views/Gateway/Application.cshtml", viewModel);
                     case GatewayReviewStatus.Pass:
                     case GatewayReviewStatus.Fail:
-                    case GatewayReviewStatus.Reject:
+                    case GatewayReviewStatus.Rejected:
                         return View("~/Views/Gateway/Application_ReadOnly.cshtml", viewModel);
                     default:
                         return RedirectToAction(nameof(NewApplications));
@@ -214,7 +214,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                             viewModel.OptionApprovedText = gatewayReviewComment;
                             break;
                         }
-                    case GatewayReviewStatus.Reject:
+                    case GatewayReviewStatus.Rejected:
                     {
                         viewModel.RadioCheckedRejected = HtmlAndCssElements.CheckBoxChecked;
                         viewModel.OptionRejectedText = gatewayReviewComment;
@@ -306,10 +306,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         viewName = "~/Views/Gateway/ConfirmOutcomeApproved.cshtml";
                         break;
                     }
-                case GatewayReviewStatus.Reject:
+                case GatewayReviewStatus.Rejected:
                 {
                     var contact = await _applyApiClient.GetContactDetails(viewModel.ApplicationId);
-                    confirmViewModel = new RoatpGatewayRejectOutcomeViewModel
+                    confirmViewModel = new RoatpGatewayRejectedOutcomeViewModel
                     {
                         ApplicationId = viewModel.ApplicationId,
                         Ukprn = application.ApplyData.ApplyDetails.UKPRN,
@@ -407,7 +407,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToRejectOutcome")]
-        public async Task<IActionResult> AboutToRejectOutcome(RoatpGatewayRejectOutcomeViewModel viewModel)
+        public async Task<IActionResult> AboutToRejectOutcome(RoatpGatewayRejectedOutcomeViewModel viewModel)
         {
             if (viewModel.ApplicationStatus == ApplicationStatus.GatewayAssessed)
             {

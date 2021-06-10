@@ -104,7 +104,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpGatewayApplicationViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 OptionApprovedText = "Some approved text",
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
@@ -266,7 +266,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpGatewayFailOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 GatewayReviewComment = "some comment"
             };
 
@@ -284,10 +284,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task AboutToRejectOutcome_selection_Yes()
         {
             var applicationId = Guid.NewGuid();
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 GatewayReviewComment = "some comment",
                 ConfirmGatewayOutcome = "Yes"
             };
@@ -305,10 +305,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         {
             var applicationId = Guid.NewGuid();
             var expectedActionName = "ConfirmOutcome";
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 GatewayReviewComment = "some comment",
                 ConfirmGatewayOutcome = "No"
             };
@@ -324,10 +324,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task AboutToRejectOutcome_no_selection()
         {
             var applicationId = Guid.NewGuid();
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 GatewayReviewComment = "some comment"
             };
 
@@ -335,7 +335,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.AboutToRejectOutcome(viewModel);
             var viewResult = result as ViewResult;
-            var resultViewModel = viewResult.Model as RoatpGatewayRejectOutcomeViewModel;
+            var resultViewModel = viewResult.Model as RoatpGatewayRejectedOutcomeViewModel;
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
@@ -536,7 +536,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
         [TestCase(GatewayReviewStatus.Pass)]
         [TestCase(GatewayReviewStatus.Fail)]
-        [TestCase(GatewayReviewStatus.Reject)]
+        [TestCase(GatewayReviewStatus.Rejected)]
         public async Task ViewApplication_when_gateway_assessed_shows_expected_view(string gatewayReviewStatus)
         {
             var applicationId = Guid.NewGuid();
