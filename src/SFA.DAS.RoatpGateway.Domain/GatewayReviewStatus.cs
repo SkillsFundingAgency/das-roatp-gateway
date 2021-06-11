@@ -9,6 +9,6 @@
         public const string Resubmitted = "Re-submitted";
         public const string Fail = "Fail";
         public const string Pass = "Pass";
-        public const string Reject = "Reject";
+        public const string Rejected = "Rejected";
     }
 }

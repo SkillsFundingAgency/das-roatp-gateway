@@ -140,7 +140,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 viewModelOnError.RadioCheckedAskClarification = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedFailed = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Fail ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
                 viewModelOnError.RadioCheckedApproved = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Pass ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
-                viewModelOnError.RadioCheckedRejected = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Reject ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
+                viewModelOnError.RadioCheckedRejected = viewModelOnError.GatewayReviewStatus == GatewayReviewStatus.Rejected ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
 
                 viewModelOnError.SubcontractingLimit = viewModel.SubcontractingLimit;
                 viewModelOnError.RadioChecked100kSubcontractingLimit = viewModelOnError.SubcontractingLimit == 100000 ? HtmlAndCssElements.CheckBoxChecked : string.Empty;
