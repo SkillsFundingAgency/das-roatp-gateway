@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.RoatpGateway.Web.Settings
+﻿using SFA.DAS.AdminService.Common.Settings;
+
+namespace SFA.DAS.RoatpGateway.Web.Settings
 {
     public interface IWebConfiguration
     {
@@ -6,7 +8,7 @@
 
         AuthSettings StaffAuthentication { get; set; }
 
-        ClientApiAuthentication ApplyApiAuthentication { get; set; }
+        ManagedIdentityApiAuthentication ApplyApiAuthentication { get; set; }
 
         ClientApiAuthentication RoatpRegisterApiAuthentication { get; set; }
 
