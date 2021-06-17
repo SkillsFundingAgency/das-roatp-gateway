@@ -125,7 +125,7 @@
                     <h2 class="govuk-heading-l">
                         Clarified answer
                     </h2>
-                    <div class="govuk-character-count govuk-!-margin-bottom-6" data-module="govuk-character-count" data-maxwords="300">
+                    <div class="govuk-character-count govuk-!-margin-bottom-6" data-module="govuk-character-count" data-maxwords="@(Model.ClarificationAnswerMaxWords)">
                         <div class="govuk-form-group @clarificationAnswerFormGroupError">
                             <label for="OptionInProgressText" class="govuk-label govuk-label--m">
                                 Add applicant's response
@@ -142,6 +142,7 @@
                                     }
                                 }
                             }
+                            <input type="hidden" asp-for="ClarificationAnswerMaxWords" />
                             <textarea class="govuk-textarea govuk-js-character-count @isErrorClarificationAnswer"
                                       id="ClarificationAnswer"
                                       name="ClarificationAnswer"
