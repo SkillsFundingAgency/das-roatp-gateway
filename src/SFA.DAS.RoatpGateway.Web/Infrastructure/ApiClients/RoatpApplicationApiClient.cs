@@ -47,9 +47,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/InProgressApplications");
         }
 
-        public async Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications()
+        public async Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications(string sortColumn, string sortOrder)
         {
-            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/ClosedApplications");
+            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/ClosedApplications?sortColumn={sortColumn}&sortOrder={sortOrder}");
         }
 
         public async Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string userId, string userName)

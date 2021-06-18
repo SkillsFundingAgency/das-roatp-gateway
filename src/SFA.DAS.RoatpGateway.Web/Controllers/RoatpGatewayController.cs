@@ -67,9 +67,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpGet("/Roatp/Gateway/Closed")]
-        public async Task<IActionResult> ClosedApplications(int page = 1)
+        public async Task<IActionResult> ClosedApplications(string sortColumn, string sortOrder, int page = 1)
         {
-            var applications = await _applyApiClient.GetClosedGatewayApplications();
+            var applications = await _applyApiClient.GetClosedGatewayApplications(sortColumn, sortOrder);
             var counts = await _applyApiClient.GetApplicationCounts();
 
             var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
@@ -78,7 +78,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 Applications = paginatedApplications,
                 ApplicationCounts = counts,
-                SelectedTab = nameof(ClosedApplications)
+                SelectedTab = nameof(ClosedApplications),
+                SortColumn = sortColumn,
+                SortOrder = sortOrder
             };
 
             return View("~/Views/Gateway/ClosedApplications.cshtml", viewModel);

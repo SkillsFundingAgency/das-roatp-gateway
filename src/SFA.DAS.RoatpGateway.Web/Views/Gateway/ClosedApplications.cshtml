@@ -43,9 +43,13 @@
                                 <th class="govuk-table__header" scope="col">Organisation name</th>
                                 <th class="govuk-table__header" scope="col">UKPRN</th>
                                 <th class="govuk-table__header" scope="col">Provider route</th>
-                                <th class="govuk-table__header" scope="col">Application submitted date</th>
+                                <th class="govuk-table__header" scope="col">
+                                    <sortable-column column-name="SubmittedDate" column-label="Application submitted date" default="true" default-order="Descending"></sortable-column>
+                                </th>
                                 <th class="govuk-table__header" scope="col">Outcome made date</th>
-                                <th class="govuk-table__header" scope="col">Outcome made by</th>
+                                <th class="govuk-table__header" scope="col">
+                                    <sortable-column column-name="OutcomeMadeBy" column-label="Outcome made by" default-order="Descending"></sortable-column>
+                                </th>
                                 <th class="govuk-table__header" scope="col">Outcome</th>
                             </tr>
                         </thead>

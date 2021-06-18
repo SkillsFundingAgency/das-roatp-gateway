@@ -17,7 +17,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<Apply> GetApplication(Guid applicationId);
         Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications();
         Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications();
-        Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications();
+        Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications(string sortColumn, string sortOrder);
         Task<GetGatewayApplicationCountsResponse> GetApplicationCounts();
 
         Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string userId, string userName);
