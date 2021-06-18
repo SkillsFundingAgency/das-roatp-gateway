@@ -8,15 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
     public interface IRoatpApplicationApiClient
     {
         Task<Apply> GetApplication(Guid applicationId);
-        Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications();
-        Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications();
+        Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications(string sortOrder);
+        Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications(string sortColumn, string sortOrder);
         Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications(string sortColumn, string sortOrder);
         Task<GetGatewayApplicationCountsResponse> GetApplicationCounts();
 
