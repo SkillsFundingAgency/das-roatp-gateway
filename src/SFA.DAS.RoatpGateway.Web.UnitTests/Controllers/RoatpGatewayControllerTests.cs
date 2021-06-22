@@ -344,7 +344,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         [Test]
         public async Task NewApplications_ViewModel_Has_Correct_Application_Counts()
         {
-            ApplyApiClient.Setup(x => x.GetNewGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+            ApplyApiClient.Setup(x => x.GetNewGatewayApplications(It.IsAny<string>())).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
 
             ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
             {
@@ -353,7 +353,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ClosedApplicationsCount = 3
             });
 
-            var result = await _controller.NewApplications(1);
+            var result = await _controller.NewApplications("", 1);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
@@ -365,7 +365,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         [Test]
         public async Task InProgressApplications_ViewModel_Has_Correct_Application_Counts()
         {
-            ApplyApiClient.Setup(x => x.GetInProgressGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+            ApplyApiClient.Setup(x => x.GetInProgressGatewayApplications(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
 
             ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
             {
@@ -374,7 +374,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ClosedApplicationsCount = 3
             });
 
-            var result = await _controller.InProgressApplications(1);
+            var result = await _controller.InProgressApplications("", "", 1);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
@@ -386,7 +386,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         [Test]
         public async Task ClosedApplications_ViewModel_Has_Correct_Application_Counts()
         {
-            ApplyApiClient.Setup(x => x.GetClosedGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+            ApplyApiClient.Setup(x => x.GetClosedGatewayApplications(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
 
             ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
             {
@@ -395,7 +395,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ClosedApplicationsCount = 3
             });
 
-            var result = await _controller.ClosedApplications(1);
+            var result = await _controller.ClosedApplications("","",1);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
