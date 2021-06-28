@@ -24,8 +24,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
         [TestCase(GatewayReviewStatus.Fail, "Clarification Message", null, "Approved Message", "Declined external message", true)]
         [TestCase(GatewayReviewStatus.Pass, "Clarification Message", "Declined Message", "Approved Message", "Declined external message", false)]
         [TestCase(GatewayReviewStatus.Pass, null, "Declined Message", "Approved Message", "Declined external message", false)]
-        [TestCase(GatewayReviewStatus.Reject, "Clarification Message", "Declined Message", "Declined external message", "Approved Message", false)]
-        [TestCase(GatewayReviewStatus.Reject, null, "Declined Message", "Approved Message", "Declined external message", false)]
+        [TestCase(GatewayReviewStatus.Rejected, "Clarification Message", "Declined Message", "Declined external message", "Approved Message", false)]
+        [TestCase(GatewayReviewStatus.Rejected, null, "Declined Message", "Approved Message", "Declined external message", false)]
         [TestCase(null, null, null, null, null, true)]
         public void Test_cases_for_no_status_and_no_fail_text_to_check_messages_as_expected(string gatewayReviewStatus, string clarificationMessage, string declinedMessage, string approvedMessage, string declinedExternalMessage, bool hasErrorMessage)
         {
@@ -51,8 +51,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
         [TestCase(GatewayReviewStatus.Fail, 151, true)]
         [TestCase(GatewayReviewStatus.Pass, 150, false)]
         [TestCase(GatewayReviewStatus.Pass, 151, true)]
-        [TestCase(GatewayReviewStatus.Reject, 150, false)]
-        [TestCase(GatewayReviewStatus.Reject, 151, true)]
+        [TestCase(GatewayReviewStatus.Rejected, 150, false)]
+        [TestCase(GatewayReviewStatus.Rejected, 151, true)]
         public void Test_cases_where_internal_comment_is_too_long(string gatewayReviewStatus, int wordCount, bool hasErrorMessage)
         {
             var words = string.Empty;
@@ -77,8 +77,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
         [TestCase(GatewayReviewStatus.Fail, 500, false)]
         [TestCase(GatewayReviewStatus.Fail, 501, true)]
-        [TestCase(GatewayReviewStatus.Reject, 500, false)]
-        [TestCase(GatewayReviewStatus.Reject, 501, true)]
+        [TestCase(GatewayReviewStatus.Rejected, 500, false)]
+        [TestCase(GatewayReviewStatus.Rejected, 501, true)]
         public void Test_cases_where_external_comment_is_too_long(string gatewayReviewStatus, int wordCount, bool hasErrorMessage)
         {
             var words = string.Empty;

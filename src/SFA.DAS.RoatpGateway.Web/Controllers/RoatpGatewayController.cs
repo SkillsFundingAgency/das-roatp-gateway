@@ -31,9 +31,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpGet("/Roatp/Gateway/New")]
-        public async Task<IActionResult> NewApplications(int page = 1)
+        public async Task<IActionResult> NewApplications(string sortOrder, int page = 1)
         {
-            var applications = await _applyApiClient.GetNewGatewayApplications();
+            var applications = await _applyApiClient.GetNewGatewayApplications(sortOrder);
             var counts = await _applyApiClient.GetApplicationCounts();
 
             var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
@@ -42,16 +42,17 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 Applications = paginatedApplications,
                 ApplicationCounts = counts,
-                SelectedTab = nameof(NewApplications)
+                SelectedTab = nameof(NewApplications),
+                SortOrder = sortOrder
             };
 
             return View("~/Views/Gateway/NewApplications.cshtml", viewModel);
         }
 
         [HttpGet("/Roatp/Gateway/InProgress")]
-        public async Task<IActionResult> InProgressApplications(int page = 1)
+        public async Task<IActionResult> InProgressApplications(string sortColumn, string sortOrder, int page = 1)
         {
-            var applications = await _applyApiClient.GetInProgressGatewayApplications();
+            var applications = await _applyApiClient.GetInProgressGatewayApplications(sortColumn, sortOrder);
             var counts = await _applyApiClient.GetApplicationCounts();
 
             var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
@@ -60,16 +61,18 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 Applications = paginatedApplications,
                 ApplicationCounts = counts,
-                SelectedTab = nameof(InProgressApplications)
+                SelectedTab = nameof(InProgressApplications),
+                SortColumn = sortColumn,
+                SortOrder = sortOrder
             };
 
             return View("~/Views/Gateway/InProgressApplications.cshtml", viewModel);
         }
 
         [HttpGet("/Roatp/Gateway/Closed")]
-        public async Task<IActionResult> ClosedApplications(int page = 1)
+        public async Task<IActionResult> ClosedApplications(string sortColumn, string sortOrder, int page = 1)
         {
-            var applications = await _applyApiClient.GetClosedGatewayApplications();
+            var applications = await _applyApiClient.GetClosedGatewayApplications(sortColumn, sortOrder);
             var counts = await _applyApiClient.GetApplicationCounts();
 
             var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
@@ -78,7 +81,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             {
                 Applications = paginatedApplications,
                 ApplicationCounts = counts,
-                SelectedTab = nameof(ClosedApplications)
+                SelectedTab = nameof(ClosedApplications),
+                SortColumn = sortColumn,
+                SortOrder = sortOrder
             };
 
             return View("~/Views/Gateway/ClosedApplications.cshtml", viewModel);
@@ -111,7 +116,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         return View("~/Views/Gateway/Application.cshtml", viewModel);
                     case GatewayReviewStatus.Pass:
                     case GatewayReviewStatus.Fail:
-                    case GatewayReviewStatus.Reject:
+                    case GatewayReviewStatus.Rejected:
                         return View("~/Views/Gateway/Application_ReadOnly.cshtml", viewModel);
                     default:
                         return RedirectToAction(nameof(NewApplications));
@@ -214,7 +219,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                             viewModel.OptionApprovedText = gatewayReviewComment;
                             break;
                         }
-                    case GatewayReviewStatus.Reject:
+                    case GatewayReviewStatus.Rejected:
                     {
                         viewModel.RadioCheckedRejected = HtmlAndCssElements.CheckBoxChecked;
                         viewModel.OptionRejectedText = gatewayReviewComment;
@@ -306,10 +311,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         viewName = "~/Views/Gateway/ConfirmOutcomeApproved.cshtml";
                         break;
                     }
-                case GatewayReviewStatus.Reject:
+                case GatewayReviewStatus.Rejected:
                 {
                     var contact = await _applyApiClient.GetContactDetails(viewModel.ApplicationId);
-                    confirmViewModel = new RoatpGatewayRejectOutcomeViewModel
+                    confirmViewModel = new RoatpGatewayRejectedOutcomeViewModel
                     {
                         ApplicationId = viewModel.ApplicationId,
                         Ukprn = application.ApplyData.ApplyDetails.UKPRN,
@@ -407,7 +412,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToRejectOutcome")]
-        public async Task<IActionResult> AboutToRejectOutcome(RoatpGatewayRejectOutcomeViewModel viewModel)
+        public async Task<IActionResult> AboutToRejectOutcome(RoatpGatewayRejectedOutcomeViewModel viewModel)
         {
             if (viewModel.ApplicationStatus == ApplicationStatus.GatewayAssessed)
             {

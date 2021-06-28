@@ -104,7 +104,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpGatewayApplicationViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 OptionApprovedText = "Some approved text",
                 ErrorMessages = new List<ValidationErrorDetail>()
             };
@@ -266,7 +266,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewModel = new RoatpGatewayFailOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 GatewayReviewComment = "some comment"
             };
 
@@ -284,10 +284,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task AboutToRejectOutcome_selection_Yes()
         {
             var applicationId = Guid.NewGuid();
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 GatewayReviewComment = "some comment",
                 ConfirmGatewayOutcome = "Yes"
             };
@@ -305,10 +305,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         {
             var applicationId = Guid.NewGuid();
             var expectedActionName = "ConfirmOutcome";
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 GatewayReviewComment = "some comment",
                 ConfirmGatewayOutcome = "No"
             };
@@ -324,10 +324,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task AboutToRejectOutcome_no_selection()
         {
             var applicationId = Guid.NewGuid();
-            var viewModel = new RoatpGatewayRejectOutcomeViewModel
+            var viewModel = new RoatpGatewayRejectedOutcomeViewModel
             {
                 ApplicationId = applicationId,
-                GatewayReviewStatus = GatewayReviewStatus.Reject,
+                GatewayReviewStatus = GatewayReviewStatus.Rejected,
                 GatewayReviewComment = "some comment"
             };
 
@@ -335,7 +335,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.AboutToRejectOutcome(viewModel);
             var viewResult = result as ViewResult;
-            var resultViewModel = viewResult.Model as RoatpGatewayRejectOutcomeViewModel;
+            var resultViewModel = viewResult.Model as RoatpGatewayRejectedOutcomeViewModel;
 
             Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
@@ -344,7 +344,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         [Test]
         public async Task NewApplications_ViewModel_Has_Correct_Application_Counts()
         {
-            ApplyApiClient.Setup(x => x.GetNewGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+            ApplyApiClient.Setup(x => x.GetNewGatewayApplications(It.IsAny<string>())).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
 
             ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
             {
@@ -353,7 +353,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ClosedApplicationsCount = 3
             });
 
-            var result = await _controller.NewApplications(1);
+            var result = await _controller.NewApplications("", 1);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
@@ -365,7 +365,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         [Test]
         public async Task InProgressApplications_ViewModel_Has_Correct_Application_Counts()
         {
-            ApplyApiClient.Setup(x => x.GetInProgressGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+            ApplyApiClient.Setup(x => x.GetInProgressGatewayApplications(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
 
             ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
             {
@@ -374,7 +374,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ClosedApplicationsCount = 3
             });
 
-            var result = await _controller.InProgressApplications(1);
+            var result = await _controller.InProgressApplications("", "", 1);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
@@ -386,7 +386,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         [Test]
         public async Task ClosedApplications_ViewModel_Has_Correct_Application_Counts()
         {
-            ApplyApiClient.Setup(x => x.GetClosedGatewayApplications()).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
+            ApplyApiClient.Setup(x => x.GetClosedGatewayApplications(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new List<RoatpApplicationSummaryItem>());
 
             ApplyApiClient.Setup(x => x.GetApplicationCounts()).ReturnsAsync(new GetGatewayApplicationCountsResponse
             {
@@ -395,7 +395,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ClosedApplicationsCount = 3
             });
 
-            var result = await _controller.ClosedApplications(1);
+            var result = await _controller.ClosedApplications("","",1);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
@@ -536,7 +536,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
         [TestCase(GatewayReviewStatus.Pass)]
         [TestCase(GatewayReviewStatus.Fail)]
-        [TestCase(GatewayReviewStatus.Reject)]
+        [TestCase(GatewayReviewStatus.Rejected)]
         public async Task ViewApplication_when_gateway_assessed_shows_expected_view(string gatewayReviewStatus)
         {
             var applicationId = Guid.NewGuid();
