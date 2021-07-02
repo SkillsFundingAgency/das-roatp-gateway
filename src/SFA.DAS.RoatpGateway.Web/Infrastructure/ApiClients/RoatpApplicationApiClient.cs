@@ -39,7 +39,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications(string searchTerm, string sortOrder)
         {
-            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/NewApplications?searchTerm={searchTerm}&sortOrder ={sortOrder}");
+            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/NewApplications?searchTerm={searchTerm}&sortOrder={sortOrder}");
         }
 
         public async Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications(string searchTerm, string sortColumn, string sortOrder)
