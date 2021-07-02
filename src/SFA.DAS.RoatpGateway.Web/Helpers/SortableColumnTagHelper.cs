@@ -11,9 +11,10 @@ using SFA.DAS.RoatpGateway.Domain.Types;
 
 namespace SFA.DAS.RoatpGateway.Web.Helpers
 {
+    [HtmlTargetElement("sortable-column")]
     public class SortableColumnTagHelper : TagHelper
     {
-        private const string CssClass = "govuk-link das-table__sort ";
+        private const string CssClass = "govuk-link das-table__sort";
 
         [HtmlAttributeName("column-name")]
         public string ColumnName { get; set; }
@@ -40,9 +41,6 @@ namespace SFA.DAS.RoatpGateway.Web.Helpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "";
-            var content = new StringBuilder();
-
             var action = ViewContext.RouteData.Values["action"] as string;
             var controller = ViewContext.RouteData.Values["controller"] as string;
 
@@ -52,6 +50,7 @@ namespace SFA.DAS.RoatpGateway.Web.Helpers
 
             var values = new
             {
+                SearchTerm = GetSearchTermFromQueryString(),
                 SortColumn = ColumnName,
                 SortOrder = isSortColumn ? sortOrder.Reverse().ToString() : DefaultSortOrder.ToString()
             };
@@ -66,10 +65,12 @@ namespace SFA.DAS.RoatpGateway.Web.Helpers
 
             var ariaSort = sortOrder.ToString().ToLower();
 
-            content.Append($"<a class=\"{CssClass}{sortOrderCssSuffix}\" href=\"{href}\" aria-sort=\"{ariaSort}\">");
+            var content = new StringBuilder();
+            content.Append($"<a class=\"{CssClass} {sortOrderCssSuffix}\" href=\"{href}\" aria-sort=\"{ariaSort}\">");
             content.Append(Label);
             content.Append("</a>");
 
+            output.TagName = "";
             output.PostContent.SetHtmlContent(content.ToString());
             output.Attributes.Clear();
 
@@ -96,6 +97,16 @@ namespace SFA.DAS.RoatpGateway.Web.Helpers
             if (ViewContext.HttpContext.Request.Query.ContainsKey("SortColumn"))
             {
                 return ViewContext.HttpContext.Request.Query["SortColumn"];
+            }
+
+            return string.Empty;
+        }
+
+        private string GetSearchTermFromQueryString()
+        {
+            if (ViewContext.HttpContext.Request.Query.ContainsKey("SearchTerm"))
+            {
+                return ViewContext.HttpContext.Request.Query["SearchTerm"];
             }
 
             return string.Empty;

@@ -10,9 +10,9 @@ using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Domain;
-using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
+using SFA.DAS.RoatpGateway.Web.ModelBinders;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
@@ -20,71 +20,117 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
     {
         private readonly IGatewayOverviewOrchestrator _orchestrator;
         private readonly IRoatpGatewayApplicationViewModelValidator _validator;
+        private readonly IRoatpSearchTermValidator _searchValidator;
 
         public RoatpGatewayController(IRoatpApplicationApiClient applyApiClient,
                                      IGatewayOverviewOrchestrator orchestrator, IRoatpGatewayApplicationViewModelValidator validator,
+                                     IRoatpSearchTermValidator searchValidator,
                                      ILogger<RoatpGatewayController> logger, IRoatpGatewayPageValidator gatewayValidator)
             :base(applyApiClient, logger, gatewayValidator)
         {
             _orchestrator = orchestrator;
             _validator = validator;
+            _searchValidator = searchValidator;
         }
 
         [HttpGet("/Roatp/Gateway/New")]
-        public async Task<IActionResult> NewApplications(string sortOrder, int page = 1)
+        public async Task<IActionResult> NewApplications([StringTrim] string searchTerm, string sortOrder, int page = 1)
         {
-            var applications = await _applyApiClient.GetNewGatewayApplications(sortOrder);
-            var counts = await _applyApiClient.GetApplicationCounts();
+            if(searchTerm != null)
+            {
+                var validationResponse = _searchValidator.Validate(searchTerm);
 
-            var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
+                foreach(var error in validationResponse.Errors)
+                {
+                    ModelState.AddModelError(error.Field, error.ErrorMessage);
+                }
+            }
 
             var viewModel = new RoatpGatewayDashboardViewModel
             {
-                Applications = paginatedApplications,
-                ApplicationCounts = counts,
+                Applications = new PaginatedList<RoatpApplicationSummaryItem>(new List<RoatpApplicationSummaryItem>(), 0, page, int.MaxValue),
+                ApplicationCounts = new GetGatewayApplicationCountsResponse(),
                 SelectedTab = nameof(NewApplications),
+                SearchTerm = searchTerm,
+                SortColumn = null,
                 SortOrder = sortOrder
             };
+
+            if (ModelState.IsValid)
+            {
+                var applications = await _applyApiClient.GetNewGatewayApplications(searchTerm, sortOrder);
+
+                viewModel.Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
+                viewModel.ApplicationCounts = await _applyApiClient.GetApplicationCounts(searchTerm);
+            }
 
             return View("~/Views/Gateway/NewApplications.cshtml", viewModel);
         }
 
         [HttpGet("/Roatp/Gateway/InProgress")]
-        public async Task<IActionResult> InProgressApplications(string sortColumn, string sortOrder, int page = 1)
+        public async Task<IActionResult> InProgressApplications([StringTrim] string searchTerm, string sortColumn, string sortOrder, int page = 1)
         {
-            var applications = await _applyApiClient.GetInProgressGatewayApplications(sortColumn, sortOrder);
-            var counts = await _applyApiClient.GetApplicationCounts();
+            if (searchTerm != null)
+            {
+                var validationResponse = _searchValidator.Validate(searchTerm);
 
-            var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
+                foreach (var error in validationResponse.Errors)
+                {
+                    ModelState.AddModelError(error.Field, error.ErrorMessage);
+                }
+            }
 
             var viewModel = new RoatpGatewayDashboardViewModel
             {
-                Applications = paginatedApplications,
-                ApplicationCounts = counts,
+                Applications = new PaginatedList<RoatpApplicationSummaryItem>(new List<RoatpApplicationSummaryItem>(), 0, page, int.MaxValue),
+                ApplicationCounts = new GetGatewayApplicationCountsResponse(),
                 SelectedTab = nameof(InProgressApplications),
+                SearchTerm = searchTerm,
                 SortColumn = sortColumn,
                 SortOrder = sortOrder
             };
+
+            if (ModelState.IsValid)
+            {
+                var applications = await _applyApiClient.GetInProgressGatewayApplications(searchTerm, sortColumn, sortOrder);
+
+                viewModel.Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
+                viewModel.ApplicationCounts = await _applyApiClient.GetApplicationCounts(searchTerm);
+            }
 
             return View("~/Views/Gateway/InProgressApplications.cshtml", viewModel);
         }
 
         [HttpGet("/Roatp/Gateway/Closed")]
-        public async Task<IActionResult> ClosedApplications(string sortColumn, string sortOrder, int page = 1)
+        public async Task<IActionResult> ClosedApplications([StringTrim] string searchTerm, string sortColumn, string sortOrder, int page = 1)
         {
-            var applications = await _applyApiClient.GetClosedGatewayApplications(sortColumn, sortOrder);
-            var counts = await _applyApiClient.GetApplicationCounts();
+            if (searchTerm != null)
+            {
+                var validationResponse = _searchValidator.Validate(searchTerm);
 
-            var paginatedApplications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
+                foreach (var error in validationResponse.Errors)
+                {
+                    ModelState.AddModelError(error.Field, error.ErrorMessage);
+                }
+            }
 
             var viewModel = new RoatpGatewayDashboardViewModel
             {
-                Applications = paginatedApplications,
-                ApplicationCounts = counts,
+                Applications = new PaginatedList<RoatpApplicationSummaryItem>(new List<RoatpApplicationSummaryItem>(), 0, page, int.MaxValue),
+                ApplicationCounts = new GetGatewayApplicationCountsResponse(),
                 SelectedTab = nameof(ClosedApplications),
+                SearchTerm = searchTerm,
                 SortColumn = sortColumn,
                 SortOrder = sortOrder
             };
+
+            if (ModelState.IsValid)
+            {
+                var applications = await _applyApiClient.GetClosedGatewayApplications(searchTerm, sortColumn, sortOrder);
+
+                viewModel.Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
+                viewModel.ApplicationCounts = await _applyApiClient.GetApplicationCounts(searchTerm);
+            }
 
             return View("~/Views/Gateway/ClosedApplications.cshtml", viewModel);
         }

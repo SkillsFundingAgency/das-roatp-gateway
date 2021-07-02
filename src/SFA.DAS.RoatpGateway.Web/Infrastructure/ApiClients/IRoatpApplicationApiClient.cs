@@ -14,10 +14,10 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
     public interface IRoatpApplicationApiClient
     {
         Task<Apply> GetApplication(Guid applicationId);
-        Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications(string sortOrder);
-        Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications(string sortColumn, string sortOrder);
-        Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications(string sortColumn, string sortOrder);
-        Task<GetGatewayApplicationCountsResponse> GetApplicationCounts();
+        Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications(string searchTerm, string sortOrder);
+        Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications(string searchTerm, string sortColumn, string sortOrder);
+        Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications(string searchTerm, string sortColumn, string sortOrder);
+        Task<GetGatewayApplicationCountsResponse> GetApplicationCounts(string searchTerm);
 
         Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string userId, string userName);
 

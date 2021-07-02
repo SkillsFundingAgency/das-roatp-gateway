@@ -1,0 +1,31 @@
+﻿@model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayDashboardViewModel
+
+<form class="form" method="get" asp-action="@Model.SelectedTab" asp-controller="RoatpGateway" novalidate>
+    <div class="govuk-form-group" sfa-anyvalidationerror-class="govuk-form-group--error">
+        <fieldset class="govuk-fieldset">
+            <span class="govuk-error-message" asp-validation-for="SearchTerm"></span>
+            <input class="govuk-input govuk-!-width-one-third" asp-for="SearchTerm" maxlength="50" sfa-validation-for="SearchTerm" sfa-validationerror-class="govuk-input--error" />
+        </fieldset>
+        @if (!string.IsNullOrWhiteSpace(Model.SortColumn))
+        {
+            <input type="hidden" asp-for="SortColumn" />
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.SortOrder))
+        {
+            <input type="hidden" asp-for="SortOrder" />
+        }
+    </div>
+    <button id="form-action" name="form-action" value="search" type="submit" class="govuk-button" data-module="govuk-button" data-disable-on-submit="true">
+        Search
+    </button>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(Model.SearchTerm) && ViewData.ModelState.IsValid)
+{
+    <div class="govuk-form-group">
+        <p class="govuk-body">
+            Showing results for <span class="govuk-!-font-weight-bold">'@Model.SearchTerm'</span>
+        </p>
+        <a class="govuk-link" asp-action="@(Model.SelectedTab)" asp-controller="RoatpGateway" asp-route-SortColumn="@Model.SortColumn" asp-route-SortOrder="@Model.SortOrder">Clear results</a>
+    </div>
+}
