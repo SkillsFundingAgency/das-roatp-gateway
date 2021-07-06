@@ -4,7 +4,7 @@
     <div class="govuk-form-group" sfa-anyvalidationerror-class="govuk-form-group--error">
         <fieldset class="govuk-fieldset">
             <span class="govuk-error-message" asp-validation-for="SearchTerm"></span>
-            <input class="govuk-input govuk-!-width-one-third" asp-for="SearchTerm" maxlength="50" sfa-validation-for="SearchTerm" sfa-validationerror-class="govuk-input--error" />
+            <input class="govuk-input govuk-!-width-one-third" asp-for="SearchTerm" maxlength="50" autocomplete="off" sfa-validation-for="SearchTerm" sfa-validationerror-class="govuk-input--error" />
         </fieldset>
         @if (!string.IsNullOrWhiteSpace(Model.SortColumn))
         {
