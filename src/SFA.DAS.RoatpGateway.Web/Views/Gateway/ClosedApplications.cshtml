@@ -23,6 +23,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds das-no-wrap">
+            <partial name="_ValidationSummary" />
             <h1 class="govuk-heading-xl">
                 RoATP gateway applications
             </h1>
@@ -32,10 +33,6 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <partial name="_DashboardSearch" />
-        </div>
-
-        <div class="govuk-grid-column-full">
-
             <partial name="_TabList" />
             <div class="govuk-tabs__panel" id="outcome">
 
@@ -81,7 +78,7 @@
                                     </td>
                                     <td class="govuk-table__cell" data-label="Outcome">
                                         @if (item.ApplicationStatus == ApplicationStatus.Withdrawn
-                                          || item.ApplicationStatus == ApplicationStatus.Removed)
+                                         || item.ApplicationStatus == ApplicationStatus.Removed)
                                         {
                                             <div class="das-tag govuk-tag--inactive das-no-wrap">
                                                 @item.ApplicationStatus
