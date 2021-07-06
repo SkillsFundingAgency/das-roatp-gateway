@@ -11,7 +11,7 @@ using SFA.DAS.RoatpGateway.Domain.Types;
 
 namespace SFA.DAS.RoatpGateway.Web.Helpers
 {
-    [HtmlTargetElement("sortable-column")]
+    [HtmlTargetElement("sfa-roatp-sortable-column")]
     public class SortableColumnTagHelper : TagHelper
     {
         private const string CssClass = "govuk-link das-table__sort";
