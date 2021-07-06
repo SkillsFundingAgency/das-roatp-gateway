@@ -15,7 +15,7 @@
         </label>
         <span class="govuk-error-message" asp-validation-for="SearchTerm"></span>
         <div class="app-search-form__group">
-            <input class="govuk-input app-search-form__input" asp-for="SearchTerm" maxlength="50" sfa-validation-for="SearchTerm" sfa-validationerror-class="govuk-input--error" />
+            <input class="govuk-input app-search-form__input" asp-for="SearchTerm" maxlength="50" autocomplete="off" sfa-validation-for="SearchTerm" sfa-validationerror-class="govuk-input--error" />
             <div class="app-search-form__button-wrap">
                 <button type="submit" class="govuk-button app-search-form__button" data-disable-on-submit="true">
                     Search
