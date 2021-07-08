@@ -46,23 +46,18 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 }
             }
 
+            var applications = await _applyApiClient.GetNewGatewayApplications(ModelState.IsValid ? searchTerm : null, sortOrder);
+            var applicationCounts = await _applyApiClient.GetApplicationCounts(ModelState.IsValid ? searchTerm : null);
+
             var viewModel = new RoatpGatewayDashboardViewModel
             {
-                Applications = new PaginatedList<RoatpApplicationSummaryItem>(new List<RoatpApplicationSummaryItem>(), 0, page, int.MaxValue),
-                ApplicationCounts = new GetGatewayApplicationCountsResponse(),
+                Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue),
+                ApplicationCounts = applicationCounts,
                 SelectedTab = nameof(NewApplications),
                 SearchTerm = searchTerm,
                 SortColumn = null,
                 SortOrder = sortOrder
             };
-
-            if (ModelState.IsValid)
-            {
-                var applications = await _applyApiClient.GetNewGatewayApplications(searchTerm, sortOrder);
-
-                viewModel.Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
-                viewModel.ApplicationCounts = await _applyApiClient.GetApplicationCounts(searchTerm);
-            }
 
             return View("~/Views/Gateway/NewApplications.cshtml", viewModel);
         }
@@ -80,23 +75,18 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 }
             }
 
+            var applications = await _applyApiClient.GetInProgressGatewayApplications(ModelState.IsValid ? searchTerm : null, sortColumn, sortOrder);
+            var applicationCounts = await _applyApiClient.GetApplicationCounts(ModelState.IsValid ? searchTerm : null);
+
             var viewModel = new RoatpGatewayDashboardViewModel
             {
-                Applications = new PaginatedList<RoatpApplicationSummaryItem>(new List<RoatpApplicationSummaryItem>(), 0, page, int.MaxValue),
-                ApplicationCounts = new GetGatewayApplicationCountsResponse(),
+                Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue),
+                ApplicationCounts = applicationCounts,
                 SelectedTab = nameof(InProgressApplications),
                 SearchTerm = searchTerm,
                 SortColumn = sortColumn,
                 SortOrder = sortOrder
             };
-
-            if (ModelState.IsValid)
-            {
-                var applications = await _applyApiClient.GetInProgressGatewayApplications(searchTerm, sortColumn, sortOrder);
-
-                viewModel.Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
-                viewModel.ApplicationCounts = await _applyApiClient.GetApplicationCounts(searchTerm);
-            }
 
             return View("~/Views/Gateway/InProgressApplications.cshtml", viewModel);
         }
@@ -114,23 +104,18 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 }
             }
 
+            var applications = await _applyApiClient.GetClosedGatewayApplications(ModelState.IsValid ? searchTerm : null, sortColumn, sortOrder);
+            var applicationCounts = await _applyApiClient.GetApplicationCounts(ModelState.IsValid ? searchTerm : null);
+
             var viewModel = new RoatpGatewayDashboardViewModel
             {
-                Applications = new PaginatedList<RoatpApplicationSummaryItem>(new List<RoatpApplicationSummaryItem>(), 0, page, int.MaxValue),
-                ApplicationCounts = new GetGatewayApplicationCountsResponse(),
+                Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue),
+                ApplicationCounts = applicationCounts,
                 SelectedTab = nameof(ClosedApplications),
                 SearchTerm = searchTerm,
                 SortColumn = sortColumn,
                 SortOrder = sortOrder
             };
-
-            if (ModelState.IsValid)
-            {
-                var applications = await _applyApiClient.GetClosedGatewayApplications(searchTerm, sortColumn, sortOrder);
-
-                viewModel.Applications = new PaginatedList<RoatpApplicationSummaryItem>(applications, applications.Count, page, int.MaxValue);
-                viewModel.ApplicationCounts = await _applyApiClient.GetApplicationCounts(searchTerm);
-            }
 
             return View("~/Views/Gateway/ClosedApplications.cshtml", viewModel);
         }
