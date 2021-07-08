@@ -9,6 +9,12 @@ namespace SFA.DAS.RoatpGateway.Web.Settings
         public string SessionRedisConnectionString { get; set; }
 
         [JsonRequired]
+        public string SessionCachingDatabase { get; set; }
+
+        [JsonRequired]
+        public string DataProtectionKeysDatabase { get; set; }
+
+        [JsonRequired]
         public AuthSettings StaffAuthentication { get; set; }
 
         [JsonRequired]

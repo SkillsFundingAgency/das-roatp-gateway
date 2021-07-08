@@ -25,6 +25,7 @@ using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.AdminService.Common;
+using SFA.DAS.RoatpGateway.Web.StartupExtensions;
 
 namespace SFA.DAS.RoatpGateway.Web
 {
@@ -82,13 +83,8 @@ namespace SFA.DAS.RoatpGateway.Web
 
             services.AddSession(opt => { opt.IdleTimeout = TimeSpan.FromHours(1); });
 
-            if (!_env.IsDevelopment())
-            {
-                services.AddDistributedRedisCache(options =>
-                {
-                    options.Configuration = ApplicationConfiguration.SessionRedisConnectionString;
-                });
-            }
+            services.AddCache(ApplicationConfiguration, _env);
+            services.AddDataProtection(ApplicationConfiguration, _env);
 
             AddAntiforgery(services);
 
