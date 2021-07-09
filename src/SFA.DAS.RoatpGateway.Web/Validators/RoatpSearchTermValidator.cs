@@ -7,7 +7,8 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
     {
         private const string SearchTerm = "SearchTerm";
         private const int MinimumSearchTermLength = 3;
-        private readonly string EnterSearchTerm = $"Enter {MinimumSearchTermLength} or more characters";       
+        private readonly string SearchTermMandatory = "Enter an organisation name or UKPRN";
+        private readonly string SearchTermLength = $"Enter a UKPRN or an organisation name using {MinimumSearchTermLength} or more characters";
 
         public ValidationResponse Validate(string searchTerm)
         {
@@ -16,8 +17,14 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                 Errors = new List<ValidationErrorDetail>()
             };
 
-            if (string.IsNullOrWhiteSpace(searchTerm) || searchTerm.Length < MinimumSearchTermLength)
-                validationResponse.Errors.Add(new ValidationErrorDetail(SearchTerm, EnterSearchTerm));
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                validationResponse.Errors.Add(new ValidationErrorDetail(SearchTerm, SearchTermMandatory));
+            }
+            else if (searchTerm.Length < MinimumSearchTermLength)
+            {
+                validationResponse.Errors.Add(new ValidationErrorDetail(SearchTerm, SearchTermLength));
+            }
 
             return validationResponse;
         }

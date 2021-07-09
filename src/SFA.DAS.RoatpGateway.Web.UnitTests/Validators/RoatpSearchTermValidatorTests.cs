@@ -13,11 +13,32 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
         [Test]
         public void When_searchTerm_is_not_provided_then_an_error_is_returned()
         {
-            var searchTerm = "";
+            var response = _validator.Validate(null);
+
+            Assert.IsFalse(response.IsValid);
+            Assert.AreEqual($"Enter an organisation name or UKPRN", response.Errors.First().ErrorMessage);
+            Assert.AreEqual("SearchTerm", response.Errors.First().Field);
+        }
+
+        [Test]
+        public void When_searchTerm_is_empty_string_then_an_error_is_returned()
+        {
+            var searchTerm = string.Empty;
             var response = _validator.Validate(searchTerm);
 
             Assert.IsFalse(response.IsValid);
-            Assert.AreEqual($"Enter {MinimumLength} or more characters", response.Errors.First().ErrorMessage);
+            Assert.AreEqual($"Enter an organisation name or UKPRN", response.Errors.First().ErrorMessage);
+            Assert.AreEqual("SearchTerm", response.Errors.First().Field);
+        }
+
+        [Test]
+        public void When_searchTerm_is_whitespace_only_then_an_error_is_returned()
+        {
+            var searchTerm = string.Concat(Enumerable.Repeat(" ", MinimumLength)); ;
+            var response = _validator.Validate(searchTerm);
+
+            Assert.IsFalse(response.IsValid);
+            Assert.AreEqual($"Enter an organisation name or UKPRN", response.Errors.First().ErrorMessage);
             Assert.AreEqual("SearchTerm", response.Errors.First().Field);
         }
 
@@ -28,7 +49,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             var response = _validator.Validate(searchTerm);
 
             Assert.IsFalse(response.IsValid);
-            Assert.AreEqual($"Enter {MinimumLength} or more characters", response.Errors.First().ErrorMessage);
+            Assert.AreEqual($"Enter a UKPRN or an organisation name using {MinimumLength} or more characters", response.Errors.First().ErrorMessage);
             Assert.AreEqual("SearchTerm", response.Errors.First().Field);
         }
 
