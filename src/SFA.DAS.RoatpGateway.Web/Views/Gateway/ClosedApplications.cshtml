@@ -23,6 +23,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds das-no-wrap">
+            <partial name="_ValidationSummary" />
             <h1 class="govuk-heading-xl">
                 RoATP gateway applications
             </h1>
@@ -31,7 +32,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-
+            <partial name="_DashboardSearch" />
             <partial name="_TabList" />
             <div class="govuk-tabs__panel" id="outcome">
 
@@ -44,11 +45,11 @@
                                 <th class="govuk-table__header" scope="col">UKPRN</th>
                                 <th class="govuk-table__header" scope="col">Provider route</th>
                                 <th class="govuk-table__header" scope="col">
-                                    <sortable-column column-name="SubmittedDate" column-label="Application submitted date" default="true" default-order="Descending"></sortable-column>
+                                    <sfa-roatp-sortable-column column-name="SubmittedDate" column-label="Application submitted date" default="true" default-order="Descending" />
                                 </th>
                                 <th class="govuk-table__header" scope="col">Outcome made date</th>
                                 <th class="govuk-table__header" scope="col">
-                                    <sortable-column column-name="OutcomeMadeBy" column-label="Outcome made by" default-order="Descending"></sortable-column>
+                                    <sfa-roatp-sortable-column column-name="OutcomeMadeBy" column-label="Outcome made by" default-order="Descending" />
                                 </th>
                                 <th class="govuk-table__header" scope="col">Outcome</th>
                             </tr>
@@ -77,7 +78,7 @@
                                     </td>
                                     <td class="govuk-table__cell" data-label="Outcome">
                                         @if (item.ApplicationStatus == ApplicationStatus.Withdrawn
-                                           || item.ApplicationStatus == ApplicationStatus.Removed)
+                                         || item.ApplicationStatus == ApplicationStatus.Removed)
                                         {
                                             <div class="das-tag govuk-tag--inactive das-no-wrap">
                                                 @item.ApplicationStatus

@@ -1,5 +1,5 @@
 @using SFA.DAS.AdminService.Common.Extensions;
-@using SFA.DAS.RoatpGateway.Domain;
+
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayDashboardViewModel
 
 @{
@@ -21,6 +21,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds das-no-wrap">
+            <partial name="_ValidationSummary" />
             <h1 class="govuk-heading-xl">
                 RoATP gateway applications
             </h1>
@@ -29,11 +30,10 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-
+            <partial name="_DashboardSearch" />
             <partial name="_TabList" />
-
             <div class="govuk-tabs__panel" id="new">
-                
+
                 @if (@Model.Applications.Items.Any())
                 {
                     <table class="govuk-table das-table--condensed das-table--responsive">
@@ -44,7 +44,7 @@
                                 <th class="govuk-table__header" scope="col">Provider route</th>
                                 <th class="govuk-table__header" scope="col">Application reference number</th>
                                 <th class="govuk-table__header" scope="col">
-                                    <sortable-column column-name="SubmittedDate" column-label="Application submitted date" default="true" default-order="Descending"></sortable-column>
+                                    <sfa-roatp-sortable-column column-name="SubmittedDate" column-label="Application submitted date" default="true" default-order="Descending"/>
                                 </th>
                             </tr>
                         </thead>
@@ -81,9 +81,9 @@
                                     @if (Model.Applications.HasPreviousPage)
                                     {
                                         <a asp-action="NewApplications"
-                                        asp-controller="RoatpGateway"
-                                        asp-route-page="@(Model.Applications.PageIndex - 1)"
-                                        class="govuk-link previous">
+                                           asp-controller="RoatpGateway"
+                                           asp-route-page="@(Model.Applications.PageIndex - 1)"
+                                           class="govuk-link previous">
                                             <i class="arrow-button icon-left-open">&#xe800;</i>
                                             <span class="description">Previous <span class="hide-mob">page</span></span>
                                             <span class="counter">Page <span class="prevPage">@(Model.Applications.PageIndex - 1)</span> of <span class="totalPage">@(Model.Applications.TotalPages)</span></span>
@@ -93,9 +93,9 @@
                                     @if (Model.Applications.HasNextPage)
                                     {
                                         <a asp-action="NewApplications"
-                                        asp-controller="RoatpGateway"
-                                        asp-route-page="@(Model.Applications.PageIndex + 1)"
-                                        class="govuk-link next">
+                                           asp-controller="RoatpGateway"
+                                           asp-route-page="@(Model.Applications.PageIndex + 1)"
+                                           class="govuk-link next">
                                             <i class="arrow-button icon-right-open">&#xe801;</i>
                                             <span class="description">Next <span class="hide-mob">page</span></span>
                                             <span class="counter">Page <span class="nextPage">@(Model.Applications.PageIndex + 1)</span> of <span class="totalPage">@(Model.Applications.TotalPages)</span></span>
@@ -108,10 +108,9 @@
                 }
                 else
                 {
-            <p class="govuk-body-l">No applications to assess</p>
+                    <p class="govuk-body-l">No applications to assess</p>
                 }
             </div>
         </div>
     </div>
-    
 </main>

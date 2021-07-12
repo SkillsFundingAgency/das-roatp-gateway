@@ -32,24 +32,24 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             return await Get<Apply>($"/Application/{applicationId}");
         }
 
-        public async Task<GetGatewayApplicationCountsResponse> GetApplicationCounts()
+        public async Task<GetGatewayApplicationCountsResponse> GetApplicationCounts(string searchTerm)
         {
-            return await Get<GetGatewayApplicationCountsResponse>($"/GatewayReview/Counts");
+            return await Get<GetGatewayApplicationCountsResponse>($"/GatewayReview/Counts?searchTerm={searchTerm}");
         }
 
-        public async Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications(string sortOrder)
+        public async Task<List<RoatpApplicationSummaryItem>> GetNewGatewayApplications(string searchTerm, string sortOrder)
         {
-            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/NewApplications?sortOrder={sortOrder}");
+            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/NewApplications?searchTerm={searchTerm}&sortOrder={sortOrder}");
         }
 
-        public async Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications(string sortColumn, string sortOrder)
+        public async Task<List<RoatpApplicationSummaryItem>> GetInProgressGatewayApplications(string searchTerm, string sortColumn, string sortOrder)
         {
-            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/InProgressApplications?sortColumn={sortColumn}&sortOrder={sortOrder}");
+            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/InProgressApplications?searchTerm={searchTerm}&sortColumn={sortColumn}&sortOrder={sortOrder}");
         }
 
-        public async Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications(string sortColumn, string sortOrder)
+        public async Task<List<RoatpApplicationSummaryItem>> GetClosedGatewayApplications(string searchTerm, string sortColumn, string sortOrder)
         {
-            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/ClosedApplications?sortColumn={sortColumn}&sortOrder={sortOrder}");
+            return await Get<List<RoatpApplicationSummaryItem>>($"/GatewayReview/ClosedApplications?searchTerm={searchTerm}&sortColumn={sortColumn}&sortOrder={sortOrder}");
         }
 
         public async Task EvaluateGateway(Guid applicationId, bool isGatewayApproved, string userId, string userName)

@@ -25,6 +25,7 @@ using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.AdminService.Common;
+using SFA.DAS.RoatpGateway.Web.ModelBinders;
 using SFA.DAS.RoatpGateway.Web.StartupExtensions;
 
 namespace SFA.DAS.RoatpGateway.Web
@@ -74,6 +75,7 @@ namespace SFA.DAS.RoatpGateway.Web
                 {
                     //options.Filters.Add<CheckSessionFilter>();
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    options.ModelBinderProviders.Insert(0, new StringTrimmingModelBinderProvider());
                 })
                 // NOTE: Can we move this to 2.2 to match the version of .NET Core we're coding against?
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options =>
@@ -195,6 +197,7 @@ namespace SFA.DAS.RoatpGateway.Web
             services.AddTransient<IGatewayCriminalComplianceChecksOrchestrator, GatewayCriminalComplianceChecksOrchestrator>();
             services.AddTransient<IRoatpGatewayPageValidator, RoatpGatewayPageValidator>();
             services.AddTransient<IRoatpGatewayApplicationViewModelValidator, RoatpGatewayApplicationViewModelValidator>();
+            services.AddTransient<IRoatpSearchTermValidator, RoatpSearchTermValidator>();
             services.AddTransient<IGatewayApplicationActionsOrchestrator, GatewayApplicationActionsOrchestrator>();
             services.AddTransient<IRoatpWithdrawApplicationViewModelValidator, RoatpWithdrawApplicationViewModelValidator>();
             services.AddTransient<IRoatpRemoveApplicationViewModelValidator, RoatpRemoveApplicationViewModelValidator>();

@@ -22,6 +22,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds das-no-wrap">
+            <partial name="_ValidationSummary" />
             <h1 class="govuk-heading-xl">
                 RoATP gateway applications
             </h1>
@@ -30,7 +31,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-
+            <partial name="_DashboardSearch" />
             <partial name="_TabList" />
             <div class="govuk-tabs__panel" id="in-progress">
 
@@ -43,10 +44,10 @@
                                 <th class="govuk-table__header" scope="col">UKPRN</th>
                                 <th class="govuk-table__header" scope="col">Provider route</th>
                                 <th class="govuk-table__header" scope="col">
-                                    <sortable-column column-name="SubmittedDate" column-label="Application submitted date" default="true" default-order="Descending"></sortable-column>
+                                    <sfa-roatp-sortable-column column-name="SubmittedDate" column-label="Application submitted date" default="true" default-order="Descending" />
                                 </th>
                                 <th class="govuk-table__header" scope="col">
-                                    <sortable-column column-name="LastCheckedBy" column-label="Last checked by" default-order="Descending"></sortable-column>
+                                    <sfa-roatp-sortable-column column-name="LastCheckedBy" column-label="Last checked by" default-order="Descending" />
                                 </th>
                                 <th class="govuk-table__header" scope="col">Clarification requested date</th>
                                 <th class="govuk-table__header" scope="col">Status</th>
@@ -55,48 +56,48 @@
                         <tbody class="govuk-table__body">
                             @foreach (var item in Model.Applications.Items)
                             {
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell" data-label="Organisation name">
-                                    <a class="govuk-link" asp-action="ViewApplication" asp-controller="RoatpGateway" asp-route-applicationId="@item.ApplicationId">@item.OrganisationName</a>
-                                </td>
-                                <td class="govuk-table__cell" data-label="UKPRN">
-                                    @item.Ukprn
-                                </td>
-                                <td class="govuk-table__cell" data-label="Provider route">
-                                    @item.ApplicationRouteShortText
-                                </td>
-                                <td class="govuk-table__cell" data-label="Application submitted date">
-                                    @item.SubmittedDate.ToSfaShortDateString()
-                                </td>
-                                <td class="govuk-table__cell" data-label="Last checked by">
-                                    @item.LastCheckedBy
-                                </td>
-                                <td class="govuk-table__cell" data-label="Clarification requested date">
-                                    @if (item.ClarificationRequestedDate is null)
-                                    {
-                                        <text>N/A</text>
-                                    }
-                                    else
-                                    {
-                                        @item.ClarificationRequestedDate.ToSfaShortDateString()
-                                    }
-                                </td>
-                                <td class="govuk-table__cell" data-label="Status">
-                                    @{
-                                        var cssModifierClassName = CssStylingHelper.GetGatewayReviewStatusStyle(item.GatewayReviewStatus);
-                                        <div class="das-tag @cssModifierClassName das-no-wrap">
-                                            @if (item.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
-                                            {
-                                                <text>Clarification</text>
-                                            }
-                                            else
-                                            {
-                                                @item.GatewayReviewStatus
-                                            }
-                                        </div>
-                                    }
-                                </td>
-                            </tr>
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell" data-label="Organisation name">
+                                        <a class="govuk-link" asp-action="ViewApplication" asp-controller="RoatpGateway" asp-route-applicationId="@item.ApplicationId">@item.OrganisationName</a>
+                                    </td>
+                                    <td class="govuk-table__cell" data-label="UKPRN">
+                                        @item.Ukprn
+                                    </td>
+                                    <td class="govuk-table__cell" data-label="Provider route">
+                                        @item.ApplicationRouteShortText
+                                    </td>
+                                    <td class="govuk-table__cell" data-label="Application submitted date">
+                                        @item.SubmittedDate.ToSfaShortDateString()
+                                    </td>
+                                    <td class="govuk-table__cell" data-label="Last checked by">
+                                        @item.LastCheckedBy
+                                    </td>
+                                    <td class="govuk-table__cell" data-label="Clarification requested date">
+                                        @if (item.ClarificationRequestedDate is null)
+                                        {
+                                            <text>N/A</text>
+                                        }
+                                        else
+                                        {
+                                            @item.ClarificationRequestedDate.ToSfaShortDateString()
+                                        }
+                                    </td>
+                                    <td class="govuk-table__cell" data-label="Status">
+                                        @{
+                                            var cssModifierClassName = CssStylingHelper.GetGatewayReviewStatusStyle(item.GatewayReviewStatus);
+                                            <div class="das-tag @cssModifierClassName das-no-wrap">
+                                                @if (item.GatewayReviewStatus == GatewayReviewStatus.ClarificationSent)
+                                                {
+                                                    <text>Clarification</text>
+                                                }
+                                                else
+                                                {
+                                                    @item.GatewayReviewStatus
+                                                }
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                     </table>
