@@ -57,6 +57,9 @@
         "version": {
             "type": "string",
             "defaultValue": "1.0"
+        },
+        "cdnUrl": {
+            "type": "string"
         }
     },
     "variables": {
@@ -181,6 +184,10 @@
                                 {
                                     "name": "WEBSITE_SWAP_WARMUP_PING_STATUSES",
                                     "value": "200"
+                                },
+                                {
+                                    "name": "cdn:url",
+                                    "value": "[parameters('cdnUrl')]"
                                 }
                             ]
                         }
