@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.CharityCommission;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Models;
 using SFA.DAS.RoatpGateway.Web.Services;
@@ -18,6 +19,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<IRoatpOrganisationSummaryApiClient> _organisationSummaryApiClient;
         private Mock<ILogger<PeopleInControlOrchestrator>> _logger;
+        private Mock<IRoatpApiClient> _roatpApiClient;
 
         private const string ukprn = "12344321";
         private const string UKRLPLegalName = "Mark's workshop";
@@ -36,14 +38,16 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
         readonly Guid _applicationId = Guid.NewGuid();
         private GatewayCommonDetails _commonDetails;
+        private string _charityNumber = "122233333";
 
         [SetUp]
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
+            _roatpApiClient = new Mock<IRoatpApiClient>();
             _organisationSummaryApiClient = new Mock<IRoatpOrganisationSummaryApiClient>();
             _logger = new Mock<ILogger<PeopleInControlOrchestrator>>();
-            _orchestrator = new PeopleInControlOrchestrator(_applyApiClient.Object, _organisationSummaryApiClient.Object, _logger.Object);
+            _orchestrator = new PeopleInControlOrchestrator(_applyApiClient.Object, _organisationSummaryApiClient.Object, _roatpApiClient.Object, _logger.Object);
     
             _commonDetails = new GatewayCommonDetails
             {
@@ -57,6 +61,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
                 Comments = "Fail",
                 Status = "Fail"
             };
+            _organisationSummaryApiClient.Setup(x=>x.GetCharityNumber(_applicationId)).ReturnsAsync(_charityNumber);
             _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, GatewayPageId, UserId, UserName)).ReturnsAsync(_commonDetails);
         }
 
@@ -188,7 +193,13 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
                     Name = PersonInControlName+ TrusteesPostfix + SourceExternal
                 }
             };
-            _organisationSummaryApiClient.Setup(x => x.GetTrusteesFromCharityCommission(_applicationId)).ReturnsAsync(trusteesFromCharityCommission);
+
+            var trusteesFromSource = new List<TrusteeInformation>
+            {
+                new TrusteeInformation { Id = "1", Name = PersonInControlName + TrusteesPostfix + SourceExternal }
+            };
+
+            _roatpApiClient.Setup(x => x.GetCharityDetails(_charityNumber)).ReturnsAsync(new CharityDetails {Trustees = trusteesFromSource });
 
 
             var request = new GetPeopleInControlRequest(_applicationId, UserId, UserName);

@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.CharityCommission;
 using SFA.DAS.RoatpGateway.Web.Extensions;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Models;
@@ -12,12 +15,14 @@ namespace SFA.DAS.RoatpGateway.Web.Services
     {
         private readonly IRoatpApplicationApiClient _applyApiClient;
         private readonly IRoatpOrganisationSummaryApiClient _organisationSummaryApiClient;
+        private readonly IRoatpApiClient _roatpApiClient;
         private readonly ILogger<PeopleInControlOrchestrator> _logger;
 
-        public PeopleInControlOrchestrator(IRoatpApplicationApiClient applyApiClient, IRoatpOrganisationSummaryApiClient organisationSummaryApiClient, ILogger<PeopleInControlOrchestrator> logger)
+        public PeopleInControlOrchestrator(IRoatpApplicationApiClient applyApiClient, IRoatpOrganisationSummaryApiClient organisationSummaryApiClient, IRoatpApiClient roatpApiClient, ILogger<PeopleInControlOrchestrator> logger)
         {
             _applyApiClient = applyApiClient;
             _logger = logger;
+            _roatpApiClient = roatpApiClient;
             _organisationSummaryApiClient = organisationSummaryApiClient;
         }
 
@@ -62,12 +67,16 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 FromSubmittedApplication = await _organisationSummaryApiClient.GetPscsFromSubmitted(request.ApplicationId)
             };
 
+            var charityDetails = await _roatpApiClient.GetCharityDetails(model.CharityNumber);
+            var charityTrustees = GatherPeopleInControl(charityDetails?.Trustees);
+
+
             _logger.LogInformation($"Retrieving people in control - [{RoatpGatewayConstants.PeopleInControl.Heading.Trustees}] for application {request.ApplicationId}");
             model.TrusteeData = new PeopleInControlData
             {
                 Caption = RoatpGatewayConstants.PeopleInControl.Heading.Trustees,
                 ExternalSourceHeading = RoatpGatewayConstants.PeopleInControl.Caption.CharityCommission,
-                FromExternalSource = await _organisationSummaryApiClient.GetTrusteesFromCharityCommission(request.ApplicationId),
+                FromExternalSource = charityTrustees,
                 FromSubmittedApplication = await _organisationSummaryApiClient.GetTrusteesFromSubmitted(request.ApplicationId)
             };
 
@@ -119,11 +128,15 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 PeopleInControl = await _organisationSummaryApiClient.GetPscsFromCompaniesHouse(request.ApplicationId)
             };
 
+
+            var charityDetails = await _roatpApiClient.GetCharityDetails(model.CharityNumber);
+            var charityTrustees = GatherPeopleInControl(charityDetails?.Trustees);
+
             _logger.LogInformation($"Retrieving people in control high risk - [{RoatpGatewayConstants.PeopleInControl.Heading.Trustees}] for application {request.ApplicationId}");
             model.TrusteeData = new PeopleInControlHighRiskData
             {
                 Heading = RoatpGatewayConstants.PeopleInControl.Heading.Trustees,
-                PeopleInControl = await _organisationSummaryApiClient.GetTrusteesFromCharityCommission(request.ApplicationId)
+                PeopleInControl = charityTrustees
             };
 
             _logger.LogInformation($"Retrieving people in control high risk - [{RoatpGatewayConstants.PeopleInControl.Heading.WhosInControl}] for application {request.ApplicationId}");
@@ -134,6 +147,22 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             };
 
             return model;
+        }
+
+
+        private static List<PersonInControl> GatherPeopleInControl(List<TrusteeInformation> trustees)
+        {
+            var peopleInControl = new List<PersonInControl>();
+            if (trustees != null)
+            {
+                foreach (var trustee in trustees.OrderBy(x => x.Name))
+                {
+                    var picName = trustee.Name;
+                    peopleInControl.Add(new PersonInControl { Name = picName, MonthYearOfBirth = null });
+                }
+            }
+
+            return peopleInControl;
         }
     }
 }

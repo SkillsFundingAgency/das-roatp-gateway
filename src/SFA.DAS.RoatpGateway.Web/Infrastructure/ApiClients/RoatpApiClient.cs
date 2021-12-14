@@ -11,12 +11,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
     public class RoatpApiClient : ApiClientBase<RoatpApiClient>, IRoatpApiClient
     {
-        public RoatpApiClient(HttpClient client, ILogger<RoatpApiClient> logger,
-            IRoatpOuterApiTokenService tokenService)
+        public RoatpApiClient(HttpClient client, ILogger<RoatpApiClient> logger)
             : base(client, logger)
         {
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
         }
 
         public async Task<CharityDetails> GetCharityDetails(string registrationNumber)

@@ -186,8 +186,8 @@ namespace SFA.DAS.RoatpGateway.Web
                 {
                     config.BaseAddress = new Uri(ApplicationConfiguration.RoatpApi.ApiBaseUrl);
                     config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
-                    config.DefaultRequestHeaders.Add("X-Version", "1");
-                    config.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApplicationConfiguration.RoatpApi.OcpApimSubscriptionKey);
+                    config.DefaultRequestHeaders.Add("X-Version", "1.0");
+                    config.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApplicationConfiguration.RoatpApi.SubscriptionKey);
                 })
                 .SetHandlerLifetime(handlerLifeTime)
                 .AddPolicyHandler(GetRetryPolicy());
@@ -199,7 +199,6 @@ namespace SFA.DAS.RoatpGateway.Web
 
             services.AddTransient<IRoatpApplicationTokenService, RoatpApplicationTokenService>();
             services.AddTransient<IRoatpRegisterTokenService, RoatpRegisterTokenService>();
-            services.AddTransient<IRoatpOuterApiTokenService, RoatpOuterApiTokenService>();
 
             services.AddTransient<IGatewayOverviewOrchestrator, GatewayOverviewOrchestrator>();
             services.AddTransient<IGatewayOrganisationChecksOrchestrator, GatewayOrganisationChecksOrchestrator>();

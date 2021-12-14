@@ -17,8 +17,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<List<PersonInControl>> GetPscsFromCompaniesHouse(Guid applicationId);
 
         Task<List<PersonInControl>> GetTrusteesFromSubmitted(Guid applicationId);
-        Task<List<PersonInControl>> GetTrusteesFromCharityCommission(Guid applicationId);
-
         Task<List<PersonInControl>> GetWhosInControlFromSubmitted(Guid applicationId);
     }
 }
