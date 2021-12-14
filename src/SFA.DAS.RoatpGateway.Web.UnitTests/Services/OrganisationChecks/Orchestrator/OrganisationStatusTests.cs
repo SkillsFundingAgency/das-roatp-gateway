@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ using SFA.DAS.RoatpGateway.Domain.Ukrlp;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
 
-namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orchestrator
+namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchestrator
 {
     [TestFixture]
     public class OrganisationStatusTests
@@ -17,6 +18,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
         private GatewayOrganisationChecksOrchestrator _orchestrator;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<ILogger<GatewayOrganisationChecksOrchestrator>> _logger;
+        private Mock<IRoatpApiClient> _charityApiClient;
 
         private static string ukprn => "12344321";
         private static string UKRLPLegalName => "Mark's workshop";
@@ -36,15 +38,16 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
+            _charityApiClient = new Mock<IRoatpApiClient>();
             _logger = new Mock<ILogger<GatewayOrganisationChecksOrchestrator>>();
-            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, Mock.Of<IRoatpOrganisationSummaryApiClient>(), _logger.Object);
+            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, Mock.Of<IRoatpOrganisationSummaryApiClient>(), _charityApiClient.Object, _logger.Object);
         }
 
         [Test]
         public void check_organisation_status_orchestrator_builds_with_company_and_charity_details()
         {
             var applicationId = Guid.NewGuid();
-
+            var charityNumber = "44443333";
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
@@ -59,7 +62,11 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
                 ProviderName = ProviderName,
                 ProviderStatus = ProviderStatus,
                 VerifiedByCompaniesHouse = true,
-                VerifiedbyCharityCommission = true
+                VerifiedbyCharityCommission = true,
+                VerificationDetails = new List<VerificationDetails>
+                {
+                    new VerificationDetails {VerificationAuthority="Charity Commission", VerificationId=charityNumber}
+                }
             };
             _applyApiClient.Setup(x => x.GetUkrlpDetails(applicationId)).ReturnsAsync(ukrlpDetails);
 
@@ -69,11 +76,11 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             };
             _applyApiClient.Setup(x => x.GetCompaniesHouseDetails(applicationId)).ReturnsAsync(companiesHouseDetails);
 
-            var charityDetails = new CharityCommissionSummary
+            var charityDetails = new CharityDetails()
             {
                 Status = CharityStatus
             };
-            _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
+            _charityApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
 
             var request = new GetOrganisationStatusRequest(applicationId, UserId, UserName);
 
@@ -88,14 +95,14 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
-            _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Once);
+            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Once);
         }
 
         [Test]
         public void check_organisation_status_orchestrator_builds_with_company_details_only()
         {
             var applicationId = Guid.NewGuid();
-
+            var charityNumber = "44443333";
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
@@ -110,7 +117,11 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
                 ProviderName = ProviderName,
                 ProviderStatus = ProviderStatus,
                 VerifiedByCompaniesHouse = true,
-                VerifiedbyCharityCommission = false
+                VerifiedbyCharityCommission = false,
+                VerificationDetails = new List<VerificationDetails>
+                {
+                    new VerificationDetails {VerificationAuthority="Charity Commission", VerificationId=charityNumber}
+                }
             };
             _applyApiClient.Setup(x => x.GetUkrlpDetails(applicationId)).ReturnsAsync(ukrlpDetails);
 
@@ -120,12 +131,12 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             };
             _applyApiClient.Setup(x => x.GetCompaniesHouseDetails(applicationId)).ReturnsAsync(companiesHouseDetails);
 
-            var charityDetails = new CharityCommissionSummary
+            var charityDetails = new CharityDetails
             {
                 Status = null
             };
 
-            _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
+            _charityApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
 
             var request = new GetOrganisationStatusRequest(applicationId, UserId, UserName);
 
@@ -140,14 +151,14 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
-            _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Never);
+            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Never);
         }
 
         [Test]
         public void check_organisation_status_orchestrator_builds_with_charity_details_only()
         {
             var applicationId = Guid.NewGuid();
-
+            var charityNumber = "44443333";
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
@@ -162,7 +173,11 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
                 ProviderName = ProviderName,
                 ProviderStatus = ProviderStatus,
                 VerifiedByCompaniesHouse = false,
-                VerifiedbyCharityCommission = true
+                VerifiedbyCharityCommission = true,
+                VerificationDetails = new List<VerificationDetails>
+                {
+                    new VerificationDetails {VerificationAuthority="Charity Commission", VerificationId=charityNumber}
+                }
             };
             _applyApiClient.Setup(x => x.GetUkrlpDetails(applicationId)).ReturnsAsync(ukrlpDetails);
 
@@ -172,12 +187,13 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             };
             _applyApiClient.Setup(x => x.GetCompaniesHouseDetails(applicationId)).ReturnsAsync(companiesHouseDetails);
 
-            var charityDetails = new CharityCommissionSummary
+            var charityDetails = new CharityDetails
             {
                 Status = CharityStatus
             };
 
-            _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
+            _charityApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
+
 
             var request = new GetOrganisationStatusRequest(applicationId, UserId, UserName);
 
@@ -192,7 +208,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Never);
-            _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Once);
+            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Once);
         }
     }
 }

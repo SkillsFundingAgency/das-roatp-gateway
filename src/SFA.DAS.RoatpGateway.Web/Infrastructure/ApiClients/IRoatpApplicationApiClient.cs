@@ -40,8 +40,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         Task<CompaniesHouseSummary> GetCompaniesHouseDetails(Guid applicationId);
 
-        Task<CharityCommissionSummary> GetCharityCommissionDetails(Guid applicationId);
-
         Task<DateTime?> GetSourcesCheckedOnDate(Guid applicationId);
 
         Task<OrganisationRegisterStatus> GetOrganisationRegisterStatus(Guid applicationId);

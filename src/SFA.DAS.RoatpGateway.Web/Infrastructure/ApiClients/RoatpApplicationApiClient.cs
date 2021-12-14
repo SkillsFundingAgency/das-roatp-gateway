@@ -213,19 +213,6 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
         }
 
-        public async Task<CharityCommissionSummary> GetCharityCommissionDetails(Guid applicationId)
-        {
-            try
-            {
-                return await Get<CharityCommissionSummary>($"Gateway/CharityCommissionData/{applicationId}");
-            }
-            catch (RoatpApiClientException ex)
-            {
-                _logger.LogError("An error occurred when retrieving Charity Commission details", ex);
-                throw new ExternalApiException("An error occurred when retrieving Charity Commission details", ex);
-            }
-        }
-
         public async Task<OrganisationRegisterStatus> GetOrganisationRegisterStatus(Guid applicationId)
         {
             try

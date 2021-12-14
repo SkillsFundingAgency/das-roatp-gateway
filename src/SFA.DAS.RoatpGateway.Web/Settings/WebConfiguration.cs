@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SFA.DAS.AdminService.Common.Settings;
+using SFA.DAS.RoatpGateway.Web.Configuration;
 
 namespace SFA.DAS.RoatpGateway.Web.Settings
 {
@@ -22,6 +23,9 @@ namespace SFA.DAS.RoatpGateway.Web.Settings
 
         [JsonRequired]
         public ClientApiAuthentication RoatpRegisterApiAuthentication { get; set; }
+
+        [JsonRequired]
+        public RoatpApi RoatpApi { get; set; }
 
         [JsonRequired]
         public string EsfaAdminServicesBaseUrl { get; set; }

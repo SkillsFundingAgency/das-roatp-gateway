@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.AdminService.Common.Settings;
+using SFA.DAS.RoatpGateway.Web.Configuration;
 
 namespace SFA.DAS.RoatpGateway.Web.Settings
 {
@@ -15,6 +16,8 @@ namespace SFA.DAS.RoatpGateway.Web.Settings
         ManagedIdentityApiAuthentication ApplyApiAuthentication { get; set; }
 
         ClientApiAuthentication RoatpRegisterApiAuthentication { get; set; }
+
+        RoatpApi RoatpApi { get; set; }
 
         string EsfaAdminServicesBaseUrl { get; set; }
     }

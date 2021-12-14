@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -17,6 +18,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
         private GatewayOrganisationChecksOrchestrator _orchestrator;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<ILogger<GatewayOrganisationChecksOrchestrator>> _logger;
+        private Mock<IRoatpApiClient> _charityApiClient;
 
         private static string ukprn => "12344321";
         private static string UKRLPLegalName => "Mark's workshop";
@@ -34,15 +36,16 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
+            _charityApiClient = new Mock<IRoatpApiClient>();
             _logger = new Mock<ILogger<GatewayOrganisationChecksOrchestrator>>();
-            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, Mock.Of<IRoatpOrganisationSummaryApiClient>(), _logger.Object);
+            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, Mock.Of<IRoatpOrganisationSummaryApiClient>(), _charityApiClient.Object, _logger.Object);
         }
 
         [Test]
         public void check_legal_name_orchestrator_builds_with_company_and_charity_details()
         {
             var applicationId = Guid.NewGuid();
-
+            var charityNumber = "44443333";
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
@@ -56,7 +59,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             {
                 ProviderName = ProviderName,
                 VerifiedbyCharityCommission = true,
-                VerifiedByCompaniesHouse = true
+                VerifiedByCompaniesHouse = true,
+                VerificationDetails = new List<VerificationDetails>
+                {
+                    new VerificationDetails {VerificationAuthority="Charity Commission", VerificationId=charityNumber}
+                }
             };
             _applyApiClient.Setup(x => x.GetUkrlpDetails(applicationId)).ReturnsAsync(ukrlpDetails);
 
@@ -66,11 +73,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             };
             _applyApiClient.Setup(x => x.GetCompaniesHouseDetails(applicationId)).ReturnsAsync(companiesHouseDetails);
 
-            var charityDetails = new CharityCommissionSummary
+            var charityDetails = new CharityDetails
             {
-                CharityName = CharityName
+                Name = CharityName
             };
-            _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
+            _charityApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
 
             var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
@@ -85,14 +92,14 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             Assert.AreEqual(ukprn, viewModel.Ukprn);
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
-            _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Once);
+            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Once);
         }
 
         [Test]
         public void check_legal_name_orchestrator_builds_with_company_details_only()
         {
             var applicationId = Guid.NewGuid();
-
+            var charityNumber = "44443333";
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
@@ -106,7 +113,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             {
                 ProviderName = ProviderName,
                 VerifiedByCompaniesHouse = true,
-                VerifiedbyCharityCommission = false
+                VerifiedbyCharityCommission = false,
+                VerificationDetails = new List<VerificationDetails>
+                {
+                    new VerificationDetails {VerificationAuthority="Charity Commission", VerificationId=charityNumber}
+                }
             };
             _applyApiClient.Setup(x => x.GetUkrlpDetails(applicationId)).ReturnsAsync(ukrlpDetails);
 
@@ -116,8 +127,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             };
             _applyApiClient.Setup(x => x.GetCompaniesHouseDetails(applicationId)).ReturnsAsync(companiesHouseDetails);
 
-            CharityCommissionSummary charityDetails = null;
-            _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
+            CharityDetails charityDetails = null;
+            _charityApiClient.Setup(x => x.GetCharityDetails(It.IsAny<string>())).ReturnsAsync(charityDetails);
 
             var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
@@ -132,14 +143,14 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             Assert.AreEqual(ukprn, viewModel.Ukprn);
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
-            _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Never);
+            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Never);
         }
 
         [Test]
         public void check_legal_name_orchestrator_builds_with_charity_details_only()
         {
             var applicationId = Guid.NewGuid();
-
+            var charityNumber = "44443333";
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
@@ -153,18 +164,22 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             {
                 ProviderName = ProviderName,
                 VerifiedByCompaniesHouse = false,
-                VerifiedbyCharityCommission = true
+                VerifiedbyCharityCommission = true,
+                VerificationDetails = new List<VerificationDetails>
+                {
+                    new VerificationDetails {VerificationAuthority="Charity Commission", VerificationId=charityNumber}
+                }
             };
             _applyApiClient.Setup(x => x.GetUkrlpDetails(applicationId)).ReturnsAsync(ukrlpDetails);
 
             CompaniesHouseSummary companiesHouseDetails = null;
             _applyApiClient.Setup(x => x.GetCompaniesHouseDetails(applicationId)).ReturnsAsync(companiesHouseDetails);
 
-            var charityDetails = new CharityCommissionSummary
+            var charityDetails = new CharityDetails
             {
-                CharityName = CharityName
+                Name = CharityName
             };
-            _applyApiClient.Setup(x => x.GetCharityCommissionDetails(applicationId)).ReturnsAsync(charityDetails);
+            _charityApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
 
             var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
@@ -179,7 +194,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             Assert.AreEqual(ukprn, viewModel.Ukprn);
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Never);
-            _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Once);
+            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Once);
         }
 
     }

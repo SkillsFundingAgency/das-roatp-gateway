@@ -2,10 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.RoatpGateway.Domain.CharityCommission;
+using SFA.DAS.RoatpGateway.Domain.Ukrlp;
 using SFA.DAS.RoatpGateway.Web.Extensions;
 
 namespace SFA.DAS.RoatpGateway.Web.Services
@@ -15,11 +18,13 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         private readonly IRoatpApplicationApiClient _applyApiClient;
         private readonly ILogger<GatewayOrganisationChecksOrchestrator> _logger;
         private readonly IRoatpOrganisationSummaryApiClient _organisationSummaryApiClient;
+        private readonly IRoatpApiClient _roatpApiClient;
         public GatewayOrganisationChecksOrchestrator(IRoatpApplicationApiClient applyApiClient,
-                                                      IRoatpOrganisationSummaryApiClient organisationSummaryApiClient, ILogger<GatewayOrganisationChecksOrchestrator> logger)
+                                                      IRoatpOrganisationSummaryApiClient organisationSummaryApiClient, IRoatpApiClient roatpApiClient, ILogger<GatewayOrganisationChecksOrchestrator> logger)
         {
             _applyApiClient = applyApiClient;
             _logger = logger;
+            _roatpApiClient = roatpApiClient;
             _organisationSummaryApiClient = organisationSummaryApiClient;
         }
 
@@ -53,10 +58,15 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
                 if (ukrlpDetails.VerifiedbyCharityCommission)
                 {
-                    var charityCommissionDetails = await _applyApiClient.GetCharityCommissionDetails(request.ApplicationId);
-                    if (charityCommissionDetails != null)
+                    var charityNumber= ExtractCharityNumberFromUkrlpDetails(ukrlpDetails);
+
+                    if (!string.IsNullOrEmpty(charityNumber))
                     {
-                        model.CharityCommissionLegalName = charityCommissionDetails.CharityName;
+                        var charityDetails = await _roatpApiClient.GetCharityDetails(charityNumber);
+                        if (charityDetails != null)
+                        {
+                            model.CharityCommissionLegalName = charityDetails.Name;
+                        }
                     }
                 }
             }
@@ -118,10 +128,15 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
                 if (ukrlpDetails.VerifiedbyCharityCommission)
                 {
-                    var charityCommissionDetails = await _applyApiClient.GetCharityCommissionDetails(request.ApplicationId);
-                    if (charityCommissionDetails != null)
+                    var charityNumber = ExtractCharityNumberFromUkrlpDetails(ukrlpDetails);
+
+                    if (!string.IsNullOrEmpty(charityNumber))
                     {
-                        model.CharityCommissionStatus = charityCommissionDetails.Status.CapitaliseFirstLetter();
+                        var charityDetails = await _roatpApiClient.GetCharityDetails(charityNumber);
+                        if (charityDetails != null)
+                        {
+                            model.CharityCommissionStatus = charityDetails.Status.CapitaliseFirstLetter();
+                        }
                     }
                 }
             }
@@ -252,6 +267,19 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             model.CharityNumber = await _organisationSummaryApiClient.GetCharityNumber(request.ApplicationId);
 
             return model;
+        }
+
+        private static string ExtractCharityNumberFromUkrlpDetails(ProviderDetails ukrlpDetails)
+        {
+            const string charityCommission = "Charity Commission";
+            var charityNumber = string.Empty;
+            foreach (var verificationDetail in ukrlpDetails.VerificationDetails.Where(res =>
+                res.VerificationAuthority == charityCommission))
+            {
+                charityNumber = verificationDetail.VerificationId;
+            }
+
+            return charityNumber;
         }
     }
 }
