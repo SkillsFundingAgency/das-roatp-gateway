@@ -18,13 +18,13 @@ namespace SFA.DAS.RoatpGateway.Web.Services
         private readonly IRoatpApplicationApiClient _applyApiClient;
         private readonly ILogger<GatewayOrganisationChecksOrchestrator> _logger;
         private readonly IRoatpOrganisationSummaryApiClient _organisationSummaryApiClient;
-        private readonly IRoatpApiClient _roatpApiClient;
+        private readonly IOuterApiClient _outerApiClient;
         public GatewayOrganisationChecksOrchestrator(IRoatpApplicationApiClient applyApiClient,
-                                                      IRoatpOrganisationSummaryApiClient organisationSummaryApiClient, IRoatpApiClient roatpApiClient, ILogger<GatewayOrganisationChecksOrchestrator> logger)
+                                                      IRoatpOrganisationSummaryApiClient organisationSummaryApiClient, IOuterApiClient outerApiClient, ILogger<GatewayOrganisationChecksOrchestrator> logger)
         {
             _applyApiClient = applyApiClient;
             _logger = logger;
-            _roatpApiClient = roatpApiClient;
+            _outerApiClient = outerApiClient;
             _organisationSummaryApiClient = organisationSummaryApiClient;
         }
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
                     if (!string.IsNullOrEmpty(charityNumber))
                     {
-                        var charityDetails = await _roatpApiClient.GetCharityDetails(charityNumber);
+                        var charityDetails = await _outerApiClient.GetCharityDetails(charityNumber);
                         if (charityDetails != null)
                         {
                             model.CharityCommissionLegalName = charityDetails.Name;
@@ -132,7 +132,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
                     if (!string.IsNullOrEmpty(charityNumber))
                     {
-                        var charityDetails = await _roatpApiClient.GetCharityDetails(charityNumber);
+                        var charityDetails = await _outerApiClient.GetCharityDetails(charityNumber);
                         if (charityDetails != null)
                         {
                             model.CharityCommissionStatus = charityDetails.Status.CapitaliseFirstLetter();

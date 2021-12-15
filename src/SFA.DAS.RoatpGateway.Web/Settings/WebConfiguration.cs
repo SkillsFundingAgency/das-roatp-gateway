@@ -25,7 +25,7 @@ namespace SFA.DAS.RoatpGateway.Web.Settings
         public ClientApiAuthentication RoatpRegisterApiAuthentication { get; set; }
 
         [JsonRequired]
-        public RoatpApi RoatpApi { get; set; }
+        public OuterApiConfiguration OuterApiConfiguration { get; set; }
 
         [JsonRequired]
         public string EsfaAdminServicesBaseUrl { get; set; }

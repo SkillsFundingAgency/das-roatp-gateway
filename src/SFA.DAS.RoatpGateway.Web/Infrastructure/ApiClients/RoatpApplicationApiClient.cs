@@ -78,7 +78,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             {
                return await Post<GatewayCommonDetailsRequest, GatewayCommonDetails> ($"Gateway/{applicationId}/CommonDetails", new GatewayCommonDetailsRequest(pageId, userId, userName));
             }
-            catch (RoatpApiClientException ex)
+            catch (OuterApiClientException ex)
             {
                 _logger.LogError("An error occurred when retrieving Gateway common details", ex);
                 throw new ExternalApiException("An error occurred when retrieving Gateway common details", ex);
@@ -193,7 +193,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             {
                 return await Get<ProviderDetails>($"Gateway/UkrlpData/{applicationId}");
             }
-            catch (RoatpApiClientException ex)
+            catch (OuterApiClientException ex)
             {
                 _logger.LogError("An error occurred when retrieving UKRLP details", ex);
                 throw new ExternalApiException("An error occurred when retrieving UKRLP details", ex);
@@ -206,7 +206,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             {
                 return await Get<CompaniesHouseSummary>($"Gateway/CompaniesHouseData/{applicationId}");
             }
-            catch (RoatpApiClientException ex)
+            catch (OuterApiClientException ex)
             {
                 _logger.LogError("An error occurred when retrieving Companies House details", ex);
                 throw new ExternalApiException("An error occurred when retrieving Companies House details", ex);

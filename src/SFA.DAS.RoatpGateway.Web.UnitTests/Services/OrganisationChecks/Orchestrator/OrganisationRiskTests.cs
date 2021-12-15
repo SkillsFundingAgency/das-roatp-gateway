@@ -28,7 +28,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
             _logger = new Mock<ILogger<GatewayOrganisationChecksOrchestrator>>();
             _organisationSummaryApiClient = new Mock<IRoatpOrganisationSummaryApiClient>();
-            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, _organisationSummaryApiClient.Object, Mock.Of<IRoatpApiClient>(), _logger.Object);
+            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, _organisationSummaryApiClient.Object, Mock.Of<IOuterApiClient>(), _logger.Object);
         }
 
         [TestCase("Company and charity", "John Training and Consultancy")]

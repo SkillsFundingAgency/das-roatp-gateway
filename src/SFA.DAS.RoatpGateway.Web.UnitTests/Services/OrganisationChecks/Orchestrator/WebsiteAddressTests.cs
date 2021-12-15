@@ -27,7 +27,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
             _logger = new Mock<ILogger<GatewayOrganisationChecksOrchestrator>>();
-            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, Mock.Of<IRoatpOrganisationSummaryApiClient>(), Mock.Of<IRoatpApiClient>(), _logger.Object);
+            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, Mock.Of<IRoatpOrganisationSummaryApiClient>(), Mock.Of<IOuterApiClient>(), _logger.Object);
         }
 
         [TestCase("http://www.OrganisationWebSite.co.uk", "http://www.UkrlpApiWebsite.co.uk")]

@@ -3,7 +3,7 @@ using SFA.DAS.RoatpGateway.Domain.CharityCommission;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
-    public interface IRoatpApiClient
+    public interface IOuterApiClient
     {
         Task<CharityDetails> GetCharityDetails(string charityNumber);
     }

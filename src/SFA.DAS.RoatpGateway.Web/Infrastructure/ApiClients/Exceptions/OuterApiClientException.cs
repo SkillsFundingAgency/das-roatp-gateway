@@ -8,17 +8,17 @@ using System.Text;
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
 {
     [Serializable]
-    public class RoatpApiClientException : ApplicationException
+    public class OuterApiClientException : ApplicationException
     {
         public string HttpMethod { get; }
         public HttpStatusCode StatusCode { get; }
         public Uri RequestUri { get; }
 
-        public RoatpApiClientException()
+        public OuterApiClientException()
         {
         }
 
-        public RoatpApiClientException(HttpResponseMessage httpResponseMessage, string message)
+        public OuterApiClientException(HttpResponseMessage httpResponseMessage, string message)
             : this(httpResponseMessage?.RequestMessage?.Method.ToString(),
                   httpResponseMessage?.StatusCode ?? HttpStatusCode.BadRequest,
                   httpResponseMessage?.RequestMessage?.RequestUri,
@@ -26,7 +26,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
         {
         }
 
-        public RoatpApiClientException(HttpResponseMessage httpResponseMessage, string message, Exception innerException)
+        public OuterApiClientException(HttpResponseMessage httpResponseMessage, string message, Exception innerException)
             : this(httpResponseMessage?.RequestMessage?.Method.ToString(),
                   httpResponseMessage?.StatusCode ?? HttpStatusCode.BadRequest,
                   httpResponseMessage?.RequestMessage?.RequestUri,
@@ -35,14 +35,14 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
         {
         }
 
-        public RoatpApiClientException(string httpMethod, HttpStatusCode statusCode, Uri requestUri, string message) : base(message)
+        public OuterApiClientException(string httpMethod, HttpStatusCode statusCode, Uri requestUri, string message) : base(message)
         {
             HttpMethod = httpMethod;
             StatusCode = statusCode;
             RequestUri = requestUri;
         }
 
-        public RoatpApiClientException(string httpMethod, HttpStatusCode statusCode, Uri requestUri, string message, Exception innerException) : base(message, innerException)
+        public OuterApiClientException(string httpMethod, HttpStatusCode statusCode, Uri requestUri, string message, Exception innerException) : base(message, innerException)
         {
             HttpMethod = httpMethod;
             StatusCode = statusCode;
@@ -50,7 +50,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
         }
 
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        protected RoatpApiClientException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected OuterApiClientException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             HttpMethod = info.GetValue("HttpMethod", typeof(string)) as string;
             StatusCode = (HttpStatusCode)info.GetValue("StatusCode", typeof(HttpStatusCode));

@@ -181,13 +181,12 @@ namespace SFA.DAS.RoatpGateway.Web
            .SetHandlerLifetime(handlerLifeTime)
            .AddPolicyHandler(GetRetryPolicy());
 
-
-            services.AddHttpClient<IRoatpApiClient, RoatpApiClient>(config =>
+            services.AddHttpClient<IOuterApiClient, OuterApiClient>(config =>
                 {
-                    config.BaseAddress = new Uri(ApplicationConfiguration.RoatpApi.ApiBaseUrl);
+                    config.BaseAddress = new Uri(ApplicationConfiguration.OuterApiConfiguration.ApiBaseUrl);
                     config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
                     config.DefaultRequestHeaders.Add("X-Version", "1.0");
-                    config.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApplicationConfiguration.RoatpApi.SubscriptionKey);
+                    config.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", ApplicationConfiguration.OuterApiConfiguration.SubscriptionKey);
                 })
                 .SetHandlerLifetime(handlerLifeTime)
                 .AddPolicyHandler(GetRetryPolicy());

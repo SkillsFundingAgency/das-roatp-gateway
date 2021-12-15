@@ -18,7 +18,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
         private GatewayOrganisationChecksOrchestrator _orchestrator;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<ILogger<GatewayOrganisationChecksOrchestrator>> _logger;
-        private Mock<IRoatpApiClient> _charityApiClient;
+        private Mock<IOuterApiClient> _outerApiClient;
 
         private static string ukprn => "12344321";
         private static string UKRLPLegalName => "Mark's workshop";
@@ -36,9 +36,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
-            _charityApiClient = new Mock<IRoatpApiClient>();
+            _outerApiClient = new Mock<IOuterApiClient>();
             _logger = new Mock<ILogger<GatewayOrganisationChecksOrchestrator>>();
-            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, Mock.Of<IRoatpOrganisationSummaryApiClient>(), _charityApiClient.Object, _logger.Object);
+            _orchestrator = new GatewayOrganisationChecksOrchestrator(_applyApiClient.Object, Mock.Of<IRoatpOrganisationSummaryApiClient>(), _outerApiClient.Object, _logger.Object);
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             {
                 Name = CharityName
             };
-            _charityApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
+            _outerApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
 
             var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
@@ -92,7 +92,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             Assert.AreEqual(ukprn, viewModel.Ukprn);
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
-            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Once);
+            _outerApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Once);
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             _applyApiClient.Setup(x => x.GetCompaniesHouseDetails(applicationId)).ReturnsAsync(companiesHouseDetails);
 
             CharityDetails charityDetails = null;
-            _charityApiClient.Setup(x => x.GetCharityDetails(It.IsAny<string>())).ReturnsAsync(charityDetails);
+            _outerApiClient.Setup(x => x.GetCharityDetails(It.IsAny<string>())).ReturnsAsync(charityDetails);
 
             var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
@@ -143,7 +143,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             Assert.AreEqual(ukprn, viewModel.Ukprn);
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
-            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Never);
+            _outerApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Never);
         }
 
         [Test]
@@ -179,7 +179,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             {
                 Name = CharityName
             };
-            _charityApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
+            _outerApiClient.Setup(x => x.GetCharityDetails(charityNumber)).ReturnsAsync(charityDetails);
 
             var request = new GetLegalNameRequest(applicationId, UserId, UserName);
 
@@ -194,7 +194,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
             Assert.AreEqual(ukprn, viewModel.Ukprn);
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Never);
-            _charityApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Once);
+            _outerApiClient.Verify(x => x.GetCharityDetails(charityNumber), Times.Once);
         }
 
     }

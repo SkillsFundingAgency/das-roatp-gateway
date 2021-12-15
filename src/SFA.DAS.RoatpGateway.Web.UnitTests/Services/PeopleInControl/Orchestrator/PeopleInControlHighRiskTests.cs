@@ -19,7 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.PeopleInControl.Orchestrat
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<IRoatpOrganisationSummaryApiClient> _organisationSummaryApiClient;
         private Mock<ILogger<PeopleInControlOrchestrator>> _logger;
-        private Mock<IRoatpApiClient> _roatpApiClient;
+        private Mock<IOuterApiClient> _roatpApiClient;
 
         private const string ukprn = "12344321";
         private const string UKRLPLegalName = "Mark's workshop";
@@ -42,7 +42,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.PeopleInControl.Orchestrat
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
-            _roatpApiClient = new Mock<IRoatpApiClient>();
+            _roatpApiClient = new Mock<IOuterApiClient>();
 
             _organisationSummaryApiClient = new Mock<IRoatpOrganisationSummaryApiClient>();
             _logger = new Mock<ILogger<PeopleInControlOrchestrator>>();
@@ -83,7 +83,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.PeopleInControl.Orchestrat
             Assert.AreEqual(_commonDetails.Ukprn, viewModel.Ukprn);
             Assert.AreEqual(_commonDetails.LegalName, viewModel.ApplyLegalName);
         }
-
 
         [Test]
         public void check_people_in_control_high_risk_director_details_from_cached_data_are_returned()
@@ -133,17 +132,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.PeopleInControl.Orchestrat
          [Test]
          public void check_people_in_control_trustee_details_from_submitted_are_returned()
          {
-             var trusteesFromSubmitted = new List<PersonInControl>
-             {
-                 new PersonInControl
-                 {
-                     Name = PersonInControlName+ TrusteesPostfix
-                 }
-             };
+             var name = PersonInControlName + TrusteesPostfix;
 
              var trusteesFromSource = new List<TrusteeInformation>
              {
-                 new TrusteeInformation { Id = "1", Name = PersonInControlName+ TrusteesPostfix}
+                 new TrusteeInformation { Id = "1", Name = name}
              };
 
              _roatpApiClient.Setup(x => x.GetCharityDetails(_charityNumber)).ReturnsAsync(new CharityDetails { Trustees = trusteesFromSource });
@@ -155,8 +148,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.PeopleInControl.Orchestrat
              var viewModel = response.Result;
              Assert.AreEqual(1, viewModel.TrusteeData.PeopleInControl.Count);
         
-             Assert.AreEqual(viewModel.TrusteeData.PeopleInControl.First().Name, trusteesFromSubmitted.First().Name);
-             Assert.AreEqual(viewModel.TrusteeData.PeopleInControl.First().MonthYearOfBirth, trusteesFromSubmitted.First().MonthYearOfBirth);
+             Assert.AreEqual(viewModel.TrusteeData.PeopleInControl.First().Name, name);
          }
 
         [Test]

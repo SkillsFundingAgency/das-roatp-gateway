@@ -9,9 +9,9 @@ using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
-    public class RoatpApiClient : ApiClientBase<RoatpApiClient>, IRoatpApiClient
+    public class OuterApiClient : ApiClientBase<OuterApiClient>, IOuterApiClient
     {
-        public RoatpApiClient(HttpClient client, ILogger<RoatpApiClient> logger)
+        public OuterApiClient(HttpClient client, ILogger<OuterApiClient> logger)
             : base(client, logger)
         {
         }
@@ -22,7 +22,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             {
                 return await Get<CharityDetails>($"Charities/{registrationNumber}");
             }
-            catch (RoatpApiClientException ex)
+            catch (OuterApiClientException ex)
             {
                 _logger.LogError("An error occurred when retrieving Charity Commission details from APIM Roatp", ex);
                 throw new ExternalApiException("An error occurred when retrieving Charity Commission details", ex);

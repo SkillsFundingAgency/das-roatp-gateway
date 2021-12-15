@@ -19,7 +19,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
         private Mock<IRoatpOrganisationSummaryApiClient> _organisationSummaryApiClient;
         private Mock<ILogger<PeopleInControlOrchestrator>> _logger;
-        private Mock<IRoatpApiClient> _roatpApiClient;
+        private Mock<IOuterApiClient> _roatpApiClient;
 
         private const string ukprn = "12344321";
         private const string UKRLPLegalName = "Mark's workshop";
@@ -44,7 +44,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
-            _roatpApiClient = new Mock<IRoatpApiClient>();
+            _roatpApiClient = new Mock<IOuterApiClient>();
             _organisationSummaryApiClient = new Mock<IRoatpOrganisationSummaryApiClient>();
             _logger = new Mock<ILogger<PeopleInControlOrchestrator>>();
             _orchestrator = new PeopleInControlOrchestrator(_applyApiClient.Object, _organisationSummaryApiClient.Object, _roatpApiClient.Object, _logger.Object);

@@ -15,14 +15,14 @@ namespace SFA.DAS.RoatpGateway.Web.Services
     {
         private readonly IRoatpApplicationApiClient _applyApiClient;
         private readonly IRoatpOrganisationSummaryApiClient _organisationSummaryApiClient;
-        private readonly IRoatpApiClient _roatpApiClient;
+        private readonly IOuterApiClient _outerApiClient;
         private readonly ILogger<PeopleInControlOrchestrator> _logger;
 
-        public PeopleInControlOrchestrator(IRoatpApplicationApiClient applyApiClient, IRoatpOrganisationSummaryApiClient organisationSummaryApiClient, IRoatpApiClient roatpApiClient, ILogger<PeopleInControlOrchestrator> logger)
+        public PeopleInControlOrchestrator(IRoatpApplicationApiClient applyApiClient, IRoatpOrganisationSummaryApiClient organisationSummaryApiClient, IOuterApiClient outerApiClient, ILogger<PeopleInControlOrchestrator> logger)
         {
             _applyApiClient = applyApiClient;
             _logger = logger;
-            _roatpApiClient = roatpApiClient;
+            _outerApiClient = outerApiClient;
             _organisationSummaryApiClient = organisationSummaryApiClient;
         }
 
@@ -67,7 +67,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
                 FromSubmittedApplication = await _organisationSummaryApiClient.GetPscsFromSubmitted(request.ApplicationId)
             };
 
-            var charityDetails = await _roatpApiClient.GetCharityDetails(model.CharityNumber);
+            var charityDetails = await _outerApiClient.GetCharityDetails(model.CharityNumber);
             var charityTrustees = GatherPeopleInControl(charityDetails?.Trustees);
 
 
@@ -129,7 +129,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             };
 
 
-            var charityDetails = await _roatpApiClient.GetCharityDetails(model.CharityNumber);
+            var charityDetails = await _outerApiClient.GetCharityDetails(model.CharityNumber);
             var charityTrustees = GatherPeopleInControl(charityDetails?.Trustees);
 
             _logger.LogInformation($"Retrieving people in control high risk - [{RoatpGatewayConstants.PeopleInControl.Heading.Trustees}] for application {request.ApplicationId}");
