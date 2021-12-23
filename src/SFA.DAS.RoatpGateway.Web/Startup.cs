@@ -223,6 +223,7 @@ namespace SFA.DAS.RoatpGateway.Web
             app.UseRequestLocalization();
             app.UseStatusCodePagesWithReExecute("/ErrorPage/{0}");
             app.UseSecurityHeaders();
+            app.UseMiddleware<SecurityHeadersMiddleware>();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseHealthChecks("/health");
