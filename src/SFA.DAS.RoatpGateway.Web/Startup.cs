@@ -226,7 +226,10 @@ namespace SFA.DAS.RoatpGateway.Web
             app.UseSecurityHeaders();
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
+                if (!context.Response.Headers.ContainsKey("X-Permitted-Cross-Domain-Policies"))
+                {
+                    context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
+                }
                 await next();
             });
             app.UseStaticFiles();
