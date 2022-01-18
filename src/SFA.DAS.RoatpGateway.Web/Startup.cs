@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Polly;
 using Polly.Extensions.Http;
 using SFA.DAS.RoatpGateway.Web.Domain;
@@ -218,13 +219,21 @@ namespace SFA.DAS.RoatpGateway.Web
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseAuthentication();
             app.UseSession();
             app.UseRequestLocalization();
             app.UseStatusCodePagesWithReExecute("/ErrorPage/{0}");
             app.UseSecurityHeaders();
+            app.Use(async (context, next) =>
+            {
+                if (!context.Response.Headers.ContainsKey("X-Permitted-Cross-Domain-Policies"))
+                {
+                    context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
+                }
+                await next();
+            });
+            app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseHealthChecks("/health");
             app.UseMvc(routes =>
             {
