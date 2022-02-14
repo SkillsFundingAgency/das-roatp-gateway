@@ -78,7 +78,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             {
                return await Post<GatewayCommonDetailsRequest, GatewayCommonDetails> ($"Gateway/{applicationId}/CommonDetails", new GatewayCommonDetailsRequest(pageId, userId, userName));
             }
-            catch (RoatpApiClientException ex)
+            catch (Exception ex)
             {
                 _logger.LogError("An error occurred when retrieving Gateway common details", ex);
                 throw new ExternalApiException("An error occurred when retrieving Gateway common details", ex);
