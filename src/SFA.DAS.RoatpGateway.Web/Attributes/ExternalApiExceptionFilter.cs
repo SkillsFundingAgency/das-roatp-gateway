@@ -11,7 +11,7 @@ namespace SFA.DAS.RoatpGateway.Web.Attributes
             if (filterContext.Exception is ExternalApiException)
             {
                 filterContext.ExceptionHandled = true;
-                filterContext.Result = new RedirectToActionResult("ExternalApisUnavailable", "RoatpShutterPage", new { });
+                filterContext.Result = new RedirectToActionResult("ServiceUnavailable", "RoatpShutterPage", new { });
                 filterContext.Result.ExecuteResultAsync(filterContext);
             }
             base.OnException(filterContext);
