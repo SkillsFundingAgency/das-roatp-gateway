@@ -1,0 +1,40 @@
+jobs:
+- job: CodeBuild
+  pool:
+    name: DAS - Continuous Integration Agents
+    demands: LATEST_DOTNET_VERSION -equals 3.1
+  workspace:
+    clean: all
+  variables:
+  - name: BuildConfiguration
+    value: release
+  - group: BUILD Management Resources  
+  steps:
+  - template: azure-pipelines-templates/build/step/gitversion.yml@das-platform-building-blocks
+
+  - template: azure-pipelines-templates/build/step/app-build.yml@das-platform-building-blocks
+    parameters:
+      SonarCloudProjectKey: SkillsFundingAgency_das-roatp-gateway
+
+  - template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks
+
+  - task: DotNetCoreCLI@2
+    displayName: "Publish - dotnet publish SFA.DAS.RoatpGateway.Web"
+    inputs:
+      command: publish
+      publishWebProjects: false #set to false as this setting (which defaults to true) will parse the entire repo for web projects
+      projects: "src/SFA.DAS.RoatpGateway.Web/SFA.DAS.RoatpGateway.Web.csproj"
+    arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
+
+  - task: CopyFiles@2
+    displayName: "Copy Files to: $(build.artifactstagingdirectory)"
+    inputs:
+      Contents: |
+        azure/**
+      TargetFolder: "$(build.artifactstagingdirectory)/publish"
+      OverWrite: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact"
+    inputs:
+      PathtoPublish: "$(build.artifactstagingdirectory)/publish"
