@@ -47,7 +47,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Attributes
 
             var redirectToActionResult = exceptionContext.Result as RedirectToActionResult;
             redirectToActionResult.Should().NotBeNull();
-            redirectToActionResult.ActionName.Should().Be("ExternalApisUnavailable");
+            redirectToActionResult.ActionName.Should().Be("ServiceUnavailable");
             redirectToActionResult.ControllerName.Should().Be("RoatpShutterPage");
         }
 
