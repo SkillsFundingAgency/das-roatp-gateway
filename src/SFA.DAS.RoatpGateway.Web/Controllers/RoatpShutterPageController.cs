@@ -6,10 +6,10 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
     [Authorize]
     public class RoatpShutterPageController : Controller
     {
-        [Route("ExternalApisUnavailable")]
+        [Route("ServiceUnavailable")]
         public IActionResult ExternalApisUnavailable()
         {
-            return View("~/Views/Roatp/Apply/ExternalApisUnavailable.cshtml");
+            return View("~/Views/ErrorPage/ServiceUnavailable.cshtml");
         }
     }
 }

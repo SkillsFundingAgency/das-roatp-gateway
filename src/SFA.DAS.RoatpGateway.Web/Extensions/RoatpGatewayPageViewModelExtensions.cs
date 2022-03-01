@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Web.Infrastructure;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 
@@ -11,7 +12,20 @@ namespace SFA.DAS.RoatpGateway.Web.Extensions
         internal static async Task PopulatePageCommonDetails(this RoatpGatewayPageViewModel viewModel, IRoatpApplicationApiClient applyApiClient, Guid applicationId,
             int sequenceNumber, string pageId, string userId, string userName, string caption, string heading, string noSelectionErrorMessage)
         {
-            var commonDetails = await applyApiClient.GetPageCommonDetails(applicationId, pageId, userId, userName);
+            GatewayCommonDetails commonDetails;
+            try
+            {
+                commonDetails = await applyApiClient.GetPageCommonDetails(applicationId, pageId, userId, userName);
+            }
+            catch (Exception ex)
+            {
+                throw new ExternalApiException("An error occurred when retrieving Gateway common details from apply", ex);
+            }
+
+            if (commonDetails == null)
+            {
+                throw new ExternalApiException("An error occurred when retrieving Gateway common details from apply, null value returned");
+            }
 
             viewModel.ApplicationId = commonDetails.ApplicationId;
             viewModel.SequenceNumber = sequenceNumber;
