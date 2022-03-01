@@ -50,7 +50,17 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<InitialTeacherTraining> GetInitialTeacherTraining(Guid applicationId)
         {
-            return await Get<InitialTeacherTraining>($"/Accreditation/{applicationId}/InitialTeacherTraining");
+            try
+            {
+                return await Get<InitialTeacherTraining>($"/Accreditation/{applicationId}/InitialTeacherTraining");
+            }
+            catch (Exception ex)
+            {
+                var message =
+                    $"An error occurred when retrieving initial teacher training details from qna via apply for application {applicationId}";
+                _logger.LogError(message, ex);
+                throw new ExternalApiException(message, ex);
+            }
         }
 
         public async Task<OfstedDetails> GetOfstedDetails(Guid applicationId)
