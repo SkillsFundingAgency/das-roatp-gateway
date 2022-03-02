@@ -5,6 +5,7 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.Infrastructure;
 
 namespace SFA.DAS.RoatpGateway.Web.Services
 {
@@ -23,17 +24,28 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
         public async Task SetupNotRequiredLinks(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
         {
-            await SetupNotRequiredLinkForTradingName(applicationId, userName, viewModel);
+            try
+            {
+                await SetupNotRequiredLinkForTradingName(applicationId, userName, viewModel);
 
-            await SetupNotRequiredLinkForWebsiteAddress(applicationId, userName, viewModel);
+                await SetupNotRequiredLinkForWebsiteAddress(applicationId, userName, viewModel);
 
-            await SetupNotRequiredLinkForOfficeForStudents(applicationId, userName, viewModel, providerRoute);
+                await SetupNotRequiredLinkForOfficeForStudents(applicationId, userName, viewModel, providerRoute);
 
-            await SetupNotRequiredLinkForInitialTeacherTraining(applicationId, userName, viewModel, providerRoute);
+                await SetupNotRequiredLinkForInitialTeacherTraining(applicationId, userName, viewModel, providerRoute);
 
-            await SetupNotRequireLinkForOfsted(applicationId, userName, viewModel, providerRoute);
+                await SetupNotRequireLinkForOfsted(applicationId, userName, viewModel, providerRoute);
 
-            await SetupNotRequiredLinkForSubcontractorDeclaration(applicationId, userName, viewModel, providerRoute);
+                await SetupNotRequiredLinkForSubcontractorDeclaration(applicationId, userName, viewModel,
+                    providerRoute);
+            }
+            catch (Exception ex)
+            {
+                var message =
+                    $"An error occurred when retrieving not setup links from apply for application {applicationId}";
+                _logger.LogError(message, ex);
+                throw new ExternalApiException(message, ex);
+            }
         }
 
         private async Task SetupNotRequiredLinkForTradingName(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel)
