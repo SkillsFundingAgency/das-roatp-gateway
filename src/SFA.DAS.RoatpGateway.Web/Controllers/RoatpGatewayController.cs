@@ -10,6 +10,7 @@ using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Web.Infrastructure;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.RoatpGateway.Web.ModelBinders;
@@ -125,8 +126,19 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
 
-            var viewModel =
-                await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
+            RoatpGatewayApplicationViewModel viewModel;
+            try
+            { 
+                viewModel =
+                    await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
+            }
+            catch (Exception ex)
+            {
+                var message =
+                    $"An error occurred when retrieving getOverViewModel for application {applicationId}";
+                _logger.LogError(message, ex);
+                throw new ExternalApiException(message, ex);
+            }
 
             if (viewModel is null)
             {

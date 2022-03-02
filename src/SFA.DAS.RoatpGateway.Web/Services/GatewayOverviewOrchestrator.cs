@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.Infrastructure;
 using SFA.DAS.RoatpGateway.Web.Models;
 
 namespace SFA.DAS.RoatpGateway.Web.Services
@@ -45,7 +46,16 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             if (savedStatuses != null && !savedStatuses.Any())
             {
                 var providerRoute = application.ApplyData.ApplyDetails.ProviderRoute;
-                await _sectionsNotRequiredService.SetupNotRequiredLinks(request.ApplicationId, request.UserName, viewmodel, providerRoute);
+                try
+                {
+                    await _sectionsNotRequiredService.SetupNotRequiredLinks(request.ApplicationId, request.UserName,
+                        viewmodel, providerRoute);
+                }
+                catch (Exception ex)
+                {
+                    var message = $"An error occurred when retrieving not setup links from apply for application {request.ApplicationId}";
+                    throw new ExternalApiException(message, ex);
+                }
             }
             else
             {
