@@ -126,20 +126,9 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
 
-            RoatpGatewayApplicationViewModel viewModel;
-            try
-            { 
-                viewModel =
+            var viewModel =
                     await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
-            }
-            catch (Exception ex)
-            {
-                var message =
-                    $"An error occurred when retrieving getOverViewModel for application {applicationId}";
-                _logger.LogError(message, ex);
-                throw new ExternalApiException(message, ex);
-            }
-
+            
             if (viewModel is null)
             {
                 return RedirectToAction(nameof(NewApplications));

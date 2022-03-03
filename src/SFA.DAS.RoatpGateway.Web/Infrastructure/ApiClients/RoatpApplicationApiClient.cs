@@ -246,17 +246,12 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<string> GetTradingName(Guid applicationId)
         {
-            try
-            {
-                return await Get<string>($"/Gateway/{applicationId}/TradingName");
-            }
-            catch (Exception ex)
-            {
+            var response = await GetResponse($"/Gateway/{applicationId}/TradingName");
+                if (response.StatusCode == HttpStatusCode.OK) return await response.Content.ReadAsAsync<string>();
                 var message =
-                    $"An error occurred when retrieving trading name from qna via apply for application {applicationId}";
-                _logger.LogError(message, ex);
-                throw new ExternalApiException(message, ex);
-            }
+                    $"An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{response.ReasonPhrase}'";
+                _logger.LogError(message);
+                throw new ExternalApiException(message);
         }
 
         public async Task<string> GetProviderRouteName(Guid applicationId)
@@ -277,17 +272,12 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<string> GetOrganisationWebsiteAddress(Guid applicationId)
         {
-            try
-            {
-                return await Get<string>($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
-            }
-            catch (Exception ex)
-            {
+            var response = await GetResponse($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
+                if (response.StatusCode == HttpStatusCode.OK) return await response.Content.ReadAsAsync<string>();
                 var message =
-                    $"An error occurred when retrieving website address from qna via apply for application {applicationId}";
-                _logger.LogError(message, ex);
-                throw new ExternalApiException(message, ex);
-            }
+                    $"An error occurred when retrieving website address from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
+                _logger.LogError(message);
+                throw new ExternalApiException(message);
         }
 
 

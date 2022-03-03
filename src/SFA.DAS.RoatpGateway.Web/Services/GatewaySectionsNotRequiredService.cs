@@ -24,8 +24,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
         public async Task SetupNotRequiredLinks(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
         {
-            try
-            {
                 await SetupNotRequiredLinkForTradingName(applicationId, userName, viewModel);
 
                 await SetupNotRequiredLinkForWebsiteAddress(applicationId, userName, viewModel);
@@ -38,14 +36,6 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
                 await SetupNotRequiredLinkForSubcontractorDeclaration(applicationId, userName, viewModel,
                     providerRoute);
-            }
-            catch (Exception ex)
-            {
-                var message =
-                    $"An error occurred when retrieving not setup links from apply for application {applicationId}";
-                _logger.LogError(message, ex);
-                throw new ExternalApiException(message, ex);
-            }
         }
 
         private async Task SetupNotRequiredLinkForTradingName(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel)

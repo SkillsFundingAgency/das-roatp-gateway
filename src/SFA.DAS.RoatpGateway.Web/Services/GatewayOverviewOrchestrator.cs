@@ -46,16 +46,7 @@ namespace SFA.DAS.RoatpGateway.Web.Services
             if (savedStatuses != null && !savedStatuses.Any())
             {
                 var providerRoute = application.ApplyData.ApplyDetails.ProviderRoute;
-                try
-                {
-                    await _sectionsNotRequiredService.SetupNotRequiredLinks(request.ApplicationId, request.UserName,
-                        viewmodel, providerRoute);
-                }
-                catch (Exception ex)
-                {
-                    var message = $"An error occurred when retrieving not setup links from apply for application {request.ApplicationId}";
-                    throw new ExternalApiException(message, ex);
-                }
+                await _sectionsNotRequiredService.SetupNotRequiredLinks(request.ApplicationId, request.UserName, viewmodel, providerRoute);
             }
             else
             {
