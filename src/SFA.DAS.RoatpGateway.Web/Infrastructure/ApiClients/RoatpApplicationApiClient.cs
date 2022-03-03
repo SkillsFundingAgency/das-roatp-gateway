@@ -247,13 +247,13 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task<string> GetTradingName(Guid applicationId)
         {
             var response = await GetResponse($"/Gateway/{applicationId}/TradingName");
-                if (response.StatusCode == HttpStatusCode.OK) return await response.Content.ReadAsAsync<string>();
+                if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<string>();
                 var message =
                     $"An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{response.ReasonPhrase}'";
                 _logger.LogError(message);
                 throw new ExternalApiException(message);
         }
-
+        
         public async Task<string> GetProviderRouteName(Guid applicationId)
         {
             return await Get<string>($"/Gateway/{applicationId}/ProviderRouteName");
@@ -273,8 +273,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task<string> GetOrganisationWebsiteAddress(Guid applicationId)
         {
             var response = await GetResponse($"/Gateway/{applicationId}/OrganisationWebsiteAddress");
-                if (response.StatusCode == HttpStatusCode.OK) return await response.Content.ReadAsAsync<string>();
-                var message =
+            if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<string>();
+
+            var message =
                     $"An error occurred when retrieving website address from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
                 _logger.LogError(message);
                 throw new ExternalApiException(message);
