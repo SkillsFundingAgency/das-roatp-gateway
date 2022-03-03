@@ -1,14 +1,11 @@
 ﻿using System;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
-using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using SFA.DAS.RoatpGateway.Web.Infrastructure;
 using SFA.DAS.RoatpGateway.Web.Models;
 
 namespace SFA.DAS.RoatpGateway.Web.Services

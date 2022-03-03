@@ -24,18 +24,17 @@ namespace SFA.DAS.RoatpGateway.Web.Services
 
         public async Task SetupNotRequiredLinks(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel, int providerRoute)
         {
-                await SetupNotRequiredLinkForTradingName(applicationId, userName, viewModel);
+            await SetupNotRequiredLinkForTradingName(applicationId, userName, viewModel);
 
-                await SetupNotRequiredLinkForWebsiteAddress(applicationId, userName, viewModel);
+            await SetupNotRequiredLinkForWebsiteAddress(applicationId, userName, viewModel);
 
-                await SetupNotRequiredLinkForOfficeForStudents(applicationId, userName, viewModel, providerRoute);
+            await SetupNotRequiredLinkForOfficeForStudents(applicationId, userName, viewModel, providerRoute);
 
-                await SetupNotRequiredLinkForInitialTeacherTraining(applicationId, userName, viewModel, providerRoute);
+            await SetupNotRequiredLinkForInitialTeacherTraining(applicationId, userName, viewModel, providerRoute);
 
-                await SetupNotRequireLinkForOfsted(applicationId, userName, viewModel, providerRoute);
+            await SetupNotRequireLinkForOfsted(applicationId, userName, viewModel, providerRoute);
 
-                await SetupNotRequiredLinkForSubcontractorDeclaration(applicationId, userName, viewModel,
-                    providerRoute);
+            await SetupNotRequiredLinkForSubcontractorDeclaration(applicationId, userName, viewModel, providerRoute);
         }
 
         private async Task SetupNotRequiredLinkForTradingName(Guid applicationId, string userName, RoatpGatewayApplicationViewModel viewModel)

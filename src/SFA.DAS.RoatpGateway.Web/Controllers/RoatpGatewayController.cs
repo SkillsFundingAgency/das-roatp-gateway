@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,6 @@ using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Domain;
-using SFA.DAS.RoatpGateway.Web.Infrastructure;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.RoatpGateway.Web.ModelBinders;
@@ -127,8 +125,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
             var username = HttpContext.User.UserDisplayName();
 
             var viewModel =
-                    await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
-            
+                await _orchestrator.GetOverviewViewModel(new GetApplicationOverviewRequest(applicationId, username));
+
             if (viewModel is null)
             {
                 return RedirectToAction(nameof(NewApplications));
