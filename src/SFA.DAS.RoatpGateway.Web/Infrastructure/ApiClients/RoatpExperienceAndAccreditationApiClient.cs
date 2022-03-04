@@ -1,12 +1,13 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
@@ -44,18 +45,33 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         }
 
         public async Task<string> GetOfficeForStudents(Guid applicationId)
-        {
-            return await Get<string>($"/Accreditation/{applicationId}/OfficeForStudents");
+        { 
+            var response = await GetResponse($"/Accreditation/{applicationId}/OfficeForStudents");
+            if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<string>();
+            var message =
+                $"An error occurred when retrieving office for students from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
+            _logger.LogError(message);
+            throw new ExternalApiException(message);
         }
 
         public async Task<InitialTeacherTraining> GetInitialTeacherTraining(Guid applicationId)
         {
-            return await Get<InitialTeacherTraining>($"/Accreditation/{applicationId}/InitialTeacherTraining");
+                var response = await GetResponse($"/Accreditation/{applicationId}/InitialTeacherTraining");
+                if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<InitialTeacherTraining>();
+                var message =
+                    $"An error occurred when retrieving initial teacher training details from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
+                _logger.LogError(message);
+                throw new ExternalApiException(message);
         }
 
         public async Task<OfstedDetails> GetOfstedDetails(Guid applicationId)
         {
-            return await Get<OfstedDetails>($"/Accreditation/{applicationId}/OfstedDetails");
+            var response = await GetResponse($"/Accreditation/{applicationId}/OfstedDetails");
+            if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<OfstedDetails>();
+            var message =
+                $"An error occurred when retrieving ofsted details from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
+            _logger.LogError(message);
+            throw new ExternalApiException(message);
         }
     }
 }

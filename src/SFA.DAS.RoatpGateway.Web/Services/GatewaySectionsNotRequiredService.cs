@@ -5,6 +5,7 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.Infrastructure;
 
 namespace SFA.DAS.RoatpGateway.Web.Services
 {
