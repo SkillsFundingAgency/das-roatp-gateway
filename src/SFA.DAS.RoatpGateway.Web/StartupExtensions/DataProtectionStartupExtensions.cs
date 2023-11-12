@@ -19,7 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.StartupExtensions
                 var redis = ConnectionMultiplexer.Connect($"{redisConnectionString},{dataProtectionKeysDatabase}");
 
                 services.AddDataProtection()
-                    .SetApplicationName("das-roatp-gateway")
+                    .SetApplicationName("das-admin-service-web")
                     .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
             }
             return services;
