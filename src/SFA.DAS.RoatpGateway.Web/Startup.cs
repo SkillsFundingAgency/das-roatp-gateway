@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -26,6 +27,9 @@ using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.AdminService.Common;
+using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.DfESignIn.Auth.AppStart;
+using SFA.DAS.DfESignIn.Auth.Enums;
 using SFA.DAS.RoatpGateway.Web.ModelBinders;
 using SFA.DAS.RoatpGateway.Web.StartupExtensions;
 
@@ -48,13 +52,38 @@ namespace SFA.DAS.RoatpGateway.Web
         {
             _env = env;
             _logger = logger;
-            _configuration = configuration;
+            
+            var config = new ConfigurationBuilder()
+                .AddConfiguration(configuration)
+                .SetBasePath(Directory.GetCurrentDirectory());
+#if DEBUG
+            if (!configuration["EnvironmentName"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
+            {
+                config.AddJsonFile("appsettings.json", true)
+                    .AddJsonFile("appsettings.Development.json", true);
+            }
+#endif
+            config.AddEnvironmentVariables();
+
+            if (!configuration["EnvironmentName"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
+            {
+                config.AddAzureTableStorage(options =>
+                    {
+                        options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                        options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                        options.EnvironmentName = configuration["EnvironmentName"];
+                        options.PreFixConfigurationKeys = false;
+                    }
+                );
+            }
+
+            _configuration = config.Build();
+            ApplicationConfiguration = _configuration.GetSection(nameof(WebConfiguration)).Get<WebConfiguration>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureApplicationConfiguration();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -101,33 +130,33 @@ namespace SFA.DAS.RoatpGateway.Web
             ConfigureDependencyInjection(services);
         }
 
-        private void ConfigureApplicationConfiguration()
-        {
-            try
-            {
-                ApplicationConfiguration = ConfigurationService.GetConfig(_configuration["EnvironmentName"], _configuration["ConfigurationStorageConnectionString"], Version, ServiceName).GetAwaiter().GetResult();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Unable to retrieve Application Configuration", ex);
-                throw;
-            }
-        }
 
         private void AddAuthentication(IServiceCollection services)
         {
-            services.AddAuthentication(sharedOptions =>
+            if (ApplicationConfiguration.UseDfeSignIn)
             {
-                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultChallengeScheme = WsFederationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultSignOutScheme = WsFederationDefaults.AuthenticationScheme;
-            }).AddWsFederation(options =>
+                services.AddAndConfigureDfESignInAuthentication(_configuration,
+                    "SFA.DAS.AdminService.Web.Auth",
+                    typeof(CustomServiceRole),
+                    ClientName.RoatpServiceAdmin,
+                    "/SignOut",
+                    "");
+            }
+            else
             {
-                options.Wtrealm = ApplicationConfiguration.StaffAuthentication.WtRealm;
-                options.MetadataAddress = ApplicationConfiguration.StaffAuthentication.MetadataAddress;
-                options.TokenValidationParameters.RoleClaimType = Roles.RoleClaimType;
-            }).AddCookie();
+                services.AddAuthentication(sharedOptions =>
+                {
+                    sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    sharedOptions.DefaultChallengeScheme = WsFederationDefaults.AuthenticationScheme;
+                    sharedOptions.DefaultSignOutScheme = WsFederationDefaults.AuthenticationScheme;
+                }).AddWsFederation(options =>
+                {
+                    options.Wtrealm = ApplicationConfiguration.StaffAuthentication.WtRealm;
+                    options.MetadataAddress = ApplicationConfiguration.StaffAuthentication.MetadataAddress;
+                    options.TokenValidationParameters.RoleClaimType = Roles.RoleClaimType;
+                }).AddCookie();
+            }
         }
 
         private void AddAntiforgery(IServiceCollection services)

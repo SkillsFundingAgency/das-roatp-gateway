@@ -25,5 +25,7 @@ namespace SFA.DAS.RoatpGateway.Web.Settings
 
         [JsonRequired]
         public string EsfaAdminServicesBaseUrl { get; set; }
+        public bool UseDfeSignIn { get; set; }
+        public string DfESignInServiceHelpUrl { get; set; }
     }
 }
