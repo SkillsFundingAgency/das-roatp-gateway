@@ -1215,22 +1215,27 @@ TODO: change to 'das-page-navigation' and BEM
 
 .govuk-tag--attention {
   background-color: #b10e1e;
+  color: #fff;
 }
 
 .govuk-tag--onboarding {
   background-color: #6f777b;
+  color: #fff;
 }
 
 .govuk-tag--startreview {
   background-color: #00823b;
+  color: #fff;
 }
 
 .govuk-tag--approved {
   background-color: #00823b;
+  color: #fff;
 }
 
 .govuk-tag--rejected {
   background-color: #b10e1e;
+  color: #fff;
 }
 
 /* Roatp org results.. remove for v4 */
@@ -1322,7 +1327,7 @@ TODO: change to 'das-page-navigation' and BEM
   background-color: transparent;
 }
 
-.app-search-form__button:active, 
+.app-search-form__button:active,
 .app-search-form__button:focus {
   top: 0;
 }
@@ -1344,7 +1349,6 @@ TODO: change to 'das-page-navigation' and BEM
 }
 
 @media (min-width: 40.0625em) {
-  
   .app-search-results-info__content {
     margin-bottom: 0;
     display: inline-block;
@@ -1353,8 +1357,4 @@ TODO: change to 'das-page-navigation' and BEM
   .app-search-results-info__clear-link {
     float: right;
   }
-  
 }
-
-
-
