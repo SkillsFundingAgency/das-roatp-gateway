@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using System.Text;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
@@ -49,15 +48,14 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
             RequestUri = requestUri;
         }
 
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        protected RoatpApiClientException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected RoatpApiClientException(SerializationInfo info, StreamingContext context)
         {
             HttpMethod = info.GetValue("HttpMethod", typeof(string)) as string;
             StatusCode = (HttpStatusCode)info.GetValue("StatusCode", typeof(HttpStatusCode));
             RequestUri = info.GetValue("RequestUri", typeof(Uri)) as Uri;
         }
 
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        [Obsolete]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)

@@ -16,7 +16,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
     public class AccountControllerTests
     {
         private AccountController _controller;
-        private Mock<IWebConfiguration> _configurationMock; 
+        private Mock<IWebConfiguration> _configurationMock;
 
         [SetUp]
         public void Setup()
@@ -35,19 +35,19 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
         public void SignIn_returns_expected_ChallengeResult()
         {
             _configurationMock.Setup(x => x.UseDfeSignIn).Returns(false);
-            
+
             var result = _controller.SignIn() as ChallengeResult;
 
             Assert.That(result, Is.Not.Null);
             CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
             CollectionAssert.Contains(result.AuthenticationSchemes, WsFederationDefaults.AuthenticationScheme);
         }
-        
+
         [Test]
         public void SignIn_returns_expected_ChallengeResult_DfeSignIn()
         {
             _configurationMock.Setup(x => x.UseDfeSignIn).Returns(true);
-            
+
             var result = _controller.SignIn() as ChallengeResult;
 
             Assert.That(result, Is.Not.Null);
@@ -68,8 +68,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
         public void SignOut_returns_expected_SignOutResult_For_Pirean()
         {
             _configurationMock.Setup(x => x.UseDfeSignIn).Returns(false);
-                
-            var result = _controller.SignOut() as SignOutResult;
+
+            var result = _controller.SignOut();
 
             Assert.That(result, Is.Not.Null);
             CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
@@ -80,8 +80,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
         public void SignOut_returns_expected_SignOutResult_For_DfeSignIn()
         {
             _configurationMock.Setup(x => x.UseDfeSignIn).Returns(true);
-                
-            var result = _controller.SignOut() as SignOutResult;
+
+            var result = _controller.SignOut();
 
             Assert.That(result, Is.Not.Null);
             CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
