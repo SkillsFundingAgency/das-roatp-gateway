@@ -67,15 +67,15 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(GatewayPageId, viewModel.PageId);
-            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(_commonDetails.Comments, viewModel.OptionFailText);
-            Assert.Null(viewModel.OptionInProgressText);
-            Assert.Null(viewModel.OptionClarificationText);
-            Assert.Null(viewModel.OptionPassText);
-            Assert.AreEqual(_commonDetails.Status, viewModel.Status);
-            Assert.AreEqual(_commonDetails.Ukprn, viewModel.Ukprn);
-            Assert.AreEqual(_commonDetails.LegalName, viewModel.ApplyLegalName);
+            Assert.That(GatewayPageId, Is.EqualTo(viewModel.PageId));
+            Assert.That(_applicationId, Is.EqualTo(viewModel.ApplicationId));
+            Assert.That(_commonDetails.Comments, Is.EqualTo(viewModel.OptionFailText));
+            Assert.That(viewModel.OptionInProgressText, Is.Null);
+            Assert.That(viewModel.OptionClarificationText, Is.Null);
+            Assert.That(viewModel.OptionPassText, Is.Null);
+            Assert.That(_commonDetails.Status, Is.EqualTo(viewModel.Status));
+            Assert.That(_commonDetails.Ukprn, Is.EqualTo(viewModel.Ukprn));
+            Assert.That(_commonDetails.LegalName, Is.EqualTo(viewModel.ApplyLegalName));
         }
 
 
@@ -95,9 +95,9 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(1, viewModel.CompanyDirectorsData.PeopleInControl.Count);
-            Assert.AreEqual(viewModel.CompanyDirectorsData.PeopleInControl.First().Name, directorsFromSubmitted.First().Name);
-            Assert.AreEqual(viewModel.CompanyDirectorsData.PeopleInControl.First().MonthYearOfBirth, directorsFromSubmitted.First().MonthYearOfBirth);
+            Assert.That(1, Is.EqualTo(viewModel.CompanyDirectorsData.PeopleInControl.Count));
+            Assert.That(viewModel.CompanyDirectorsData.PeopleInControl.First().Name, Is.EqualTo(directorsFromSubmitted.First().Name));
+            Assert.That(viewModel.CompanyDirectorsData.PeopleInControl.First().MonthYearOfBirth, Is.EqualTo(directorsFromSubmitted.First().MonthYearOfBirth));
         }
 
         [Test]
@@ -119,9 +119,9 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(1, viewModel.PscData.PeopleInControl.Count);
-            Assert.AreEqual(viewModel.PscData.PeopleInControl.First().Name, pcsFromSubmitted.First().Name);
-            Assert.AreEqual(viewModel.PscData.PeopleInControl.First().MonthYearOfBirth, pcsFromSubmitted.First().MonthYearOfBirth);
+            Assert.That(1, Is.EqualTo(viewModel.PscData.PeopleInControl.Count));
+            Assert.That(viewModel.PscData.PeopleInControl.First().Name, Is.EqualTo(pcsFromSubmitted.First().Name));
+            Assert.That(viewModel.PscData.PeopleInControl.First().MonthYearOfBirth, Is.EqualTo(pcsFromSubmitted.First().MonthYearOfBirth));
         }
 
         [Test]
@@ -141,10 +141,10 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             var response = _orchestrator.GetPeopleInControlHighRiskViewModel(request);
 
             var viewModel = response.Result;
-            Assert.AreEqual(1, viewModel.TrusteeData.PeopleInControl.Count);
+            Assert.That(1, Is.EqualTo(viewModel.TrusteeData.PeopleInControl.Count));
 
-            Assert.AreEqual(viewModel.TrusteeData.PeopleInControl.First().Name, trusteesFromSubmitted.First().Name);
-            Assert.AreEqual(viewModel.TrusteeData.PeopleInControl.First().MonthYearOfBirth, trusteesFromSubmitted.First().MonthYearOfBirth);
+            Assert.That(viewModel.TrusteeData.PeopleInControl.First().Name, Is.EqualTo(trusteesFromSubmitted.First().Name));
+            Assert.That(viewModel.TrusteeData.PeopleInControl.First().MonthYearOfBirth, Is.EqualTo(trusteesFromSubmitted.First().MonthYearOfBirth));
         }
 
         [Test]
@@ -165,9 +165,9 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(1, viewModel.WhosInControlData.PeopleInControl.Count);
-            Assert.AreEqual(viewModel.WhosInControlData.PeopleInControl.First().Name, whosInControlFromSubmitted.First().Name);
-            Assert.AreEqual(viewModel.WhosInControlData.PeopleInControl.First().MonthYearOfBirth, whosInControlFromSubmitted.First().MonthYearOfBirth);
+            Assert.That(1, Is.EqualTo(viewModel.WhosInControlData.PeopleInControl.Count));
+            Assert.That(viewModel.WhosInControlData.PeopleInControl.First().Name, Is.EqualTo(whosInControlFromSubmitted.First().Name));
+            Assert.That(viewModel.WhosInControlData.PeopleInControl.First().MonthYearOfBirth, Is.EqualTo(whosInControlFromSubmitted.First().MonthYearOfBirth));
         }
     }
 }

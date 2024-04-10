@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using NLog;
 using NLog.Web;
 
 namespace SFA.DAS.RoatpGateway.Web
@@ -11,7 +12,7 @@ namespace SFA.DAS.RoatpGateway.Web
     {
         public static void Main(string[] args)
         {
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var logger = LogManager.Setup().LoadConfigurationFromAppSettings("nlog.config").GetCurrentClassLogger();
             try
             {
                 logger.Info("Starting up host");

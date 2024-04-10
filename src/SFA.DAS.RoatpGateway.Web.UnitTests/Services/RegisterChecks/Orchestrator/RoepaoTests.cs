@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrator
 {
@@ -50,8 +50,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
             var viewModel = await _orchestrator.GetRoepaoViewModel(request);
 
             // NOTE: We only grab Common Details at the moment
-            Assert.IsNotNull(viewModel.Ukprn);
-            Assert.IsNotNull(viewModel.ApplyLegalName);
+            Assert.That(viewModel.Ukprn, Is.Not.Null);
+            Assert.That(viewModel.ApplyLegalName, Is.Not.Null);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AdminService.Common.Testing.MockedObjects;
@@ -45,7 +44,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             _orchestrator.Setup(x => x.GetInitialTeacherTrainingViewModel(It.Is<GetInitialTeacherTrainingRequest>(y => y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
             var result = await _controller.InitialTeacherTraining(applicationId);
-            Assert.AreSame(expectedViewModel, result.Model);
+            Assert.That(expectedViewModel, Is.SameAs(result.Model));
         }
 
         [Test]
@@ -99,7 +98,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswerPostClarification(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, ClarificationAnswer));
         }
 
-        
+
 
         [Test]
         public async Task saving_initial_teacher_training_without_required_fields_does_not_save()
@@ -157,12 +156,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
 
             GatewayValidator.Setup(v => v.ValidateClarification(command))
                 .ReturnsAsync(new ValidationResponse
-                    {
-                        Errors = new List<ValidationErrorDetail>
+                {
+                    Errors = new List<ValidationErrorDetail>
                         {
                             new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
                         }
-                    }
+                }
                 );
             _orchestrator.Setup(x => x.GetInitialTeacherTrainingViewModel(It.Is<GetInitialTeacherTrainingRequest>(y => y.ApplicationId == vm.ApplicationId
                 && y.UserName == Username))).ReturnsAsync(vm);

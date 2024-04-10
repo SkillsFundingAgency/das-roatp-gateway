@@ -52,7 +52,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.ModelBinders
 
             ModelBindingResult expectedResult = success ? ModelBindingResult.Success(expectedValue) : ModelBindingResult.Failed();
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(expectedResult, Is.EqualTo(result));
         }
     }
 }

@@ -20,9 +20,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(GatewayPageIds.OfficeForStudents, viewModel.PageId);
+            Assert.That(GatewayPageIds.OfficeForStudents, Is.EqualTo(viewModel.PageId));
             AssertCommonDetails(viewModel);
-            Assert.AreEqual(expectedResult, viewModel.IsOrganisationFundedByOfficeForStudents);
+            Assert.That(expectedResult, Is.EqualTo(viewModel.IsOrganisationFundedByOfficeForStudents));
         }
     }
 }

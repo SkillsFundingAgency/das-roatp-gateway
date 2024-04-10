@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.RoatpGateway.Web.Controllers;
 using SFA.DAS.RoatpGateway.Web.Models;
@@ -60,8 +61,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
         {
             var result = _controller.PostSignIn() as RedirectToActionResult;
 
-            Assert.AreEqual("Home", result.ControllerName);
-            Assert.AreEqual("Index", result.ActionName);
+            Assert.That("Home", Is.EqualTo(result.ControllerName));
+            Assert.That("Index", Is.EqualTo(result.ActionName));
         }
 
         [Test]
@@ -95,7 +96,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.SignedOut() as ViewResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.AreEqual("SignedOut", result.ViewName);
+            Assert.That("SignedOut", Is.EqualTo(result.ViewName));
         }
 
         [Test]
@@ -104,11 +105,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.AccessDenied() as ViewResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.AreEqual("AccessDenied", result.ViewName);
+            Assert.That("AccessDenied", Is.EqualTo(result.ViewName));
             var actualModel = result.Model as Error403ViewModel;
-            Assert.NotNull(actualModel);
-            Assert.True(actualModel.UseDfESignIn);
-            Assert.AreEqual("test", actualModel.HelpPageLink);
+            Assert.That(actualModel, Is.Not.Null);
+            Assert.That(actualModel.UseDfESignIn, Is.True);
+            Assert.That("test", Is.EqualTo(actualModel.HelpPageLink));
         }
     }
 }

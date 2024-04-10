@@ -29,8 +29,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.IsTrue(result.Errors.Any());
-            Assert.AreEqual("ConfirmApplicationActionYes", result.Errors.First().Field);
+            Assert.That(result.Errors.Any(), Is.True);
+            Assert.That("ConfirmApplicationActionYes", Is.EqualTo(result.Errors.First().Field));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.IsFalse(result.Errors.Any());
+            Assert.That(result.Errors.Any(), Is.False);
         }
 
         [Test]
@@ -58,8 +58,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.IsTrue(result.Errors.Any());
-            Assert.AreEqual("OptionYesText", result.Errors.First().Field);
+            Assert.That(result.Errors.Any(), Is.True);
+            Assert.That("OptionYesText", Is.EqualTo(result.Errors.First().Field));
         }
 
         [Test]
@@ -74,8 +74,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.IsTrue(result.Errors.Any());
-            Assert.AreEqual("OptionYesTextExternal", result.Errors.First().Field);
+            Assert.That(result.Errors.Any(), Is.True);
+            Assert.That("OptionYesTextExternal", Is.EqualTo(result.Errors.First().Field));
         }
 
         [TestCase(150, false)]
@@ -91,11 +91,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Any()));
 
-            if(hasErrorMessage)
+            if (hasErrorMessage)
             {
-                Assert.AreEqual("OptionYesText", result.Errors.First().Field);
+                Assert.That("OptionYesText", Is.EqualTo(result.Errors.First().Field));
             }
         }
 
@@ -112,11 +112,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Any()));
 
             if (hasErrorMessage)
             {
-                Assert.AreEqual("OptionYesTextExternal", result.Errors.First().Field);
+                Assert.That("OptionYesTextExternal", Is.EqualTo(result.Errors.First().Field));
             }
         }
     }

@@ -67,9 +67,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPTradingName, viewModel.UkrlpTradingName);
-            Assert.AreEqual(ApplyTradingName, viewModel.ApplyTradingName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
+            Assert.That(UKRLPTradingName, Is.EqualTo(viewModel.UkrlpTradingName));
+            Assert.That(ApplyTradingName, Is.EqualTo(viewModel.ApplyTradingName));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
         }
 
 

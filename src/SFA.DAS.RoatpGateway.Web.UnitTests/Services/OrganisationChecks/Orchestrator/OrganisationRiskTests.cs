@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System;
 
 namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orchestrator
 {
@@ -43,7 +43,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             var commonDetails = new GatewayCommonDetails
             {
                 ApplicationSubmittedOn = DateTime.Now.AddDays(-3),
-                SourcesCheckedOn = DateTime.Now, 
+                SourcesCheckedOn = DateTime.Now,
                 LegalName = UKRLPLegalName,
                 Ukprn = ukprn
             };
@@ -53,19 +53,19 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
             _organisationSummaryApiClient.Setup(x => x.GetCharityNumber(applicationId)).ReturnsAsync(CharityNumber);
             _organisationSummaryApiClient.Setup(x => x.GetCompanyNumber(applicationId)).ReturnsAsync(CompanyNumber);
             _applyApiClient.Setup(x => x.GetTradingName(applicationId)).ReturnsAsync(tradingName);
-            
+
             var request = new GetOrganisationRiskRequest(applicationId, UserId, UserName);
 
             var response = _orchestrator.GetOrganisationRiskViewModel(request);
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(organisationType, viewModel.OrganisationType);
-            Assert.AreEqual(tradingName, viewModel.TradingName);
-            Assert.AreEqual(CompanyNumber, viewModel.CompanyNumber);
-            Assert.AreEqual(CharityNumber, viewModel.CharityNumber);
+            Assert.That(UKRLPLegalName, Is.EqualTo(viewModel.ApplyLegalName));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
+            Assert.That(organisationType, Is.EqualTo(viewModel.OrganisationType));
+            Assert.That(tradingName, Is.EqualTo(viewModel.TradingName));
+            Assert.That(CompanyNumber, Is.EqualTo(viewModel.CompanyNumber));
+            Assert.That(CharityNumber, Is.EqualTo(viewModel.CharityNumber));
 
         }
     }

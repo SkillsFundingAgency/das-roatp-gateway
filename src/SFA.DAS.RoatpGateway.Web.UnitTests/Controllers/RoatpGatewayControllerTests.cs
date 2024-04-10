@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.Controllers;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.AdminService.Common.Extensions;
-using SFA.DAS.AdminService.Common.Testing.MockedObjects;
-using SFA.DAS.RoatpGateway.Domain.Apply;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 {
@@ -55,7 +55,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.ConfirmOutcome(applicationId, GatewayReviewStatus.Pass, null, null, 0);
             var viewResult = result as ViewResult;
-            Assert.AreSame(expectedViewModel, viewResult.Model);
+            Assert.That(expectedViewModel, Is.SameAs(viewResult.Model));
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.EvaluateConfirmOutcome(viewModel);
             var viewResult = result as ViewResult;
-            Assert.AreSame(expectedViewModelWithErrors, viewResult.Model);
+            Assert.That(expectedViewModelWithErrors, Is.SameAs(viewResult.Model));
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
             var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
-            Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
+            Assert.That(viewModel.GatewayReviewStatus, Is.SameAs(viewResultModel.GatewayReviewStatus));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, string.Empty, viewModel.SubcontractingLimit, UserId, Username), Times.Once);
         }
 
@@ -193,7 +193,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.AboutToConfirmOutcome(viewModel);
             var redirectToActionResult = result as RedirectToActionResult;
 
-            Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
+            Assert.That(expectedActionName, Is.SameAs(redirectToActionResult.ActionName));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
@@ -214,7 +214,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayConfirmOutcomeViewModel;
 
-            Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
+            Assert.That(HtmlAndCssElements.CssFormGroupErrorClass, Is.SameAs(resultViewModel.CssFormGroupError));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
@@ -237,7 +237,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
             var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
-            Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
+            Assert.That(viewModel.GatewayReviewStatus, Is.SameAs(viewResultModel.GatewayReviewStatus));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Once);
         }
 
@@ -257,7 +257,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.AboutToFailOutcome(viewModel);
             var redirectToActionResult = result as RedirectToActionResult;
 
-            Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
+            Assert.That(expectedActionName, Is.SameAs(redirectToActionResult.ActionName));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
@@ -278,7 +278,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayFailOutcomeViewModel;
 
-            Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
+            Assert.That(HtmlAndCssElements.CssFormGroupErrorClass, Is.SameAs(resultViewModel.CssFormGroupError));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
@@ -298,7 +298,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
             var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
-            Assert.AreSame(viewModel.GatewayReviewStatus, viewResultModel.GatewayReviewStatus);
+            Assert.That(viewModel.GatewayReviewStatus, Is.SameAs(viewResultModel.GatewayReviewStatus));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Once);
         }
 
@@ -318,7 +318,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.AboutToRejectOutcome(viewModel);
             var redirectToActionResult = result as RedirectToActionResult;
 
-            Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
+            Assert.That(expectedActionName, Is.SameAs(redirectToActionResult.ActionName));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
@@ -339,7 +339,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayRejectedOutcomeViewModel;
 
-            Assert.AreSame(HtmlAndCssElements.CssFormGroupErrorClass, resultViewModel.CssFormGroupError);
+            Assert.That(HtmlAndCssElements.CssFormGroupErrorClass, Is.SameAs(resultViewModel.CssFormGroupError));
             ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAndComment(applicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, UserId, Username), Times.Never);
         }
 
@@ -359,9 +359,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
-            Assert.AreEqual(1, resultViewModel.ApplicationCounts.NewApplicationsCount);
-            Assert.AreEqual(2, resultViewModel.ApplicationCounts.InProgressApplicationsCount);
-            Assert.AreEqual(3, resultViewModel.ApplicationCounts.ClosedApplicationsCount);
+            Assert.That(1, Is.EqualTo(resultViewModel.ApplicationCounts.NewApplicationsCount));
+            Assert.That(2, Is.EqualTo(resultViewModel.ApplicationCounts.InProgressApplicationsCount));
+            Assert.That(3, Is.EqualTo(resultViewModel.ApplicationCounts.ClosedApplicationsCount));
         }
 
         [Test]
@@ -380,9 +380,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
-            Assert.AreEqual(1, resultViewModel.ApplicationCounts.NewApplicationsCount);
-            Assert.AreEqual(2, resultViewModel.ApplicationCounts.InProgressApplicationsCount);
-            Assert.AreEqual(3, resultViewModel.ApplicationCounts.ClosedApplicationsCount);
+            Assert.That(1, Is.EqualTo(resultViewModel.ApplicationCounts.NewApplicationsCount));
+            Assert.That(2, Is.EqualTo(resultViewModel.ApplicationCounts.InProgressApplicationsCount));
+            Assert.That(3, Is.EqualTo(resultViewModel.ApplicationCounts.ClosedApplicationsCount));
         }
 
         [Test]
@@ -397,13 +397,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ClosedApplicationsCount = 3
             });
 
-            var result = await _controller.ClosedApplications(null, "","",1);
+            var result = await _controller.ClosedApplications(null, "", "", 1);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayDashboardViewModel;
 
-            Assert.AreEqual(1, resultViewModel.ApplicationCounts.NewApplicationsCount);
-            Assert.AreEqual(2, resultViewModel.ApplicationCounts.InProgressApplicationsCount);
-            Assert.AreEqual(3, resultViewModel.ApplicationCounts.ClosedApplicationsCount);
+            Assert.That(1, Is.EqualTo(resultViewModel.ApplicationCounts.NewApplicationsCount));
+            Assert.That(2, Is.EqualTo(resultViewModel.ApplicationCounts.InProgressApplicationsCount));
+            Assert.That(3, Is.EqualTo(resultViewModel.ApplicationCounts.ClosedApplicationsCount));
         }
 
 
@@ -411,11 +411,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
         public async Task AskForClarification_no_view_model_returned()
         {
             _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
-                .ReturnsAsync((RoatpGatewayClarificationsViewModel) null);
+                .ReturnsAsync((RoatpGatewayClarificationsViewModel)null);
 
             var result = await _controller.AskForClarification(new Guid());
             var viewResult = result as RedirectToActionResult;
-            Assert.AreEqual("NewApplications",viewResult.ActionName);
+            Assert.That("NewApplications", Is.EqualTo(viewResult.ActionName));
         }
 
         [Test]
@@ -426,7 +426,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.AskForClarification(new Guid());
             var viewResult = result as ViewResult;
-            Assert.IsTrue(viewResult.ViewName.Contains("AskForClarification.cshtml"));
+            Assert.That(viewResult.ViewName.Contains("AskForClarification.cshtml"), Is.True);
         }
 
 
@@ -440,9 +440,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 .ReturnsAsync((RoatpGatewayClarificationsViewModel)null);
 
             var confirmAskForClarification = string.Empty;
-            var result = await _controller.AboutToAskForClarification(applicationId,confirmAskForClarification);
+            var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
             var viewResult = result as RedirectToActionResult;
-            Assert.AreEqual("NewApplications", viewResult.ActionName);
+            Assert.That("NewApplications", Is.EqualTo(viewResult.ActionName));
         }
 
         [Test]
@@ -457,9 +457,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
             var viewResult = result as ViewResult;
             var model = viewResult.Model as RoatpGatewayClarificationsViewModel;
-            Assert.IsTrue(viewResult.ViewName.Contains("AskForClarification.cshtml"));
-            Assert.AreEqual(1, model.ErrorMessages.Count);
-            Assert.AreEqual("ConfirmAskForClarification", model.ErrorMessages[0].Field);
+            Assert.That(viewResult.ViewName.Contains("AskForClarification.cshtml"), Is.True);
+            Assert.That(1, Is.EqualTo(model.ErrorMessages.Count));
+            Assert.That("ConfirmAskForClarification", Is.EqualTo(model.ErrorMessages[0].Field));
         }
 
         [Test]
@@ -474,7 +474,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
 
             var viewResult = result as RedirectToActionResult;
-            Assert.AreEqual("ViewApplication", viewResult.ActionName);
+            Assert.That("ViewApplication", Is.EqualTo(viewResult.ActionName));
         }
 
 
@@ -486,13 +486,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             _orchestrator.Setup(x => x.GetClarificationViewModel(It.IsAny<GetApplicationClarificationsRequest>()))
                 .ReturnsAsync(new RoatpGatewayClarificationsViewModel());
 
-            ApplyApiClient.Setup(x=>x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(), It.IsAny<string>()));
+            ApplyApiClient.Setup(x => x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(), It.IsAny<string>()));
 
             var confirmAskForClarification = "Yes";
             var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
             var viewResult = result as ViewResult;
-            Assert.IsTrue(viewResult.ViewName.Contains("ConfirmApplicationClarification.cshtml"));
-            ApplyApiClient.Verify(x=>x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(),It.IsAny<string>()),Times.Once);
+            Assert.That(viewResult.ViewName.Contains("ConfirmApplicationClarification.cshtml"), Is.True);
+            ApplyApiClient.Verify(x => x.UpdateGatewayReviewStatusAsClarification(applicationId, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -507,12 +507,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.AboutToAskForClarification(applicationId, confirmAskForClarification);
 
             var viewResult = result as RedirectToActionResult;
-            Assert.AreEqual("ViewApplication", viewResult.ActionName);
+            Assert.That("ViewApplication", Is.EqualTo(viewResult.ActionName));
         }
 
         [TestCase(GatewayReviewStatus.New)]
         [TestCase(GatewayReviewStatus.InProgress)]
-        [TestCase( GatewayReviewStatus.ClarificationSent)]
+        [TestCase(GatewayReviewStatus.ClarificationSent)]
         public async Task ViewApplication_when_submitted_for_review_shows_expected_view(string gatewayReviewStatus)
         {
             var applicationId = Guid.NewGuid();
@@ -525,7 +525,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ApplyData = new ApplyData { ApplyDetails = new ApplyDetails() }
             };
 
-            var oversightDetails = new ApplicationOversightDetails {OversightStatus = OversightReviewStatus.None};
+            var oversightDetails = new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None };
 
             var viewmodel = new RoatpGatewayApplicationViewModel(application, oversightDetails);
             _orchestrator.Setup(x => x.GetOverviewViewModel(It.IsAny<GetApplicationOverviewRequest>())).ReturnsAsync(viewmodel);
@@ -533,7 +533,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ViewApplication(applicationId);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("Application.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("Application.cshtml"), Is.True);
         }
 
         [TestCase(GatewayReviewStatus.Pass)]
@@ -557,7 +557,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ViewApplication(applicationId);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("Application_ReadOnly.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("Application_ReadOnly.cshtml"), Is.True);
         }
 
         [Test]
@@ -579,7 +579,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ViewApplication(applicationId);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("Application_Closed.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("Application_Closed.cshtml"), Is.True);
         }
 
         [Test]
@@ -601,7 +601,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ViewApplication(applicationId);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("Application_Closed.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("Application_Closed.cshtml"), Is.True);
         }
     }
 }
