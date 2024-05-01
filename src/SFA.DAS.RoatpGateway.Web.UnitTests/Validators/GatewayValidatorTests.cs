@@ -48,7 +48,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.Validate(command).Result;
 
-            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count() != 0));
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count != 0));
         }
 
         [TestCase(150, false)]
@@ -69,7 +69,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.Validate(command).Result;
 
-            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count() != 0));
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count != 0));
 
         }
 
@@ -106,7 +106,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.ValidateClarification(command).Result;
 
-            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count() != 0));
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count != 0));
         }
 
         [TestCase(typeof(RoatpGatewayPageViewModel))]
