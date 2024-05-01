@@ -83,7 +83,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.That(OrganisationName, Is.EqualTo(viewModel.OrganisationName));
             Assert.That(gatewayReviewStatus, Is.EqualTo(viewModel.GatewayReviewStatus));
             Assert.That(sectionReviewStatus, Is.EqualTo(viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status));
-            Assert.That(false, Is.EqualTo(viewModel.IsClarificationsSelectedAndAllFieldsSet));
+            Assert.That(viewModel.IsClarificationsSelectedAndAllFieldsSet, Is.False);
         }
 
 
@@ -142,8 +142,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.That(OrganisationName, Is.EqualTo(viewModel.OrganisationName));
             Assert.That(gatewayReviewStatus, Is.EqualTo(viewModel.GatewayReviewStatus));
             Assert.That(sectionReviewStatus, Is.EqualTo(viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status));
-            Assert.That(false, Is.EqualTo(viewModel.IsClarificationsSelectedAndAllFieldsSet));
-            Assert.That(false, Is.EqualTo(viewModel.ReadyToConfirm));
+            Assert.That(viewModel.IsClarificationsSelectedAndAllFieldsSet, Is.False);
+            Assert.That(viewModel.ReadyToConfirm, Is.False);
         }
     }
 }

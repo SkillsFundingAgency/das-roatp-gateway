@@ -58,10 +58,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
         [Obsolete]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null)
-            {
-                throw new ArgumentNullException("info");
-            }
+            ArgumentNullException.ThrowIfNull(info);
+
             info.AddValue("HttpMethod", HttpMethod);
             info.AddValue("StatusCode", StatusCode);
             info.AddValue("RequestUri", RequestUri);

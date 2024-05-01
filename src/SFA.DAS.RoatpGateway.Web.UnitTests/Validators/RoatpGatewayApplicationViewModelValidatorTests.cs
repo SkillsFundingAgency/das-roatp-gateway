@@ -11,7 +11,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
     {
         private RoatpGatewayApplicationViewModel _viewModel;
 
-        private IRoatpGatewayApplicationViewModelValidator _validator;
+        private RoatpGatewayApplicationViewModelValidator _validator;
         [SetUp]
         public void Setup()
         {

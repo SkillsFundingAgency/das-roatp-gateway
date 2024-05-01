@@ -14,7 +14,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
     {
         private RoatpGatewayPageViewModel _viewModel;
 
-        private IRoatpGatewayPageValidator _validator;
+        private RoatpGatewayPageValidator _validator;
         private const string ClarificationAnswer = "Clarification answer";
 
         [SetUp]

@@ -11,7 +11,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
     public class RoatpWithdrawApplicationViewModelValidatorTests
     {
         private RoatpWithdrawApplicationViewModel _viewModel;
-        private IRoatpWithdrawApplicationViewModelValidator _validator;
+        private RoatpWithdrawApplicationViewModelValidator _validator;
 
         [SetUp]
         public void Setup()

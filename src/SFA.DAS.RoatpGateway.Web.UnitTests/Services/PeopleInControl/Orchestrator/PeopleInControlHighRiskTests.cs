@@ -23,7 +23,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
         private const string UKRLPLegalName = "Mark's workshop";
         private const string UserName = "GatewayUser";
         private const string UserId = "GatewayUser@test.com";
-        private string GatewayPageId => GatewayPageIds.PeopleInControlRisk;
+        private static string GatewayPageId => GatewayPageIds.PeopleInControlRisk;
 
         const string PersonInControlName = "Bob";
         const string PersonInControlDob = "Jan 1990";

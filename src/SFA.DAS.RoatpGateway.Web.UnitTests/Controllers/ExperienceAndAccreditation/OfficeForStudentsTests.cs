@@ -19,7 +19,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
     {
         private RoatpGatewayExperienceAndAccreditationController _controller;
         private Mock<IGatewayExperienceAndAccreditationOrchestrator> _orchestrator;
-        private string ClarificationAnswer => "Clarification answer";
+        private static string ClarificationAnswer => "Clarification answer";
 
         [SetUp]
         public void Setup()

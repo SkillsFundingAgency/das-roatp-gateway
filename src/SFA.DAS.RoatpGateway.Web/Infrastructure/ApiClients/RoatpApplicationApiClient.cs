@@ -80,7 +80,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError("An error occurred when retrieving Gateway common details", ex);
+                _logger.LogError(ex, "An error occurred when retrieving Gateway common details");
                 throw new ExternalApiException("An error occurred when retrieving Gateway common details", ex);
             }
         }
@@ -105,7 +105,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username,
             string comments, string clarificationAnswer)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'");
+            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswer - ApplicationId '{0}' - PageId '{1}' - Status '{2}' - UserName '{3}' - Comments '{4}' - ClarificationAnswer '{5}'",
+            applicationId, pageId, status, username, comments, clarificationAnswer);
 
             try
             {
@@ -120,7 +121,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task SubmitGatewayPageAnswerClarification(Guid applicationId, string pageId, string status, string userId, string username,
             string comments, string clarificationAnswer)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswerClarification - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'");
+            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswerClarification - ApplicationId '{0}' - PageId '{1}' - Status '{2}' - UserName '{3}' - Comments '{4}' - ClarificationAnswer '{5}'",
+                applicationId, pageId, status, username, comments, clarificationAnswer);
 
             try
             {
@@ -135,7 +137,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task SubmitGatewayPageAnswerPostClarification(Guid applicationId, string pageId, string status, string userId, string username,
             string comments, string clarificationAnswer)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswerPostClarification - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'");
+            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswerPostClarification - ApplicationId '{0}' - PageId '{1}' - Status '{2}' - UserName '{3}' - Comments '{4}' - ClarificationAnswer '{5}'",
+                applicationId, pageId, status, username, comments);
 
             try
             {
@@ -149,7 +152,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string gatewayReviewExternalComment, int? subcontractingLimit, string userId, string userName)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - ApplicationId '{applicationId}' - GatewayReviewStatus '{gatewayReviewStatus}' - GatewayReviewComment '{gatewayReviewComment}'- GatewayReviewExternalComment '{gatewayReviewExternalComment}' - UserName '{userName}'");
+            _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - ApplicationId '{0}' - GatewayReviewStatus '{1}' - GatewayReviewComment '{2}'- GatewayReviewExternalComment '{3}' - UserName '{4}'",
+                applicationId, gatewayReviewStatus, gatewayReviewComment, gatewayReviewExternalComment, userName);
+
 
             try
             {
@@ -169,7 +174,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task UpdateGatewayReviewStatusAsClarification(Guid applicationId, string userId, string userName)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - ApplicationId '{applicationId}' - UserName '{userName}'");
+            _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - ApplicationId '{0}' - UserName '{1}'",
+                applicationId, userName);
 
             try
             {
@@ -181,7 +187,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - Error: '" + ex.Message + "'");
+                _logger.LogError(ex, "RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - Error: '{0}'", ex.Message);
                 throw;
             }
         }
@@ -195,7 +201,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (RoatpApiClientException ex)
             {
-                _logger.LogError("An error occurred when retrieving UKRLP details", ex);
+                _logger.LogError(ex, "An error occurred when retrieving UKRLP details");
                 throw new ExternalApiException("An error occurred when retrieving UKRLP details", ex);
             }
         }
@@ -208,7 +214,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (RoatpApiClientException ex)
             {
-                _logger.LogError("An error occurred when retrieving Companies House details", ex);
+                _logger.LogError(ex, "An error occurred when retrieving Companies House details");
                 throw new ExternalApiException("An error occurred when retrieving Companies House details", ex);
             }
         }
@@ -221,7 +227,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (RoatpApiClientException ex)
             {
-                _logger.LogError("An error occurred when retrieving Charity Commission details", ex);
+                _logger.LogError(ex, "An error occurred when retrieving Charity Commission details");
                 throw new ExternalApiException("An error occurred when retrieving Charity Commission details", ex);
             }
         }
@@ -234,7 +240,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError("An error occurred when retrieving RoATP details", ex);
+                _logger.LogError(ex, "An error occurred when retrieving RoATP details");
                 throw new ExternalApiException("An error occurred when retrieving RoATP details", ex);
             }
         }
