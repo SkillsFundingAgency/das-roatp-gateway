@@ -29,7 +29,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.That(result.Errors.Any());
+            Assert.That(result.Errors.Count != 0);
             Assert.That("ConfirmApplicationActionYes", Is.EqualTo(result.Errors.First().Field));
         }
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.That(result.Errors.Any(), Is.False);
+            Assert.That(result.Errors.Count != 0, Is.False);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.That(result.Errors.Any(), Is.True);
+            Assert.That(result.Errors.Count != 0, Is.True);
             Assert.That("OptionYesText", Is.EqualTo(result.Errors.First().Field));
         }
 
@@ -73,7 +73,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = await _validator.Validate(_viewModel);
 
-            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Any()));
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count != 0));
 
             if (hasErrorMessage)
             {
