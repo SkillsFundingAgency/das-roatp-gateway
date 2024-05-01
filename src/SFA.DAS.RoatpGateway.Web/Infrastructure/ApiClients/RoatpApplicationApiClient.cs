@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.RoatpGateway.Domain;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
-using SFA.DAS.RoatpGateway.Domain.Ukrlp;
-using SFA.DAS.RoatpGateway.Domain.CompaniesHouse;
-using SFA.DAS.RoatpGateway.Domain.CharityCommission;
-using SFA.DAS.RoatpGateway.Domain.Roatp;
 using System.Net.Http;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.AdminService.Common.Infrastructure;
+using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
+using SFA.DAS.RoatpGateway.Domain.CharityCommission;
+using SFA.DAS.RoatpGateway.Domain.CompaniesHouse;
+using SFA.DAS.RoatpGateway.Domain.Roatp;
+using SFA.DAS.RoatpGateway.Domain.Ukrlp;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
@@ -24,7 +24,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public RoatpApplicationApiClient(HttpClient client, ILogger<RoatpApplicationApiClient> logger, IRoatpApplicationTokenService tokenService)
             : base(client, logger)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress).Result);
         }
 
         public async Task<Apply> GetApplication(Guid applicationId)
@@ -76,7 +76,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         {
             try
             {
-               return await Post<GatewayCommonDetailsRequest, GatewayCommonDetails> ($"Gateway/{applicationId}/CommonDetails", new GatewayCommonDetailsRequest(pageId, userId, userName));
+                return await Post<GatewayCommonDetailsRequest, GatewayCommonDetails>($"Gateway/{applicationId}/CommonDetails", new GatewayCommonDetailsRequest(pageId, userId, userName));
             }
             catch (Exception ex)
             {
@@ -98,7 +98,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username,
             string comments)
         {
-                await SubmitGatewayPageAnswer(applicationId, pageId, status, userId, username, comments, null);
+            await SubmitGatewayPageAnswer(applicationId, pageId, status, userId, username, comments, null);
         }
 
 
@@ -247,13 +247,13 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task<string> GetTradingName(Guid applicationId)
         {
             var response = await GetResponse($"/Gateway/{applicationId}/TradingName");
-                if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<string>();
-                var message =
-                    $"An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{response.ReasonPhrase}'";
-                _logger.LogError(message);
-                throw new ExternalApiException(message);
+            if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<string>();
+            var message =
+                $"An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{response.ReasonPhrase}'";
+            _logger.LogError(message);
+            throw new ExternalApiException(message);
         }
-        
+
         public async Task<string> GetProviderRouteName(Guid applicationId)
         {
             return await Get<string>($"/Gateway/{applicationId}/ProviderRouteName");
@@ -277,8 +277,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
             var message =
                     $"An error occurred when retrieving website address from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
-                _logger.LogError(message);
-                throw new ExternalApiException(message);
+            _logger.LogError(message);
+            throw new ExternalApiException(message);
         }
 
 

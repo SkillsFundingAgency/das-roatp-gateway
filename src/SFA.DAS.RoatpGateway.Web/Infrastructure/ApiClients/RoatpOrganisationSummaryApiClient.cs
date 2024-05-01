@@ -17,7 +17,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public RoatpOrganisationSummaryApiClient(HttpClient client, ILogger<RoatpOrganisationSummaryApiClient> logger, IRoatpApplicationTokenService tokenService)
             : base(client, logger)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress).Result);
         }
 
         public async Task<string> GetTypeOfOrganisation(Guid applicationId)

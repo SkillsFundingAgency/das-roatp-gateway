@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public RoatpRegisterApiClient(HttpClient client, ILogger<RoatpRegisterApiClient> logger, IRoatpRegisterTokenService tokenService)
             : base(client, logger)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress).Result);
         }
 
         public async Task<IEnumerable<ProviderDetails>> GetUkrlpProviderDetails(string ukprn)

@@ -38,20 +38,16 @@ namespace SFA.DAS.RoatpGateway.Web
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        private const string ServiceName = "SFA.DAS.RoatpGateway";
-        private const string Version = "1.0";
         private const string Culture = "en-GB";
 
         private readonly IConfiguration _configuration;
-        private readonly IHostEnvironment _env;
-        private readonly ILogger<Startup> _logger;
+        private readonly IWebHostEnvironment _env;
 
         public IWebConfiguration ApplicationConfiguration { get; set; }
 
-        public Startup(IConfiguration configuration, IHostEnvironment env, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _env = env;
-            _logger = logger;
 
             var config = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
@@ -109,7 +105,7 @@ namespace SFA.DAS.RoatpGateway.Web
                     options.EnableEndpointRouting = false;
                 });
 
-            services.AddSession(opt => { opt.IdleTimeout = TimeSpan.FromHours(1); });
+            services.AddLogging();
 
             services.AddCache(ApplicationConfiguration, _env);
             services.AddDataProtection(ApplicationConfiguration, _env);
@@ -119,6 +115,8 @@ namespace SFA.DAS.RoatpGateway.Web
             services.AddHealthChecks();
 
             services.AddApplicationInsightsTelemetry();
+
+            services.AddControllers();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -231,7 +229,7 @@ namespace SFA.DAS.RoatpGateway.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -245,7 +243,6 @@ namespace SFA.DAS.RoatpGateway.Web
 
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
-            app.UseSession();
             app.UseRequestLocalization();
             app.UseStatusCodePagesWithReExecute("/ErrorPage/{0}");
             app.UseSecurityHeaders();
@@ -257,15 +254,10 @@ namespace SFA.DAS.RoatpGateway.Web
                 }
                 await next();
             });
-            app.UseStaticFiles();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseHealthChecks("/health");
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()

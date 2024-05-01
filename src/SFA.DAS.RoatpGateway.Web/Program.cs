@@ -1,9 +1,6 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore;
+﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Hosting;
-using NLog;
-using NLog.Web;
+using Microsoft.Extensions.Hosting;
 
 namespace SFA.DAS.RoatpGateway.Web
 {
@@ -12,23 +9,14 @@ namespace SFA.DAS.RoatpGateway.Web
     {
         public static void Main(string[] args)
         {
-            var logger = LogManager.Setup().LoadConfigurationFromAppSettings("nlog.config").GetCurrentClassLogger();
-            try
-            {
-                logger.Info("Starting up host");
-                CreateWebHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Could not start host");
-                throw;
-            }
+            CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseUrls("https://localhost:45668")
-                .UseNLog();
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
@@ -16,7 +15,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public RoatpExperienceAndAccreditationApiClient(HttpClient client, ILogger<RoatpExperienceAndAccreditationApiClient> logger, IRoatpApplicationTokenService tokenService)
             : base(client, logger)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress).Result);
         }
 
         public async Task<SubcontractorDeclaration> GetSubcontractorDeclaration(Guid applicationId)
@@ -30,7 +29,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
             var fileStream = await response.Content.ReadAsStreamAsync();
             var result = new FileStreamResult(fileStream, response.Content.Headers.ContentType.MediaType);
-            result.FileDownloadName = response.Content.Headers.ContentDisposition.FileName.Replace("\"","");
+            result.FileDownloadName = response.Content.Headers.ContentDisposition.FileName.Replace("\"", "");
             return result;
         }
 
@@ -45,7 +44,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         }
 
         public async Task<string> GetOfficeForStudents(Guid applicationId)
-        { 
+        {
             var response = await GetResponse($"/Accreditation/{applicationId}/OfficeForStudents");
             if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<string>();
             var message =
@@ -56,12 +55,12 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<InitialTeacherTraining> GetInitialTeacherTraining(Guid applicationId)
         {
-                var response = await GetResponse($"/Accreditation/{applicationId}/InitialTeacherTraining");
-                if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<InitialTeacherTraining>();
-                var message =
-                    $"An error occurred when retrieving initial teacher training details from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
-                _logger.LogError(message);
-                throw new ExternalApiException(message);
+            var response = await GetResponse($"/Accreditation/{applicationId}/InitialTeacherTraining");
+            if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<InitialTeacherTraining>();
+            var message =
+                $"An error occurred when retrieving initial teacher training details from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
+            _logger.LogError(message);
+            throw new ExternalApiException(message);
         }
 
         public async Task<OfstedDetails> GetOfstedDetails(Guid applicationId)

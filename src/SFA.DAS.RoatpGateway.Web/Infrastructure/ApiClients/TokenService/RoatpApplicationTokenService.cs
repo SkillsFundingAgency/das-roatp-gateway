@@ -1,21 +1,26 @@
-﻿using Microsoft.Azure.Services.AppAuthentication;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Hosting;
 using SFA.DAS.RoatpGateway.Web.Settings;
-using System;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService
 {
     public class RoatpApplicationTokenService : IRoatpApplicationTokenService
     {
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IWebConfiguration _configuration;
 
-        public RoatpApplicationTokenService(IWebConfiguration configuration)
+        public RoatpApplicationTokenService(IWebHostEnvironment hostingEnvironment, IWebConfiguration configuration)
         {
+            _hostingEnvironment = hostingEnvironment;
             _configuration = configuration;
         }
 
-        public string GetToken(Uri baseUri)
+        public async Task<string> GetToken(Uri baseUri)
         {
-            if (baseUri != null && baseUri.IsLoopback)
+            if (_hostingEnvironment.IsDevelopment())
                 return string.Empty;
 
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
