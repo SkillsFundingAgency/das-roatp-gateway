@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Polly;
 using Polly.Extensions.Http;
+using Polly.Retry;
 using SFA.DAS.AdminService.Common;
 using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -153,7 +154,7 @@ namespace SFA.DAS.RoatpGateway.Web
             }
         }
 
-        private void AddAntiforgery(IServiceCollection services)
+        private static void AddAntiforgery(IServiceCollection services)
         {
             services.AddAntiforgery(options => options.Cookie = new CookieBuilder() { Name = ".RoatpGateway.Staff.AntiForgery", HttpOnly = false });
         }
@@ -260,7 +261,7 @@ namespace SFA.DAS.RoatpGateway.Web
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
-        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()

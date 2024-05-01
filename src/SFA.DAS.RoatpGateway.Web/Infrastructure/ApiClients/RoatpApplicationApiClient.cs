@@ -114,7 +114,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '" + ex.Message + "'");
+                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'", ex.Message);
             }
         }
 
@@ -130,7 +130,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswerClarification - Error: '" + ex.Message + "'");
+                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'", ex.Message);
             }
         }
 
@@ -146,7 +146,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswerPostClarification - Error: '" + ex.Message + "'");
+                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'", ex.Message);
             }
         }
 
@@ -166,7 +166,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - Error: '" + ex.Message + "'");
+                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'", ex.Message);
                 throw;
             }
 

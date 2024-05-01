@@ -24,9 +24,9 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService
                 return string.Empty;
 
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            var generateTokenTask = azureServiceTokenProvider.GetAccessTokenAsync(_configuration.ApplyApiAuthentication.Identifier);
+            var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_configuration.ApplyApiAuthentication.Identifier);
 
-            return generateTokenTask.GetAwaiter().GetResult();
+            return accessToken;
         }
     }
 }
