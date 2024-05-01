@@ -21,6 +21,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
     public class RoatpApplicationApiClient : ApiClientBase<RoatpApplicationApiClient>, IRoatpApplicationApiClient
     {
+        private const string SubmitGatewayPageErrorMessage =
+            "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'";
         public RoatpApplicationApiClient(HttpClient client, ILogger<RoatpApplicationApiClient> logger, IRoatpApplicationTokenService tokenService)
             : base(client, logger)
         {
@@ -114,7 +116,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'", ex.Message);
+                _logger.LogError(ex, SubmitGatewayPageErrorMessage, ex.Message);
             }
         }
 
@@ -130,7 +132,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'", ex.Message);
+                _logger.LogError(ex, SubmitGatewayPageErrorMessage, ex.Message);
             }
         }
 
@@ -146,7 +148,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'", ex.Message);
+                _logger.LogError(ex, SubmitGatewayPageErrorMessage, ex.Message);
             }
         }
 
@@ -166,7 +168,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "RoatpApplicationApiClient - SubmitGatewayPageAnswer - Error: '{0}'", ex.Message);
+                _logger.LogError(ex, SubmitGatewayPageErrorMessage, ex.Message);
                 throw;
             }
 
