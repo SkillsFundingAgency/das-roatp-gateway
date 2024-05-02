@@ -64,19 +64,19 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task<List<PersonInControl>> GetTrusteesFromSubmitted(Guid applicationId)
         {
-            _logger.LogInformation($"Retrieving list of trustees in Qna QuestionTags from applicationId [{0}]", applicationId);
+            _logger.LogInformation($"Retrieving list of trustees in Qna QuestionTags from applicationId [{applicationId}]", applicationId);
             return await Get<List<PersonInControl>>($"{RoutePath}/TrusteeData/Submitted/{applicationId}");
         }
 
         public async Task<List<PersonInControl>> GetTrusteesFromCharityCommission(Guid applicationId)
         {
-            _logger.LogInformation($"Retrieving list of trustees from charity commission in ApplyData from applicationId [{0}]", applicationId);
+            _logger.LogInformation($"Retrieving list of trustees from charity commission in ApplyData from applicationId [{applicationId}]", applicationId);
             return await Get<List<PersonInControl>>($"{RoutePath}/TrusteeData/CharityCommission/{applicationId}");
         }
 
         public async Task<List<PersonInControl>> GetWhosInControlFromSubmitted(Guid applicationId)
         {
-            _logger.LogInformation($"Retrieving list of Whos in control in Qna QuestionTags from applicationId [{0}]", applicationId);
+            _logger.LogInformation($"Retrieving list of Whos in control in Qna QuestionTags from applicationId [{applicationId}]", applicationId);
             return await Get<List<PersonInControl>>($"{RoutePath}/WhosInControlData/Submitted/{applicationId}");
         }
     }
