@@ -55,7 +55,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
             RequestUri = info.GetValue("RequestUri", typeof(Uri)) as Uri;
         }
 
-        [Obsolete]
+        [Obsolete("GotEbjectData Required")]  //Required
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             ArgumentNullException.ThrowIfNull(info);

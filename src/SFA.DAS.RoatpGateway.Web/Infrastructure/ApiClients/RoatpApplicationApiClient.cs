@@ -107,7 +107,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username,
             string comments, string clarificationAnswer)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswer - ApplicationId '{0}' - PageId '{1}' - Status '{2}' - UserName '{3}' - Comments '{4}' - ClarificationAnswer '{5}'",
+            _logger.LogInformation("RoatpApplicationApiClient-SubmitGatewayPageAnswer - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'",
             applicationId, pageId, status, username, comments, clarificationAnswer);
 
             try
@@ -123,7 +123,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task SubmitGatewayPageAnswerClarification(Guid applicationId, string pageId, string status, string userId, string username,
             string comments, string clarificationAnswer)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswerClarification - ApplicationId '{0}' - PageId '{1}' - Status '{2}' - UserName '{3}' - Comments '{4}' - ClarificationAnswer '{5}'",
+            _logger.LogInformation("RoatpApplicationApiClient-SubmitGatewayPageAnswerClarification - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'",
                 applicationId, pageId, status, username, comments, clarificationAnswer);
 
             try
@@ -139,8 +139,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         public async Task SubmitGatewayPageAnswerPostClarification(Guid applicationId, string pageId, string status, string userId, string username,
             string comments, string clarificationAnswer)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-SubmitGatewayPageAnswerPostClarification - ApplicationId '{0}' - PageId '{1}' - Status '{2}' - UserName '{3}' - Comments '{4}' - ClarificationAnswer '{5}'",
-                applicationId, pageId, status, username, comments);
+            _logger.LogInformation("RoatpApplicationApiClient-SubmitGatewayPageAnswerPostClarification - ApplicationId '{applicationId}' - PageId '{pageId}' - Status '{status}' - UserName '{username}' - Comments '{comments}' - ClarificationAnswer '{clarificationAnswer}'",
+                applicationId, pageId, status, username, comments, clarificationAnswer);
 
             try
             {
@@ -154,7 +154,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task UpdateGatewayReviewStatusAndComment(Guid applicationId, string gatewayReviewStatus, string gatewayReviewComment, string gatewayReviewExternalComment, int? subcontractingLimit, string userId, string userName)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - ApplicationId '{0}' - GatewayReviewStatus '{1}' - GatewayReviewComment '{2}'- GatewayReviewExternalComment '{3}' - UserName '{4}'",
+            _logger.LogInformation("RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - ApplicationId '{applicationId}' - GatewayReviewStatus '{gatewayReviewStatus}' - GatewayReviewComment '{gatewayReviewComment}'- GatewayReviewExternalComment '{gatewayReviewExternalComment}' - UserName '{userName}'",
                 applicationId, gatewayReviewStatus, gatewayReviewComment, gatewayReviewExternalComment, userName);
 
 
@@ -176,7 +176,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
         public async Task UpdateGatewayReviewStatusAsClarification(Guid applicationId, string userId, string userName)
         {
-            _logger.LogInformation($"RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - ApplicationId '{0}' - UserName '{1}'",
+            _logger.LogInformation("RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - ApplicationId '{applicationId}' - UserName '{userName}'",
                 applicationId, userName);
 
             try
@@ -258,7 +258,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<string>();
             var message =
                 $"An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{response.ReasonPhrase}'";
-            _logger.LogError(message);
+            _logger.LogError("An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{response.ReasonPhrase}'", applicationId, response.ReasonPhrase);
             throw new ExternalApiException(message);
         }
 
@@ -285,7 +285,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
             var message =
                     $"An error occurred when retrieving website address from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
-            _logger.LogError(message);
+            _logger.LogError("An error occurred when retrieving website address from qna via apply for application {applicationId} with error message {response.ReasonPhrase}", applicationId, response.ReasonPhrase);
             throw new ExternalApiException(message);
         }
 
@@ -327,7 +327,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
                 catch (HttpRequestException ex)
                 {
                     _logger.LogError(ex,
-                        $"Error when submitting Subcontractor Declaration Clarification File update for Application: {applicationId} | Filename: {fileName}");
+                        "Error when submitting Subcontractor Declaration Clarification File update for Application: {applicationId} | Filename: {fileName}", applicationId, fileName);
                     return false;
                 }
             }
@@ -346,7 +346,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex,
-                    $"Error when removing Subcontractor Declaration Clarification File for Application: {applicationId} | Filename: {fileName}");
+                    "Error when removing Subcontractor Declaration Clarification File for Application: {applicationId} | Filename: {fileName}", applicationId, fileName);
                 return false;
             }
         }
