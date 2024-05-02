@@ -256,9 +256,10 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         {
             var response = await GetResponse($"/Gateway/{applicationId}/TradingName");
             if (response.IsSuccessStatusCode) return await response.Content.ReadAsAsync<string>();
+            var reason = response.ReasonPhrase;
             var message =
                 $"An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{response.ReasonPhrase}'";
-            _logger.LogError("An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{response.ReasonPhrase}'", applicationId, response.ReasonPhrase);
+            _logger.LogError("An error occurred when retrieving trading name from qna via apply for application {applicationId} with error message '{reason}'", applicationId, reason);
             throw new ExternalApiException(message);
         }
 
@@ -285,7 +286,8 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 
             var message =
                     $"An error occurred when retrieving website address from qna via apply for application {applicationId} with error message {response.ReasonPhrase}";
-            _logger.LogError("An error occurred when retrieving website address from qna via apply for application {applicationId} with error message {response.ReasonPhrase}", applicationId, response.ReasonPhrase);
+            var reason = response.ReasonPhrase;
+            _logger.LogError("An error occurred when retrieving website address from qna via apply for application {applicationId} with error message {reason}", applicationId, reason);
             throw new ExternalApiException(message);
         }
 
