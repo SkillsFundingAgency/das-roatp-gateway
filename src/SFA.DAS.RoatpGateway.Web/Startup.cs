@@ -256,6 +256,7 @@ namespace SFA.DAS.RoatpGateway.Web
                 await next();
             });
             app.UseRouting();
+            app.UseAuthorization();
             app.UseAuthentication();
             app.UseHealthChecks("/health");
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
