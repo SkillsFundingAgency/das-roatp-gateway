@@ -1,13 +1,13 @@
-﻿using Moq;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
+using System.Threading.Tasks;
+using Moq;
+using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {
@@ -37,7 +37,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync((Apply)null);
             var request = new GetApplicationClarificationsRequest(_applicationId, UserName);
             var result = await _orchestrator.GetClarificationViewModel(request);
-            Assert.IsNull(result);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
@@ -51,18 +51,18 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
                     OrganisationName = OrganisationName
                 }
             };
-        
+
             var returnedRoatpApplicationResponse = new Apply
             {
                 ApplicationId = _applicationId,
                 ApplyData = applyData,
                 GatewayReviewStatus = GatewayReviewStatus.InProgress
             };
-        
-            var contactDetails = new ContactDetails {Email = Email};
+
+            var contactDetails = new ContactDetails { Email = Email };
             _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync(returnedRoatpApplicationResponse);
             _applyApiClient.Setup(x => x.GetContactDetails(_applicationId)).ReturnsAsync(contactDetails);
-            
+
             const string status = SectionReviewStatus.Clarification;
             const string comment = "comments go here";
 
@@ -76,23 +76,23 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
                     Comments = comment
                 }
             };
-            
-             _applyApiClient.Setup(x => x.GetGatewayPageAnswers(_applicationId)).ReturnsAsync(returnedGatewayPageAnswers);
+
+            _applyApiClient.Setup(x => x.GetGatewayPageAnswers(_applicationId)).ReturnsAsync(returnedGatewayPageAnswers);
 
             var request = new GetApplicationClarificationsRequest(_applicationId, UserName);
-        
+
             var viewModel = await _orchestrator.GetClarificationViewModel(request);
-            
-        
-            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(Email, viewModel.ApplicationEmailAddress);
-            Assert.AreEqual(Ukprn, viewModel.Ukprn);
-            Assert.AreEqual(OrganisationName, viewModel.OrganisationName);
-            Assert.AreEqual(1,viewModel.Sequences.Count);
-            Assert.AreEqual("Organisation checks", viewModel.Sequences[0].SequenceTitle);
-            Assert.AreEqual(1,viewModel.Sequences[0].Sections.Count);
-            Assert.AreEqual("Organisation high risk", viewModel.Sequences[0].Sections[0].PageTitle);
-            Assert.AreEqual(comment, viewModel.Sequences[0].Sections[0].Comment);
+
+
+            Assert.That(_applicationId, Is.EqualTo(viewModel.ApplicationId));
+            Assert.That(Email, Is.EqualTo(viewModel.ApplicationEmailAddress));
+            Assert.That(Ukprn, Is.EqualTo(viewModel.Ukprn));
+            Assert.That(OrganisationName, Is.EqualTo(viewModel.OrganisationName));
+            Assert.That(1, Is.EqualTo(viewModel.Sequences.Count));
+            Assert.That("Organisation checks", Is.EqualTo(viewModel.Sequences[0].SequenceTitle));
+            Assert.That(1, Is.EqualTo(viewModel.Sequences[0].Sections.Count));
+            Assert.That("Organisation high risk", Is.EqualTo(viewModel.Sequences[0].Sections[0].PageTitle));
+            Assert.That(comment, Is.EqualTo(viewModel.Sequences[0].Sections[0].Comment));
         }
     }
 }

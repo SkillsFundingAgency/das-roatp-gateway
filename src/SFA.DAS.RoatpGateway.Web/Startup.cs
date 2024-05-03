@@ -14,45 +14,42 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Polly;
 using Polly.Extensions.Http;
-using SFA.DAS.RoatpGateway.Web.Domain;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
-using SFA.DAS.RoatpGateway.Web.Settings;
-using SFA.DAS.RoatpGateway.Web.Extensions;
-using SFA.DAS.RoatpGateway.Web.Services;
-using SFA.DAS.RoatpGateway.Web.Validators;
-using SFA.DAS.AdminService.Common.Extensions;
+using Polly.Retry;
 using SFA.DAS.AdminService.Common;
+using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.DfESignIn.Auth.Enums;
+using SFA.DAS.RoatpGateway.Web.Domain;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 using SFA.DAS.RoatpGateway.Web.ModelBinders;
+using SFA.DAS.RoatpGateway.Web.Services;
+using SFA.DAS.RoatpGateway.Web.Settings;
 using SFA.DAS.RoatpGateway.Web.StartupExtensions;
+using SFA.DAS.RoatpGateway.Web.Validators;
 
 namespace SFA.DAS.RoatpGateway.Web
 {
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        private const string ServiceName = "SFA.DAS.RoatpGateway";
-        private const string Version = "1.0";
         private const string Culture = "en-GB";
 
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _env;
-        private readonly ILogger<Startup> _logger;
+        private readonly IWebHostEnvironment _env;
 
         public IWebConfiguration ApplicationConfiguration { get; set; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _env = env;
-            _logger = logger;
-            
+
             var config = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
                 .SetBasePath(Directory.GetCurrentDirectory());
@@ -106,14 +103,10 @@ namespace SFA.DAS.RoatpGateway.Web
                     //options.Filters.Add<CheckSessionFilter>();
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     options.ModelBinderProviders.Insert(0, new StringTrimmingModelBinderProvider());
-                })
-                // NOTE: Can we move this to 2.2 to match the version of .NET Core we're coding against?
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.EnableEndpointRouting = false;
                 });
 
-            services.AddSession(opt => { opt.IdleTimeout = TimeSpan.FromHours(1); });
+            services.AddLogging();
 
             services.AddCache(ApplicationConfiguration, _env);
             services.AddDataProtection(ApplicationConfiguration, _env);
@@ -123,6 +116,8 @@ namespace SFA.DAS.RoatpGateway.Web
             services.AddHealthChecks();
 
             services.AddApplicationInsightsTelemetry();
+
+            services.AddControllers();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -159,7 +154,7 @@ namespace SFA.DAS.RoatpGateway.Web
             }
         }
 
-        private void AddAntiforgery(IServiceCollection services)
+        private static void AddAntiforgery(IServiceCollection services)
         {
             services.AddAntiforgery(options => options.Cookie = new CookieBuilder() { Name = ".RoatpGateway.Staff.AntiForgery", HttpOnly = false });
         }
@@ -235,7 +230,7 @@ namespace SFA.DAS.RoatpGateway.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -249,7 +244,6 @@ namespace SFA.DAS.RoatpGateway.Web
 
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
-            app.UseSession();
             app.UseRequestLocalization();
             app.UseStatusCodePagesWithReExecute("/ErrorPage/{0}");
             app.UseSecurityHeaders();
@@ -257,22 +251,18 @@ namespace SFA.DAS.RoatpGateway.Web
             {
                 if (!context.Response.Headers.ContainsKey("X-Permitted-Cross-Domain-Policies"))
                 {
-                    context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
+                    context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
                 }
                 await next();
             });
-            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthorization();
             app.UseAuthentication();
             app.UseHealthChecks("/health");
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
-        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()

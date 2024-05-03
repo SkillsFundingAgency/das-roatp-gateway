@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using SFA.DAS.RoatpGateway.Web.Models;
 using SFA.DAS.RoatpGateway.Web.Settings;
 
@@ -53,7 +53,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult SignOut()
+        public override SignOutResult SignOut()
         {
             var callbackUrl = Url.Action("SignedOut", "Account", values: null, protocol: Request.Scheme);
 
@@ -90,14 +90,15 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                 var userName = HttpContext.User.Identity.Name ?? HttpContext.User.FindFirstValue(ClaimTypes.Upn);
                 var roles = HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.Role || c.Type == Domain.Roles.RoleClaimType).Select(c => c.Value);
 
-                _logger.LogError($"AccessDenied - User '{userName}' does not have a valid role. They have the following roles: '{string.Join(",", roles)}'");
+                var roleNames = string.Join(",", roles);
+                _logger.LogError("AccessDenied - User '{userName}' does not have a valid role. They have the following roles: '{roleNames}'", userName, roleNames);
             }
             var model = new Error403ViewModel
             {
                 UseDfESignIn = _webConfiguration.UseDfeSignIn,
                 HelpPageLink = _webConfiguration.DfESignInServiceHelpUrl
             };
-            return View("AccessDenied",model);
+            return View("AccessDenied", model);
         }
     }
 }

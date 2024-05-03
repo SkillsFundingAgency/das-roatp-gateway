@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService
 {
     public interface ITokenService
     {
-        string GetToken(Uri baseUri);
+        Task<string> GetToken(Uri baseUri);
     }
 }

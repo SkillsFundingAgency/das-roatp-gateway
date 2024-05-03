@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -11,10 +15,6 @@ using SFA.DAS.RoatpGateway.Web.Models;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 {
@@ -84,7 +84,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.GetOrganisationRiskPage(applicationId).Result;
             var viewResult = result as ViewResult;
-            Assert.AreEqual(viewname, viewResult.ViewName);
+            Assert.That(viewname, Is.EqualTo(viewResult.ViewName));
         }
 
         [Test]
@@ -197,12 +197,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             _gatewayValidator.Setup(v => v.ValidateClarification(command))
                 .ReturnsAsync(new ValidationResponse
-                    {
-                        Errors = new List<ValidationErrorDetail>
+                {
+                    Errors = new List<ValidationErrorDetail>
                         {
                             new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
                         }
-                    }
+                }
                 );
 
 

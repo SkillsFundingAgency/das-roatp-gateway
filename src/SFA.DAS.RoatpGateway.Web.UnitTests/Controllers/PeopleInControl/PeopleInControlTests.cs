@@ -53,7 +53,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.PeopleInControl
         {
             var result = (ViewResult)_controller.GetGatewayPeopleInControlPage(_applicationId).Result;
             var resultModel = (PeopleInControlPageViewModel)result.Model;
-            Assert.AreEqual(_applicationId, resultModel.ApplicationId);
+            Assert.That(_applicationId, Is.EqualTo(resultModel.ApplicationId));
         }
 
         [Test]
@@ -70,8 +70,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.PeopleInControl
             var result = (RedirectToActionResult)_controller.EvaluatePeopleInControlPage(command).Result;
 
             GatewayValidator.Verify(x => x.Validate(command), Times.Once);
-            Assert.AreEqual("ViewApplication", result.ActionName);
-            Assert.AreEqual("RoatpGateway", result.ControllerName);
+            Assert.That("ViewApplication", Is.EqualTo(result.ActionName));
+            Assert.That("RoatpGateway", Is.EqualTo(result.ControllerName));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.PeopleInControl
             var resultModel = (PeopleInControlPageViewModel)result.Model;
 
             GatewayValidator.Verify(x => x.Validate(command), Times.Once);
-            Assert.AreEqual(1, resultModel.ErrorMessages.Count);
+            Assert.That(1, Is.EqualTo(resultModel.ErrorMessages.Count));
         }
     }
 

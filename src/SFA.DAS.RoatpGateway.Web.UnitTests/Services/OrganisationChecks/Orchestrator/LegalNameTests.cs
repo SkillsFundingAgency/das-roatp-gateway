@@ -78,11 +78,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ProviderName, viewModel.UkrlpLegalName);
-            Assert.AreEqual(CompanyName, viewModel.CompaniesHouseLegalName);
-            Assert.AreEqual(CharityName, viewModel.CharityCommissionLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
+            Assert.That(UKRLPLegalName, Is.EqualTo(viewModel.ApplyLegalName));
+            Assert.That(ProviderName, Is.EqualTo(viewModel.UkrlpLegalName));
+            Assert.That(CompanyName, Is.EqualTo(viewModel.CompaniesHouseLegalName));
+            Assert.That(CharityName, Is.EqualTo(viewModel.CharityCommissionLegalName));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Once);
@@ -125,11 +125,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ProviderName, viewModel.UkrlpLegalName);
-            Assert.AreEqual(CompanyName, viewModel.CompaniesHouseLegalName);
-            Assert.IsNull(viewModel.CharityCommissionLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
+            Assert.That(UKRLPLegalName, Is.EqualTo(viewModel.ApplyLegalName));
+            Assert.That(ProviderName, Is.EqualTo(viewModel.UkrlpLegalName));
+            Assert.That(CompanyName, Is.EqualTo(viewModel.CompaniesHouseLegalName));
+            Assert.That(viewModel.CharityCommissionLegalName, Is.Null);
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Never);
@@ -172,11 +172,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ProviderName, viewModel.UkrlpLegalName);
-            Assert.IsNull(viewModel.CompaniesHouseLegalName);
-            Assert.AreEqual(CharityName, viewModel.CharityCommissionLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
+            Assert.That(UKRLPLegalName, Is.EqualTo(viewModel.ApplyLegalName));
+            Assert.That(ProviderName, Is.EqualTo(viewModel.UkrlpLegalName));
+            Assert.That(viewModel.CompaniesHouseLegalName, Is.Null);
+            Assert.That(CharityName, Is.EqualTo(viewModel.CharityCommissionLegalName));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Never);
             _applyApiClient.Verify(x => x.GetCharityCommissionDetails(applicationId), Times.Once);

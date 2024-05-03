@@ -81,10 +81,10 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(ProviderStatusWithCapitalisation, viewModel.UkrlpStatus);
-            Assert.AreEqual(CompanyStatusWithCapitalisation, viewModel.CompaniesHouseStatus);
-            Assert.AreEqual(CharityStatusWithCapitalisation, viewModel.CharityCommissionStatus);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
+            Assert.That(ProviderStatusWithCapitalisation, Is.EqualTo(viewModel.UkrlpStatus));
+            Assert.That(CompanyStatusWithCapitalisation, Is.EqualTo(viewModel.CompaniesHouseStatus));
+            Assert.That(CharityStatusWithCapitalisation, Is.EqualTo(viewModel.CharityCommissionStatus));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
 
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
@@ -133,10 +133,10 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(ProviderStatusWithCapitalisation, viewModel.UkrlpStatus);
-            Assert.AreEqual(CompanyStatusWithCapitalisation, viewModel.CompaniesHouseStatus);
-            Assert.IsNull(viewModel.CharityCommissionStatus);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
+            Assert.That(ProviderStatusWithCapitalisation, Is.EqualTo(viewModel.UkrlpStatus));
+            Assert.That(CompanyStatusWithCapitalisation, Is.EqualTo(viewModel.CompaniesHouseStatus));
+            Assert.That(viewModel.CharityCommissionStatus, Is.Null);
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
 
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Once);
@@ -185,10 +185,10 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(ProviderStatusWithCapitalisation, viewModel.UkrlpStatus);
-            Assert.IsNull(viewModel.CompaniesHouseStatus);
-            Assert.AreEqual(CharityStatusWithCapitalisation, viewModel.CharityCommissionStatus);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
+            Assert.That(ProviderStatusWithCapitalisation, Is.EqualTo(viewModel.UkrlpStatus));
+            Assert.That(viewModel.CompaniesHouseStatus, Is.Null);
+            Assert.That(CharityStatusWithCapitalisation, Is.EqualTo(viewModel.CharityCommissionStatus));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
 
             _applyApiClient.Verify(x => x.GetUkrlpDetails(applicationId), Times.Once);
             _applyApiClient.Verify(x => x.GetCompaniesHouseDetails(applicationId), Times.Never);
