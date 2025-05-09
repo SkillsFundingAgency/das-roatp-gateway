@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Models;
 using SFA.DAS.RoatpGateway.Web.Validators;
@@ -13,7 +14,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
     {
         private RoatpGatewayPageViewModel _viewModel;
 
-        private IRoatpGatewayPageValidator _validator;
+        private RoatpGatewayPageValidator _validator;
         private const string ClarificationAnswer = "Clarification answer";
 
         [SetUp]
@@ -47,7 +48,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.Validate(command).Result;
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count != 0));
         }
 
         [TestCase(150, false)]
@@ -68,7 +69,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.Validate(command).Result;
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count != 0));
 
         }
 
@@ -79,7 +80,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
         [TestCase(SectionReviewStatus.Pass, "pass message goes here", "", "", "", ClarificationAnswer, false)]
         [TestCase(SectionReviewStatus.InProgress, "", "", "", "", ClarificationAnswer, false)]
         [TestCase(SectionReviewStatus.InProgress, "", "in progress message goes here", "", "", ClarificationAnswer, false)]
-        [TestCase(SectionReviewStatus.Fail, "", "", "fail message goes here", "", ClarificationAnswer, false)] 
+        [TestCase(SectionReviewStatus.Fail, "", "", "fail message goes here", "", ClarificationAnswer, false)]
         [TestCase(null, "", "", "", "", ClarificationAnswer, true)]
         [TestCase(SectionReviewStatus.Pass, "", "", "", "", null, true)]
         [TestCase(SectionReviewStatus.Pass, "pass message goes here", "", "", "", null, true)]
@@ -105,7 +106,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.ValidateClarification(command).Result;
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+            Assert.That(hasErrorMessage, Is.EqualTo(result.Errors.Count != 0));
         }
 
         [TestCase(typeof(RoatpGatewayPageViewModel))]
@@ -122,7 +123,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
             var result = _validator.ValidateClarification(command).Result;
 
             CollectionAssert.IsNotEmpty(result.Errors);
-            Assert.IsTrue(result.Errors[0].ErrorMessage.Contains($"{_viewModel.ClarificationAnswerMaxWords} words"));
+            Assert.That(result.Errors[0].ErrorMessage.Contains($"{_viewModel.ClarificationAnswerMaxWords} words"), Is.True);
         }
     }
 }

@@ -23,10 +23,10 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.ExperienceAndAccredita
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(GatewayPageIds.SubcontractorDeclaration, viewModel.PageId);
+            Assert.That(GatewayPageIds.SubcontractorDeclaration, Is.EqualTo(viewModel.PageId));
             AssertCommonDetails(viewModel);
-            Assert.AreEqual(subcontractorDeclaration.HasDeliveredTrainingAsSubcontractor, viewModel.HasDeliveredTrainingAsSubcontractor);
-            Assert.AreEqual(subcontractorDeclaration.ContractFileName, viewModel.ContractFileName);
+            Assert.That(subcontractorDeclaration.HasDeliveredTrainingAsSubcontractor, Is.EqualTo(viewModel.HasDeliveredTrainingAsSubcontractor));
+            Assert.That(subcontractorDeclaration.ContractFileName, Is.EqualTo(viewModel.ContractFileName));
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.ExperienceAndAccredita
 
             var result = response.Result;
 
-            Assert.AreSame(fileStreamResult, result);
+            Assert.That(fileStreamResult, Is.SameAs(result));
         }
     }
 }

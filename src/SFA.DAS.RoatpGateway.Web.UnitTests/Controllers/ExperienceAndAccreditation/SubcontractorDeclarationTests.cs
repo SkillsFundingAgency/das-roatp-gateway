@@ -50,7 +50,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                         y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
             var result = await _controller.SubcontractorDeclaration(applicationId);
-            Assert.AreSame(expectedViewModel, result.Model);
+            Assert.That(expectedViewModel, Is.SameAs(result.Model));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                 .ReturnsAsync(expectedContractFile);
 
             var result = await _controller.SubcontractorDeclarationContractFile(applicationId);
-            Assert.AreSame(expectedContractFile, result);
+            Assert.That(expectedContractFile, Is.SameAs(result));
         }
 
 
@@ -83,7 +83,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                 .ReturnsAsync(expectedContractFile);
 
             var result = await _controller.SubcontractorDeclarationContractFileClarification(applicationId, fileName);
-            Assert.AreSame(expectedContractFile, result);
+            Assert.That(expectedContractFile, Is.SameAs(result));
         }
 
 
@@ -106,7 +106,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             var command = new SubmitGatewayPageAnswerCommand(vm);
 
             GatewayValidator.Setup(v => v.Validate(command)).ReturnsAsync(new ValidationResponse
-                {Errors = new List<ValidationErrorDetail>()});
+            { Errors = new List<ValidationErrorDetail>() });
 
             await _controller.EvaluateSubcontractorDeclarationPage(command);
 
@@ -114,30 +114,30 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                 x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, null));
         }
         [Test]
-         public async Task Clarifying_subcontractor_declaration_saves_evaluation_result()
-         {
-             var applicationId = Guid.NewGuid();
-             var pageId = GatewayPageIds.SubcontractorDeclaration;
-        
-             var vm = new SubcontractorDeclarationViewModel
-             {
-                 ApplicationId = applicationId,
-                 PageId = pageId,
-                 Status = SectionReviewStatus.Pass,
-                 SourcesCheckedOn = DateTime.Now,
-                 ErrorMessages = new List<ValidationErrorDetail>(),
-                 OptionPassText = "Some pass text",
-                 ClarificationAnswer = ClarificationAnswer
-             };
-        
-             var command = new SubmitGatewayPageAnswerCommand(vm);
-        
-             GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
-        
-             await _controller.ClarifySubcontractorDeclarationPage(command);
-        
-             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswerPostClarification(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, ClarificationAnswer));
-         }
+        public async Task Clarifying_subcontractor_declaration_saves_evaluation_result()
+        {
+            var applicationId = Guid.NewGuid();
+            var pageId = GatewayPageIds.SubcontractorDeclaration;
+
+            var vm = new SubcontractorDeclarationViewModel
+            {
+                ApplicationId = applicationId,
+                PageId = pageId,
+                Status = SectionReviewStatus.Pass,
+                SourcesCheckedOn = DateTime.Now,
+                ErrorMessages = new List<ValidationErrorDetail>(),
+                OptionPassText = "Some pass text",
+                ClarificationAnswer = ClarificationAnswer
+            };
+
+            var command = new SubmitGatewayPageAnswerCommand(vm);
+
+            GatewayValidator.Setup(v => v.ValidateClarification(command)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
+
+            await _controller.ClarifySubcontractorDeclarationPage(command);
+
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswerPostClarification(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, ClarificationAnswer));
+        }
 
 
         [Test]
@@ -145,7 +145,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
         {
             var applicationId = Guid.NewGuid();
             var pageId = GatewayPageIds.SubcontractorDeclaration;
-        
+
             var vm = new SubcontractorDeclarationViewModel
             {
                 Status = SectionReviewStatus.Fail,
@@ -154,9 +154,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                 ApplicationId = applicationId,
                 PageId = pageId
             };
-        
+
             var command = new SubmitGatewayPageAnswerCommand(vm);
-        
+
             GatewayValidator.Setup(v => v.Validate(command))
                 .ReturnsAsync(new ValidationResponse
                 {
@@ -166,12 +166,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                         }
                 }
                 );
-        
+
             _orchestrator.Setup(x => x.GetSubcontractorDeclarationViewModel(It.Is<GetSubcontractorDeclarationRequest>(y => y.ApplicationId == vm.ApplicationId
                                                                                 && y.UserName == Username))).ReturnsAsync(vm);
-        
+
             await _controller.EvaluateSubcontractorDeclarationPage(command);
-        
+
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
@@ -180,7 +180,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
         {
             var applicationId = Guid.NewGuid();
             var pageId = GatewayPageIds.SubcontractorDeclaration;
-        
+
             var vm = new SubcontractorDeclarationViewModel
             {
                 Status = SectionReviewStatus.Fail,
@@ -190,24 +190,24 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                 PageId = pageId,
                 ClarificationAnswer = ClarificationAnswer
             };
-        
+
             var command = new SubmitGatewayPageAnswerCommand(vm);
-        
+
             GatewayValidator.Setup(v => v.ValidateClarification(command))
                 .ReturnsAsync(new ValidationResponse
-                    {
-                        Errors = new List<ValidationErrorDetail>
+                {
+                    Errors = new List<ValidationErrorDetail>
                         {
                             new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
                         }
-                    }
+                }
                 );
-        
+
             _orchestrator.Setup(x => x.GetSubcontractorDeclarationViewModel(It.Is<GetSubcontractorDeclarationRequest>(y => y.ApplicationId == vm.ApplicationId
                 && y.UserName == Username))).ReturnsAsync(vm);
-        
+
             await _controller.ClarifySubcontractorDeclarationPage(command);
-        
+
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 

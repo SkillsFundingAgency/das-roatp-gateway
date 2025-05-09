@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Ukrlp;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System;
-using System.Collections.Generic;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {
@@ -84,10 +84,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(SubmittedApplicationAddress, viewModel.SubmittedApplicationAddress);
-            Assert.AreEqual(UkrlpAddress, viewModel.UkrlpAddress);
+            Assert.That(UKRLPLegalName, Is.EqualTo(viewModel.ApplyLegalName));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
+            Assert.That(SubmittedApplicationAddress, Is.EqualTo(viewModel.SubmittedApplicationAddress));
+            Assert.That(UkrlpAddress, Is.EqualTo(viewModel.UkrlpAddress));
         }
 
 

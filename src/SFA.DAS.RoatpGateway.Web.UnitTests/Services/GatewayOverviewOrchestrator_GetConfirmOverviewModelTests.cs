@@ -1,16 +1,16 @@
-﻿using Moq;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
+using Moq;
+using NUnit.Framework;
 using SFA.DAS.AdminService.Common.Validation;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
-using SFA.DAS.RoatpGateway.Web.ViewModels;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.ViewModels;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {
@@ -59,7 +59,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(application);
             _applyApiClient.Setup(x => x.GetOversightDetails(applicationId)).ReturnsAsync(() =>
                 new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None });
-            
+
             var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>
             {
                 new GatewayPageAnswerSummary
@@ -77,13 +77,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModel = await _orchestrator.GetConfirmOverviewViewModel(request);
 
-            Assert.AreEqual(applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(organisationName, viewModel.OrganisationName);
-            Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
-            Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
-            Assert.AreEqual(comment, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Comment);
-            Assert.AreEqual(viewModel.IsClarificationsSelectedAndAllFieldsSet,isClarificationSet);
+            Assert.That(applicationId, Is.EqualTo(viewModel.ApplicationId));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
+            Assert.That(organisationName, Is.EqualTo(viewModel.OrganisationName));
+            Assert.That(gatewayReviewStatus, Is.EqualTo(viewModel.GatewayReviewStatus));
+            Assert.That(sectionReviewStatus, Is.EqualTo(viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status));
+            Assert.That(comment, Is.EqualTo(viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Comment));
+            Assert.That(viewModel.IsClarificationsSelectedAndAllFieldsSet, Is.EqualTo(isClarificationSet));
         }
 
         [TestCase("12345678", "John Ltd.")]

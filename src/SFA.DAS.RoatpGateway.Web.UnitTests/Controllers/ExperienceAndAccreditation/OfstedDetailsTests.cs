@@ -43,7 +43,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             _orchestrator.Setup(x => x.GetOfstedDetailsViewModel(It.Is<GetOfstedDetailsRequest>(y => y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
             var result = await _controller.OfstedDetails(applicationId);
-            Assert.AreSame(expectedViewModel, result.Model);
+            Assert.That(expectedViewModel, Is.SameAs(result.Model));
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
 
             await _controller.EvaluateOfstedDetailsPage(command);
 
-            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText,null));
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(applicationId, pageId, vm.Status, UserId, Username, vm.OptionPassText, null));
         }
 
 
@@ -155,12 +155,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
 
             GatewayValidator.Setup(v => v.ValidateClarification(command))
                 .ReturnsAsync(new ValidationResponse
-                    {
-                        Errors = new List<ValidationErrorDetail>
+                {
+                    Errors = new List<ValidationErrorDetail>
                         {
                             new ValidationErrorDetail {Field = "OptionFail", ErrorMessage = "needs text"}
                         }
-                    }
+                }
                 );
 
             _orchestrator.Setup(x => x.GetOfstedDetailsViewModel(It.Is<GetOfstedDetailsRequest>(y => y.ApplicationId == vm.ApplicationId

@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.AdminService.Common.Validation;
+using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.Controllers;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.AdminService.Common.Extensions;
-using SFA.DAS.AdminService.Common.Testing.MockedObjects;
-using SFA.DAS.RoatpGateway.Domain.Apply;
-using SFA.DAS.RoatpGateway.Domain;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 {
@@ -51,7 +51,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.RemoveApplication(applicationId);
             var viewResult = result as ViewResult;
-            Assert.AreSame(expectedViewModel, viewResult.Model);
+            Assert.That(expectedViewModel, Is.SameAs(viewResult.Model));
         }
 
         [Test]
@@ -68,15 +68,15 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId });
 
             ApplyApiClient.Setup(x => x.GetOversightDetails(applicationId)).ReturnsAsync(() =>
-                new ApplicationOversightDetails {OversightStatus = OversightReviewStatus.None});
+                new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None });
 
             _removeApplicationValidator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
 
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(nameof(RoatpGatewayController.ViewApplication), Is.EqualTo(viewResult.ActionName));
+            Assert.That("RoatpGateway", Is.EqualTo(viewResult.ControllerName));
         }
 
         [Test]
@@ -98,8 +98,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(nameof(RoatpGatewayController.ViewApplication), Is.EqualTo(viewResult.ActionName));
+            Assert.That("RoatpGateway", Is.EqualTo(viewResult.ControllerName));
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("ConfirmRemoveApplication.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("ConfirmRemoveApplication.cshtml"), Is.True);
         }
 
         [Test]
@@ -154,8 +154,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("ApplicationRemoved.cshtml"));
-            ApplyApiClient.Verify(x => x.RemoveApplication(viewModel.ApplicationId, viewModel.OptionYesText, viewModel.OptionYesTextExternal,  It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            Assert.That(viewResult.ViewName.EndsWith("ApplicationRemoved.cshtml"), Is.True);
+            ApplyApiClient.Verify(x => x.RemoveApplication(viewModel.ApplicationId, viewModel.OptionYesText, viewModel.OptionYesTextExternal, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
 
@@ -169,7 +169,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.WithdrawApplication(applicationId);
             var viewResult = result as ViewResult;
-            Assert.AreSame(expectedViewModel, viewResult.Model);
+            Assert.That(expectedViewModel, Is.SameAs(viewResult.Model));
         }
 
         [Test]
@@ -192,8 +192,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(nameof(RoatpGatewayController.ViewApplication), Is.EqualTo(viewResult.ActionName));
+            Assert.That("RoatpGateway", Is.EqualTo(viewResult.ControllerName));
         }
 
         [TestCase(OversightReviewStatus.Successful)]
@@ -217,8 +217,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(nameof(RoatpGatewayController.ViewApplication), Is.EqualTo(viewResult.ActionName));
+            Assert.That("RoatpGateway", Is.EqualTo(viewResult.ControllerName));
         }
 
         public async Task ConfirmWithdrawApplication_When_already_withdrawn_returns_to_ViewApplication(string oversightStatus)
@@ -238,8 +238,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(nameof(RoatpGatewayController.ViewApplication), Is.EqualTo(viewResult.ActionName));
+            Assert.That("RoatpGateway", Is.EqualTo(viewResult.ControllerName));
         }
 
         [Test]
@@ -263,7 +263,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("ConfirmWithdrawApplication.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("ConfirmWithdrawApplication.cshtml"), Is.True);
         }
 
         [Test]
@@ -282,7 +282,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ApplicationId = applicationId,
                 ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueYes,
                 OptionYesText = "Comments"
-            };       
+            };
 
             var validationErrors = new List<ValidationErrorDetail>();
 
@@ -294,7 +294,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("ApplicationWithdrawn.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("ApplicationWithdrawn.cshtml"), Is.True);
             ApplyApiClient.Verify(x => x.WithdrawApplication(viewModel.ApplicationId, viewModel.OptionYesText, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }

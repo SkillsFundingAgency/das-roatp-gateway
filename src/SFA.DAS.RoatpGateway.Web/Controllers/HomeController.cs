@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.V3.Pages.Internal.Account;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.RoatpGateway.Web.Settings;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
@@ -31,6 +28,6 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         public IActionResult Dashboard()
         {
             return Redirect($"{_configuration.EsfaAdminServicesBaseUrl}/Dashboard");
-        } 
+        }
     }
 }

@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchestrator
 {
@@ -73,10 +73,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(expectedOrganisationAddress, viewModel.OrganisationAddress);
-            Assert.AreEqual(expectedIcoNumberIcoNumber, viewModel.IcoNumber);
+            Assert.That(UKRLPLegalName, Is.EqualTo(viewModel.ApplyLegalName));
+            Assert.That(ukprn, Is.EqualTo(viewModel.Ukprn));
+            Assert.That(expectedOrganisationAddress, Is.EqualTo(viewModel.OrganisationAddress));
+            Assert.That(expectedIcoNumberIcoNumber, Is.EqualTo(viewModel.IcoNumber));
         }
     }
 }
