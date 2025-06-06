@@ -170,9 +170,9 @@
                                     "value": "[parameters('resourceEnvironmentName')]"
                                 },
                                 {
-									"name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-									"value": "[reference(concat(variables('appServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
-								},
+				    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+				    "value": "[reference(concat(variables('appServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+				},
                                 {
                                     "name": "ASPNETCORE_ENVIRONMENT",
                                     "value": "[toUpper(parameters('environmentName'))]"
