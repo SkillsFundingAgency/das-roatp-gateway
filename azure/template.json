@@ -171,7 +171,7 @@
                                 },
                                 {
 				    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-				    "value": "[reference(concat(variables('appServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+				    "value": "[reference(concat('app-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
 				},
                                 {
                                     "name": "ASPNETCORE_ENVIRONMENT",
