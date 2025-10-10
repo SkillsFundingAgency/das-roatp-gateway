@@ -33,20 +33,20 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(GatewayPageIds.Ofsted, viewModel.PageId);
+            Assert.That(viewModel.PageId, Is.EqualTo(GatewayPageIds.Ofsted));
             AssertCommonDetails(viewModel);
 
-            Assert.AreEqual(ofstedDetails.FullInspectionApprenticeshipGrade, viewModel.FullInspectionApprenticeshipGrade);
-            Assert.AreEqual(ofstedDetails.FullInspectionOverallEffectivenessGrade, viewModel.FullInspectionOverallEffectivenessGrade);
-            Assert.AreEqual(ofstedDetails.GradeWithinTheLast3Years, viewModel.GradeWithinTheLast3Years);
-            Assert.AreEqual(ofstedDetails.HasHadFullInspection, viewModel.HasHadFullInspection);
-            Assert.AreEqual(ofstedDetails.HasHadMonitoringVisit, viewModel.HasHadMonitoringVisit);
-            Assert.AreEqual(ofstedDetails.HasHadShortInspectionWithinLast3Years, viewModel.HasHadShortInspectionWithinLast3Years);
-            Assert.AreEqual(ofstedDetails.HasMaintainedFullGradeInShortInspection, viewModel.HasMaintainedFullGradeInShortInspection);
-            Assert.AreEqual(ofstedDetails.HasMaintainedFundingSinceInspection, viewModel.HasMaintainedFundingSinceInspection);
-            Assert.AreEqual(ofstedDetails.ReceivedFullInspectionGradeForApprenticeships, viewModel.ReceivedFullInspectionGradeForApprenticeships);
-            Assert.AreEqual(ofstedDetails.Has2MonitoringVisitsGradedInadequate, viewModel.Has2MonitoringVisitsGradedInadequate); 
-            Assert.AreEqual(ofstedDetails.HasMonitoringVisitGradedInadequateInLast18Months, viewModel.HasMonitoringVisitGradedInadequateInLast18Months);
+            Assert.That(viewModel.FullInspectionApprenticeshipGrade, Is.EqualTo(ofstedDetails.FullInspectionApprenticeshipGrade));
+            Assert.That(viewModel.FullInspectionOverallEffectivenessGrade, Is.EqualTo(ofstedDetails.FullInspectionOverallEffectivenessGrade));
+            Assert.That(viewModel.GradeWithinTheLast3Years, Is.EqualTo(ofstedDetails.GradeWithinTheLast3Years));
+            Assert.That(viewModel.HasHadFullInspection, Is.EqualTo(ofstedDetails.HasHadFullInspection));
+            Assert.That(viewModel.HasHadMonitoringVisit, Is.EqualTo(ofstedDetails.HasHadMonitoringVisit));
+            Assert.That(viewModel.HasHadShortInspectionWithinLast3Years, Is.EqualTo(ofstedDetails.HasHadShortInspectionWithinLast3Years));
+            Assert.That(viewModel.HasMaintainedFullGradeInShortInspection, Is.EqualTo(ofstedDetails.HasMaintainedFullGradeInShortInspection));
+            Assert.That(viewModel.HasMaintainedFundingSinceInspection, Is.EqualTo(ofstedDetails.HasMaintainedFundingSinceInspection));
+            Assert.That(viewModel.ReceivedFullInspectionGradeForApprenticeships, Is.EqualTo(ofstedDetails.ReceivedFullInspectionGradeForApprenticeships));
+            Assert.That(viewModel.Has2MonitoringVisitsGradedInadequate, Is.EqualTo(ofstedDetails.Has2MonitoringVisitsGradedInadequate)); 
+            Assert.That(viewModel.HasMonitoringVisitGradedInadequateInLast18Months, Is.EqualTo(ofstedDetails.HasMonitoringVisitGradedInadequateInLast18Months));
         }
     }
 }

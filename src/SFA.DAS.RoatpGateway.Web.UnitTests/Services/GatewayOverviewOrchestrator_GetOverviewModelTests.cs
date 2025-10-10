@@ -77,13 +77,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModel = await _orchestrator.GetOverviewViewModel(request);
 
-            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(viewModel.ApplicationEmailAddress,Email);
-            Assert.AreEqual(Ukprn, viewModel.Ukprn);
-            Assert.AreEqual(OrganisationName, viewModel.OrganisationName);
-            Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
-            Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
-            Assert.AreEqual(false, viewModel.IsClarificationsSelectedAndAllFieldsSet);
+            Assert.That(viewModel.ApplicationId, Is.EqualTo(_applicationId));
+            Assert.That(Email, Is.EqualTo(viewModel.ApplicationEmailAddress));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(Ukprn));
+            Assert.That(viewModel.OrganisationName, Is.EqualTo(OrganisationName));
+            Assert.That(viewModel.GatewayReviewStatus, Is.EqualTo(gatewayReviewStatus));
+            Assert.That(viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status, Is.EqualTo(sectionReviewStatus));
+            Assert.That(viewModel.IsClarificationsSelectedAndAllFieldsSet, Is.EqualTo(false));
         }
 
 
@@ -136,14 +136,14 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModel = await _orchestrator.GetOverviewViewModel(request);
 
-            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(viewModel.ApplicationEmailAddress, Email);
-            Assert.AreEqual(Ukprn, viewModel.Ukprn);
-            Assert.AreEqual(OrganisationName, viewModel.OrganisationName);
-            Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
-            Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
-            Assert.AreEqual(false, viewModel.IsClarificationsSelectedAndAllFieldsSet);
-            Assert.AreEqual(false, viewModel.ReadyToConfirm);
+            Assert.That(viewModel.ApplicationId, Is.EqualTo(_applicationId));
+            Assert.That(Email, Is.EqualTo(viewModel.ApplicationEmailAddress));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(Ukprn));
+            Assert.That(viewModel.OrganisationName, Is.EqualTo(OrganisationName));
+            Assert.That(viewModel.GatewayReviewStatus, Is.EqualTo(gatewayReviewStatus));
+            Assert.That(viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status, Is.EqualTo(sectionReviewStatus));
+            Assert.That(viewModel.IsClarificationsSelectedAndAllFieldsSet, Is.EqualTo(false));
+            Assert.That(viewModel.ReadyToConfirm, Is.EqualTo(false));
         }
     }
 }

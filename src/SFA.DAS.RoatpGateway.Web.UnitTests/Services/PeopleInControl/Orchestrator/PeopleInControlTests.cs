@@ -69,15 +69,15 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(GatewayPageId, viewModel.PageId);
-            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(_commonDetails.Comments, viewModel.OptionFailText);
-            Assert.Null(viewModel.OptionInProgressText);
-            Assert.Null(viewModel.OptionClarificationText);
-            Assert.Null(viewModel.OptionPassText);
-            Assert.AreEqual(_commonDetails.Status, viewModel.Status);
-            Assert.AreEqual(_commonDetails.Ukprn, viewModel.Ukprn);
-            Assert.AreEqual(_commonDetails.LegalName, viewModel.ApplyLegalName);
+            Assert.That(viewModel.PageId, Is.EqualTo(GatewayPageId));
+            Assert.That(viewModel.ApplicationId, Is.EqualTo(_applicationId));
+            Assert.That(viewModel.OptionFailText, Is.EqualTo(_commonDetails.Comments));
+            Assert.That(viewModel.OptionInProgressText, Is.Null);
+            Assert.That(viewModel.OptionClarificationText, Is.Null);
+            Assert.That(viewModel.OptionPassText, Is.Null);
+            Assert.That(viewModel.Status, Is.EqualTo(_commonDetails.Status));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(_commonDetails.Ukprn));
+            Assert.That(viewModel.ApplyLegalName, Is.EqualTo(_commonDetails.LegalName));
         }
 
         [Test]
@@ -99,12 +99,10 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(1, viewModel.CompanyDirectorsData.FromExternalSource.Count);
+            Assert.That(viewModel.CompanyDirectorsData.FromExternalSource.Count, Is.EqualTo(1));
 
-            Assert.AreEqual(viewModel.CompanyDirectorsData.FromExternalSource.First().Name,
-                directorsFromCompaniesHouse.First().Name);
-            Assert.AreEqual(viewModel.CompanyDirectorsData.FromExternalSource.First().MonthYearOfBirth,
-                directorsFromCompaniesHouse.First().MonthYearOfBirth);
+            Assert.That(directorsFromCompaniesHouse.First().Name, Is.EqualTo(viewModel.CompanyDirectorsData.FromExternalSource.First().Name));
+            Assert.That(directorsFromCompaniesHouse.First().MonthYearOfBirth, Is.EqualTo(viewModel.CompanyDirectorsData.FromExternalSource.First().MonthYearOfBirth));
         }
 
         [Test]
@@ -123,9 +121,9 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(1, viewModel.CompanyDirectorsData.FromSubmittedApplication.Count);
-            Assert.AreEqual(viewModel.CompanyDirectorsData.FromSubmittedApplication.First().Name, directorsFromSubmitted.First().Name);
-            Assert.AreEqual(viewModel.CompanyDirectorsData.FromSubmittedApplication.First().MonthYearOfBirth, directorsFromSubmitted.First().MonthYearOfBirth);
+            Assert.That(viewModel.CompanyDirectorsData.FromSubmittedApplication.Count, Is.EqualTo(1));
+            Assert.That(directorsFromSubmitted.First().Name, Is.EqualTo(viewModel.CompanyDirectorsData.FromSubmittedApplication.First().Name));
+            Assert.That(directorsFromSubmitted.First().MonthYearOfBirth, Is.EqualTo(viewModel.CompanyDirectorsData.FromSubmittedApplication.First().MonthYearOfBirth));
         }
 
 
@@ -148,10 +146,10 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(1, viewModel.PscData.FromExternalSource.Count);
+            Assert.That(viewModel.PscData.FromExternalSource.Count, Is.EqualTo(1));
 
-            Assert.AreEqual(viewModel.PscData.FromExternalSource.First().Name, pscsFromCompaniesHouse.First().Name);
-            Assert.AreEqual(viewModel.PscData.FromExternalSource.First().MonthYearOfBirth, pscsFromCompaniesHouse.First().MonthYearOfBirth);
+            Assert.That(pscsFromCompaniesHouse.First().Name, Is.EqualTo(viewModel.PscData.FromExternalSource.First().Name));
+            Assert.That(pscsFromCompaniesHouse.First().MonthYearOfBirth, Is.EqualTo(viewModel.PscData.FromExternalSource.First().MonthYearOfBirth));
         }
 
         [Test]
@@ -173,9 +171,9 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(1, viewModel.PscData.FromSubmittedApplication.Count);
-            Assert.AreEqual(viewModel.PscData.FromSubmittedApplication.First().Name, pcsFromSubmitted.First().Name);
-            Assert.AreEqual(viewModel.PscData.FromSubmittedApplication.First().MonthYearOfBirth, pcsFromSubmitted.First().MonthYearOfBirth);
+            Assert.That(viewModel.PscData.FromSubmittedApplication.Count, Is.EqualTo(1));
+            Assert.That(pcsFromSubmitted.First().Name, Is.EqualTo(viewModel.PscData.FromSubmittedApplication.First().Name));
+            Assert.That(pcsFromSubmitted.First().MonthYearOfBirth, Is.EqualTo(viewModel.PscData.FromSubmittedApplication.First().MonthYearOfBirth));
         }
 
         [Test]
@@ -195,9 +193,9 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
-            Assert.AreEqual(1, viewModel.TrusteeData.FromExternalSource.Count);
-            Assert.AreEqual(viewModel.TrusteeData.FromExternalSource.First().Name, trusteesFromCharityCommission.First().Name);
-            Assert.AreEqual(viewModel.TrusteeData.FromExternalSource.First().MonthYearOfBirth, trusteesFromCharityCommission.First().MonthYearOfBirth);
+            Assert.That(viewModel.TrusteeData.FromExternalSource.Count, Is.EqualTo(1));
+            Assert.That(trusteesFromCharityCommission.First().Name, Is.EqualTo(viewModel.TrusteeData.FromExternalSource.First().Name));
+            Assert.That(trusteesFromCharityCommission.First().MonthYearOfBirth, Is.EqualTo(viewModel.TrusteeData.FromExternalSource.First().MonthYearOfBirth));
 
         }
 
@@ -218,10 +216,10 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
             var response = _orchestrator.GetPeopleInControlViewModel(request);
 
             var viewModel = response.Result;
-            Assert.AreEqual(1, viewModel.TrusteeData.FromSubmittedApplication.Count);
+            Assert.That(viewModel.TrusteeData.FromSubmittedApplication.Count, Is.EqualTo(1));
 
-            Assert.AreEqual(viewModel.TrusteeData.FromSubmittedApplication.First().Name, trusteesFromSubmitted.First().Name);
-            Assert.AreEqual(viewModel.TrusteeData.FromSubmittedApplication.First().MonthYearOfBirth, trusteesFromSubmitted.First().MonthYearOfBirth);
+            Assert.That(trusteesFromSubmitted.First().Name, Is.EqualTo(viewModel.TrusteeData.FromSubmittedApplication.First().Name));
+            Assert.That(trusteesFromSubmitted.First().MonthYearOfBirth, Is.EqualTo(viewModel.TrusteeData.FromSubmittedApplication.First().MonthYearOfBirth));
         }
 
         [Test]
@@ -242,9 +240,9 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.PeopleInControl.Orches
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(1, viewModel.WhosInControlData.FromSubmittedApplication.Count);
-            Assert.AreEqual(viewModel.WhosInControlData.FromSubmittedApplication.First().Name, whosInControlFromSubmitted.First().Name);
-            Assert.AreEqual(viewModel.WhosInControlData.FromSubmittedApplication.First().MonthYearOfBirth, whosInControlFromSubmitted.First().MonthYearOfBirth);
+            Assert.That(viewModel.WhosInControlData.FromSubmittedApplication.Count, Is.EqualTo(1));
+            Assert.That(whosInControlFromSubmitted.First().Name, Is.EqualTo(viewModel.WhosInControlData.FromSubmittedApplication.First().Name));
+            Assert.That(whosInControlFromSubmitted.First().MonthYearOfBirth, Is.EqualTo(viewModel.WhosInControlData.FromSubmittedApplication.First().MonthYearOfBirth));
         }
     }
 }

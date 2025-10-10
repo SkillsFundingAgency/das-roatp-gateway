@@ -73,10 +73,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.OrganisationChecks.Orchest
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(expectedOrganisationAddress, viewModel.OrganisationAddress);
-            Assert.AreEqual(expectedIcoNumberIcoNumber, viewModel.IcoNumber);
+            Assert.That(viewModel.ApplyLegalName, Is.EqualTo(UKRLPLegalName));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(ukprn));
+            Assert.That(viewModel.OrganisationAddress, Is.EqualTo(expectedOrganisationAddress));
+            Assert.That(viewModel.IcoNumber, Is.EqualTo(expectedIcoNumberIcoNumber));
         }
     }
 }

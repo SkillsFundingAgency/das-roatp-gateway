@@ -77,10 +77,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
 
             var viewModel = await _orchestrator.GetRoatpViewModel(request);
 
-            Assert.IsFalse(viewModel.RoatpUkprnOnRegister);
-            Assert.IsNull(viewModel.RoatpStatus);
-            Assert.IsNull(viewModel.RoatpStatusDate);
-            Assert.IsNull(viewModel.RoatpProviderRoute);
+            Assert.That(viewModel.RoatpUkprnOnRegister, Is.False);
+            Assert.That(viewModel.RoatpStatus, Is.Null);
+            Assert.That(viewModel.RoatpStatusDate, Is.Null);
+            Assert.That(viewModel.RoatpProviderRoute, Is.Null);
         }
 
         [Test]
@@ -99,10 +99,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
 
             var viewModel = await _orchestrator.GetRoatpViewModel(request);
 
-            Assert.IsTrue(viewModel.RoatpUkprnOnRegister);
-            Assert.IsNotNull(viewModel.RoatpStatus);
-            Assert.IsNotNull(viewModel.RoatpStatusDate);
-            Assert.IsNotNull(viewModel.RoatpProviderRoute);
+            Assert.That(viewModel.RoatpUkprnOnRegister, Is.True);
+            Assert.That(viewModel.RoatpStatus, Is.Not.Null);
+            Assert.That(viewModel.RoatpStatusDate, Is.Not.Null);
+            Assert.That(viewModel.RoatpProviderRoute, Is.Not.Null);
         }
 
         [TestCase("Main")]
@@ -116,7 +116,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
 
             var viewModel = await _orchestrator.GetRoatpViewModel(request);
 
-            Assert.AreEqual(providerRouteName, viewModel.ApplyProviderRoute);
+            Assert.That(viewModel.ApplyProviderRoute, Is.EqualTo(providerRouteName));
         }
     }
 }

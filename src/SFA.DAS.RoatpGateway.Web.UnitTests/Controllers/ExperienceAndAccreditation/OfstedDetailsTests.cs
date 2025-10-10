@@ -43,7 +43,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             _orchestrator.Setup(x => x.GetOfstedDetailsViewModel(It.Is<GetOfstedDetailsRequest>(y => y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
             var result = await _controller.OfstedDetails(applicationId);
-            Assert.AreSame(expectedViewModel, result.Model);
+            Assert.That(result.Model, Is.SameAs(expectedViewModel));
         }
 
         [Test]

@@ -84,10 +84,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(SubmittedApplicationAddress, viewModel.SubmittedApplicationAddress);
-            Assert.AreEqual(UkrlpAddress, viewModel.UkrlpAddress);
+            Assert.That(viewModel.ApplyLegalName, Is.EqualTo(UKRLPLegalName));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(ukprn));
+            Assert.That(viewModel.SubmittedApplicationAddress, Is.EqualTo(SubmittedApplicationAddress));
+            Assert.That(viewModel.UkrlpAddress, Is.EqualTo(UkrlpAddress));
         }
 
 

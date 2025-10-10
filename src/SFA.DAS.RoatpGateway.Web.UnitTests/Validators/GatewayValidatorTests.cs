@@ -47,7 +47,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.Validate(command).Result;
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+            Assert.That(result.Errors.Any(), Is.EqualTo(hasErrorMessage));
         }
 
         [TestCase(150, false)]
@@ -68,7 +68,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.Validate(command).Result;
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+            Assert.That(result.Errors.Any(), Is.EqualTo(hasErrorMessage));
 
         }
 
@@ -105,7 +105,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.ValidateClarification(command).Result;
 
-            Assert.AreEqual(hasErrorMessage, result.Errors.Any());
+            Assert.That(result.Errors.Any(), Is.EqualTo(hasErrorMessage));
         }
 
         [TestCase(typeof(RoatpGatewayPageViewModel))]
@@ -121,8 +121,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Validators
 
             var result = _validator.ValidateClarification(command).Result;
 
-            CollectionAssert.IsNotEmpty(result.Errors);
-            Assert.IsTrue(result.Errors[0].ErrorMessage.Contains($"{_viewModel.ClarificationAnswerMaxWords} words"));
+            Assert.That(result.Errors, Is.Not.Empty);
+            Assert.That(result.Errors[0].ErrorMessage.Contains($"{_viewModel.ClarificationAnswerMaxWords} words"), Is.True);
         }
     }
 }

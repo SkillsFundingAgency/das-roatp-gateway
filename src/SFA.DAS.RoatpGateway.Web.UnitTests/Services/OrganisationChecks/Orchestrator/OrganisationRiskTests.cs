@@ -60,12 +60,12 @@ namespace SFA.DAS.AdminService.Web.Tests.Services.Gateway.OrganisationChecks.Orc
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(UKRLPLegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(organisationType, viewModel.OrganisationType);
-            Assert.AreEqual(tradingName, viewModel.TradingName);
-            Assert.AreEqual(CompanyNumber, viewModel.CompanyNumber);
-            Assert.AreEqual(CharityNumber, viewModel.CharityNumber);
+            Assert.That(viewModel.ApplyLegalName, Is.EqualTo(UKRLPLegalName));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(ukprn));
+            Assert.That(viewModel.OrganisationType, Is.EqualTo(organisationType));
+            Assert.That(viewModel.TradingName, Is.EqualTo(tradingName));
+            Assert.That(viewModel.CompanyNumber, Is.EqualTo(CompanyNumber));
+            Assert.That(viewModel.CharityNumber, Is.EqualTo(CharityNumber));
 
         }
     }

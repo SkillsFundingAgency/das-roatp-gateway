@@ -67,14 +67,14 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModel = await _orchestrator.GetWithdrawApplicationViewModel(_applicationId, UserName);
 
-            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(submittedDate, viewModel.ApplicationSubmittedOn);
-            Assert.AreEqual(organisationName, viewModel.ApplyLegalName);
-            Assert.AreEqual(providerRouteName, viewModel.ApplicationRoute);
-            Assert.AreEqual(applicationStatus, viewModel.ApplicationStatus);
-            Assert.AreEqual(referenceNumber, viewModel.ApplicationReferenceNumber);
-            Assert.AreEqual(email, viewModel.ApplicationEmailAddress);
+            Assert.That(viewModel.ApplicationId, Is.EqualTo(_applicationId));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(ukprn));
+            Assert.That(viewModel.ApplicationSubmittedOn, Is.EqualTo(submittedDate));
+            Assert.That(viewModel.ApplyLegalName, Is.EqualTo(organisationName));
+            Assert.That(viewModel.ApplicationRoute, Is.EqualTo(providerRouteName));
+            Assert.That(viewModel.ApplicationStatus, Is.EqualTo(applicationStatus));
+            Assert.That(viewModel.ApplicationReferenceNumber, Is.EqualTo(referenceNumber));
+            Assert.That(viewModel.ApplicationEmailAddress, Is.EqualTo(email));
         }
 
         [Test]
@@ -86,12 +86,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModelOnError = ProcessWithdrawApplicationViewModelOnError(applicationId, field, errorMessage);
 
-            Assert.AreEqual(applicationId, viewModelOnError.ApplicationId);
-            Assert.IsNotNull(viewModelOnError.ErrorMessages);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
-            Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
-            Assert.IsNull( viewModelOnError.CssOnErrorOptionYesText);
+            Assert.That(viewModelOnError.ApplicationId, Is.EqualTo(applicationId));
+            Assert.That(viewModelOnError.ErrorMessages, Is.Not.Null);
+            Assert.That(field, Is.EqualTo(viewModelOnError.ErrorMessages[0].Field));
+            Assert.That(errorMessage, Is.EqualTo(viewModelOnError.ErrorMessages[0].ErrorMessage));
+            Assert.That(viewModelOnError.CssFormGroupError, Is.EqualTo(HtmlAndCssElements.CssFormGroupErrorClass));
+            Assert.That(viewModelOnError.CssOnErrorOptionYesText, Is.Null);
         }
 
         [Test]
@@ -103,12 +103,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModelOnError = ProcessWithdrawApplicationViewModelOnError(applicationId, field, errorMessage);
 
-            Assert.AreEqual(applicationId, viewModelOnError.ApplicationId);
-            Assert.IsNotNull(viewModelOnError.ErrorMessages);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
-            Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
-            Assert.AreEqual(HtmlAndCssElements.CssTextareaErrorOverrideClass, viewModelOnError.CssOnErrorOptionYesText);
+            Assert.That(viewModelOnError.ApplicationId, Is.EqualTo(applicationId));
+            Assert.That(viewModelOnError.ErrorMessages, Is.Not.Null);
+            Assert.That(field, Is.EqualTo(viewModelOnError.ErrorMessages[0].Field));
+            Assert.That(errorMessage, Is.EqualTo(viewModelOnError.ErrorMessages[0].ErrorMessage));
+            Assert.That(viewModelOnError.CssFormGroupError, Is.EqualTo(HtmlAndCssElements.CssFormGroupErrorClass));
+            Assert.That(viewModelOnError.CssOnErrorOptionYesText, Is.EqualTo(HtmlAndCssElements.CssTextareaErrorOverrideClass));
         }
 
         private RoatpWithdrawApplicationViewModel ProcessWithdrawApplicationViewModelOnError(Guid applicationId, string field, string errorMessage)
@@ -158,12 +158,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModel = await _orchestrator.GetRemoveApplicationViewModel(_applicationId, UserId, UserName);
 
-            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(submittedDate, viewModel.ApplicationSubmittedOn);
-            Assert.AreEqual(organisationName, viewModel.ApplyLegalName);
-            Assert.AreEqual(providerRouteName, viewModel.ApplicationRoute);
-            Assert.AreEqual(applicationStatus, viewModel.ApplicationStatus);
+            Assert.That(viewModel.ApplicationId, Is.EqualTo(_applicationId));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(ukprn));
+            Assert.That(viewModel.ApplicationSubmittedOn, Is.EqualTo(submittedDate));
+            Assert.That(viewModel.ApplyLegalName, Is.EqualTo(organisationName));
+            Assert.That(viewModel.ApplicationRoute, Is.EqualTo(providerRouteName));
+            Assert.That(viewModel.ApplicationStatus, Is.EqualTo(applicationStatus));
         }
 
         [Test]
@@ -175,13 +175,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModelOnError = ProcessRemoveApplicationViewModelOnError(applicationId, field, errorMessage);
 
-            Assert.AreEqual(applicationId, viewModelOnError.ApplicationId);
-            Assert.IsNotNull(viewModelOnError.ErrorMessages);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
-            Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
-            Assert.IsNull(viewModelOnError.CssOnErrorOptionYesText);
-            Assert.IsNull(viewModelOnError.CssOnErrorOptionYesTextExternal);
+            Assert.That(viewModelOnError.ApplicationId, Is.EqualTo(applicationId));
+            Assert.That(viewModelOnError.ErrorMessages, Is.Not.Null);
+            Assert.That(field, Is.EqualTo(viewModelOnError.ErrorMessages[0].Field));
+            Assert.That(errorMessage, Is.EqualTo(viewModelOnError.ErrorMessages[0].ErrorMessage));
+            Assert.That(viewModelOnError.CssFormGroupError, Is.EqualTo(HtmlAndCssElements.CssFormGroupErrorClass));
+            Assert.That(viewModelOnError.CssOnErrorOptionYesText, Is.Null);
+            Assert.That(viewModelOnError.CssOnErrorOptionYesTextExternal, Is.Null);
         }
 
         [Test]
@@ -193,13 +193,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModelOnError = ProcessRemoveApplicationViewModelOnError(applicationId, field, errorMessage);
 
-            Assert.AreEqual(applicationId, viewModelOnError.ApplicationId);
-            Assert.IsNotNull(viewModelOnError.ErrorMessages);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
-            Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
-            Assert.AreEqual(HtmlAndCssElements.CssTextareaErrorOverrideClass, viewModelOnError.CssOnErrorOptionYesText);
-            Assert.IsNull(viewModelOnError.CssOnErrorOptionYesTextExternal);
+            Assert.That(viewModelOnError.ApplicationId, Is.EqualTo(applicationId));
+            Assert.That(viewModelOnError.ErrorMessages, Is.Not.Null);
+            Assert.That(field, Is.EqualTo(viewModelOnError.ErrorMessages[0].Field));
+            Assert.That(errorMessage, Is.EqualTo(viewModelOnError.ErrorMessages[0].ErrorMessage));
+            Assert.That(viewModelOnError.CssFormGroupError, Is.EqualTo(HtmlAndCssElements.CssFormGroupErrorClass));
+            Assert.That(viewModelOnError.CssOnErrorOptionYesText, Is.EqualTo(HtmlAndCssElements.CssTextareaErrorOverrideClass));
+            Assert.That(viewModelOnError.CssOnErrorOptionYesTextExternal, Is.Null);
         }
 
         [Test]
@@ -211,13 +211,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModelOnError = ProcessRemoveApplicationViewModelOnError(applicationId, field, errorMessage);
 
-            Assert.AreEqual(applicationId, viewModelOnError.ApplicationId);
-            Assert.IsNotNull(viewModelOnError.ErrorMessages);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
-            Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
-            Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
-            Assert.IsNull(viewModelOnError.CssOnErrorOptionYesText);
-            Assert.AreEqual(HtmlAndCssElements.CssTextareaErrorOverrideClass, viewModelOnError.CssOnErrorOptionYesTextExternal);
+            Assert.That(viewModelOnError.ApplicationId, Is.EqualTo(applicationId));
+            Assert.That(viewModelOnError.ErrorMessages, Is.Not.Null);
+            Assert.That(field, Is.EqualTo(viewModelOnError.ErrorMessages[0].Field));
+            Assert.That(errorMessage, Is.EqualTo(viewModelOnError.ErrorMessages[0].ErrorMessage));
+            Assert.That(viewModelOnError.CssFormGroupError, Is.EqualTo(HtmlAndCssElements.CssFormGroupErrorClass));
+            Assert.That(viewModelOnError.CssOnErrorOptionYesText, Is.Null);
+            Assert.That(viewModelOnError.CssOnErrorOptionYesTextExternal, Is.EqualTo(HtmlAndCssElements.CssTextareaErrorOverrideClass));
         }
 
         private RoatpRemoveApplicationViewModel ProcessRemoveApplicationViewModelOnError(Guid applicationId, string field, string errorMessage)

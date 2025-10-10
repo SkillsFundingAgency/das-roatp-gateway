@@ -51,7 +51,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.RemoveApplication(applicationId);
             var viewResult = result as ViewResult;
-            Assert.AreSame(expectedViewModel, viewResult.Model);
+            Assert.That(viewResult.Model, Is.SameAs(expectedViewModel));
         }
 
         [Test]
@@ -75,8 +75,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(viewResult.ActionName, Is.EqualTo(nameof(RoatpGatewayController.ViewApplication)));
+            Assert.That(viewResult.ControllerName, Is.EqualTo("RoatpGateway"));
         }
 
         [Test]
@@ -98,8 +98,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(viewResult.ActionName, Is.EqualTo(nameof(RoatpGatewayController.ViewApplication)));
+            Assert.That(viewResult.ControllerName, Is.EqualTo("RoatpGateway"));
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("ConfirmRemoveApplication.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("ConfirmRemoveApplication.cshtml"), Is.True);
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmRemoveApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("ApplicationRemoved.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("ApplicationRemoved.cshtml"), Is.True);
             ApplyApiClient.Verify(x => x.RemoveApplication(viewModel.ApplicationId, viewModel.OptionYesText, viewModel.OptionYesTextExternal,  It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
@@ -169,7 +169,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             var result = await _controller.WithdrawApplication(applicationId);
             var viewResult = result as ViewResult;
-            Assert.AreSame(expectedViewModel, viewResult.Model);
+            Assert.That(viewResult.Model, Is.SameAs(expectedViewModel));
         }
 
         [Test]
@@ -192,8 +192,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(viewResult.ActionName, Is.EqualTo(nameof(RoatpGatewayController.ViewApplication)));
+            Assert.That(viewResult.ControllerName, Is.EqualTo("RoatpGateway"));
         }
 
         [TestCase(OversightReviewStatus.Successful)]
@@ -217,8 +217,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(viewResult.ActionName, Is.EqualTo(nameof(RoatpGatewayController.ViewApplication)));
+            Assert.That(viewResult.ControllerName, Is.EqualTo("RoatpGateway"));
         }
 
         public async Task ConfirmWithdrawApplication_When_already_withdrawn_returns_to_ViewApplication(string oversightStatus)
@@ -238,8 +238,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as RedirectToActionResult;
 
-            Assert.AreEqual(nameof(RoatpGatewayController.ViewApplication), viewResult.ActionName);
-            Assert.AreEqual("RoatpGateway", viewResult.ControllerName);
+            Assert.That(viewResult.ActionName, Is.EqualTo(nameof(RoatpGatewayController.ViewApplication)));
+            Assert.That(viewResult.ControllerName, Is.EqualTo("RoatpGateway"));
         }
 
         [Test]
@@ -263,7 +263,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("ConfirmWithdrawApplication.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("ConfirmWithdrawApplication.cshtml"), Is.True);
         }
 
         [Test]
@@ -294,7 +294,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var result = await _controller.ConfirmWithdrawApplication(applicationId, viewModel);
             var viewResult = result as ViewResult;
 
-            Assert.IsTrue(viewResult.ViewName.EndsWith("ApplicationWithdrawn.cshtml"));
+            Assert.That(viewResult.ViewName.EndsWith("ApplicationWithdrawn.cshtml"), Is.True);
             ApplyApiClient.Verify(x => x.WithdrawApplication(viewModel.ApplicationId, viewModel.OptionYesText, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }

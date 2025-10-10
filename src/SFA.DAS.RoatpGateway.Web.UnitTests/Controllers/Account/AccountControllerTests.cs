@@ -39,8 +39,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.SignIn() as ChallengeResult;
 
             Assert.That(result, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
-            CollectionAssert.Contains(result.AuthenticationSchemes, WsFederationDefaults.AuthenticationScheme);
+            Assert.That(result.AuthenticationSchemes, Is.Not.Empty);
+            Assert.That(result.AuthenticationSchemes, Does.Contain(WsFederationDefaults.AuthenticationScheme));
         }
         
         [Test]
@@ -51,8 +51,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.SignIn() as ChallengeResult;
 
             Assert.That(result, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
-            CollectionAssert.Contains(result.AuthenticationSchemes, OpenIdConnectDefaults.AuthenticationScheme);
+            Assert.That(result.AuthenticationSchemes, Is.Not.Empty);
+            Assert.That(result.AuthenticationSchemes, Does.Contain(OpenIdConnectDefaults.AuthenticationScheme));
         }
 
         [Test]
@@ -60,8 +60,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
         {
             var result = _controller.PostSignIn() as RedirectToActionResult;
 
-            Assert.AreEqual("Home", result.ControllerName);
-            Assert.AreEqual("Index", result.ActionName);
+            Assert.That(result.ControllerName, Is.EqualTo("Home"));
+            Assert.That(result.ActionName, Is.EqualTo("Index"));
         }
 
         [Test]
@@ -72,9 +72,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.SignOut() as SignOutResult;
 
             Assert.That(result, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
-            CollectionAssert.Contains(result.AuthenticationSchemes, WsFederationDefaults.AuthenticationScheme);
-            CollectionAssert.Contains(result.AuthenticationSchemes, CookieAuthenticationDefaults.AuthenticationScheme);
+            Assert.That(result.AuthenticationSchemes, Is.Not.Empty);
+            Assert.That(result.AuthenticationSchemes, Does.Contain(WsFederationDefaults.AuthenticationScheme));
+            Assert.That(result.AuthenticationSchemes, Does.Contain(CookieAuthenticationDefaults.AuthenticationScheme));
         }
         [Test]
         public void SignOut_returns_expected_SignOutResult_For_DfeSignIn()
@@ -84,9 +84,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.SignOut() as SignOutResult;
 
             Assert.That(result, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
-            CollectionAssert.Contains(result.AuthenticationSchemes, OpenIdConnectDefaults.AuthenticationScheme);
-            CollectionAssert.Contains(result.AuthenticationSchemes, CookieAuthenticationDefaults.AuthenticationScheme);
+            Assert.That(result.AuthenticationSchemes, Is.Not.Empty);
+            Assert.That(result.AuthenticationSchemes, Does.Contain(OpenIdConnectDefaults.AuthenticationScheme));
+            Assert.That(result.AuthenticationSchemes, Does.Contain(CookieAuthenticationDefaults.AuthenticationScheme));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.SignedOut() as ViewResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.AreEqual("SignedOut", result.ViewName);
+            Assert.That(result.ViewName, Is.EqualTo("SignedOut"));
         }
 
         [Test]
@@ -104,11 +104,11 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.AccessDenied() as ViewResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.AreEqual("AccessDenied", result.ViewName);
+            Assert.That(result.ViewName, Is.EqualTo("AccessDenied"));
             var actualModel = result.Model as Error403ViewModel;
-            Assert.NotNull(actualModel);
-            Assert.True(actualModel.UseDfESignIn);
-            Assert.AreEqual("test", actualModel.HelpPageLink);
+            Assert.That(actualModel, Is.Not.Null);
+            Assert.That(actualModel.UseDfESignIn, Is.True);
+            Assert.That(actualModel.HelpPageLink, Is.EqualTo("test"));
         }
     }
 }

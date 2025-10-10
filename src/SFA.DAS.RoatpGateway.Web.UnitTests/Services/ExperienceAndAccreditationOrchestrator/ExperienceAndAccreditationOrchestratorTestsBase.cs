@@ -53,23 +53,23 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
 
         protected void AssertCommonDetails(RoatpGatewayPageViewModel viewModel)
         {
-            Assert.AreEqual(CommonDetails.ApplicationId, viewModel.ApplicationId);
-            Assert.AreEqual(CommonDetails.PageId, viewModel.PageId);
-            Assert.AreEqual(CommonDetails.ApplicationSubmittedOn, viewModel.ApplicationSubmittedOn);
-            Assert.AreEqual(CommonDetails.SourcesCheckedOn, viewModel.SourcesCheckedOn);
-            Assert.AreEqual(CommonDetails.LegalName, viewModel.ApplyLegalName);
-            Assert.AreEqual(CommonDetails.Ukprn, viewModel.Ukprn);
-            Assert.AreEqual(CommonDetails.GatewayReviewStatus, viewModel.GatewayReviewStatus);
-            Assert.AreEqual(CommonDetails.Status, viewModel.Status);
-            Assert.AreEqual(CommonDetails.Comments, viewModel.Comments);
-            Assert.AreEqual(CommonDetails.OutcomeMadeBy, viewModel.OutcomeMadeBy);
-            Assert.AreEqual(CommonDetails.OutcomeMadeOn, viewModel.OutcomeMadeOn);
+            Assert.That(viewModel.ApplicationId, Is.EqualTo(CommonDetails.ApplicationId));
+            Assert.That(viewModel.PageId, Is.EqualTo(CommonDetails.PageId));
+            Assert.That(viewModel.ApplicationSubmittedOn, Is.EqualTo(CommonDetails.ApplicationSubmittedOn));
+            Assert.That(viewModel.SourcesCheckedOn, Is.EqualTo(CommonDetails.SourcesCheckedOn));
+            Assert.That(viewModel.ApplyLegalName, Is.EqualTo(CommonDetails.LegalName));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(CommonDetails.Ukprn));
+            Assert.That(viewModel.GatewayReviewStatus, Is.EqualTo(CommonDetails.GatewayReviewStatus));
+            Assert.That(viewModel.Status, Is.EqualTo(CommonDetails.Status));
+            Assert.That(viewModel.Comments, Is.EqualTo(CommonDetails.Comments));
+            Assert.That(viewModel.OutcomeMadeBy, Is.EqualTo(CommonDetails.OutcomeMadeBy));
+            Assert.That(viewModel.OutcomeMadeOn, Is.EqualTo(CommonDetails.OutcomeMadeOn));
 
             // Note: If you change from a 'Pass' in Setup() then you'll have to amend this
-            Assert.AreEqual(CommonDetails.Comments, viewModel.OptionPassText);
-            Assert.Null(viewModel.OptionFailText);
-            Assert.Null(viewModel.OptionInProgressText);
-            Assert.Null(viewModel.OptionClarificationText);
+            Assert.That(viewModel.OptionPassText, Is.EqualTo(CommonDetails.Comments));
+            Assert.That(viewModel.OptionFailText, Is.Null);
+            Assert.That(viewModel.OptionInProgressText, Is.Null);
+            Assert.That(viewModel.OptionClarificationText, Is.Null);
         }
     }
 }

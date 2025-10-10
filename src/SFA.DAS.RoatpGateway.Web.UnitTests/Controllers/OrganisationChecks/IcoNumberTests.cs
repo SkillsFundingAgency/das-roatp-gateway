@@ -45,7 +45,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = await _controller.GetIcoNumberPage(applicationId);
             var viewResult = result as ViewResult;
-            Assert.AreSame(expectedViewModel, viewResult.Model);
+            Assert.That(viewResult.Model, Is.SameAs(expectedViewModel));
         }
 
         [Test]

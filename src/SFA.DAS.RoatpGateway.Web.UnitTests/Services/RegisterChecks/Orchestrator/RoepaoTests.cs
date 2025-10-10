@@ -50,8 +50,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
             var viewModel = await _orchestrator.GetRoepaoViewModel(request);
 
             // NOTE: We only grab Common Details at the moment
-            Assert.IsNotNull(viewModel.Ukprn);
-            Assert.IsNotNull(viewModel.ApplyLegalName);
+            Assert.That(viewModel.Ukprn, Is.Not.Null);
+            Assert.That(viewModel.ApplyLegalName, Is.Not.Null);
         }
     }
 }

@@ -77,13 +77,13 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 
             var viewModel = await _orchestrator.GetConfirmOverviewViewModel(request);
 
-            Assert.AreEqual(applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(ukprn, viewModel.Ukprn);
-            Assert.AreEqual(organisationName, viewModel.OrganisationName);
-            Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
-            Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
-            Assert.AreEqual(comment, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Comment);
-            Assert.AreEqual(viewModel.IsClarificationsSelectedAndAllFieldsSet,isClarificationSet);
+            Assert.That(viewModel.ApplicationId, Is.EqualTo(applicationId));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(ukprn));
+            Assert.That(viewModel.OrganisationName, Is.EqualTo(organisationName));
+            Assert.That(viewModel.GatewayReviewStatus, Is.EqualTo(gatewayReviewStatus));
+            Assert.That(viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status, Is.EqualTo(sectionReviewStatus));
+            Assert.That(viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Comment, Is.EqualTo(comment));
+            Assert.That(isClarificationSet, Is.EqualTo(viewModel.IsClarificationsSelectedAndAllFieldsSet));
         }
 
         [TestCase("12345678", "John Ltd.")]

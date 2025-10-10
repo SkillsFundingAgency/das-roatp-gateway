@@ -44,7 +44,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
             _orchestrator.Setup(x => x.GetOfficeForStudentsViewModel(It.Is<GetOfficeForStudentsRequest>(y => y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
             var result = await _controller.OfficeForStudents(applicationId);
-            Assert.AreSame(expectedViewModel, result.Model);
+            Assert.That(result.Model, Is.SameAs(expectedViewModel));
         }
 
         [Test]

@@ -102,16 +102,11 @@ namespace SFA.DAS.RoatpGateway.Web
             });
 
             services.AddMvc(options =>
-                {
-                    //options.Filters.Add<CheckSessionFilter>();
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                    options.ModelBinderProviders.Insert(0, new StringTrimmingModelBinderProvider());
-                })
-                // NOTE: Can we move this to 2.2 to match the version of .NET Core we're coding against?
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                });
+            {
+                //options.Filters.Add<CheckSessionFilter>();
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.ModelBinderProviders.Insert(0, new StringTrimmingModelBinderProvider());
+            });
 
             services.AddSession(opt => { opt.IdleTimeout = TimeSpan.FromHours(1); });
 

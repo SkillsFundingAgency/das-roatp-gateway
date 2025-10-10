@@ -20,10 +20,10 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.ExperienceAndAccreditation
 
             var viewModel = response.Result;
 
-            Assert.AreEqual(GatewayPageIds.InitialTeacherTraining, viewModel.PageId);
+            Assert.That(viewModel.PageId, Is.EqualTo(GatewayPageIds.InitialTeacherTraining));
             AssertCommonDetails(viewModel);
-            Assert.AreEqual(initialTeacherTraining.DoesOrganisationOfferInitialTeacherTraining, viewModel.DoesOrganisationOfferInitialTeacherTraining);
-            Assert.AreEqual(initialTeacherTraining.IsPostGradOnlyApprenticeship, viewModel.IsPostGradOnlyApprenticeship);
+            Assert.That(viewModel.DoesOrganisationOfferInitialTeacherTraining, Is.EqualTo(initialTeacherTraining.DoesOrganisationOfferInitialTeacherTraining));
+            Assert.That(viewModel.IsPostGradOnlyApprenticeship, Is.EqualTo(initialTeacherTraining.IsPostGradOnlyApprenticeship));
         }
     }
 }

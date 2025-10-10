@@ -53,7 +53,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.OrganisationChecks
 
             var result = _controller.GetWebsitePage(applicationId).Result;
             var viewResult = result as ViewResult;
-            Assert.AreEqual(viewname, viewResult.ViewName);
+            Assert.That(viewResult.ViewName, Is.EqualTo(viewname));
         }
 
         [Test]

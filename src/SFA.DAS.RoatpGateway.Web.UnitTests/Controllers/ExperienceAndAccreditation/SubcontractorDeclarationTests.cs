@@ -50,7 +50,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                         y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModel);
 
             var result = await _controller.SubcontractorDeclaration(applicationId);
-            Assert.AreSame(expectedViewModel, result.Model);
+            Assert.That(result.Model, Is.SameAs(expectedViewModel));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                 .ReturnsAsync(expectedContractFile);
 
             var result = await _controller.SubcontractorDeclarationContractFile(applicationId);
-            Assert.AreSame(expectedContractFile, result);
+            Assert.That(result, Is.SameAs(expectedContractFile));
         }
 
 
@@ -83,7 +83,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ExperienceAndAccreditat
                 .ReturnsAsync(expectedContractFile);
 
             var result = await _controller.SubcontractorDeclarationContractFileClarification(applicationId, fileName);
-            Assert.AreSame(expectedContractFile, result);
+            Assert.That(result, Is.SameAs(expectedContractFile));
         }
 
 

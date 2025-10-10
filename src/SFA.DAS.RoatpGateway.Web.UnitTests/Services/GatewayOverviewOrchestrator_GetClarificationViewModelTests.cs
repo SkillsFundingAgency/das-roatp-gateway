@@ -37,7 +37,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             _applyApiClient.Setup(x => x.GetApplication(_applicationId)).ReturnsAsync((Apply)null);
             var request = new GetApplicationClarificationsRequest(_applicationId, UserName);
             var result = await _orchestrator.GetClarificationViewModel(request);
-            Assert.IsNull(result);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
@@ -84,15 +84,15 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             var viewModel = await _orchestrator.GetClarificationViewModel(request);
             
         
-            Assert.AreEqual(_applicationId, viewModel.ApplicationId);
-            Assert.AreEqual(Email, viewModel.ApplicationEmailAddress);
-            Assert.AreEqual(Ukprn, viewModel.Ukprn);
-            Assert.AreEqual(OrganisationName, viewModel.OrganisationName);
-            Assert.AreEqual(1,viewModel.Sequences.Count);
-            Assert.AreEqual("Organisation checks", viewModel.Sequences[0].SequenceTitle);
-            Assert.AreEqual(1,viewModel.Sequences[0].Sections.Count);
-            Assert.AreEqual("Organisation high risk", viewModel.Sequences[0].Sections[0].PageTitle);
-            Assert.AreEqual(comment, viewModel.Sequences[0].Sections[0].Comment);
+            Assert.That(viewModel.ApplicationId, Is.EqualTo(_applicationId));
+            Assert.That(viewModel.ApplicationEmailAddress, Is.EqualTo(Email));
+            Assert.That(viewModel.Ukprn, Is.EqualTo(Ukprn));
+            Assert.That(viewModel.OrganisationName, Is.EqualTo(OrganisationName));
+            Assert.That(viewModel.Sequences.Count, Is.EqualTo(1));
+            Assert.That(viewModel.Sequences[0].SequenceTitle, Is.EqualTo("Organisation checks"));
+            Assert.That(viewModel.Sequences[0].Sections.Count, Is.EqualTo(1));
+            Assert.That(viewModel.Sequences[0].Sections[0].PageTitle, Is.EqualTo("Organisation high risk"));
+            Assert.That(viewModel.Sequences[0].Sections[0].Comment, Is.EqualTo(comment));
         }
     }
 }
