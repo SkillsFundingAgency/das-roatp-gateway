@@ -1,4 +1,4 @@
-﻿using SFA.DAS.AdminService.Common.Settings;
+﻿using SFA.DAS.RoatpGateway.Web.Settings.Authentication;
 
 namespace SFA.DAS.RoatpGateway.Web.Settings
 {

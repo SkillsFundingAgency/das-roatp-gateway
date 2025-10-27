@@ -49,25 +49,11 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions
             RequestUri = requestUri;
         }
 
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        protected RoatpApiClientException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected RoatpApiClientException(SerializationInfo info, StreamingContext context)
         {
             HttpMethod = info.GetValue("HttpMethod", typeof(string)) as string;
             StatusCode = (HttpStatusCode)info.GetValue("StatusCode", typeof(HttpStatusCode));
             RequestUri = info.GetValue("RequestUri", typeof(Uri)) as Uri;
-        }
-
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-            {
-                throw new ArgumentNullException("info");
-            }
-            info.AddValue("HttpMethod", HttpMethod);
-            info.AddValue("StatusCode", StatusCode);
-            info.AddValue("RequestUri", RequestUri);
-            base.GetObjectData(info, context);
         }
 
         public override string ToString()

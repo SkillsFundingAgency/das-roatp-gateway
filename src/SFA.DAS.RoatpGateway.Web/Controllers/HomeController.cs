@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.RoatpGateway.Web.Settings;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {

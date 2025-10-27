@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.RoatpGateway.Web.Controllers;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.ErrorPage

@@ -14,17 +14,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Primitives;
 using Polly;
 using Polly.Extensions.Http;
-using SFA.DAS.AdminService.Common;
-using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.DfESignIn.Auth.Enums;
 using SFA.DAS.RoatpGateway.Web.Domain;
+using SFA.DAS.RoatpGateway.Web.Extensions;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 using SFA.DAS.RoatpGateway.Web.ModelBinders;
@@ -43,12 +43,12 @@ namespace SFA.DAS.RoatpGateway.Web
         private const string Culture = "en-GB";
 
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
         private readonly ILogger<Startup> _logger;
 
         public IWebConfiguration ApplicationConfiguration { get; set; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             _env = env;
             _logger = logger;
@@ -106,6 +106,7 @@ namespace SFA.DAS.RoatpGateway.Web
                 //options.Filters.Add<CheckSessionFilter>();
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.ModelBinderProviders.Insert(0, new StringTrimmingModelBinderProvider());
+                options.EnableEndpointRouting = false;
             });
 
             services.AddSession(opt => { opt.IdleTimeout = TimeSpan.FromHours(1); });
@@ -236,7 +237,7 @@ namespace SFA.DAS.RoatpGateway.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -258,7 +259,7 @@ namespace SFA.DAS.RoatpGateway.Web
             {
                 if (!context.Response.Headers.ContainsKey("X-Permitted-Cross-Domain-Policies"))
                 {
-                    context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
+                    context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
                 }
                 await next();
             });

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Web.Validators.Validation;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 
 namespace SFA.DAS.RoatpGateway.Web.Services

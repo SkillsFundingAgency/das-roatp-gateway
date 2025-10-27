@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AdminService.Common.Testing.MockedObjects;
 using SFA.DAS.RoatpGateway.Web.Controllers;
 using SFA.DAS.RoatpGateway.Web.Settings;
 using SFA.DAS.RoatpGateway.Web.ViewModels;

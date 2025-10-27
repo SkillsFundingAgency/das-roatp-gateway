@@ -1,8 +1,8 @@
-﻿using SFA.DAS.AdminService.Common.Validation;
-using SFA.DAS.RoatpGateway.Domain.Apply;
+﻿using SFA.DAS.RoatpGateway.Domain.Apply;
 using System;
 using System.Collections.Generic;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Web.Validators.Validation;
 
 namespace SFA.DAS.RoatpGateway.Web.ViewModels
 {

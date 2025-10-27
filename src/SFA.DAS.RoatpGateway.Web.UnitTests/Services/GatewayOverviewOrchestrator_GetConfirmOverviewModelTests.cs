@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Web.Services;
 using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.Validators.Validation;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {

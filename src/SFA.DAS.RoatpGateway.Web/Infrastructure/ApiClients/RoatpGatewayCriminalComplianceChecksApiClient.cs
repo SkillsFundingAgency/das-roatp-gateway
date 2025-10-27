@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 using System;

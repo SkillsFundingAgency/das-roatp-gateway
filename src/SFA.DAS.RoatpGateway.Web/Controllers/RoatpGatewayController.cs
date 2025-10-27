@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
 using SFA.DAS.RoatpGateway.Domain;
@@ -12,6 +11,7 @@ using SFA.DAS.RoatpGateway.Web.Extensions;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.RoatpGateway.Web.ModelBinders;
+using SFA.DAS.RoatpGateway.Web.Validators.Validation;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {

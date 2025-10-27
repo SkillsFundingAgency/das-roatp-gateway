@@ -1,6 +1,5 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
@@ -10,6 +9,7 @@ using SFA.DAS.RoatpGateway.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.Validators.Validation;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {

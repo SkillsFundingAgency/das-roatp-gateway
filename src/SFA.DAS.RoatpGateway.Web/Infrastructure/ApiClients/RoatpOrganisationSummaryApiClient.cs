@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 using SFA.DAS.RoatpGateway.Web.Models;
 

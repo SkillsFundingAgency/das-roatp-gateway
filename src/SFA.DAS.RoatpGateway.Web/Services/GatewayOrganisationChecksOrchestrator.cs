@@ -5,7 +5,6 @@ using System;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
-using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.RoatpGateway.Web.Extensions;
 
 namespace SFA.DAS.RoatpGateway.Web.Services
