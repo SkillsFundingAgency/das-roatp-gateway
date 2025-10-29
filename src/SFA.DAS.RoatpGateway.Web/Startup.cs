@@ -251,6 +251,7 @@ namespace SFA.DAS.RoatpGateway.Web
 
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
+            app.UseRouting();
             app.UseSession();
             app.UseRequestLocalization();
             app.UseStatusCodePagesWithReExecute("/ErrorPage/{0}");
