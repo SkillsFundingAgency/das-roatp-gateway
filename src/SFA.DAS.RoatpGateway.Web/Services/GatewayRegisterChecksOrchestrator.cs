@@ -11,10 +11,10 @@ namespace SFA.DAS.RoatpGateway.Web.Services
     public class GatewayRegisterChecksOrchestrator : IGatewayRegisterChecksOrchestrator
     {
         private readonly IRoatpApplicationApiClient _applyApiClient;
-        private readonly IRoatpRegisterApiClient _roatpApiClient;
+        private readonly IRoatpServiceApiClient _roatpApiClient;
         private readonly ILogger<GatewayRegisterChecksOrchestrator> _logger;
 
-        public GatewayRegisterChecksOrchestrator(IRoatpApplicationApiClient applyApiClient, IRoatpRegisterApiClient roatpApiClient,
+        public GatewayRegisterChecksOrchestrator(IRoatpApplicationApiClient applyApiClient, IRoatpServiceApiClient roatpApiClient,
                                                      ILogger<GatewayRegisterChecksOrchestrator> logger)
         {
             _applyApiClient = applyApiClient;

@@ -16,7 +16,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
     {
         private GatewayRegisterChecksOrchestrator _orchestrator;
         private Mock<IRoatpApplicationApiClient> _applyApiClient;
-        private Mock<IRoatpRegisterApiClient> _roatpApiClient;
+        private Mock<IRoatpServiceApiClient> _roatpApiClient;
         private Mock<ILogger<GatewayRegisterChecksOrchestrator>> _logger;
 
         private const string ukprn = "12345678";
@@ -33,7 +33,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
         public void Setup()
         {
             _applyApiClient = new Mock<IRoatpApplicationApiClient>();
-            _roatpApiClient = new Mock<IRoatpRegisterApiClient>();
+            _roatpApiClient = new Mock<IRoatpServiceApiClient>();
             _logger = new Mock<ILogger<GatewayRegisterChecksOrchestrator>>();
             _orchestrator = new GatewayRegisterChecksOrchestrator(_applyApiClient.Object, _roatpApiClient.Object, _logger.Object);
 

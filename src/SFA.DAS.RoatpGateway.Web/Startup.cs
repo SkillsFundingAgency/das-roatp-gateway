@@ -20,11 +20,14 @@ using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Primitives;
 using Polly;
 using Polly.Extensions.Http;
+using Refit;
+using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.DfESignIn.Auth.Enums;
 using SFA.DAS.RoatpGateway.Web.Domain;
 using SFA.DAS.RoatpGateway.Web.Extensions;
+using SFA.DAS.RoatpGateway.Web.Infrastructure;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 using SFA.DAS.RoatpGateway.Web.ModelBinders;
@@ -128,7 +131,7 @@ namespace SFA.DAS.RoatpGateway.Web
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            ConfigureHttpClients(services);
+            ConfigureApiClients(services);
             ConfigureDependencyInjection(services);
         }
 
@@ -166,59 +169,56 @@ namespace SFA.DAS.RoatpGateway.Web
             services.AddAntiforgery(options => options.Cookie = new CookieBuilder() { Name = ".RoatpGateway.Staff.AntiForgery", HttpOnly = false });
         }
 
-        private void ConfigureHttpClients(IServiceCollection services)
+        private void ConfigureApiClients(IServiceCollection services)
         {
             var acceptHeaderName = "Accept";
             var acceptHeaderValue = "application/json";
             var handlerLifeTime = TimeSpan.FromMinutes(5);
-
+            
             services.AddHttpClient<IRoatpApplicationApiClient, RoatpApplicationApiClient>(config =>
-            {
-                config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
-                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
-            })
-            .SetHandlerLifetime(handlerLifeTime)
-            .AddPolicyHandler(GetRetryPolicy());
-
-            services.AddHttpClient<IRoatpRegisterApiClient, RoatpRegisterApiClient>(config =>
-            {
-                config.BaseAddress = new Uri(ApplicationConfiguration.RoatpRegisterApiAuthentication.ApiBaseAddress);
-                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
-            })
-            .SetHandlerLifetime(handlerLifeTime)
-            .AddPolicyHandler(GetRetryPolicy());
-
+                {
+                    config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
+                    config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
+                })
+                .SetHandlerLifetime(handlerLifeTime)
+                .AddPolicyHandler(GetRetryPolicy());
+            
             services.AddHttpClient<IRoatpOrganisationSummaryApiClient, RoatpOrganisationSummaryApiClient>(config =>
-            {
-                config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
-                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
-            })
-            .SetHandlerLifetime(handlerLifeTime)
-            .AddPolicyHandler(GetRetryPolicy());
-
+                {
+                    config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
+                    config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
+                })
+                .SetHandlerLifetime(handlerLifeTime)
+                .AddPolicyHandler(GetRetryPolicy());
+            
             services.AddHttpClient<IRoatpExperienceAndAccreditationApiClient, RoatpExperienceAndAccreditationApiClient>(config =>
-            {
-                config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
-                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
-            })
-           .SetHandlerLifetime(handlerLifeTime)
-           .AddPolicyHandler(GetRetryPolicy());
-
+                {
+                    config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
+                    config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
+                })
+                .SetHandlerLifetime(handlerLifeTime)
+                .AddPolicyHandler(GetRetryPolicy());
+            
             services.AddHttpClient<IRoatpGatewayCriminalComplianceChecksApiClient, RoatpGatewayCriminalComplianceChecksApiClient>(config =>
-            {
-                config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
-                config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
-            })
-           .SetHandlerLifetime(handlerLifeTime)
-           .AddPolicyHandler(GetRetryPolicy());
-        }
+                {
+                    config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
+                    config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
+                })
+                .SetHandlerLifetime(handlerLifeTime)
+                .AddPolicyHandler(GetRetryPolicy());
+            
+            services.AddRefitClient<IRoatpServiceApiClient>()
+                .ConfigureHttpClient(c =>
+                    c.BaseAddress = new Uri(ApplicationConfiguration.RoatpServiceApiAuthentication.ApiBaseAddress))
+                .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(),
+                    ApplicationConfiguration.RoatpServiceApiAuthentication.Identifier));
+            }
 
         private void ConfigureDependencyInjection(IServiceCollection services)
         {
             services.AddTransient(x => ApplicationConfiguration);
 
             services.AddTransient<IRoatpApplicationTokenService, RoatpApplicationTokenService>();
-            services.AddTransient<IRoatpRegisterTokenService, RoatpRegisterTokenService>();
 
             services.AddTransient<IGatewayOverviewOrchestrator, GatewayOverviewOrchestrator>();
             services.AddTransient<IGatewayOrganisationChecksOrchestrator, GatewayOrganisationChecksOrchestrator>();
