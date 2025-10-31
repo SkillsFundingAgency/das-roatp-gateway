@@ -22,6 +22,7 @@ using Polly;
 using Polly.Extensions.Http;
 using Refit;
 using SFA.DAS.Api.Common.Infrastructure;
+using SFA.DAS.Api.Common.Interfaces;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.DfESignIn.Auth.Enums;
@@ -216,7 +217,7 @@ namespace SFA.DAS.RoatpGateway.Web
 
         private void ConfigureDependencyInjection(IServiceCollection services)
         {
-            services.AddTransient(x => ApplicationConfiguration);
+            services.AddSingleton(x => ApplicationConfiguration);
 
             services.AddTransient<IRoatpApplicationTokenService, RoatpApplicationTokenService>();
 
@@ -233,6 +234,9 @@ namespace SFA.DAS.RoatpGateway.Web
             services.AddTransient<IGatewayApplicationActionsOrchestrator, GatewayApplicationActionsOrchestrator>();
             services.AddTransient<IRoatpWithdrawApplicationViewModelValidator, RoatpWithdrawApplicationViewModelValidator>();
             services.AddTransient<IRoatpRemoveApplicationViewModelValidator, RoatpRemoveApplicationViewModelValidator>();
+
+            services.AddSingleton<IAzureClientCredentialHelper, AzureClientCredentialHelper>();
+
             DependencyInjection.ConfigureDependencyInjection(services);
         }
 

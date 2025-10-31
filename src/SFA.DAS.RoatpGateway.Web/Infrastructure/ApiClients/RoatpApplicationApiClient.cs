@@ -2,28 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.RoatpGateway.Domain;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
-using SFA.DAS.RoatpGateway.Domain.Ukrlp;
-using SFA.DAS.RoatpGateway.Domain.CompaniesHouse;
-using SFA.DAS.RoatpGateway.Domain.CharityCommission;
-using SFA.DAS.RoatpGateway.Domain.Roatp;
 using System.Net.Http;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.Api.Common.Infrastructure;
+using SFA.DAS.Api.Common.Interfaces;
+using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
+using SFA.DAS.RoatpGateway.Domain.CharityCommission;
+using SFA.DAS.RoatpGateway.Domain.CompaniesHouse;
+using SFA.DAS.RoatpGateway.Domain.Roatp;
+using SFA.DAS.RoatpGateway.Domain.Ukrlp;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.Exceptions;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
+using SFA.DAS.RoatpGateway.Web.Settings;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
     public class RoatpApplicationApiClient : ApiClientBase<RoatpApplicationApiClient>, IRoatpApplicationApiClient
     {
-        public RoatpApplicationApiClient(HttpClient client, ILogger<RoatpApplicationApiClient> logger, IRoatpApplicationTokenService tokenService)
+        public RoatpApplicationApiClient(HttpClient client, ILogger<RoatpApplicationApiClient> logger, IRoatpApplicationTokenService tokenService, IAzureClientCredentialHelper clientCredentialHelper, IWebConfiguration configuration)
             : base(client, logger)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
+            if (!string.IsNullOrEmpty(configuration.ApplyApiAuthentication.Identifier))
+            {
+                var accessToken = clientCredentialHelper.GetAccessTokenAsync(configuration.ApplyApiAuthentication.Identifier).GetAwaiter().GetResult();
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
+            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
         }
 
         public async Task<Apply> GetApplication(Guid applicationId)
