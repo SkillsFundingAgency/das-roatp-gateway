@@ -207,11 +207,11 @@ namespace SFA.DAS.RoatpGateway.Web
                 .SetHandlerLifetime(handlerLifeTime)
                 .AddPolicyHandler(GetRetryPolicy());
             
-            services.AddRefitClient<IRoatpServiceApiClient>()
+            services.AddRefitClient<IRoatpRegisterApiClient>()
                 .ConfigureHttpClient(c =>
-                    c.BaseAddress = new Uri(ApplicationConfiguration.RoatpServiceApiAuthentication.ApiBaseAddress))
+                    c.BaseAddress = new Uri(ApplicationConfiguration.RoatpRegisterApiAuthentication.ApiBaseAddress))
                 .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(),
-                    ApplicationConfiguration.RoatpServiceApiAuthentication.Identifier));
+                    ApplicationConfiguration.RoatpRegisterApiAuthentication.Identifier));
             }
 
         private void ConfigureDependencyInjection(IServiceCollection services)

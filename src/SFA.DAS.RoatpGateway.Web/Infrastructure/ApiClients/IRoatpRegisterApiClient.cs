@@ -6,7 +6,7 @@ using Refit;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
-    public interface IRoatpServiceApiClient
+    public interface IRoatpRegisterApiClient
     {
         [Get("/api/v1/ukrlp/lookup/{ukprn}")]
         Task<IEnumerable<ProviderDetails>> GetUkrlpProviderDetails([AliasAs("ukprn")] string ukprn);
