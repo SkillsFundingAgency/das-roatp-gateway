@@ -1,20 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 
-namespace SFA.DAS.RoatpGateway.Web
-{
-    [ExcludeFromCodeCoverage]
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateWebHostBuilder(args).Build().Run();
-        }
+namespace SFA.DAS.RoatpGateway.Web;
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseUrls("https://localhost:45668");
+[ExcludeFromCodeCoverage]
+public static class Program
+{
+    public static void Main(string[] args)
+    {
+        WebHost.CreateDefaultBuilder(args).UseStartup<Startup>().Build().Run();
     }
 }

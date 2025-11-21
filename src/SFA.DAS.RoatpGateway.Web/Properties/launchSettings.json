@@ -17,7 +17,7 @@
     },
     "SFA.DAS.RoatpGateway.Web": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "applicationUrl": "https://localhost:45668",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",

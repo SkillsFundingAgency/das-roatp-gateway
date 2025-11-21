@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Primitives;
@@ -38,44 +38,28 @@ namespace SFA.DAS.RoatpGateway.Web
     [ExcludeFromCodeCoverage]
     public class Startup
     {
-        private const string ServiceName = "SFA.DAS.RoatpGateway";
-        private const string Version = "1.0";
         private const string Culture = "en-GB";
 
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _env;
-        private readonly ILogger<Startup> _logger;
+        private readonly IWebHostEnvironment _env;
 
         public IWebConfiguration ApplicationConfiguration { get; set; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _env = env;
-            _logger = logger;
 
             var config = new ConfigurationBuilder()
-                .AddConfiguration(configuration)
-                .SetBasePath(Directory.GetCurrentDirectory());
-#if DEBUG
-            if (!configuration["EnvironmentName"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
-            {
-                config.AddJsonFile("appsettings.json", true)
-                    .AddJsonFile("appsettings.Development.json", true);
-            }
-#endif
-            config.AddEnvironmentVariables();
+                .AddConfiguration(configuration);
 
-            if (!configuration["EnvironmentName"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
-            {
-                config.AddAzureTableStorage(options =>
-                    {
-                        options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
-                        options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                        options.EnvironmentName = configuration["EnvironmentName"];
-                        options.PreFixConfigurationKeys = false;
-                    }
-                );
-            }
+            config.AddAzureTableStorage(options =>
+                {
+                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                    options.EnvironmentName = configuration["EnvironmentName"];
+                    options.PreFixConfigurationKeys = false;
+                }
+            );
 
             _configuration = config.Build();
             ApplicationConfiguration = _configuration.GetSection(nameof(WebConfiguration)).Get<WebConfiguration>();
@@ -163,7 +147,7 @@ namespace SFA.DAS.RoatpGateway.Web
             }
         }
 
-        private void AddAntiforgery(IServiceCollection services)
+        private static void AddAntiforgery(IServiceCollection services)
         {
             services.AddAntiforgery(options => options.Cookie = new CookieBuilder() { Name = ".RoatpGateway.Staff.AntiForgery", HttpOnly = false });
         }
@@ -239,7 +223,7 @@ namespace SFA.DAS.RoatpGateway.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
