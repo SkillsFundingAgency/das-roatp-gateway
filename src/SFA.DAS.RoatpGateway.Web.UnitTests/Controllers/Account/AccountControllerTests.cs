@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -16,13 +15,12 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
     public class AccountControllerTests
     {
         private AccountController _controller;
-        private Mock<IWebConfiguration> _configurationMock; 
+        private Mock<IWebConfiguration> _configurationMock;
 
         [SetUp]
         public void Setup()
         {
             _configurationMock = new Mock<IWebConfiguration>();
-            _configurationMock.Setup(x => x.UseDfeSignIn).Returns(true);
             _configurationMock.Setup(x => x.DfESignInServiceHelpUrl).Returns("test");
             _controller = new AccountController(Mock.Of<ILogger<AccountController>>(), _configurationMock.Object)
             {
@@ -32,22 +30,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
         }
 
         [Test]
-        public void SignIn_returns_expected_ChallengeResult()
-        {
-            _configurationMock.Setup(x => x.UseDfeSignIn).Returns(false);
-            
-            var result = _controller.SignIn() as ChallengeResult;
-
-            Assert.That(result, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
-            CollectionAssert.Contains(result.AuthenticationSchemes, WsFederationDefaults.AuthenticationScheme);
-        }
-        
-        [Test]
         public void SignIn_returns_expected_ChallengeResult_DfeSignIn()
         {
-            _configurationMock.Setup(x => x.UseDfeSignIn).Returns(true);
-            
             var result = _controller.SignIn() as ChallengeResult;
 
             Assert.That(result, Is.Not.Null);
@@ -65,22 +49,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
         }
 
         [Test]
-        public void SignOut_returns_expected_SignOutResult_For_Pirean()
-        {
-            _configurationMock.Setup(x => x.UseDfeSignIn).Returns(false);
-                
-            var result = _controller.SignOut() as SignOutResult;
-
-            Assert.That(result, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
-            CollectionAssert.Contains(result.AuthenticationSchemes, WsFederationDefaults.AuthenticationScheme);
-            CollectionAssert.Contains(result.AuthenticationSchemes, CookieAuthenticationDefaults.AuthenticationScheme);
-        }
-        [Test]
         public void SignOut_returns_expected_SignOutResult_For_DfeSignIn()
         {
-            _configurationMock.Setup(x => x.UseDfeSignIn).Returns(true);
-                
             var result = _controller.SignOut() as SignOutResult;
 
             Assert.That(result, Is.Not.Null);
@@ -107,7 +77,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             Assert.AreEqual("AccessDenied", result.ViewName);
             var actualModel = result.Model as Error403ViewModel;
             Assert.NotNull(actualModel);
-            Assert.True(actualModel.UseDfESignIn);
             Assert.AreEqual("test", actualModel.HelpPageLink);
         }
     }
