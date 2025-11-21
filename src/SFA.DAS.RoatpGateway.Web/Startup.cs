@@ -102,16 +102,10 @@ namespace SFA.DAS.RoatpGateway.Web
             });
 
             services.AddMvc(options =>
-                {
-                    //options.Filters.Add<CheckSessionFilter>();
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                    options.ModelBinderProviders.Insert(0, new StringTrimmingModelBinderProvider());
-                })
-                // NOTE: Can we move this to 2.2 to match the version of .NET Core we're coding against?
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                });
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.ModelBinderProviders.Insert(0, new StringTrimmingModelBinderProvider());
+            });
 
             services.AddSession(opt => { opt.IdleTimeout = TimeSpan.FromHours(1); });
 
@@ -134,6 +128,10 @@ namespace SFA.DAS.RoatpGateway.Web
 
             ConfigureHttpClients(services);
             ConfigureDependencyInjection(services);
+
+#if DEBUG
+            services.AddControllersWithViews().AddControllersAsServices().AddRazorRuntimeCompilation();
+#endif
         }
 
 
@@ -255,6 +253,7 @@ namespace SFA.DAS.RoatpGateway.Web
 
             app.UseHttpsRedirection();
             app.UseCookiePolicy();
+            app.UseRouting();
             app.UseSession();
             app.UseRequestLocalization();
             app.UseStatusCodePagesWithReExecute("/ErrorPage/{0}");
@@ -269,12 +268,13 @@ namespace SFA.DAS.RoatpGateway.Web
             });
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseHealthChecks("/health");
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
 
