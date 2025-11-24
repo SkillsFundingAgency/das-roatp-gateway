@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
-using SFA.DAS.AdminService.Common.Testing.MockedObjects;
-using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.Validation;
 using SFA.DAS.RoatpGateway.Web.Models;
 using SFA.DAS.RoatpGateway.Web.Validators;
 
@@ -25,7 +23,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             ApplyApiClient = new Mock<IRoatpApplicationApiClient>();
             GatewayValidator = new Mock<IRoatpGatewayPageValidator>();
             Logger = new Mock<ILogger<T>>();
-            
+
             GatewayValidator.Setup(v => v.Validate(It.IsAny<SubmitGatewayPageAnswerCommand>()))
                 .ReturnsAsync(new ValidationResponse
                 {

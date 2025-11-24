@@ -1,13 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Domain.CharityCommission;
 using SFA.DAS.RoatpGateway.Domain.CompaniesHouse;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
 using SFA.DAS.RoatpGateway.Domain.Ukrlp;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
 {
@@ -29,7 +29,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<ContactAddress> GetOrganisationAddress(Guid applicationId);
         Task<IcoNumber> GetIcoNumber(Guid applicationId);
 
-        Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username, string comments); 
+        Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username, string comments);
         Task SubmitGatewayPageAnswer(Guid applicationId, string pageId, string status, string userId, string username, string comments, string clarificationAnswer);
         Task SubmitGatewayPageAnswerClarification(Guid applicationId, string pageId, string status, string userId, string username, string comments, string clarificationAnswer);
         Task SubmitGatewayPageAnswerPostClarification(Guid applicationId, string pageId, string status, string userId, string username, string comments, string clarificationAnswer);
@@ -55,7 +55,7 @@ namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients
         Task<ContactDetails> GetContactDetails(Guid applicationId);
 
         Task<bool> UploadSubcontractorDeclarationClarificationFile(Guid applicationId, string userId, string userName, IFormFileCollection clarificationFiles);
-        Task<bool> RemoveSubcontractorDeclarationClarificationFile(Guid application, string userId, string userName, string fileName);
+        Task<bool> RemoveSubcontractorDeclarationClarificationFile(Guid applicationId, string userId, string userName, string fileName);
         Task<ApplicationOversightDetails> GetOversightDetails(Guid applicationId);
     }
 }

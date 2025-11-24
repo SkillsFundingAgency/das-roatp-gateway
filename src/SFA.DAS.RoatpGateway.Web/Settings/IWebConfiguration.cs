@@ -1,6 +1,4 @@
-﻿using SFA.DAS.AdminService.Common.Settings;
-
-namespace SFA.DAS.RoatpGateway.Web.Settings;
+﻿namespace SFA.DAS.RoatpGateway.Web.Settings;
 
 public interface IWebConfiguration
 {
@@ -10,9 +8,9 @@ public interface IWebConfiguration
 
     string DataProtectionKeysDatabase { get; set; }
 
-    ManagedIdentityApiAuthentication ApplyApiAuthentication { get; set; }
+    InnerApiConfiguration ApplyApiAuthentication { get; set; }
 
-    ClientApiAuthentication RoatpRegisterApiAuthentication { get; set; }
+    InnerApiConfiguration RoatpRegisterApiAuthentication { get; set; }
 
     string EsfaAdminServicesBaseUrl { get; set; }
     string DfESignInServiceHelpUrl { get; set; }
