@@ -4,6 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,8 +20,11 @@ using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Primitives;
 using Polly;
 using Polly.Extensions.Http;
+using Refit;
 using SFA.DAS.AdminService.Common;
 using SFA.DAS.AdminService.Common.Extensions;
+using SFA.DAS.Api.Common.Infrastructure;
+using SFA.DAS.Api.Common.Interfaces;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.DfESignIn.Auth.Enums;
@@ -112,6 +118,8 @@ public class Startup
 
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
+        AddRoatpRegisterApiClient(services, _configuration);
+
         ConfigureHttpClients(services);
         ConfigureDependencyInjection(services);
 
@@ -129,14 +137,6 @@ public class Startup
         services.AddHttpClient<IRoatpApplicationApiClient, RoatpApplicationApiClient>(config =>
         {
             config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
-            config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
-        })
-        .SetHandlerLifetime(handlerLifeTime)
-        .AddPolicyHandler(GetRetryPolicy());
-
-        services.AddHttpClient<IRoatpRegisterApiClient, RoatpRegisterApiClient>(config =>
-        {
-            config.BaseAddress = new Uri(ApplicationConfiguration.RoatpRegisterApiAuthentication.ApiBaseAddress);
             config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
         })
         .SetHandlerLifetime(handlerLifeTime)
@@ -167,12 +167,25 @@ public class Startup
        .AddPolicyHandler(GetRetryPolicy());
     }
 
+    private static void AddRoatpRegisterApiClient(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IAzureClientCredentialHelper, AzureClientCredentialHelper>();
+        var apiConfig = GetApiConfiguration(configuration, "WebConfiguration:RoatpRegisterApiAuthentication");
+
+        services.AddRefitClient<IRoatpRegisterApiClient>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfig.ApiBaseAddress))
+            .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(configuration), apiConfig.Identifier));
+    }
+
+    private static InnerApiConfiguration GetApiConfiguration(IConfiguration configuration, string configurationName)
+        => configuration.GetSection(configurationName).Get<InnerApiConfiguration>()!;
+
+
     private void ConfigureDependencyInjection(IServiceCollection services)
     {
         services.AddTransient(x => ApplicationConfiguration);
 
         services.AddTransient<IRoatpApplicationTokenService, RoatpApplicationTokenService>();
-        services.AddTransient<IRoatpRegisterTokenService, RoatpRegisterTokenService>();
 
         services.AddTransient<IGatewayOverviewOrchestrator, GatewayOverviewOrchestrator>();
         services.AddTransient<IGatewayOrganisationChecksOrchestrator, GatewayOrganisationChecksOrchestrator>();
@@ -237,5 +250,28 @@ public class Startup
             .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
             .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
                 retryAttempt)));
+    }
+}
+
+public class InnerApiAuthenticationHeaderHandler : DelegatingHandler
+{
+    private readonly IAzureClientCredentialHelper _azureClientCredentialHelper;
+    private readonly string _apiIdentifier;
+
+    public InnerApiAuthenticationHeaderHandler(IAzureClientCredentialHelper azureClientCredentialHelper, string apiIdentifier)
+    {
+        _azureClientCredentialHelper = azureClientCredentialHelper;
+        _apiIdentifier = apiIdentifier;
+    }
+
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        request.Headers.Add("X-Version", "1.0");
+        if (!string.IsNullOrEmpty(_apiIdentifier))
+        {
+            var accessToken = await _azureClientCredentialHelper.GetAccessTokenAsync(_apiIdentifier);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+        return await base.SendAsync(request, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
     }
 }
