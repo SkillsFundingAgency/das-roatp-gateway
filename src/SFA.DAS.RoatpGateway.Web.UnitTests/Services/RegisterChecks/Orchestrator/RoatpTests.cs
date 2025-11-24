@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrator
 {
@@ -48,20 +47,6 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
             _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserId, UserName)).ReturnsAsync(commonDetails);
 
             _applyApiClient.Setup(x => x.GetProviderRouteName(_applicationId)).ReturnsAsync($"{roatpProviderTypeId}");
-
-            var providerType = new ProviderType
-            {
-                Id = roatpProviderTypeId,
-                Type = $"{roatpProviderTypeId}"
-            };
-            _roatpApiClient.Setup(x => x.GetProviderTypes()).ReturnsAsync(new List<ProviderType> { providerType });
-
-            var organisationStatus = new OrganisationStatus
-            {
-                Id = roatpStatusId,
-                Status = $"{roatpStatusId}"
-            };
-            _roatpApiClient.Setup(x => x.GetOrganisationStatuses(It.IsAny<int?>())).ReturnsAsync(new List<OrganisationStatus> { organisationStatus });
         }
 
         [Test]
