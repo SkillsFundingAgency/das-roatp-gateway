@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Refit;
 using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.Roatp;
 using SFA.DAS.RoatpGateway.Web.Extensions;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
@@ -51,15 +53,16 @@ public class GatewayRegisterChecksOrchestrator : IGatewayRegisterChecksOrchestra
 
         model.ApplyProviderRoute = await _applyApiClient.GetProviderRouteName(model.ApplicationId);
 
-        var roatpProviderDetails = await _roatpApiClient.GetOrganisationRegisterStatus(model.Ukprn);
+        ApiResponse<OrganisationResponse> organisationResponse = await _roatpApiClient.GetOrganisationRegisterStatus(model.Ukprn);
 
-        if (roatpProviderDetails != null)
+        if (organisationResponse.IsSuccessStatusCode)
         {
-            model.RoatpUkprnOnRegister = roatpProviderDetails.UkprnOnRegister;
-            model.RoatpStatusDate = roatpProviderDetails.StatusDate;
-            model.RoatpProviderRoute = GetProviderRoute(roatpProviderDetails.ProviderTypeId);
-            model.RoatpStatus = GetProviderStatus(roatpProviderDetails.StatusId);
-            model.RoatpRemovedReason = await GetRemovedReason(roatpProviderDetails.RemovedReasonId);
+            OrganisationRegisterStatus registerStatus = organisationResponse.Content;
+            model.RoatpUkprnOnRegister = registerStatus.UkprnOnRegister;
+            model.RoatpStatusDate = registerStatus.StatusDate;
+            model.RoatpProviderRoute = GetProviderRoute(registerStatus.ProviderTypeId);
+            model.RoatpStatus = GetProviderStatus(registerStatus.StatusId);
+            model.RoatpRemovedReason = await GetRemovedReason(registerStatus.RemovedReasonId);
         }
 
         return model;
@@ -96,7 +99,7 @@ public class GatewayRegisterChecksOrchestrator : IGatewayRegisterChecksOrchestra
         {
             var roatpRemovedReasons = await _roatpApiClient.GetRemovedReasons();
 
-            reason = roatpRemovedReasons?.FirstOrDefault(rm => rm.Id == providerRemovedReasonId.Value)?.Reason;
+            reason = roatpRemovedReasons.Content.ReasonsForRemoval.FirstOrDefault(rm => rm.Id == providerRemovedReasonId.Value)?.Description;
         }
 
         return reason;
