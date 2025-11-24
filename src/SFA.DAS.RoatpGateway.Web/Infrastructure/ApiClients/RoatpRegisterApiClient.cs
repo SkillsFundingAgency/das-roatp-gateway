@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.AdminService.Common.Infrastructure;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
-using SFA.DAS.RoatpGateway.Domain.Ukrlp;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 
 namespace SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
@@ -16,11 +15,6 @@ public class RoatpRegisterApiClient : ApiClientBase<RoatpRegisterApiClient>, IRo
         : base(client, logger)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetToken(client.BaseAddress));
-    }
-
-    public async Task<IEnumerable<ProviderDetails>> GetUkrlpProviderDetails(string ukprn)
-    {
-        return await Get<List<ProviderDetails>>($"/api/v1/ukrlp/lookup/{ukprn}");
     }
 
     public async Task<OrganisationRegisterStatus> GetOrganisationRegisterStatus(string ukprn)
