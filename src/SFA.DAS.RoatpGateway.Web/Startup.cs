@@ -21,15 +21,12 @@ using Microsoft.Extensions.Primitives;
 using Polly;
 using Polly.Extensions.Http;
 using Refit;
-using SFA.DAS.AdminService.Common;
-using SFA.DAS.AdminService.Common.Extensions;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Api.Common.Interfaces;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.DfESignIn.Auth.Enums;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients.TokenService;
 using SFA.DAS.RoatpGateway.Web.ModelBinders;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Settings;
@@ -118,9 +115,8 @@ public class Startup
 
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-        AddRoatpRegisterApiClient(services, _configuration);
-
-        ConfigureHttpClients(services);
+        ConfigureRoatpRegisterApiClient(services, _configuration);
+        ConfigureApplyApiClients(services, _configuration);
         ConfigureDependencyInjection(services);
 
 #if DEBUG
@@ -128,7 +124,7 @@ public class Startup
 #endif
     }
 
-    private void ConfigureHttpClients(IServiceCollection services)
+    private void ConfigureApplyApiClients(IServiceCollection services, IConfiguration configuration)
     {
         var acceptHeaderName = "Accept";
         var acceptHeaderValue = "application/json";
@@ -139,6 +135,7 @@ public class Startup
             config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
             config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
         })
+        .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(configuration), ApplicationConfiguration.ApplyApiAuthentication.Identifier))
         .SetHandlerLifetime(handlerLifeTime)
         .AddPolicyHandler(GetRetryPolicy());
 
@@ -147,6 +144,7 @@ public class Startup
             config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
             config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
         })
+        .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(configuration), ApplicationConfiguration.ApplyApiAuthentication.Identifier))
         .SetHandlerLifetime(handlerLifeTime)
         .AddPolicyHandler(GetRetryPolicy());
 
@@ -155,6 +153,7 @@ public class Startup
             config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
             config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
         })
+        .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(configuration), ApplicationConfiguration.ApplyApiAuthentication.Identifier))
        .SetHandlerLifetime(handlerLifeTime)
        .AddPolicyHandler(GetRetryPolicy());
 
@@ -163,29 +162,21 @@ public class Startup
             config.BaseAddress = new Uri(ApplicationConfiguration.ApplyApiAuthentication.ApiBaseAddress);
             config.DefaultRequestHeaders.Add(acceptHeaderName, acceptHeaderValue);
         })
+        .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(configuration), ApplicationConfiguration.ApplyApiAuthentication.Identifier))
        .SetHandlerLifetime(handlerLifeTime)
        .AddPolicyHandler(GetRetryPolicy());
     }
 
-    private static void AddRoatpRegisterApiClient(IServiceCollection services, IConfiguration configuration)
+    private void ConfigureRoatpRegisterApiClient(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IAzureClientCredentialHelper, AzureClientCredentialHelper>();
-        var apiConfig = GetApiConfiguration(configuration, "WebConfiguration:RoatpRegisterApiAuthentication");
-
         services.AddRefitClient<IRoatpRegisterApiClient>()
-            .ConfigureHttpClient(c => c.BaseAddress = new Uri(apiConfig.ApiBaseAddress))
-            .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(configuration), apiConfig.Identifier));
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri(ApplicationConfiguration.RoatpRegisterApiAuthentication.ApiBaseAddress))
+            .AddHttpMessageHandler(() => new InnerApiAuthenticationHeaderHandler(new AzureClientCredentialHelper(configuration), ApplicationConfiguration.RoatpRegisterApiAuthentication.Identifier));
     }
-
-    private static InnerApiConfiguration GetApiConfiguration(IConfiguration configuration, string configurationName)
-        => configuration.GetSection(configurationName).Get<InnerApiConfiguration>()!;
-
 
     private void ConfigureDependencyInjection(IServiceCollection services)
     {
         services.AddTransient(x => ApplicationConfiguration);
-
-        services.AddTransient<IRoatpApplicationTokenService, RoatpApplicationTokenService>();
 
         services.AddTransient<IGatewayOverviewOrchestrator, GatewayOverviewOrchestrator>();
         services.AddTransient<IGatewayOrganisationChecksOrchestrator, GatewayOrganisationChecksOrchestrator>();
@@ -200,7 +191,6 @@ public class Startup
         services.AddTransient<IGatewayApplicationActionsOrchestrator, GatewayApplicationActionsOrchestrator>();
         services.AddTransient<IRoatpWithdrawApplicationViewModelValidator, RoatpWithdrawApplicationViewModelValidator>();
         services.AddTransient<IRoatpRemoveApplicationViewModelValidator, RoatpRemoveApplicationViewModelValidator>();
-        DependencyInjection.ConfigureDependencyInjection(services);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -222,12 +212,24 @@ public class Startup
         app.UseSession();
         app.UseRequestLocalization();
         app.UseStatusCodePagesWithReExecute("/ErrorPage/{0}");
-        app.UseSecurityHeaders();
+        app.Use(async (context, next) =>
+        {
+            // security headers
+            context.Response.Headers["X-Frame-Options"] = "SAMEORIGIN";
+            context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+            context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            context.Response.Headers["X-Permitted-Cross-Domain-Policies"] = "none";
+            context.Response.Headers.ContentSecurityPolicy = "default-src 'self'; img-src 'self' *.azureedge.net *.google-analytics.com; script-src 'self' 'unsafe-inline' *.azureedge.net *.googletagmanager.com *.google-analytics.com *.googleapis.com; style-src-elem 'self' *.azureedge.net; style-src 'self' *.azureedge.net; font-src 'self' *.azureedge.net data:;";
+            context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+            context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            context.Response.Headers["Pragma"] = "no-cache";
+            await next();
+        });
         app.Use(async (context, next) =>
         {
             if (!context.Response.Headers.ContainsKey("X-Permitted-Cross-Domain-Policies"))
             {
-                context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
+                context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
             }
             await next();
         });
