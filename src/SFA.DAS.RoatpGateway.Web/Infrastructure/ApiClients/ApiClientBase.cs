@@ -52,7 +52,7 @@ public abstract class ApiClientBase<AC>
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, $"Error when processing request: {HttpMethod.Get} - {uri}");
+            _logger.LogError(ex, "Error when processing GET request at {Uri}", uri);
             throw;
         }
     }
@@ -74,7 +74,7 @@ public abstract class ApiClientBase<AC>
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, $"Error when processing request: {HttpMethod.Get} - {uri}");
+            _logger.LogError(ex, "Error when processing GET request at {Uri}", uri);
             throw;
         }
     }
