@@ -124,7 +124,6 @@ public class RoatpGatewayPageValidator : IRoatpGatewayPageValidator
         {
             Errors = new List<ValidationErrorDetail>()
         };
-        // var result = await Validate(command);
         if (string.IsNullOrWhiteSpace(command.ClarificationAnswer))
         {
             validationResponse.Errors.Add(new ValidationErrorDetail("ClarificationAnswer",

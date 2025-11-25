@@ -146,38 +146,21 @@ public class RoatpApplicationApiClient : ApiClientBase<RoatpApplicationApiClient
     {
         _logger.LogInformation("RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - ApplicationId '{ApplicationId}' - GatewayReviewStatus '{GatewayReviewStatus}' - GatewayReviewComment '{GatewayReviewComment}'- GatewayReviewExternalComment '{GatewayReviewExternalComment}' - UserName '{UserName}'", applicationId, gatewayReviewStatus, gatewayReviewComment, gatewayReviewExternalComment, userName);
 
-        try
+        var responseCode = await Post($"/Gateway/UpdateGatewayReviewStatusAndComment", new { applicationId, gatewayReviewStatus, gatewayReviewComment, gatewayReviewExternalComment, subcontractingLimit, userId, userName });
+        if (responseCode != System.Net.HttpStatusCode.OK)
         {
-            var responseCode = await Post($"/Gateway/UpdateGatewayReviewStatusAndComment", new { applicationId, gatewayReviewStatus, gatewayReviewComment, gatewayReviewExternalComment, subcontractingLimit, userId, userName });
-            if (responseCode != System.Net.HttpStatusCode.OK)
-            {
-                throw new HttpRequestException($"Unable to update RoATP gateway review status, response code {responseCode}");
-            }
+            throw new HttpRequestException($"Unable to update RoATP gateway review status, response code {responseCode}");
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "RoatpApplicationApiClient-UpdateGatewayReviewStatusAndComment - Error: '{ErrorMessage}'", ex.Message);
-            throw;
-        }
-
     }
 
     public async Task UpdateGatewayReviewStatusAsClarification(Guid applicationId, string userId, string userName)
     {
         _logger.LogInformation("RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - ApplicationId '{ApplicationId}' - UserName '{UserName}'", applicationId, userName);
 
-        try
+        var responseCode = await Post($"/Gateway/UpdateGatewayClarification", new { applicationId, userId, userName });
+        if (responseCode != HttpStatusCode.OK)
         {
-            var responseCode = await Post($"/Gateway/UpdateGatewayClarification", new { applicationId, userId, userName });
-            if (responseCode != System.Net.HttpStatusCode.OK)
-            {
-                throw new HttpRequestException($"Unable to update RoATP gateway review status as clarification, response code {responseCode}");
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "RoatpApplicationApiClient-UpdateGatewayReviewStatusAsClarification - Error: '{ErrorMessage}'", ex.Message);
-            throw;
+            throw new HttpRequestException($"Unable to update RoATP gateway review status as clarification, response code {responseCode}");
         }
     }
 

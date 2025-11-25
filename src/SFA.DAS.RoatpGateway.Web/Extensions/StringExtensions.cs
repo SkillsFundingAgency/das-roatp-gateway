@@ -23,7 +23,7 @@ public static class StringExtensions
             return false;
         }
 
-        if (!Regex.IsMatch(value, @"^https?:\/\/", RegexOptions.IgnoreCase))
+        if (!Regex.IsMatch(value, @"^https?:\/\/", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(5)))
             value = "http://" + value;
 
         if (Uri.TryCreate(value, UriKind.Absolute, out resultURI))
