@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
     <PackageReference Include="Refit" Version="8.0.0" />
     <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
-    <PackageReference Include="SFA.DAS.Api.Common" Version="17.1.156" />
+    <PackageReference Include="SFA.DAS.Api.Common" Version="17.1.159" />
     <PackageReference Include="SFA.DAS.DfESignIn.Auth" Version="17.1.142" />
     <PackageReference Include="System.Text.Json" Version="8.0.6" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
