@@ -36,13 +36,13 @@
             "type": "string",
             "defaultValue": ""
         },
-        "certificateName": {
+        "keyVaultCertificateName": {
             "type": "string"
         },
         "sharedKeyVaultName": {
             "type": "string"
         },
-        "sharedKeyVaultResourceGroupName": {
+        "sharedManagementResourceGroup": {
             "type": "string"
         },
         "appServiceAllowedIPs": {
@@ -119,13 +119,13 @@
                 },
                 "parameters": {
                     "keyVaultCertificateName": {
-                        "value": "[parameters('certificateName')]"
+                        "value": "[parameters('keyVaultCertificateName')]"
                     },
                     "keyVaultName": {
                         "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('sharedKeyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -170,9 +170,9 @@
                                     "value": "[parameters('resourceEnvironmentName')]"
                                 },
                                 {
-				    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-				    "value": "[reference(concat('app-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
-				},
+                                    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                                    "value": "[reference(concat('app-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                                },
                                 {
                                     "name": "ASPNETCORE_ENVIRONMENT",
                                     "value": "[toUpper(parameters('environmentName'))]"

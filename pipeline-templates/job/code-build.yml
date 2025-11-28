@@ -1,3 +1,7 @@
+parameters:
+  SolutionBaseName:
+  BuildConfiguration:
+
 jobs:
 - job: CodeBuild
   pool:
@@ -6,8 +10,6 @@ jobs:
   workspace:
     clean: all
   variables:
-  - name: BuildConfiguration
-    value: release
   - group: BUILD Management Resources  
   steps:
   - template: azure-pipelines-templates/build/step/gitversion.yml@das-platform-building-blocks
@@ -18,22 +20,34 @@ jobs:
       ContinueOnVulnerablePackageScanError: true
 
   - task: DotNetCoreCLI@2
-    displayName: "Publish - dotnet publish SFA.DAS.RoatpGateway.Web"
+    displayName: Publish - dotnet publish ${{ parameters.SolutionBaseName }}.Web
     inputs:
       command: publish
       publishWebProjects: false #set to false as this setting (which defaults to true) will parse the entire repo for web projects
-      projects: "src/SFA.DAS.RoatpGateway.Web/SFA.DAS.RoatpGateway.Web.csproj"
-      arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
+      projects: src/${{ parameters.SolutionBaseName }}.Web/${{ parameters.SolutionBaseName }}.Web.csproj
+      arguments: -o $(build.artifactstagingdirectory)/publish -c ${{ parameters.BuildConfiguration }} --no-build
+      modifyOutputPath: true
+      zipAfterPublish: true
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish - dotnet publish ${{ parameters.SolutionBaseName }}.Api
+    inputs:
+      command: publish
+      publishWebProjects: false #set to false as this setting (which defaults to true) will parse the entire repo for web projects
+      projects: src/${{ parameters.SolutionBaseName }}.Web/${{ parameters.SolutionBaseName }}.Web.csproj
+      arguments: -o $(build.artifactstagingdirectory)/publish -c ${{ parameters.BuildConfiguration }} --no-build
+      modifyOutputPath: true
+      zipAfterPublish: true
 
   - task: CopyFiles@2
-    displayName: "Copy Files to: $(build.artifactstagingdirectory)"
+    displayName: Copy Files to $(build.artifactstagingdirectory)/publish
     inputs:
       Contents: |
         azure/**
-      TargetFolder: "$(build.artifactstagingdirectory)/publish"
-      OverWrite: true
+      TargetFolder: $(build.artifactstagingdirectory)/publish
 
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifact"
+  - task: PublishPipelineArtifact@1
+    displayName: Publish Build Artifact
     inputs:
-      PathtoPublish: "$(build.artifactstagingdirectory)/publish"
+      targetPath: $(build.artifactstagingdirectory)/publish
+      artifactName: ${{ parameters.SolutionBaseName }}
