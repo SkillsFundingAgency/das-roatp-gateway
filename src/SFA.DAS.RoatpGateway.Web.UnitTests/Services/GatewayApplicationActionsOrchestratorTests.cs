@@ -1,15 +1,15 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
-using SFA.DAS.AdminService.Common.Validation;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.Validation;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {
@@ -91,7 +91,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.AreEqual(viewModelOnError.ErrorMessages[0].Field, field);
             Assert.AreEqual(viewModelOnError.ErrorMessages[0].ErrorMessage, errorMessage);
             Assert.AreEqual(HtmlAndCssElements.CssFormGroupErrorClass, viewModelOnError.CssFormGroupError);
-            Assert.IsNull( viewModelOnError.CssOnErrorOptionYesText);
+            Assert.IsNull(viewModelOnError.CssOnErrorOptionYesText);
         }
 
         [Test]

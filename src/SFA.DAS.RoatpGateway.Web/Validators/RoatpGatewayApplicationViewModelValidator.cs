@@ -1,10 +1,10 @@
-﻿using SFA.DAS.AdminService.Common.Validation;
-using SFA.DAS.RoatpGateway.Domain;
-using SFA.DAS.RoatpGateway.Web.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.Validation;
+using SFA.DAS.RoatpGateway.Web.ViewModels;
 
 namespace SFA.DAS.RoatpGateway.Web.Validators
 {
@@ -127,7 +127,7 @@ namespace SFA.DAS.RoatpGateway.Web.Validators
                             }
                         }
 
-                        if(viewModel.ApplicationRouteShortText.Equals("Supporting") && !viewModel.SubcontractingLimit.HasValue)
+                        if (viewModel.ApplicationRouteShortText.Equals("Supporting") && !viewModel.SubcontractingLimit.HasValue)
                         {
                             validationResponse.Errors.Add(new ValidationErrorDetail("SubcontractingLimit", ErrorSelectSubcontractingLimit));
                         }

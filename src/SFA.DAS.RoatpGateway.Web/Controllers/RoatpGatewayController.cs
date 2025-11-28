@@ -1,17 +1,17 @@
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using System.Linq;
-using SFA.DAS.AdminService.Common.Validation;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
-using SFA.DAS.RoatpGateway.Web.ViewModels;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Extensions;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.Validation;
+using SFA.DAS.RoatpGateway.Web.ModelBinders;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
-using SFA.DAS.RoatpGateway.Web.ModelBinders;
+using SFA.DAS.RoatpGateway.Web.ViewModels;
 
 namespace SFA.DAS.RoatpGateway.Web.Controllers
 {
@@ -25,7 +25,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                                      IGatewayOverviewOrchestrator orchestrator, IRoatpGatewayApplicationViewModelValidator validator,
                                      IRoatpSearchTermValidator searchValidator,
                                      ILogger<RoatpGatewayController> logger, IRoatpGatewayPageValidator gatewayValidator)
-            :base(applyApiClient, logger, gatewayValidator)
+            : base(applyApiClient, logger, gatewayValidator)
         {
             _orchestrator = orchestrator;
             _validator = validator;
@@ -35,11 +35,11 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         [HttpGet("/Roatp/Gateway/New")]
         public async Task<IActionResult> NewApplications([StringTrim] string searchTerm, string sortOrder, int page = 1)
         {
-            if(searchTerm != null)
+            if (searchTerm != null)
             {
                 var validationResponse = _searchValidator.Validate(searchTerm);
 
-                foreach(var error in validationResponse.Errors)
+                foreach (var error in validationResponse.Errors)
                 {
                     ModelState.AddModelError(error.Field, error.ErrorMessage);
                 }
@@ -163,8 +163,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             var viewModel =
                 await _orchestrator.GetClarificationViewModel(new GetApplicationClarificationsRequest(applicationId, username));
-            
-            
+
+
             if (viewModel is null)
             {
                 return RedirectToAction(nameof(NewApplications));
@@ -202,7 +202,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
 
             var userId = HttpContext.User.UserId();
             await _applyApiClient.UpdateGatewayReviewStatusAsClarification(applicationId, userId, username);
-            var vm = new RoatpGatewayOutcomeViewModel { ApplicationId = applicationId};
+            var vm = new RoatpGatewayOutcomeViewModel { ApplicationId = applicationId };
             return View("~/Views/Gateway/ConfirmApplicationClarification.cshtml", vm);
         }
 
@@ -237,7 +237,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         }
                     case GatewayReviewStatus.Pass:
                         {
-                            if(subcontractingLimit == 100000)
+                            if (subcontractingLimit == 100000)
                             {
                                 viewModel.RadioChecked100kSubcontractingLimit = HtmlAndCssElements.CheckBoxChecked;
                             }
@@ -250,12 +250,12 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                             break;
                         }
                     case GatewayReviewStatus.Rejected:
-                    {
-                        viewModel.RadioCheckedRejected = HtmlAndCssElements.CheckBoxChecked;
-                        viewModel.OptionRejectedText = gatewayReviewComment;
-                        viewModel.OptionExternalRejectedText = gatewayReviewExternalComment;
-                        break;
-                    }
+                        {
+                            viewModel.RadioCheckedRejected = HtmlAndCssElements.CheckBoxChecked;
+                            viewModel.OptionRejectedText = gatewayReviewComment;
+                            viewModel.OptionExternalRejectedText = gatewayReviewExternalComment;
+                            break;
+                        }
                 }
 
                 if (viewModel.ApplicationStatus == ApplicationStatus.GatewayAssessed)
@@ -342,28 +342,28 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                         break;
                     }
                 case GatewayReviewStatus.Rejected:
-                {
-                    var contact = await _applyApiClient.GetContactDetails(viewModel.ApplicationId);
-                    confirmViewModel = new RoatpGatewayRejectedOutcomeViewModel
                     {
-                        ApplicationId = viewModel.ApplicationId,
-                        Ukprn = application.ApplyData.ApplyDetails.UKPRN,
-                        ApplyLegalName = application.ApplyData.ApplyDetails.OrganisationName,
-                        ApplicationRoute = application.ApplyData.ApplyDetails.ProviderRouteName,
-                        ApplicationReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber,
-                        ApplicationEmailAddress = contact?.Email,
-                        ApplicationSubmittedOn = application.ApplyData.ApplyDetails.ApplicationSubmittedOn,
-                        GatewayReviewStatus = viewModel.GatewayReviewStatus,
-                        GatewayReviewComment = viewModel.OptionRejectedText,
-                        GatewayReviewExternalComment = viewModel.OptionExternalRejectedText
-                    };
-                    viewName = "~/Views/Gateway/ConfirmOutcomeRejected.cshtml";
-                    break;
-                }
+                        var contact = await _applyApiClient.GetContactDetails(viewModel.ApplicationId);
+                        confirmViewModel = new RoatpGatewayRejectedOutcomeViewModel
+                        {
+                            ApplicationId = viewModel.ApplicationId,
+                            Ukprn = application.ApplyData.ApplyDetails.UKPRN,
+                            ApplyLegalName = application.ApplyData.ApplyDetails.OrganisationName,
+                            ApplicationRoute = application.ApplyData.ApplyDetails.ProviderRouteName,
+                            ApplicationReferenceNumber = application.ApplyData.ApplyDetails.ReferenceNumber,
+                            ApplicationEmailAddress = contact?.Email,
+                            ApplicationSubmittedOn = application.ApplyData.ApplyDetails.ApplicationSubmittedOn,
+                            GatewayReviewStatus = viewModel.GatewayReviewStatus,
+                            GatewayReviewComment = viewModel.OptionRejectedText,
+                            GatewayReviewExternalComment = viewModel.OptionExternalRejectedText
+                        };
+                        viewName = "~/Views/Gateway/ConfirmOutcomeRejected.cshtml";
+                        break;
+                    }
             }
 
             return View(viewName, confirmViewModel);
-            
+
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToConfirmOutcome")]
@@ -419,8 +419,8 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
                     var userId = HttpContext.User.UserId();
                     var username = HttpContext.User.UserDisplayName();
                     await _applyApiClient.UpdateGatewayReviewStatusAndComment(viewModel.ApplicationId, viewModel.GatewayReviewStatus, viewModel.GatewayReviewComment, viewModel.GatewayReviewExternalComment, viewModel.SubcontractingLimit, userId, username);
-                    
-                    var vm = new RoatpGatewayOutcomeViewModel {GatewayReviewStatus = viewModel.GatewayReviewStatus};
+
+                    var vm = new RoatpGatewayOutcomeViewModel { GatewayReviewStatus = viewModel.GatewayReviewStatus };
                     return View("~/Views/Gateway/GatewayOutcomeConfirmation.cshtml", vm);
                 }
                 else

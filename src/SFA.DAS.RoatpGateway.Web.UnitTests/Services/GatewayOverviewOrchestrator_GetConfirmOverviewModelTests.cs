@@ -1,16 +1,16 @@
-﻿using Moq;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
-using SFA.DAS.AdminService.Common.Validation;
-using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
+using Moq;
+using NUnit.Framework;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Apply;
-using SFA.DAS.RoatpGateway.Web.ViewModels;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.Validation;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System.Threading.Tasks;
+using SFA.DAS.RoatpGateway.Web.ViewModels;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
 {
@@ -59,7 +59,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             _applyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(application);
             _applyApiClient.Setup(x => x.GetOversightDetails(applicationId)).ReturnsAsync(() =>
                 new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None });
-            
+
             var returnedGatewayPageAnswers = new List<GatewayPageAnswerSummary>
             {
                 new GatewayPageAnswerSummary
@@ -83,7 +83,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services
             Assert.AreEqual(gatewayReviewStatus, viewModel.GatewayReviewStatus);
             Assert.AreEqual(sectionReviewStatus, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Status);
             Assert.AreEqual(comment, viewModel.Sequences.FirstOrDefault(seq => seq.SequenceNumber == 1).Sections.FirstOrDefault(sec => sec.PageId == GatewayPageIds.OrganisationRisk).Comment);
-            Assert.AreEqual(viewModel.IsClarificationsSelectedAndAllFieldsSet,isClarificationSet);
+            Assert.AreEqual(viewModel.IsClarificationsSelectedAndAllFieldsSet, isClarificationSet);
         }
 
         [TestCase("12345678", "John Ltd.")]
