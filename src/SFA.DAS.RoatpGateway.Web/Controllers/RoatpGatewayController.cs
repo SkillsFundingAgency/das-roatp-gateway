@@ -274,7 +274,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/ConfirmOutcome")]
-        public async Task<IActionResult> EvaluateConfirmOutcome(RoatpGatewayApplicationViewModel viewModel)
+        public async Task<IActionResult> EvaluateConfirmOutcome(Guid applicationId, RoatpGatewayApplicationViewModel viewModel)
         {
             var application = await _applyApiClient.GetApplication(viewModel.ApplicationId);
 
@@ -367,7 +367,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToConfirmOutcome")]
-        public async Task<IActionResult> AboutToConfirmOutcome(RoatpGatewayConfirmOutcomeViewModel viewModel)
+        public async Task<IActionResult> AboutToConfirmOutcome(Guid applicationId, RoatpGatewayConfirmOutcomeViewModel viewModel)
         {
             if (viewModel.ApplicationStatus == ApplicationStatus.GatewayAssessed)
             {
@@ -442,7 +442,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         }
 
         [HttpPost("/Roatp/Gateway/{applicationId}/AboutToRejectOutcome")]
-        public async Task<IActionResult> AboutToRejectOutcome(RoatpGatewayRejectedOutcomeViewModel viewModel)
+        public async Task<IActionResult> AboutToRejectOutcome(Guid applicationId, RoatpGatewayRejectedOutcomeViewModel viewModel)
         {
             if (viewModel.ApplicationStatus == ApplicationStatus.GatewayAssessed)
             {

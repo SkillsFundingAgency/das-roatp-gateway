@@ -73,7 +73,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _validator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
 
-            await _controller.EvaluateConfirmOutcome(viewModel);
+            await _controller.EvaluateConfirmOutcome(viewModel.ApplicationId, viewModel);
 
             _orchestrator.Verify(x => x.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(viewModel.ApplicationId, Username)), Times.Never);
         }
@@ -93,7 +93,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _validator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
 
-            await _controller.EvaluateConfirmOutcome(viewModel);
+            await _controller.EvaluateConfirmOutcome(viewModel.ApplicationId, viewModel);
 
             _orchestrator.Verify(x => x.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(viewModel.ApplicationId, Username)), Times.Never);
         }
@@ -113,7 +113,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _validator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
 
-            await _controller.EvaluateConfirmOutcome(viewModel);
+            await _controller.EvaluateConfirmOutcome(viewModel.ApplicationId, viewModel);
 
             _orchestrator.Verify(x => x.GetConfirmOverviewViewModel(new GetApplicationOverviewRequest(viewModel.ApplicationId, Username)), Times.Never);
         }
@@ -152,7 +152,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _orchestrator.Setup(x => x.GetConfirmOverviewViewModel(It.Is<GetApplicationOverviewRequest>(y => y.ApplicationId == applicationId && y.UserName == Username))).ReturnsAsync(expectedViewModelWithErrors);
 
-            var result = await _controller.EvaluateConfirmOutcome(viewModel);
+            var result = await _controller.EvaluateConfirmOutcome(viewModel.ApplicationId, viewModel);
             var viewResult = result as ViewResult;
             Assert.AreSame(expectedViewModelWithErrors, viewResult.Model);
         }
@@ -169,7 +169,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ConfirmGatewayOutcome = "Yes"
             };
 
-            var result = await _controller.AboutToConfirmOutcome(viewModel);
+            var result = await _controller.AboutToConfirmOutcome(viewModel.ApplicationId, viewModel);
             var viewResult = result as ViewResult;
             var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
@@ -190,7 +190,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ConfirmGatewayOutcome = "No"
             };
 
-            var result = await _controller.AboutToConfirmOutcome(viewModel);
+            var result = await _controller.AboutToConfirmOutcome(viewModel.ApplicationId, viewModel);
             var redirectToActionResult = result as RedirectToActionResult;
 
             Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
@@ -210,7 +210,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _controller.ModelState.AddModelError("ConfirmGatewayOutcome", "Select if you are sure you want to pass this application");
 
-            var result = await _controller.AboutToConfirmOutcome(viewModel);
+            var result = await _controller.AboutToConfirmOutcome(viewModel.ApplicationId, viewModel);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayConfirmOutcomeViewModel;
 
@@ -294,7 +294,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ConfirmGatewayOutcome = "Yes"
             };
 
-            var result = await _controller.AboutToRejectOutcome(viewModel);
+            var result = await _controller.AboutToRejectOutcome(viewModel.ApplicationId, viewModel);
             var viewResult = result as ViewResult;
             var viewResultModel = viewResult.Model as RoatpGatewayOutcomeViewModel;
 
@@ -315,7 +315,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ConfirmGatewayOutcome = "No"
             };
 
-            var result = await _controller.AboutToRejectOutcome(viewModel);
+            var result = await _controller.AboutToRejectOutcome(viewModel.ApplicationId, viewModel);
             var redirectToActionResult = result as RedirectToActionResult;
 
             Assert.AreSame(expectedActionName, redirectToActionResult.ActionName);
@@ -335,7 +335,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 
             _controller.ModelState.AddModelError("ConfirmGatewayOutcome", "Select if you are sure you want to reject this application");
 
-            var result = await _controller.AboutToRejectOutcome(viewModel);
+            var result = await _controller.AboutToRejectOutcome(viewModel.ApplicationId, viewModel);
             var viewResult = result as ViewResult;
             var resultViewModel = viewResult.Model as RoatpGatewayRejectedOutcomeViewModel;
 

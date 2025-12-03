@@ -122,7 +122,7 @@
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <form class="form" method="post" asp-action="EvaluateConfirmOutcome" asp-controller="RoatpGateway">
+            <form class="form" method="post" asp-action="EvaluateConfirmOutcome" asp-controller="RoatpGateway" asp-route-applicationId="@Model.ApplicationId">
                 <div class="govuk-form-group @Model.CssFormGroupError">
                     <input type="hidden" asp-for="ApplicationId" />
                     <input type="hidden" asp-for="ApplicationStatus" />
