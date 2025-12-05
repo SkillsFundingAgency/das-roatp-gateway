@@ -1,10 +1,9 @@
-﻿
-namespace SFA.DAS.RoatpGateway.Domain.Roatp
+﻿namespace SFA.DAS.RoatpGateway.Domain.Roatp;
+
+public enum ProviderType
 {
-    public class ProviderType
-    {
-        public int Id { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
-    }
+    Main = 1,
+    Employer = 2,
+    Supporting = 3
 }
+

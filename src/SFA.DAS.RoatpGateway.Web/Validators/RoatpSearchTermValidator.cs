@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.AdminService.Common.Validation;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.Validation;
 
 namespace SFA.DAS.RoatpGateway.Web.Validators
 {

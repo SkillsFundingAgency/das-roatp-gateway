@@ -1,5 +1,4 @@
 @using SFA.DAS.RoatpGateway.Domain;
-@using SFA.DAS.AdminService.Common.Extensions;
 @model SFA.DAS.RoatpGateway.Web.ViewModels.RoatpGatewayRejectedOutcomeViewModel
 
 @{
@@ -39,7 +38,7 @@
                 </div>
             }
 
-            <form class="form" method="post" asp-action="AboutToRejectOutcome" asp-controller="RoatpGateway">
+            <form class="form" method="post" asp-action="AboutToRejectOutcome" asp-controller="RoatpGateway" asp-route-applicationId="@Model.ApplicationId">
                 <div class="govuk-form-group @Model.CssFormGroupError">
                     <fieldset class="govuk-fieldset" aria-describedby="ConfirmGatewayOutcome-error">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-7">
