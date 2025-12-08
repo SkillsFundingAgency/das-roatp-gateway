@@ -161,7 +161,7 @@ namespace SFA.DAS.RoatpGateway.Web.Controllers
         {
             var username = HttpContext.User.UserDisplayName();
 
-            var viewModel =
+            RoatpGatewayClarificationsViewModel viewModel =
                 await _orchestrator.GetClarificationViewModel(new GetApplicationClarificationsRequest(applicationId, username));
 
 
