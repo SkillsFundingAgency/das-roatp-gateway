@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using SFA.DAS.AdminService.Common.Validation;
-using SFA.DAS.RoatpGateway.Domain;
-using SFA.DAS.RoatpGateway.Web.ViewModels;
-using FluentAssertions;
 using SFA.DAS.AdminService.Common.Testing.MockedObjects;
-using SFA.DAS.RoatpGateway.Web.Models;
-using SFA.DAS.RoatpGateway.Web.Services;
+using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Web.Controllers;
 using SFA.DAS.RoatpGateway.Web.Extensions;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.Validation;
+using SFA.DAS.RoatpGateway.Web.Models;
+using SFA.DAS.RoatpGateway.Web.Services;
+using SFA.DAS.RoatpGateway.Web.ViewModels;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
 {
@@ -63,7 +63,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
             viewModel.Should().NotBeNull();
         }
 
-        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors,null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractTermination, null)]
         [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractWithdrawnEarly, null)]
@@ -246,52 +246,52 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
 
             ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText, clarificationAnswer), Times.Never);
         }
-    
 
 
 
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractTermination, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractWithdrawnEarly, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRoTO, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FundingRemoved, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRegister, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, null)]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractTermination, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractWithdrawnEarly, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRoTO, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FundingRemoved, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRegister, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, "clarification answer")]
-    [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "clarification answer")]
-    public void Organisation_criminal_compliance_clarification_check_has_validation_error(string gatewayPageId, string clarificationAnswer)
-    {
-        var model = new CriminalCompliancePageViewModel
+
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractTermination, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractWithdrawnEarly, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRoTO, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FundingRemoved, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRegister, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, null)]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.CompositionCreditors, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FailedToRepayFunds, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractTermination, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.ContractWithdrawnEarly, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRoTO, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.FundingRemoved, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedRegister, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.IttAccreditation, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.RemovedCharityRegister, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Safeguarding, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.InvestigationPublicBody, "clarification answer")]
+        [TestCase(GatewayPageIds.CriminalComplianceOrganisationChecks.Insolvency, "clarification answer")]
+        public void Organisation_criminal_compliance_clarification_check_has_validation_error(string gatewayPageId, string clarificationAnswer)
         {
-            ApplicationId = Guid.NewGuid(),
-            ApplyLegalName = "legal name",
-            ComplianceCheckQuestionId = "CC-20",
-            ComplianceCheckAnswer = "No",
-            OptionFailText = null,
-            Status = "Fail",
-            PageId = gatewayPageId,
-            QuestionText = "Question text",
-            Ukprn = "10001234"
-        };
+            var model = new CriminalCompliancePageViewModel
+            {
+                ApplicationId = Guid.NewGuid(),
+                ApplyLegalName = "legal name",
+                ComplianceCheckQuestionId = "CC-20",
+                ComplianceCheckAnswer = "No",
+                OptionFailText = null,
+                Status = "Fail",
+                PageId = gatewayPageId,
+                QuestionText = "Question text",
+                Ukprn = "10001234"
+            };
 
-        var validationResponse = new ValidationResponse
-        {
-            Errors = new List<ValidationErrorDetail>()
+            var validationResponse = new ValidationResponse
+            {
+                Errors = new List<ValidationErrorDetail>()
                 {
                     new ValidationErrorDetail
                     {
@@ -299,23 +299,23 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.CriminalCompliance
                         Field = "OptionFailText"
                     }
                 }
-        };
+            };
 
-        var command = new SubmitGatewayPageAnswerCommand(model);
+            var command = new SubmitGatewayPageAnswerCommand(model);
 
-        GatewayValidator.Setup(x => x.ValidateClarification(command)).ReturnsAsync(validationResponse);
+            GatewayValidator.Setup(x => x.ValidateClarification(command)).ReturnsAsync(validationResponse);
 
-        _orchestrator.Setup(x => x.GetCriminalComplianceCheckViewModel(It.Is<GetCriminalComplianceCheckRequest>(y => y.ApplicationId == model.ApplicationId
-                                                                            && y.UserName == Username))).ReturnsAsync(model);
+            _orchestrator.Setup(x => x.GetCriminalComplianceCheckViewModel(It.Is<GetCriminalComplianceCheckRequest>(y => y.ApplicationId == model.ApplicationId
+                                                                                && y.UserName == Username))).ReturnsAsync(model);
 
-        var result = _controller.ClarifyCriminalCompliancePage(command).GetAwaiter().GetResult();
+            var result = _controller.ClarifyCriminalCompliancePage(command).GetAwaiter().GetResult();
 
-        var viewResult = result as ViewResult;
-        var viewModel = viewResult.Model as CriminalCompliancePageViewModel;
-        viewModel.Should().NotBeNull();
-        viewModel.ErrorMessages.Count.Should().BeGreaterThan(0);
+            var viewResult = result as ViewResult;
+            var viewModel = viewResult.Model as CriminalCompliancePageViewModel;
+            viewModel.Should().NotBeNull();
+            viewModel.ErrorMessages.Count.Should().BeGreaterThan(0);
 
-        ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText, clarificationAnswer), Times.Never);
+            ApplyApiClient.Verify(x => x.SubmitGatewayPageAnswer(model.ApplicationId, gatewayPageId, model.Status, UserId, Username, model.OptionPassText, clarificationAnswer), Times.Never);
+        }
     }
-}
 }

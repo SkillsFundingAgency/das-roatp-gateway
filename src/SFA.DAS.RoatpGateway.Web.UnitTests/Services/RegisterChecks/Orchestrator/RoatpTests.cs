@@ -1,13 +1,15 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Refit;
 using SFA.DAS.RoatpGateway.Domain;
 using SFA.DAS.RoatpGateway.Domain.Roatp;
 using SFA.DAS.RoatpGateway.Web.Infrastructure.ApiClients;
 using SFA.DAS.RoatpGateway.Web.Services;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrator
 {
@@ -48,30 +50,14 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
             _applyApiClient.Setup(x => x.GetPageCommonDetails(_applicationId, It.IsAny<string>(), UserId, UserName)).ReturnsAsync(commonDetails);
 
             _applyApiClient.Setup(x => x.GetProviderRouteName(_applicationId)).ReturnsAsync($"{roatpProviderTypeId}");
-
-            var providerType = new ProviderType
-            {
-                Id = roatpProviderTypeId,
-                Type = $"{roatpProviderTypeId}"
-            };
-            _roatpApiClient.Setup(x => x.GetProviderTypes()).ReturnsAsync(new List<ProviderType> { providerType });
-
-            var organisationStatus = new OrganisationStatus
-            {
-                Id = roatpStatusId,
-                Status = $"{roatpStatusId}"
-            };
-            _roatpApiClient.Setup(x => x.GetOrganisationStatuses(It.IsAny<int?>())).ReturnsAsync(new List<OrganisationStatus> { organisationStatus });
         }
 
         [Test]
         public async Task check_orchestrator_builds_with_roatp_not_on_register_details()
         {
-            var organisationRegisterStatus = new OrganisationRegisterStatus
-            {
-                UkprnOnRegister = false
-            };
-            _roatpApiClient.Setup(x => x.GetOrganisationRegisterStatus(ukprn.ToString())).ReturnsAsync(organisationRegisterStatus);
+            _roatpApiClient
+                .Setup(x => x.GetOrganisationRegisterStatus(ukprn.ToString()))
+                .ReturnsAsync(new ApiResponse<OrganisationResponse>(new HttpResponseMessage(HttpStatusCode.NotFound), null, null));
 
             var request = new GetRoatpRequest(_applicationId, UserId, UserName);
 
@@ -86,23 +72,24 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
         [Test]
         public async Task check_orchestrator_builds_with_roatp_on_register_details()
         {
-            var organisationRegisterStatus = new OrganisationRegisterStatus
+            var organisationResponse = new OrganisationResponse
             {
-                UkprnOnRegister = true,
-                StatusId = roatpStatusId,
-                ProviderTypeId = roatpProviderTypeId,
+                Status = OrganisationStatus.Active,
+                ProviderType = ProviderType.Main,
                 StatusDate = DateTime.Now.AddMonths(-1)
             };
-            _roatpApiClient.Setup(x => x.GetOrganisationRegisterStatus(ukprn.ToString())).ReturnsAsync(organisationRegisterStatus);
+            var apiResponse = new ApiResponse<OrganisationResponse>(new HttpResponseMessage(HttpStatusCode.OK), organisationResponse, null);
+            _roatpApiClient.Setup(x => x.GetOrganisationRegisterStatus(ukprn.ToString())).ReturnsAsync(apiResponse);
 
             var request = new GetRoatpRequest(_applicationId, UserId, UserName);
 
             var viewModel = await _orchestrator.GetRoatpViewModel(request);
 
             Assert.IsTrue(viewModel.RoatpUkprnOnRegister);
-            Assert.IsNotNull(viewModel.RoatpStatus);
-            Assert.IsNotNull(viewModel.RoatpStatusDate);
-            Assert.IsNotNull(viewModel.RoatpProviderRoute);
+            Assert.AreEqual("Main provider", viewModel.RoatpProviderRoute);
+            Assert.AreEqual("Active", viewModel.RoatpStatus);
+            Assert.AreEqual(organisationResponse.StatusDate, viewModel.RoatpStatusDate);
+            Assert.IsTrue(viewModel.RoatpUkprnOnRegister);
         }
 
         [TestCase("Main")]
@@ -110,6 +97,15 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Services.RegisterChecks.Orchestrato
         [TestCase("Employer")]
         public async Task check_orchestrator_builds_with_ProviderRouteName_details(string providerRouteName)
         {
+            var organisationResponse = new OrganisationResponse
+            {
+                Status = OrganisationStatus.Active,
+                ProviderType = ProviderType.Main,
+                StatusDate = DateTime.Now.AddMonths(-1)
+            };
+            var apiResponse = new ApiResponse<OrganisationResponse>(new HttpResponseMessage(HttpStatusCode.OK), organisationResponse, null);
+            _roatpApiClient.Setup(x => x.GetOrganisationRegisterStatus(ukprn.ToString())).ReturnsAsync(apiResponse);
+
             _applyApiClient.Setup(x => x.GetProviderRouteName(_applicationId)).ReturnsAsync(providerRouteName);
 
             var request = new GetRoatpRequest(_applicationId, UserId, UserName);

@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AdminService.Common.Validation;
+using SFA.DAS.AdminService.Common.Testing.MockedObjects;
+using SFA.DAS.RoatpGateway.Domain;
+using SFA.DAS.RoatpGateway.Domain.Apply;
 using SFA.DAS.RoatpGateway.Web.Controllers;
+using SFA.DAS.RoatpGateway.Web.Extensions;
+using SFA.DAS.RoatpGateway.Web.Infrastructure.Validation;
 using SFA.DAS.RoatpGateway.Web.Services;
 using SFA.DAS.RoatpGateway.Web.Validators;
 using SFA.DAS.RoatpGateway.Web.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.AdminService.Common.Extensions;
-using SFA.DAS.AdminService.Common.Testing.MockedObjects;
-using SFA.DAS.RoatpGateway.Domain.Apply;
-using SFA.DAS.RoatpGateway.Domain;
 
 namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
 {
@@ -68,7 +68,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             ApplyApiClient.Setup(x => x.GetApplication(applicationId)).ReturnsAsync(new Apply { ApplicationId = applicationId });
 
             ApplyApiClient.Setup(x => x.GetOversightDetails(applicationId)).ReturnsAsync(() =>
-                new ApplicationOversightDetails {OversightStatus = OversightReviewStatus.None});
+                new ApplicationOversightDetails { OversightStatus = OversightReviewStatus.None });
 
             _removeApplicationValidator.Setup(v => v.Validate(viewModel)).ReturnsAsync(new ValidationResponse { Errors = new List<ValidationErrorDetail>() });
 
@@ -155,7 +155,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
             var viewResult = result as ViewResult;
 
             Assert.IsTrue(viewResult.ViewName.EndsWith("ApplicationRemoved.cshtml"));
-            ApplyApiClient.Verify(x => x.RemoveApplication(viewModel.ApplicationId, viewModel.OptionYesText, viewModel.OptionYesTextExternal,  It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            ApplyApiClient.Verify(x => x.RemoveApplication(viewModel.ApplicationId, viewModel.OptionYesText, viewModel.OptionYesTextExternal, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
 
@@ -282,7 +282,7 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers
                 ApplicationId = applicationId,
                 ConfirmApplicationAction = HtmlAndCssElements.RadioButtonValueYes,
                 OptionYesText = "Comments"
-            };       
+            };
 
             var validationErrors = new List<ValidationErrorDetail>();
 

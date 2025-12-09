@@ -1,23 +1,17 @@
-﻿using SFA.DAS.AdminService.Common.Settings;
+﻿namespace SFA.DAS.RoatpGateway.Web.Settings;
 
-namespace SFA.DAS.RoatpGateway.Web.Settings
+public interface IWebConfiguration
 {
-    public interface IWebConfiguration
-    {
-        string SessionRedisConnectionString { get; set; }
+    string SessionRedisConnectionString { get; set; }
 
-        string SessionCachingDatabase { get; set; }
+    string SessionCachingDatabase { get; set; }
 
-        string DataProtectionKeysDatabase { get; set; }
+    string DataProtectionKeysDatabase { get; set; }
 
-        AuthSettings StaffAuthentication { get; set; }
+    InnerApiConfiguration ApplyApiAuthentication { get; set; }
 
-        ManagedIdentityApiAuthentication ApplyApiAuthentication { get; set; }
+    InnerApiConfiguration RoatpRegisterApiAuthentication { get; set; }
 
-        ClientApiAuthentication RoatpRegisterApiAuthentication { get; set; }
-
-        string EsfaAdminServicesBaseUrl { get; set; }
-        bool UseDfeSignIn { get; set; }
-        string DfESignInServiceHelpUrl { get; set; }
-    }
+    string EsfaAdminServicesBaseUrl { get; set; }
+    string DfESignInServiceHelpUrl { get; set; }
 }
