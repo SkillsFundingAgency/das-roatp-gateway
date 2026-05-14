@@ -67,8 +67,8 @@
                     @if (Model.ReceivedFullInspectionGradeForApprenticeships.HasValue)
                     {
                         <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">Did your organisation get a grade for apprenticeships in this full Ofsted inspection?</td>
-                            <td class="govuk-table__cell">@(Model.ReceivedFullInspectionGradeForApprenticeships.Value ? "Yes" : "No")</td>
+                            <td class="govuk-table__cell">Did your organisation get a separate grade for apprenticeships in this Ofsted inspection?</td>
+                            <td class="govuk-table__cell">@(Model.ReceivedFullInspectionGradeForApprenticeships.Value ? "Yes - but before November 2025" : "No")</td>
                         </tr>
                     }
 
