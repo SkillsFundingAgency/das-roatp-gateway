@@ -63,7 +63,7 @@ The front end for tribal users to view and administer provider gateway applicati
 Open the solution with Visual Studio, and run the project SFA.DAS.RoatpGateway.Web, running under process 'SFA.DAS.RoatpGateway.Web' (not IIS)
 
 ## Technologies
-* .NetCore 10.0
+* .Net 10.0
 * NUnit
 * Moq
 * FluentAssertions
