@@ -107,8 +107,6 @@ public class Startup
 
         services.AddOpenTelemetryRegistration(_configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]!);
 
-        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
         ConfigureRoatpRegisterApiClient(services, _configuration);
         ConfigureApplyApiClients(services, _configuration);
         ConfigureDependencyInjection(services);
