@@ -35,8 +35,8 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.SignIn() as ChallengeResult;
 
             Assert.That(result, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
-            CollectionAssert.Contains(result.AuthenticationSchemes, OpenIdConnectDefaults.AuthenticationScheme);
+            Assert.That(result.AuthenticationSchemes, Is.Not.Empty);
+            Assert.That(result.AuthenticationSchemes.Contains(OpenIdConnectDefaults.AuthenticationScheme));
         }
 
         [Test]
@@ -54,9 +54,9 @@ namespace SFA.DAS.RoatpGateway.Web.UnitTests.Controllers.Account
             var result = _controller.SignOut() as SignOutResult;
 
             Assert.That(result, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(result.AuthenticationSchemes);
-            CollectionAssert.Contains(result.AuthenticationSchemes, OpenIdConnectDefaults.AuthenticationScheme);
-            CollectionAssert.Contains(result.AuthenticationSchemes, CookieAuthenticationDefaults.AuthenticationScheme);
+            Assert.That(result.AuthenticationSchemes, Is.Not.Empty);
+            Assert.That(result.AuthenticationSchemes.Contains(OpenIdConnectDefaults.AuthenticationScheme));
+            Assert.That(result.AuthenticationSchemes.Contains(CookieAuthenticationDefaults.AuthenticationScheme));
         }
 
         [Test]

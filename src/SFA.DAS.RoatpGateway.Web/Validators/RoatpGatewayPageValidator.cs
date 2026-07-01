@@ -190,7 +190,7 @@ public class RoatpGatewayPageValidator : IRoatpGatewayPageValidator
         using (var fileContents = file.OpenReadStream())
         {
             var headerOfActualFile = new byte[pdfHeader.Length];
-            fileContents.Read(headerOfActualFile, 0, headerOfActualFile.Length);
+            fileContents.ReadExactly(headerOfActualFile);
             fileContents.Position = 0;
 
             return headerOfActualFile.SequenceEqual(pdfHeader);

@@ -1,37 +1,69 @@
 # ![crest](https://assets.publishing.service.gov.uk/government/assets/crests/org_crest_27px-916806dcf065e7273830577de490d5c7c42f36ddec83e907efe62086785f24fb.png) Digital Apprenticeships Service
 ##  RoATP Gateway
-# das-roatp-gateway
+
+<img src="https://avatars.githubusercontent.com/u/9841374?s=200&v=4" align="right" alt="UK Government logo">
+
+[![Build Status](https://dev.azure.com/sfa-gov-uk/Digital%20Apprenticeship%20Service/_apis/build/status%2FApprenticeships%20Providers%2Fdas-roatp-gateway?repoName=SkillsFundingAgency%2Fdas-roatp-gateway&branchName=master)](https://dev.azure.com/sfa-gov-uk/Digital%20Apprenticeship%20Service/_build/latest?definitionId=2174&repoName=SkillsFundingAgency%2Fdas-roatp-gateway&branchName=master)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SkillsFundingAgency_das-roatp-gateway&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SkillsFundingAgency_das-roatp-gateway)
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?longCache=true&style=flat-square)](https://en.wikipedia.org/wiki/MIT_License)
 
 
+## About
 
-#### Requirements
+The front end for tribal users to view and administer provider gateway applications.
 
-- Install [.NET Core 2.2](https://www.microsoft.com/net/download)
-- Install [Azure Storage Emulator](https://go.microsoft.com/fwlink/?linkid=717179&clcid=0x409) (Make sure you are on v5.3)
-- Install [Azure Storage Explorer](http://storageexplorer.com/)
-- Install the editor of your choice:
-  - [Jetbrains Rider](https://www.jetbrains.com/rider/)
-  - [Visual Studio Code](https://code.visualstudio.com/)
-  - [Visual Studio](https://visualstudio.microsoft.com/)
+
+### Developer Setup
+
+### Pre-Requisites
+
+* A clone of this repository
+* A storage emulator like Azurite
+* Visual studio or similar IDE 
+
+### Dependencies
+
+* DfE Signin for user authentication
+* The Apply Service [das-apply-service](https://github.com/SkillsFundingAgency/das-apply-service) should be available either running locally or accessible in an Azure tenancy.
+* The Admin Service [das-admin-service](https://github.com/SkillsFundingAgency/das-admin-service) should be available either running locally or accessible in an Azure tenancy.
+* The Roatp Api [das-roatp-service](https://github.com/SkillsFundingAgency/das-roatp-service) should be available either running locally or accessible in an Azure tenancy.
+
 
 #### Setup
 
-- Clone this repository
+- Create a Configuration table in your (Development) local storage account.
+- Obtain the local config json from the das-employer-config for das-roatp-gateway repo (https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-roatp-gateway/SFA.DAS.RoatpGateway.json) 
+  - PartitionKey: LOCAL
+  - RowKey: SFA.DAS.RoatpGateway_1.0
+  - Data: {The contents of the local config json file}
+  
+- In the web project, if not exist already, add `AppSettings.Development.json` file with following content:
+```json  
+{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  },
+  "cdn": {
+    "url": "https://das-prd-frnt-end.azureedge.net"
+  },
+  "ConfigurationStorageConnectionString": "UseDevelopmentStorage=true;",
+  "ConfigNames": "SFA.DAS.RoatpGateway,SFA.DAS.Provider.DfeSignIn",
+  "ConnectionStrings": {
+    "Redis": ""
+  },
+  "EnvironmentName": "LOCAL"
+}
+```
 
+Open the solution with Visual Studio, and run the project SFA.DAS.RoatpGateway.Web, running under process 'SFA.DAS.RoatpGateway.Web' (not IIS)
 
-##### Code
-- Grab the das-roatp-gateway configuration json file from [das-employer-config](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-roatp-gateway/SFA.DAS.RoatpGateway.json)
-- Create a Configuration table in your (Development) local Azure Storage account.
-- Add a row to the Configuration table with fields: PartitionKey: LOCAL, RowKey: SFA.DAS.RoatpGateway_1.0, Data: {The contents of the local config json file}.
-
-### Running the code
-
-- `dotnet run` the following project:
-  - SFA.DAS.RoatpGateway.Web
-- Navigate to (https://localhost:45668) and you should see the start page.
-
-- run the following repos locally to get the application working, and dashboard links working suitably
-  - das-apply-service (https://github.com/SkillsFundingAgency/das-apply-service)
-  - das-admin-service (https://github.com/SkillsFundingAgency/das-admin-service)
-  - das-assessor-service (https://github.com/SkillsFundingAgency/das-assessor-service)
-  - das-roatp-service (https://github.com/SkillsFundingAgency/das-roatp-service)
+## Technologies
+* .Net 10.0
+* NUnit
+* Moq
+* FluentAssertions

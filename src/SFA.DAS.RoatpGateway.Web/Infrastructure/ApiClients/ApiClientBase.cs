@@ -101,7 +101,7 @@ public abstract class ApiClientBase<AC>
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, $"Error when processing request: {HttpMethod.Post} - {uri}");
+            _logger.LogError(ex, "Error when processing request: {HttpMethodPost} - {Uri}", HttpMethod.Post, uri);
             throw;
         }
     }
@@ -129,7 +129,7 @@ public abstract class ApiClientBase<AC>
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, $"Error when processing request: {HttpMethod.Post} - {uri}");
+            _logger.LogError(ex, "Error when processing request: {HttpMethodPost} - {Uri}", HttpMethod.Post, uri);
             throw;
         }
     }
@@ -155,7 +155,7 @@ public abstract class ApiClientBase<AC>
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, $"Error when processing request: {HttpMethod.Post} - {uri}");
+            _logger.LogError(ex, "Error when processing request: {HttpMethodPost} - {Uri}", HttpMethod.Post, uri);
             throw;
         }
     }
@@ -182,7 +182,7 @@ public abstract class ApiClientBase<AC>
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, $"Error when processing request: {HttpMethod.Put} - {uri}");
+            _logger.LogError(ex, "Error when processing request: {HttpMethodPut} - {Uri}", HttpMethod.Post, uri);
             throw;
         }
     }
@@ -210,7 +210,7 @@ public abstract class ApiClientBase<AC>
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "Error when processing PUT request at {PutUri}");
+            _logger.LogError(ex, "Error when processing PUT request at {PutUri}", uri);
             throw;
         }
     }
@@ -303,7 +303,7 @@ public abstract class ApiClientBase<AC>
                 apiErrorMessage = apiError.Message;
             }
 
-            _logger.LogError($"HTTP {statusCode} {reasonPhrase} || {httpMethod}: {requestUri} || Message: {apiErrorMessage}");
+            _logger.LogError("HTTP {StatusCode} {ReasonPhrase} || {HttpMethod}: {RequestUri} || Message: {ApiErrorMessage}", statusCode, reasonPhrase, httpMethod, requestUri, apiErrorMessage);
         }
     }
 
